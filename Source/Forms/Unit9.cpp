@@ -25,6 +25,7 @@
 #pragma link "TStdFuncFrame"
 #pragma link "TTanFrame"
 #pragma link "TEvalFrame"
+#pragma link "TRelationFrame"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TForm9::TForm9(TComponent* Owner)
@@ -93,20 +94,23 @@ void TForm9::FuncChanged(const boost::shared_ptr<TGraphElem> &AElem)
     ShowFrame(NULL);
     return;
   }
+  TEvalFrame *Frame = NULL;
   switch(EvalType)
   {
     case etEval:
-      if(dynamic_cast<TTan*>(Elem.get()) || dynamic_cast<TPointSeries*>(Elem.get()))
-        ShowFrame(TanFrame1);
+      if(dynamic_cast<TTangent*>(Elem.get()) || dynamic_cast<TPointSeries*>(Elem.get()))
+        Frame = TanFrame1;
       else if(dynamic_cast<TStdFunc*>(Elem.get()))
-        ShowFrame(StdFuncFrame1);
+        Frame = StdFuncFrame1;
       else if(dynamic_cast<TParFunc*>(Elem.get()))
-        ShowFrame(ParFuncFrame1);
+        Frame = ParFuncFrame1;
       else if(dynamic_cast<TPolFunc*>(Elem.get()))
-        ShowFrame(PolFuncFrame1);
-      else
-        ShowFrame(NULL);
+        Frame = PolFuncFrame1;
+      else if(TRelation *Relation = dynamic_cast<TRelation*>(Elem.get()))
+        if(Relation->GetRelationType() == rtEquation)
+          Frame = RelationFrame1;
 
+      ShowFrame(Frame);
       Edit1Change(NULL);
       break;
 
@@ -134,7 +138,6 @@ void __fastcall TForm9::FormHide(TObject *Sender)
   Form1->EvalAction->Checked = false;
   Form1->PathAction->Checked = false;
   Form1->AreaAction->Checked = false;
-  Form1->AnimateAction->Checked = false;
   Form1->Panel1->Height = 0;
 
   Form1->IPolygon1->Hide();
@@ -191,15 +194,15 @@ void __fastcall TForm9::FormShortCut(TWMKey &Msg, bool &Handled)
     switch(Msg.CharCode)
     {
       case 'X':
-        ActiveControl->Perform(WM_CUT, 0, 0);
+        ActiveControl->Perform(WM_CUT, 0, static_cast<NativeInt>(0));
         Handled = true;
         break;
       case 'C':
-        ActiveControl->Perform(WM_COPY, 0, 0);
+        ActiveControl->Perform(WM_COPY, 0, static_cast<NativeInt>(0));
         Handled = true;
         break;
       case 'V':
-        ActiveControl->Perform(WM_PASTE, 0, 0);
+        ActiveControl->Perform(WM_PASTE, 0, static_cast<NativeInt>(0));
         Handled = true;
         break;
       case 'A':
@@ -207,7 +210,7 @@ void __fastcall TForm9::FormShortCut(TWMKey &Msg, bool &Handled)
         Handled = true;
         break;
       case 'Z':
-        ActiveControl->Perform(WM_UNDO, 0, 0);
+        ActiveControl->Perform(WM_UNDO, 0, static_cast<NativeInt>(0));
         Handled = true;
         break;
     }
@@ -247,7 +250,7 @@ void TForm9::ShowFrame(TEvalFrame *Frame)
       ClientHeight = GetFrame()->Height;
     }
     if(Form1->Panel1->Height)
-      Form1->Panel1->Height = VisibleFrame ? GetFrame()->Height+10 : 110;
+      Form1->Panel1->Height = VisibleFrame ? GetFrame()->Height + DockCaptionHeight : 110;
     UndockHeight = ClientHeight + SizeDif;
   }
 
@@ -262,7 +265,7 @@ void TForm9::SetEvalType(TEvalType AEvalType)
   EvalType = AEvalType;
   Visible = true;
   if(Form1->Panel4->VisibleDockClientCount)
-    Form1->Panel1->Height = VisibleFrame ? GetFrame()->Height+10 : 100;
+    Form1->Panel1->Height = VisibleFrame ? GetFrame()->Height + DockCaptionHeight : 100;
   switch(EvalType)
   {
     case etEval:

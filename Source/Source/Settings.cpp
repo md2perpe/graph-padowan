@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------------
 namespace Graph
 {
-TProperty Property;
+TOptions Options;
 TGuiFormatSettings GuiFormatSettings;
 TPlotSettings PlotSettings;
 TGuiSettings GuiSettings;
@@ -152,11 +152,11 @@ void TAxes::HandleZoomSquare(double xyScale)
 //    ZoomSquare = false;
 }
 //---------------------------------------------------------------------------
-///////////////
-// TProperty //
-///////////////
-TProperty::TProperty() : RoundTo(4), SavePos(true), ComplexFormat(cfRectangular),
-  CheckForUpdate(true), ShowTipsAtStartup(true), NextTip(RES_FIRST_TIP), Language(L"English"),
+//////////////
+// TOptions //
+//////////////
+TOptions::TOptions() : RoundTo(4), SavePos(true), ComplexFormat(cfReal),
+  CheckForUpdate(true), Language(L"English"),
   FontScale(100)
 {
   //Initialize with default settings
@@ -172,7 +172,7 @@ TProperty::TProperty() : RoundTo(4), SavePos(true), ComplexFormat(cfRectangular)
   StrToFont(DEFAULT_TEXT_LABEL_FONT, DefaultLabelFont);
 }
 //---------------------------------------------------------------------------
-void TProperty::Read(const TConfigRegistry &Registry)
+void TOptions::Read(const TConfigRegistry &Registry)
 {
   //Use current value as default
   RoundTo = Registry.Read("RoundTo", RoundTo);
@@ -191,8 +191,6 @@ void TProperty::Read(const TConfigRegistry &Registry)
   StrToFont(Registry.Read(L"DefaultPointLabelFont", L""), DefaultPointLabelFont);
   StrToFont(Registry.Read(L"DefaultLabelFont", L""), DefaultLabelFont);
 
-  ShowTipsAtStartup = Registry.Read(L"ShowTipsAtStartup", ShowTipsAtStartup);
-  NextTip = Registry.Read(L"NextTip", NextTip) + RES_FIRST_TIP; //Tips in registry count from 0
   FontScale = Registry.Read(L"FontScale", FontScale);
 
   DecimalSeparator = Registry.Read(L"DecimalSeparator", L'\0');
@@ -201,7 +199,7 @@ void TProperty::Read(const TConfigRegistry &Registry)
     DecimalSeparator = GetLocaleChar(GetThreadLocale(), LOCALE_SDECIMAL, '.');
 }
 //---------------------------------------------------------------------------
-void TProperty::Write(TConfigRegistry &Registry)
+void TOptions::Write(TConfigRegistry &Registry)
 {
   Registry.Write("RoundTo", RoundTo);
   Registry.Write("ComplexFormat", ComplexFormat);
@@ -218,9 +216,6 @@ void TProperty::Write(TConfigRegistry &Registry)
   Registry.Write(L"DefaultDif", DefaultDif.ToString());
   Registry.Write(L"DefaultPointLabelFont", FontToStr(DefaultPointLabelFont));
   Registry.Write(L"DefaultLabelFont", FontToStr(DefaultLabelFont));
-
-  Registry.Write("ShowTipsAtStartup", ShowTipsAtStartup);
-  Registry.Write("NextTip", NextTip - RES_FIRST_TIP); //Tips in registry count from 0
 
   Registry.Write("FontScale", FontScale);
   Registry.Write("DecimalSeparator", CustomDecimalSeparator ? DecimalSeparator : 0);
@@ -347,8 +342,9 @@ void TCustomFunctions::Add(const std::wstring &Name, const Func32::TArgType &Arg
 //---------------------------------------------------------------------------
 void TCustomFunctions::Replace(const std::wstring &Name, const std::wstring &Value)
 {
+  std::wstring LowerName = ToLower(Name);
   for(TIterator Iter = Functions.begin(); Iter != Functions.end(); ++Iter)
-    if(Iter->Name == Name)
+    if(ToLower(Iter->Name) == LowerName)
     {
       Iter->Text = Value;
       Iter->Arguments.clear();
@@ -360,8 +356,9 @@ void TCustomFunctions::Replace(const std::wstring &Name, const std::wstring &Val
 //---------------------------------------------------------------------------
 void TCustomFunctions::Replace(const std::wstring &Name, long double Value)
 {
+  std::wstring LowerName = ToLower(Name);
   for(TIterator Iter = Functions.begin(); Iter != Functions.end(); ++Iter)
-    if(Iter->Name == Name)
+    if(ToLower(Iter->Name) == LowerName)
     {
       Iter->Text = ToWString(Value);
       Iter->Arguments.clear();
@@ -373,8 +370,9 @@ void TCustomFunctions::Replace(const std::wstring &Name, long double Value)
 //---------------------------------------------------------------------------
 void TCustomFunctions::Delete(const std::wstring &Name)
 {
+  std::wstring LowerName = ToLower(Name);
   for(TIterator Iter = Functions.begin(); Iter != Functions.end(); ++Iter)
-    if(Iter->Name == Name)
+    if(ToLower(Iter->Name) == LowerName)
     {
       Functions.erase(Iter);
       InternalSymbolList.Erase(Name);
@@ -384,10 +382,20 @@ void TCustomFunctions::Delete(const std::wstring &Name)
   throw ECustomFunctionError(cfeSymbolUndefined, 0, Name);
 }
 //---------------------------------------------------------------------------
+TCustomFunctions::TConstIterator TCustomFunctions::GetIter(const std::wstring &Name) const
+{
+  std::wstring LowerName = ToLower(Name);
+  for(TConstIterator Iter = Functions.begin(); Iter != Functions.end(); ++Iter)
+    if(ToLower(Iter->Name) == LowerName)
+      return Iter;
+  return Functions.end();
+}
+//---------------------------------------------------------------------------
 const TCustomFunction& TCustomFunctions::GetValue(const std::wstring &Name) const
 {
+  std::wstring LowerName = ToLower(Name);
   for(TConstIterator Iter = Functions.begin(); Iter != Functions.end(); ++Iter)
-    if(Iter->Name == Name)
+    if(ToLower(Iter->Name) == LowerName)
       return *Iter;
   throw ECustomFunctionError(cfeSymbolUndefined, 0, Name);
 }
@@ -479,9 +487,15 @@ void TCustomFunctions::Reset()
 //////////////////
 // TDefaultData //
 //////////////////
+//Don't try to optimize this function or it might crash in release mode.
 std::wstring TDefaultData::ToString() const
 {
-  return ToWString(Style) + L"," + ToWString(ColorToString(Color)) + L"," + ToWString(Size);
+  std::wstring S1 = ToWString(Style);
+  std::wstring S2;
+  S2 = ColorToString(Color).c_str();
+  std::wstring S3 = ToWString(Size);
+  std::wstring S4 = S1 + L"," + S2 + L"," + S3;
+  return S4;
 }
 //---------------------------------------------------------------------------
 void TDefaultData::FromString(const std::wstring &Str, unsigned AStyle, TColor AColor, unsigned ASize)
@@ -554,6 +568,9 @@ void TAnimationInfo::Clear()
 {
   Constant.clear();
   ConstantList.clear();
+  Width = 0;
+  Height = 0;
+  FramesPerSecond = 1;
 }
 //---------------------------------------------------------------------------
 /////////////////////
@@ -571,7 +588,7 @@ TGuiFormatSettings::TGuiFormatSettings()
 /////////////////////
 TPlotSettings::TPlotSettings()
   : AxisWidth(2), GridWidth(1), xNumberDist(4), yNumberDist(7), TickWidth(1),
-    TickLength(5)
+    TickLength(5), ThreadCount(System::CPUCount), SmoothingMode(4)
 {
 }
 //---------------------------------------------------------------------------
@@ -580,8 +597,12 @@ TPlotSettings::TPlotSettings()
 //////////////////
 TGuiSettings::TGuiSettings()
 	: MajorZoomIn(0.5), MinorZoomIn(0.9), MajorZoomOut(2), MinorZoomOut(20.0/18.0),
-    MajorStepSize(0.1), MinorStepSize(0.01), MouseZoomIn(0.9), MouseZoomOut(1/0.9)
+    MajorStepSize(0.1), MinorStepSize(0.01), MouseZoomIn(0.9), MouseZoomOut(1/0.9),
+    ToolBarIconSize(24), MenuIconSize(16)
 {
+  Font->Name = L"MS Shell Dlg";
+  Font->Size = 8;
+  Font->Color = clWindowText;
 }
 //---------------------------------------------------------------------------
 } //namespace Graph

@@ -26,6 +26,7 @@ __fastcall TForm18::TForm18(TComponent* Owner)
   ComboBox1->Left = Label3->Left + Label3->Width + 5;
   PageControl1->ActivePage = TabSheet1;
   FlipForm(this);
+  TrackBar1->ThumbLength = MulDiv(20, PixelsPerInch, 96);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm18::EditKeyPress(TObject *Sender, char &Key)
@@ -48,7 +49,7 @@ void TForm18::EditOptions(TImageOptions &Options, TImageFormat ImageFormat, int 
   Edit2->Enabled = Options.UseCustomSize;
   Edit3->Text = Options.Jpeg.Quality;
   RadioGroup1->ItemIndex = Options.Jpeg.ProgressiveEncoding;
-  RadioGroup2->ItemIndex = Options.Pdf.Orientation;
+  RadioGroup2->ItemIndex = static_cast<int>(Options.Pdf.Orientation);
   ComboBox1->ItemIndex = Options.Pdf.PaperSize;
 
   switch(ImageFormat)
@@ -147,11 +148,9 @@ void TImageOptions::SaveSettings() const
     Registry.Write("UseCustomSize", UseCustomSize);
     Registry.Write("JpegQuality", Jpeg.Quality);
     Registry.Write("ProgressiveEncoding", Jpeg.ProgressiveEncoding);
-    Registry.Write("Orientation", Pdf.Orientation);
+    Registry.Write("Orientation", static_cast<int>(Pdf.Orientation));
     Registry.Write("PaperSize", Pdf.PaperSize);
   }
 }
 //---------------------------------------------------------------------------
-
-
 

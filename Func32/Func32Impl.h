@@ -194,32 +194,22 @@ struct TMakeTextData
   unsigned Decimals;
 };
 
-template<typename T>
-struct TGSLFunction
-{
-  TConstIterator Func;
-  TDynData<T> &DynData;
-  long double *Value;
-  TGSLFunction(TConstIterator AFunc, TDynData<T> &ADynData, long double *AValue)
-    : Func(AFunc), DynData(ADynData), Value(AValue) {}
-};
-
 class TFuncData
 {
   std::vector<TElem> Data;
 
   template<typename T>
   static T CalcFunc(TConstIterator &Iter, TDynData<T> &DynData);
-	template<typename T>
+	template<typename T,typename T2>
 	static double CalcGSLFunc(double x, void *Params);
-  template<typename T>
-  static double Integrate(TConstIterator Func, double Min, double Max, double RelError, TDynData<T> &DynData, long double *Value);
+  template<typename T, typename T2>
+  static double Integrate(TConstIterator Func, double Min, double Max, double RelError, TDynData<T> &DynData, T2 *Value);
   void AddDif(TConstIterator Iter, const TElem &Var, TTrigonometry Trigonometry, unsigned Level);
   static std::wstring MakeText(TConstIterator Iter);
   static void CreateText(TMakeTextData &TextData, bool AddPar=false);
   bool CheckRecursive(std::vector<const TFuncData*> &FuncStack) const;
   bool CheckRecursive() const;
-  static void HandleParseError(const EParseError &E, const wchar_t* Where, unsigned Pos);
+  static EParseError HandleParseError(const EParseError &E, const wchar_t* Where, unsigned Pos);
 	static void CopyReplaceArgs(std::vector<TElem> &List, TConstIterator Iter, const std::vector<std::vector<TElem> > &Args);
 	static void CopyReplace(std::vector<TElem> &List, TConstIterator Iter, const TElem &Elem, TConstIterator First, TConstIterator Last);
 
@@ -235,6 +225,7 @@ public:
   TFuncData(const std::wstring &Str, const TArgType &Args) {Parse(Str, Args);}
 
   void Parse(const std::wstring &Str, const TArgType &Args, const TSymbolList *SymbolList = NULL);
+  void Parse(const std::wstring &Str, const TArgType &Args, const TSymbolList *SymbolList, EParseError &E);
 
   template<typename T>
   T CalcF(TDynData<T> &DynData) const;
@@ -287,6 +278,7 @@ bool ArgCountValid(TIdent Ident, unsigned Args);
 const TFuncData& GetDif(TIdent Ident);
 std::vector<TElem>::const_iterator FindEnd(std::vector<TElem>::const_iterator Iter);
 std::wstring ToLower(const std::wstring &Str);
+std::string ToString(int Value);
 bool IsEqual(long double a, long double b);
 //---------------------------------------------------------------------------
 class TCompareStringNoCase
@@ -341,10 +333,11 @@ inline unsigned FunctionArguments(const TElem &Elem)
 }
 //---------------------------------------------------------------------------
 //Check if a is very close to zero
-//From an article "The G3D Graphics Engine" by Morgan McGuire in CUJ Dec. 2004
 inline bool IsZero(long double a)
 {
-  return a == 0 || std::abs(a) <= 0.0000001L * (std::abs(a) + 1);
+//From an article "The G3D Graphics Engine" by Morgan McGuire in CUJ Dec. 2004
+//  return a == 0 || std::fabsl(a) <= 0.000001L * (std::fabsl(a) + 1);
+  return std::fabsl(a) < 1E-15; //Just check for very low number
 }
 
 template<typename T> inline T Sqr(T t)

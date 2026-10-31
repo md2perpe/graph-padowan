@@ -29,9 +29,9 @@ __published:	// IDE-managed Components
   TMyEdit *Edit1;
   TUpDownEx *UpDownEx1;
 private:	// User declarations
-  void EvalTan(const TTan *Tan);
+  void EvalTan(const TTangent *Tan);
   void EvalSeries(const TPointSeries *Series);
-  void SetPoint(const TTan *Tan, int X);
+  void SetPoint(const TTangent *Tan, int X);
   void SetPoint(const TPointSeries *Series, int X);
 
 public:		// User declarations

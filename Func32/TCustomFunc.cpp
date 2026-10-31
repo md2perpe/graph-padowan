@@ -71,6 +71,16 @@ TCustomFunc::TCustomFunc(const TComplex &Complex)
   SetFunc(Complex);
 }
 //---------------------------------------------------------------------------
+/** Swap content with another TCustomFunc.
+ *  \param O: The object to swap with.
+ */
+void TCustomFunc::Swap(TCustomFunc &O)
+{
+  FuncData.swap(O.FuncData);
+  std::swap(Args, O.Args);
+  std::swap(Trigonometry, O.Trigonometry);
+}
+//---------------------------------------------------------------------------
 /** Assigns new data to the function.
  *  \param Text: The string to containing the function, for example "a*sin(b)"
  *  \param AArgs: A vector for strings with the argument names, for example {"a", "b"}

@@ -38,9 +38,13 @@ object Form18: TForm18
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Size'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label1: TLabel
         Left = 8
-        Top = 92
+        Top = 90
         Width = 60
         Height = 13
         Caption = 'Image width:'
@@ -48,7 +52,7 @@ object Form18: TForm18
       end
       object Label2: TLabel
         Left = 8
-        Top = 124
+        Top = 122
         Width = 64
         Height = 13
         Caption = 'Image height:'
@@ -190,7 +194,7 @@ object Form18: TForm18
       end
       object ComboBox1: TComboBox
         Left = 64
-        Top = 4
+        Top = 6
         Width = 89
         Height = 21
         Hint = 'Choose paper size to use.'

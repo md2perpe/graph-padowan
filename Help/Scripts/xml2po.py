@@ -536,8 +536,8 @@ def processElementTag(node, replacements, restart = 0):
 
             if '<placeholder-' in translation and original_translation.encode("UTF-8") != outtxt:
                 i = translation.find("<placeholder-")
-                placeholder = translation[i: translation.find(">", i)+1]
-                print >> sys.stderr, "WARNING: %s found in translation, but does not exist in the original.\nOriginal string:\n%s\nTranslation:\n%s\n" % (placeholder, normalizeString(outtxt), original_translation)
+                placeholder = translation[i: min(i+20, translation.find(">", i)+1)]
+                print >> sys.stderr, "WARNING: %s found in translation, but does not exist in the original.\nOriginal string:\n%s\nTranslation:\n%s\n" % (placeholder.encode("UTF8", "ignore"), normalizeString(outtxt), original_translation.encode("UTF-8", "ignore"))
                 translation = translation.replace(placeholder, "")
 
             if worth:
@@ -797,7 +797,7 @@ for opt, arg in opts:
         mofile = ".xml2po.mo"
         pofile = arg
         if translationlanguage == '': translationlanguage = os.path.split(os.path.splitext(pofile)[0])[1]
-        os.system("msgfmt -o %s %s >%s" % (mofile, pofile, NULL_STRING)) and sys.exit(7)
+        os.system('msgfmt -o %s "%s" >%s' % (mofile, pofile, NULL_STRING)) and sys.exit(7)
         mode = 'merge'
     elif opt in ('-o', '--output'):
         output = arg

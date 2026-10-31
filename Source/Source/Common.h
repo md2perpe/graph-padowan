@@ -9,10 +9,10 @@
 //---------------------------------------------------------------------------
 #ifndef CommonH
 #define CommonH
-#include "Func32.h"
 #include <complex>
 #include <Values.h>
 #include <comctrls.hpp>
+#include "Func32.h"
 //---------------------------------------------------------------------------
 void CenterForm(TForm *Form);
 
@@ -30,7 +30,9 @@ std::string DecodeEscapeSequence(const std::string &Str);
 void GetLanguageList(TStrings *List);
 
 String GetTempFileName(const String &Prefix, const String &Ext);
+String GetTempFileName();
 String GetTempPath();
+const String& GetBaseDir();
 
 inline bool InsideRect(const TRect &Rect, const TPoint &P) {return P.x >= Rect.Left && P.x <= Rect.Right && P.y >= Rect.Top && P.y <= Rect.Bottom;}
 std::wstring ReduceString(const std::wstring &Str, unsigned MaxLength);
@@ -48,10 +50,10 @@ bool operator==(const boost::shared_ptr<T1> &SharedPtr, const T2 *Ptr)
 template<class T1, class T2>
 int IndexOf(const std::vector<T1> &Vector, const T2 &Value)
 {
-  std::vector<T1>::const_iterator iter = std::find(Vector.begin(), Vector.end(), Value);
+  typename std::vector<T1>::const_iterator iter = std::find(Vector.begin(), Vector.end(), Value);
   return iter == Vector.end() ? -1 : iter - Vector.begin();
 }
-
+/*
 template<typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
 inline InputIterator1 FindInRanges(InputIterator1 First1, InputIterator2 Last1,
                                    InputIterator2 First2, InputIterator2 Last2,
@@ -66,7 +68,7 @@ inline InputIterator1 FindInRanges(InputIterator1 First1, InputIterator2 Last1,
   }
   return Last1;
 }
-
+*/
 //Calculate the perp dot product
 template<typename T>
 inline double Perp(const T &u, const T &v)
@@ -157,7 +159,7 @@ public:
 
 inline unsigned MaxDist(const TPoint &P1, const TPoint &P2)
 {
-  return std::max(abs(P1.x - P2.x), abs(P1.y - P2.y));
+  return std::max(std::abs(P1.x - P2.x), std::abs(P1.y - P2.y));
 }
 
 inline unsigned Sqr(int x)

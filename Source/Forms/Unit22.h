@@ -35,12 +35,13 @@ private:	// User declarations
   int CacheIndex;
   String Command;
   int IndentLevel;
+  bool InputPromptActive;
+  String InputResult;
 
   void WritePrompt(const String &Str = ">>> ");
   void KeyboardInterrupt();
   void SetUserString(const String &Str);
   void HandleNewLine();
-  void __fastcall AfterFormShown(TObject*);
 	void __fastcall WMEnable(TMessage &Message);
 
 BEGIN_MESSAGE_MAP
@@ -52,6 +53,7 @@ public:		// User declarations
   void WriteText(const String &Str, TColor Color = clBlack);
   void Translate();
   void Clear();
+  String InputQuery();
 };
 //---------------------------------------------------------------------------
 extern TForm22 *Form22;

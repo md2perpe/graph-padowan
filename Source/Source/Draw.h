@@ -13,6 +13,13 @@
 #include "Data.h"
 #include "Context.h"
 #include <boost/function.hpp>
+#include "DrawElem.h"
+
+namespace Thread
+{
+class TIEvent;
+class TCriticalSectionObject;
+}
 namespace Graph
 {
 class TDrawThread;
@@ -32,18 +39,27 @@ class TDraw
 {
   friend TDrawThread;
   friend class TDrawLegend;
+  friend class TDrawElem;
   TContext Context;
   double xScale, yScale;  //The scale of x-axis and y-axis
   int Width, Height;      //Width and height of image
   TRect AxesRect;         //Rectangle where the coordinate system is shown
   TData *Data;
   TAxes &Axes;
-  TDrawThread *Thread;
+  TDrawElem DrawElem;
   TRect LegendRect;
-  bool ForceBlack;
   double SizeMul;
   TOnCompleteEvent OnComplete;
   std::vector<TLabelInfo> yLabelInfo;
+  std::string ThreadName;
+
+  //Thread variables and functions
+  std::vector<TDrawThread*> Threads;
+  LONG IdleThreadCount; //Must be aligned on a 32-bit boundary
+  boost::shared_ptr<Thread::TIEvent> IdleEvent; //Signalet when all threads are idle
+  LONG EvalIndex; //Next elem to evaluate
+  void IncThreadInIdle(bool Init); // Called from worker threads
+  TGraphElemPtr GetNextEvalElem(); //Called from worker threads
 
   //Temp variables
   double xAxisCross, yAxisCross;
@@ -59,12 +75,13 @@ class TDraw
   static double GetMinValue(double Unit, double Min, double Max, double AxisCross, bool Log);
   static std::wstring MakeNumber(double Number, bool MultiplyByPi);
   unsigned FindLabels();
+  void __fastcall EndUpdate();
 
   TDraw(const TDraw&); //Not implemented
   TDraw& operator=(const TDraw&); //Not implemented
 
 public:
-  TDraw(TCanvas *Canvas, TData *pData, bool AForceBlack, const std::string &ThreadName);
+  TDraw(TCanvas *Canvas, TData *pData, const std::string &ThreadName, bool UseGdiPlus);
   ~TDraw();
   void DrawAll();
   void DrawFunc(const TGraphElem *F);
@@ -81,7 +98,7 @@ public:
   Func32::TDblPoint xyCoord(int x, int y) const {return Func32::TDblPoint(xCoord(x), yCoord(y));}
   Func32::TDblPoint xyCoord(const TPoint &P) const {return xyCoord(P.x, P.y);}
   bool AbortUpdate();
-  bool Wait();
+  bool Wait(bool WaitInfinitely=true);
   bool Updating();
   void SetSize(int Width, int Height);
   int SizeScale(int I) const {return I*SizeMul+0.5;}
@@ -90,13 +107,17 @@ public:
   void DrawAxes();
   void SetClippingRegion();
   double GetScaledYAxis() const;
-  void SetSizeMul(double xSizeMul, double ySizeMul);
+  void SetSizeMul(double ASizeMul) {SizeMul = ASizeMul;}
   bool InsideLegend(int X, int Y) const {return Data->Axes.ShowLegend && InsideRect(LegendRect, TPoint(X, Y));}
   static void DrawPointLabel(TCanvas *Canvas, TPoint Pos, int PointSize, const std::wstring &Label, TLabelPosition LabelPosition);
   void SetOnComplete(TOnCompleteEvent AOnComplete) {OnComplete = AOnComplete;}
   const TRect& GetLegendRect() const {return LegendRect;}
   void SetCanvas(TCanvas *Canvas) {Context.SetCanvas(Canvas);}
   const TRect& GetAxesRect() const {return AxesRect;}
+  void SetThreadCount(unsigned Count);
+  unsigned GetThreadCount() const {return Threads.size();}
+
+  void DrawLegend(TContext &Context, const TRect &LegendRect);
 };
 } //namespace Graph
 #endif

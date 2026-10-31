@@ -102,6 +102,26 @@ void TSvgWriter::Polygon(const POINTS *Points, int Count, TPolyFillMode PolyFill
   Stream << "\" />\n";
 }
 //---------------------------------------------------------------------------
+void TSvgWriter::PolyPolygon(const POINTS *Points, const unsigned long *Counts, int PolyCount, TPolyFillMode PolyFillMode)
+{
+  Stream << "    <path";
+  WritePen();
+  WriteBrush();
+  if(PolyFillMode == pfmEvenOdd)
+    Stream << " fill-rule=\"evenodd\"";
+  Stream << " d=\"";
+  const POINTS *P = Points;
+  for(int I = 0; I < PolyCount; I++)
+  {
+    Stream << "M " << P->x << "," << P->y << " L ";
+    P++;
+    for(unsigned J = 1; J < Counts[I]; J++, P++)
+      Stream << P->x << "," << P->y << " ";
+    Stream << "z ";
+  }
+  Stream << "\" />\n";
+}
+//---------------------------------------------------------------------------
 void TSvgWriter::Rectangle(const RECTL &Rect)
 {
   Stream << "    <rect";
@@ -270,18 +290,22 @@ unsigned TSvgWriter::CreatePattern()
   unsigned Index = (Iter - PatternList.begin()) + 1;
   if(Iter == PatternList.end())
   {
+    //We need to draw extra lines because of clipping.
+    //See https://stackoverflow.com/questions/13069446/simple-fill-pattern-in-svg-diagonal-hatching
     PatternList.push_back(Brush);
     Stream << "  <defs>\n";
     Stream << "    <pattern id=\"pattern" << Index << "\" x=\"0\" y=\"0\" width=\"10\" height=\"10\" patternUnits=\"userSpaceOnUse\">\n";
     Stream << std::hex;
+    Stream << "      <path d=\"";
     if(Brush.Hatch == HS_FDIAGONAL || Brush.Hatch == HS_DIAGCROSS)
-      Stream << "      <line stroke=\"#" << std::setw(6) << Brush.Color << "\" stroke-width=\"1\" x1=\"0\" y1=\"0\" x2=\"10\" y2=\"10\" />\n";
+      Stream << "M12,2 l-4,-4 M0,0 l10,10 M-2,8 l4,4 ";
     if(Brush.Hatch == HS_BDIAGONAL || Brush.Hatch == HS_DIAGCROSS)
-      Stream << "      <line stroke=\"#" << std::setw(6) << Brush.Color << "\" stroke-width=\"1\" x1=\"0\" y1=\"10\" x2=\"10\" y2=\"0\" />\n";
+      Stream << "M-2,2 l4,-4 M0,10 l10,-10 M8,12 l4,-4";
     if(Brush.Hatch == HS_VERTICAL || Brush.Hatch == HS_CROSS)
-      Stream << "      <line stroke=\"#" << std::setw(6) << Brush.Color << "\" stroke-width=\"1\" x1=\"5\" y1=\"0\" x2=\"5\" y2=\"10\" />\n";
+      Stream << "M5,0 l0,10 ";
     if(Brush.Hatch == HS_HORIZONTAL || Brush.Hatch == HS_CROSS)
-      Stream << "      <line stroke=\"#" << std::setw(6) << Brush.Color << "\" stroke-width=\"1\" x1=\"0\" y1=\"5\" x2=\"10\" y2=\"5\" />\n";
+      Stream << "M0,5 l10,0";
+    Stream << "\" stroke=\"#" << std::setw(6) << Brush.Color << "\" stroke-width=\"1\" />\n";
     Stream << "    </pattern>\n";
     Stream << "  </defs>\n";
     Stream << std::dec;

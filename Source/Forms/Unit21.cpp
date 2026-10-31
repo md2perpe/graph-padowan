@@ -26,8 +26,8 @@ __fastcall TForm21::TForm21(TComponent* Owner, TData &AData, const TDraw &ADraw,
 
   const int PlacementToIndex[] = {0, -1, -1, -1, -1, 1, 2, 3};
   ComboBox1->ItemIndex = PlacementToIndex[Label->GetPlacement()];
-  Edit1->Text = ToUString(Label->GetXPos().Text);
-  Edit2->Text = ToUString(Label->GetYPos().Text);
+  Edit1->Text = ToUString(Label->GetPos().first.Text);
+  Edit2->Text = ToUString(Label->GetPos().second.Text);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm21::TntButton1Click(TObject *Sender)
@@ -43,18 +43,10 @@ void __fastcall TForm21::TntButton1Click(TObject *Sender)
   if(Index == -1)
     Index = 0;
 
-  boost::shared_ptr<TTextLabel> NewLabel(new TTextLabel(
-    Label->GetText(),
-    IndexToPlacement[Index],
-    xPos,
-    yPos,
-    Label->GetBackgroundColor(),
-    Label->GetRotation(),
-    Label->GetOleLink()
-  ));
-  UndoList.Push(TUndoChange(Label, NewLabel));
-  Data.Replace(Label, NewLabel);
-  NewLabel->Update();
+  UndoList.Push(TUndoChange(Label));
+  Label->SetPlacement(IndexToPlacement[Index]);
+  Label->SetPos(std::make_pair(xPos, yPos));
+  Label->Update();
   ModalResult = mrOk;
 }
 //---------------------------------------------------------------------------
@@ -71,6 +63,7 @@ void __fastcall TForm21::ComboBox1Change(TObject *Sender)
     case lpUserTopRight:    xPos -= Width; break;
     case lpUserBottomLeft:  yPos += Height; break;
     case lpUserBottomRight: xPos -= Width; yPos += Height; break;
+    default: break;
   }
 
   switch(NewPlacement)
@@ -78,6 +71,7 @@ void __fastcall TForm21::ComboBox1Change(TObject *Sender)
     case lpUserTopRight:    xPos += Width; break;
     case lpUserBottomLeft:  yPos -= Height; break;
     case lpUserBottomRight: xPos += Width; yPos -= Height; break;
+    default: break;
   }
 
   Edit1->Text = xPos;

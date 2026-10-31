@@ -13,8 +13,13 @@
 #include "Convert.h"
 #include "Grid.h"
 #include "GuiUtil.h"
+#ifdef _WIN64
+#include <boost/spirit/home/classic/phoenix/operators.hpp>
+#include <boost/spirit/home/classic/phoenix/primitives.hpp>
+#else
 #include <boost/spirit/phoenix/operators.hpp>
 #include <boost/spirit/phoenix/primitives.hpp>
+#endif
 using phoenix::arg1;
 //---------------------------------------------------------------------------
 double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, const boost::function1<bool, double> &Interval)
@@ -60,6 +65,16 @@ double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, const boost::functio
 double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, double Min, double Max)
 {
   return MakeFloat(Edit, ErrorStr, arg1 >= Min && arg1 <= Max);
+}
+//---------------------------------------------------------------------------
+double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, double Min)
+{
+  return MakeFloat(Edit, ErrorStr, arg1 >= Min);
+}
+//---------------------------------------------------------------------------
+double MakeFloat(TCustomEdit *Edit)
+{
+  return MakeFloat(Edit, String(), phoenix::const_(true));
 }
 //---------------------------------------------------------------------------
 int MakeInt(TCustomEdit *Edit, const String &Caption)
@@ -147,14 +162,14 @@ String ComplexToString(const Func32::TComplex &C, unsigned Decimals, TComplexFor
 //---------------------------------------------------------------------------
 String ComplexToString(const Func32::TComplex &C)
 {
-  return ComplexToString(C, Property.RoundTo, Property.ComplexFormat);
+  return ComplexToString(C, Options.RoundTo, Options.ComplexFormat);
 }
 //---------------------------------------------------------------------------
 //This function converts a floating point number to a string
 //The number of decimals will be determined by Property.RoundTo
 String DoubleToStr(long double Number)
 {
-  return DoubleToStr(Number, Property.RoundTo);
+  return DoubleToStr(Number, Options.RoundTo);
 }
 //---------------------------------------------------------------------------
 //This function converts a floating point number to a string
@@ -305,7 +320,7 @@ String RoundToStr(long double Number, unsigned Decimals)
 //---------------------------------------------------------------------------
 String RoundToStr(long double Number)
 {
-  return RoundToStr(Number, Property.RoundTo);
+  return RoundToStr(Number, Options.RoundTo);
 }
 //---------------------------------------------------------------------------
 double CellToDouble(TGrid *Grid, int Col, int Row)
@@ -315,7 +330,7 @@ double CellToDouble(TGrid *Grid, int Col, int Row)
     //First try to convert as a number as optimization. If it fails parse using Calc()
     double Result;
     String Str = Grid->Cells[Col][Row];
-    if(Str.Pos("e") == -1 && TryStrToFloat(Str, Result))
+    if(Str.Pos("e") == 0 && TryStrToFloat(Str, Result))
       return Result;
     return Form1->Data.Calc(ToWString(Str));
   }
@@ -348,6 +363,8 @@ std::pair<int, int> FloatToFract(double f, double Epsilon)
 std::wstring RtfToPlainText(const std::string &Str)
 {
   //We need a parent window; just use main form
+  if(Application->MainForm == NULL)
+    return std::wstring();
   std::auto_ptr<TIRichEdit> RichEdit(new TIRichEdit(Application->MainForm));
   RichEdit->Visible = false;
   RichEdit->Parent = Application->MainForm;
@@ -371,6 +388,16 @@ std::string ToString(int Value)
 std::string ToString(unsigned Value)
 {
   return ToString(AnsiString(Value));
+}
+//---------------------------------------------------------------------------
+std::string ToString(uint64_t Value)
+{
+  return ToString(AnsiString(Value));
+}
+//---------------------------------------------------------------------------
+std::string ToString(double Value)
+{
+  return ToString(FloatToStr(Value));
 }
 //---------------------------------------------------------------------------
 std::string ToString(long double Value)
@@ -406,7 +433,17 @@ std::wstring ToWString(unsigned Value)
   return ToWString(String(Value));
 }
 //---------------------------------------------------------------------------
+std::wstring ToWString(uint64_t Value)
+{
+  return ToWString(String(Value));
+}
+//---------------------------------------------------------------------------
 std::wstring ToWString(long double Value)
+{
+  return ToWString(FloatToStr(Value));
+}
+//---------------------------------------------------------------------------
+std::wstring ToWString(double Value)
 {
   return ToWString(FloatToStr(Value));
 }

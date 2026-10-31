@@ -6,20 +6,20 @@
 # A radio group is used to specify if the revolution is around the x- or y-axis.
 # The result is shown in a third edit box.
 import Graph
-import vcl
 import Gui
+from Gui import ScaledVcl
 
 class RevolutionDialog(Gui.SimpleDialog):
     def __init__(self):
         Gui.SimpleDialog.__init__(self, Caption="Area of revolution", Width=275, Height=180, ShowCancel=False)
-        self.button1.Caption = "Close"
-        self.Label1 = vcl.TLabel(None, Parent = self.panel, Caption = "From:", Top = 12, Left = 8)
-        self.Label2 = vcl.TLabel(None, Parent = self.panel, Caption = "To:", Top = 44, Left = 8)
-        self.Label5 = vcl.TLabel(None, Parent = self.panel, Caption = "Area:", Top = 76, Left = 8)
-        self.Edit1 = vcl.TEdit(None, Parent = self.panel, Top = 8, Left = 50, Width = 100, OnChange = self.EditChange)
-        self.Edit2 = vcl.TEdit(None, Parent = self.panel, Top = 40, Left = 50, Width = 100, OnChange = self.EditChange)
-        self.Edit3 = vcl.TEdit(None, Parent = self.panel, Top = 72, Left = 50, Width = 100, ReadOnly = True, Color = 0xFF00000F)
-        self.RadioGroup1 = vcl.TRadioGroup(None, Parent = self.panel, Top = 8, Left = 160, Width = 85, Height = 60, Caption="Rotate around", OnClick = self.EditChange)
+        self.Button1.Caption = "Close"
+        self.Label1 = ScaledVcl.TLabel(None, Parent = self.Panel, Caption = "From:", Top = 12, Left = 8)
+        self.Label2 = ScaledVcl.TLabel(None, Parent = self.Panel, Caption = "To:", Top = 44, Left = 8)
+        self.Label5 = ScaledVcl.TLabel(None, Parent = self.Panel, Caption = "Area:", Top = 76, Left = 8)
+        self.Edit1 = ScaledVcl.TEdit(None, Parent = self.Panel, Top = 8, Left = 50, Width = 100, OnChange = self.EditChange)
+        self.Edit2 = ScaledVcl.TEdit(None, Parent = self.Panel, Top = 40, Left = 50, Width = 100, OnChange = self.EditChange)
+        self.Edit3 = ScaledVcl.TEdit(None, Parent = self.Panel, Top = 72, Left = 50, Width = 100, ReadOnly = True, Color = 0xFF00000F)
+        self.RadioGroup1 = ScaledVcl.TRadioGroup(None, Parent = self.Panel, Top = 8, Left = 160, Width = 85, Height = 60, Caption="Rotate around", OnClick = self.EditChange)
         self.RadioGroup1.Items.Text = "X-axis\nY-Axis"
         self.RadioGroup1.ItemIndex = 0
 
@@ -50,6 +50,6 @@ def OnSelect(Item):
     ContextMenuItem.Visible = Action.Enabled
 
 Action = Graph.CreateAction(Caption="Revolution", OnExecute=Execute, Hint="Area for surface of revolution.")
-Graph.AddActionToMainMenu(Action)
+Graph.AddActionToMainMenu(Action, "Calc")
 ContextMenuItem = Graph.AddActionToContextMenu(Action)
 Graph.OnSelect.append(OnSelect)

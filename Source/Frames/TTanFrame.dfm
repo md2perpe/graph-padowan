@@ -1,12 +1,11 @@
 inherited TanFrame: TTanFrame
-  Left = 0
-  Top = 0
   Width = 184
   Height = 69
   HelpContext = 100
   Anchors = [akLeft, akTop, akRight]
   ParentBackground = False
-  TabOrder = 0
+  ExplicitWidth = 184
+  ExplicitHeight = 69
   DesignSize = (
     184
     69)
@@ -33,7 +32,7 @@ inherited TanFrame: TTanFrame
     Top = 40
     Width = 135
     Height = 21
-    Hint =
+    Hint = 
       'This is the y-coordinate corresponding to the entered x-coordina' +
       'te.'
     Anchors = [akLeft, akTop, akRight]

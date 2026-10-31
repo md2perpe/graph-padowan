@@ -26,6 +26,7 @@
 #include "SymbolDialog.h"
 #include <ActnPopup.hpp>
 #include <PlatformDefaultStyleActnCtrls.hpp>
+#include "ScaledImageList.h"
 //---------------------------------------------------------------------------
 class TForm6 : public TForm
 {
@@ -37,21 +38,9 @@ __published:	// IDE-managed Components
   TLabel *Label3;
   TComboBox *ComboBox1;
   TGroupBox *GroupBox1;
-  TToolBar *ToolBar1;
-  TToolButton *ToolButton1;
-  TToolButton *ToolButton2;
-  TToolButton *ToolButton3;
-  TImageList *ImageList1;
-  TToolButton *ToolButton4;
-  TToolButton *ToolButton5;
-  TToolButton *ToolButton6;
-  TToolButton *ToolButton7;
-  TToolButton *ToolButton8;
   TIFontBox *IFontBox1;
   TButton *Button3;
   TIRichEdit *IRichEdit1;
-  TToolButton *ToolButton9;
-  TToolButton *ToolButton10;
   TPopupActionBar *PopupMenu1;
   TMenuItem *Popup_Cut;
   TMenuItem *Popup_Copy;
@@ -66,10 +55,24 @@ __published:	// IDE-managed Components
   TLabel *Label4;
   TExtColorBox *ColorBox1;
   TExtColorBox *ColorBox2;
-  TToolButton *ToolButton11;
-  TToolButton *ToolButton12;
-  TToolButton *ToolButton13;
   TSymbolDialog *SymbolDialog1;
+  TPanel *Panel1;
+  TToolBar *ToolBar1;
+  TToolButton *ToolButton11;
+  TToolButton *ToolButton13;
+  TToolButton *ToolButton12;
+  TToolButton *ToolButton1;
+  TToolButton *ToolButton2;
+  TToolButton *ToolButton3;
+  TToolButton *ToolButton4;
+  TToolButton *ToolButton9;
+  TToolButton *ToolButton10;
+  TToolButton *ToolButton8;
+  TToolButton *ToolButton5;
+  TToolButton *ToolButton6;
+  TToolButton *ToolButton7;
+  TImageList *ImageList1;
+  TScaledImageList *ScaledImageList1;
   void __fastcall ParagraphChange(TObject *Sender);
   void __fastcall IRichEdit1SelectionChange(TObject *Sender);
   void __fastcall IRichEdit1KeyDown(TObject *Sender, WORD &Key,

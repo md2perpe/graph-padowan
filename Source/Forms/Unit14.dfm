@@ -33,8 +33,8 @@ object Form14: TForm14
     FocusControl = Edit1
   end
   object Button1: TButton
-    Left = 208
-    Top = 521
+    Left = 141
+    Top = 523
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -68,8 +68,8 @@ object Form14: TForm14
     OnSetText = GridSetText
   end
   object Button2: TButton
-    Left = 296
-    Top = 521
+    Left = 222
+    Top = 523
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -112,7 +112,7 @@ object Form14: TForm14
   end
   object Button3: TButton
     Left = 384
-    Top = 521
+    Top = 523
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -130,10 +130,6 @@ object Form14: TForm14
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Markers'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         186
         379)
@@ -197,7 +193,7 @@ object Form14: TForm14
         end
         object PointSelect1: TPointSelect
           Left = 76
-          Top = 16
+          Top = 18
           Width = 49
           Height = 22
           Hint = 'Choose the type of markers to be shown at each point.'
@@ -207,7 +203,7 @@ object Form14: TForm14
         end
         object ExtColorBox1: TExtColorBox
           Left = 76
-          Top = 43
+          Top = 44
           Width = 86
           Height = 22
           Hint = 'Choose the color of the markers.'
@@ -265,7 +261,7 @@ object Form14: TForm14
         end
         object LineSelect1: TLineSelect
           Left = 76
-          Top = 16
+          Top = 18
           Width = 86
           Height = 22
           Hint = 
@@ -302,7 +298,7 @@ object Form14: TForm14
         end
         object ComboBox2: TExtComboBox
           Left = 76
-          Top = 96
+          Top = 98
           Width = 86
           Height = 21
           Hint = 'Select which kind of line to draw between the markers.'
@@ -318,7 +314,7 @@ object Form14: TForm14
         end
         object ExtColorBox2: TExtColorBox
           Left = 76
-          Top = 43
+          Top = 44
           Width = 86
           Height = 22
           Hint = 'Choose the color of the lines.'
@@ -360,30 +356,9 @@ object Form14: TForm14
           TabOrder = 0
           OnClick = Change
         end
-        object BitBtn1: TBitBtn
-          Left = 140
-          Top = 14
-          Width = 21
-          Height = 21
-          Hint = 'Select the font for the coordinates.'
-          Anchors = [akTop, akRight]
-          DoubleBuffered = True
-          Glyph.Data = {
-            F6000000424DF600000000000000760000002800000010000000100000000100
-            04000000000080000000130B0000130B00001000000010000000A64D4D00FF4D
-            4D00D1D8DB000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000222222222222
-            2222222000000000000222222222222222222220000022200002222220022222
-            0022222222002222002211111220000000222211222200220022222112222002
-            0022222211111100002222222112211000222222221121120022222222211112
-            2222222222221112222222222222211222222222222222222222}
-          ParentDoubleBuffered = False
-          TabOrder = 1
-          OnClick = BitBtn1Click
-        end
         object ComboBox1: TComboBox
           Left = 76
-          Top = 40
+          Top = 42
           Width = 86
           Height = 21
           Hint = 'Select where the coordinates should be shown.'
@@ -401,6 +376,18 @@ object Form14: TForm14
             'Above Right'
             'Below Left'
             'Below Right')
+        end
+        object Button5: TButton
+          Left = 142
+          Top = 15
+          Width = 21
+          Height = 21
+          Hint = 'Select the font for the coordinates.'
+          ImageAlignment = iaCenter
+          ImageIndex = 5
+          Images = Form1.ScaledImageList3
+          TabOrder = 1
+          OnClick = Button5Click
         end
       end
       object RadioGroup1: TRadioGroup
@@ -595,6 +582,17 @@ object Form14: TForm14
         end
       end
     end
+  end
+  object Button4: TButton
+    Left = 303
+    Top = 523
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Apply'
+    Enabled = False
+    TabOrder = 7
+    OnClick = Button4Click
   end
   object PopupMenu1: TPopupActionBar
     OnPopup = PopupMenu1Popup

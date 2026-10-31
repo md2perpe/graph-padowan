@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 
-from ftplib import FTP
+import ftplib
 from getpass import getpass
 from VersionInfo import CalcVersionInfo
 import os
@@ -12,21 +12,19 @@ import subprocess
 try:
   # Test that Graph can be started without some obscure dll files
   os.system("Graph.exe /regserver")
+  VersionInfo = CalcVersionInfo("Graph.exe")
 
   # Sign Graph.exe
-  if "/sign" in sys.argv:
-    subprocess.check_call(['signtool.exe',  'sign', '/f', 'IvanMøllerJohansen.crt', '/t', 'http://timestamp.comodoca.com/authenticode', '/d', '"Graph"', 'Graph.exe'])
+  subprocess.check_call(['signtool.exe',  'sign', '/sha1', '2b23c09a501a21ef4b37d33894bbf8bcc59cdc76', '/tr', 'http://time.certum.pl', '/fd', 'sha256', '/d', 'Graph ' + VersionInfo, 'Graph.exe'])
 
-  # Compile SetupGraphBeta-4.2.0.x.exe
+  # Compile SetupGraphBeta-4.5.x.exe
   print("Compiling...")
-  subprocess.check_call(["c:\\program files\\Inno Setup 5\\iscc.exe", "/Q", "Graph.iss"])
+  subprocess.check_call(["c:\\program files (x86)\\Inno Setup 5\\iscc.exe", "/Q", "Graph.iss"])
 
-  VersionInfo = CalcVersionInfo("Graph.exe")
   FileName = "SetupGraphBeta-" + VersionInfo + ".exe"
 
   # Sign SetupGraphBeta-x.x.x.exe
-  if "/sign" in sys.argv:
-    subprocess.check_call(['signtool.exe',  'sign', '/f', 'IvanMøllerJohansen.crt', '/t', 'http://timestamp.comodoca.com/authenticode', '/d', '"Graph"', FileName])
+#  subprocess.check_call(['signtool.exe',  'sign', '/sha1', '2b23c09a501a21ef4b37d33894bbf8bcc59cdc76', '/tr', 'http://time.certum.pl', '/fd', 'sha256', '/d', 'Graph ' + VersionInfo, FileName])
 
   #Creating GraphBeta.inf
   print("Writing GraphBeta.inf ...")
@@ -41,9 +39,14 @@ try:
   File.write("DownloadPage = http://www.padowan.dk/beta\n")
 
   # Upload SetupGraphBeta.exe to the server
-  Password = getpass()
-  ftp = FTP('ftp.padowan.dk')   # connect to host, default port
-  ftp.login('padowan.dk', Password)
+  ftp = ftplib.FTP('ftp.padowan.dk')   # connect to host, default port
+  while True:
+    try:
+      Password = getpass()
+      ftp.login('padowan.dk', Password)
+      break
+    except ftplib.error_perm as E:
+        print(E.args)
   ftp.cwd('bin')
   print("Uploading", FileName, "...")
   File = open(FileName, 'rb')

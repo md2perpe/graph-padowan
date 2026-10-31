@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter SYSTEM "dtd/dblite.dtd">
 <section id="Setting">
-	<section id="Graph.TProperty" xreflabel="Graph.TProperty">
-		<indexterm><primary>TProperty (class in Graph)</primary></indexterm>
-		<title>class <classname>Graph.TProperty</classname></title>
+	<section id="Graph.TOptions" xreflabel="Graph.TOptions">
+		<indexterm><primary>TOptions (class in Graph)</primary></indexterm>
+		<title>class <classname>Graph.TOptions</classname></title>
 		<para>
 			<variablelist>
 				<varlistentry>
 					<term>
-						<indexterm><primary>RoundTo (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>RoundTo</property>
+						<indexterm><primary>RoundTo (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>RoundTo</property>
 					</term>
 					<listitem>
 						<para>
@@ -20,8 +20,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>SavePos (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>SavePos</property>
+						<indexterm><primary>SavePos (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>SavePos</property>
 					</term>
 					<listitem>
 						<para>
@@ -32,8 +32,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>ComplexFormat (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>ComplexFormat</property>
+						<indexterm><primary>ComplexFormat (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>ComplexFormat</property>
 					</term>
 					<listitem>
 						<para>
@@ -45,8 +45,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>CheckForUpdate (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>CheckForUpdate</property>
+						<indexterm><primary>CheckForUpdate (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>CheckForUpdate</property>
 					</term>
 					<listitem>
 						<para>
@@ -56,23 +56,23 @@
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TProperty</classname>.<property>DefaultFunction</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultPoint</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultPointLine</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultShade</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultTrendline</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultRelation</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultTangent</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultDif</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultFunction</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultPoint</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultPointLine</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultShade</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultTrendline</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultRelation</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultTangent</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultDif</property></term>
 					<listitem>
-						<indexterm><primary>DefaultFunction (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultPoint (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultPointLine (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultShade (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultTrendline (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultRelation (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultTangent (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultDif (Graph.TProperty attribute)</primary></indexterm>
+						<indexterm><primary>DefaultFunction (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultPoint (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultPointLine (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultShade (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultTrendline (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultRelation (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultTangent (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultDif (Graph.TOptions attribute)</primary></indexterm>
 						<para>
 							 A tuple with default settings for functions, point markers, point lines, shadings, trendlines, relations, tangents
 							and derivatives with style, color and size.
@@ -81,33 +81,21 @@
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TProperty</classname>.<property>DefaultPointLabelFont</property></term>
-					<term><classname>TProperty</classname>.<property>DefaultLabelFont</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultPointLabelFont</property></term>
+					<term><classname>TOptions</classname>.<property>DefaultLabelFont</property></term>
 					<listitem>
-						<indexterm><primary>DefaultPointLabelFont (Graph.TProperty attribute)</primary></indexterm>
-						<indexterm><primary>DefaultLabelFont (Graph.TProperty attribute)</primary></indexterm>
+						<indexterm><primary>DefaultPointLabelFont (Graph.TOptions attribute)</primary></indexterm>
+						<indexterm><primary>DefaultLabelFont (Graph.TOptions attribute)</primary></indexterm>
 						<para>
 							VCL object of type <classname>TFont</classname> with default font settings for point series labels and text labels.
 						</para>
 					</listitem>
 				</varlistentry>
-
+3
 				<varlistentry>
 					<term>
-						<indexterm><primary>ShowTipsAtStartup (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>ShowTipsAtStartup</property>
-					</term>
-					<listitem>
-						<para>
-							Indicates if Tip of the Day should be shown at startup.
-						</para>
-					</listitem>
-				</varlistentry>
-
-				<varlistentry>
-					<term>
-						<indexterm><primary>Language (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>Language</property>
+						<indexterm><primary>Language (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>Language</property>
 					</term>
 					<listitem>
 						<para>
@@ -118,8 +106,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>FontScale (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>FontScale</property>
+						<indexterm><primary>FontScale (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>FontScale</property>
 					</term>
 					<listitem>
 						<para>
@@ -130,8 +118,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>CustomDecimalSeparator (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>CustomDecimalSeparator</property>
+						<indexterm><primary>CustomDecimalSeparator (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>CustomDecimalSeparator</property>
 					</term>
 					<listitem>
 						<para>
@@ -143,8 +131,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>DecimalSeparator (Graph.TProperty attribute)</primary></indexterm>
-						<classname>TProperty</classname>.<property>DecimalSeparator</property>
+						<indexterm><primary>DecimalSeparator (Graph.TOptions attribute)</primary></indexterm>
+						<classname>TOptions</classname>.<property>DecimalSeparator</property>
 					</term>
 					<listitem>
 						<para>
@@ -427,7 +415,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the color of the axes. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TColor">VCL documentation</ulink>.
+							This specifies the color of the axes. See the <ulink url="WIKI/Graphics.TColor">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -439,7 +427,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the color of the grid lines. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TColor">VCL documentation</ulink>.
+							This specifies the color of the grid lines. See the <ulink url="WIKI/Graphics.TColor">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -451,7 +439,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the background color of the image. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TColor">VCL documentation</ulink>.
+							This specifies the background color of the image. See the <ulink url="WIKI/Graphics.TColor">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -463,7 +451,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the font used to write the numbers along the axes. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TFont">VCL documentation</ulink>.
+							This specifies the font used to write the numbers along the axes. See the <ulink url="WIKI/Graphics.TFont">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -475,7 +463,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the font used to write the labels shown at the end of the axes. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TFont">VCL documentation</ulink>.
+							This specifies the font used to write the labels shown at the end of the axes. See the <ulink url="WIKI/Graphics.TFont">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -487,7 +475,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the font used to write the text in the legend. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TFont">VCL documentation</ulink>.
+							This specifies the font used to write the text in the legend. See the <ulink url="WIKI/Graphics.TFont">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -499,7 +487,7 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the font used to write the title above the coordinate system. See the <ulink url="http://docwiki.embarcadero.com/VCL/en/Graphics.TFont">VCL documentation</ulink>.
+							This specifies the font used to write the title above the coordinate system. See the <ulink url="WIKI/Graphics.TFont">VCL documentation</ulink>.
 						</para>
 					</listitem>
 				</varlistentry>

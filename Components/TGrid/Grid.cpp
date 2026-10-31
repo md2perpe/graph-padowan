@@ -40,10 +40,8 @@ namespace Grid
 }
 //---------------------------------------------------------------------------
 __fastcall TGrid::TGrid(TComponent* Owner)
- : TDrawGrid(Owner), FSelectCols(true), FSelectRows(true), FPopupMenu(NULL),
-   LeftButtonPressed(false), FAutoAddRows(false), FOnEditorKeyPress(NULL),
-   FEditorPopupMenu(NULL), FOnGetText(NULL), FOnSetText(NULL),
-   FExportFixedRows(true)
+ : TBaseGrid(Owner), FSelectCols(true), FSelectRows(true), FPopupMenu(NULL),
+   LeftButtonPressed(false), FAutoAddRows(false), FEditorPopupMenu(NULL), FExportFixedRows(true)
 {
   //Initialize to invalid value
   SelStart.X = -1;
@@ -170,23 +168,22 @@ void __fastcall TGrid::KeyDown(Word &Key, Classes::TShiftState Shift)
 
   TDrawGrid::KeyDown(Key, Shift);
 
-  if(Key == VK_DELETE && Editing)
+  if((Key == VK_DELETE || Key == VK_BACK) && Editing)
     ClearSelection();
-
   else if(Key==VK_LEFT || Key==VK_RIGHT || Key==VK_UP || Key==VK_DOWN)
+  {
     if(Shift.Contains(ssShift))
     {
       Options = Options >> goEditing;
       EditorMode = false;
     }
-    else
-      if(Editing)
-      {
-        Options = Options << goEditing;
-        EditorMode = true;
-        EmptySelection();
-      }
-
+    else if(Editing)
+    {
+      Options = Options << goEditing;
+      EditorMode = true;
+      EmptySelection();
+    }
+  }
   if(InplaceEditor)
     switch(Key)
     {
@@ -221,8 +218,9 @@ void __fastcall TGrid::KeyPress(Char &Key)
     Key = 0;
   if(Editing && !EditorMode)
   {
-    FOnEditorKeyPress(InplaceEditor, Key);
-    if(Key)
+    if(OnEditorKeyPress)
+      OnEditorKeyPress(InplaceEditor, Key);
+    if(Key && Key != '\b')
     {
       Options = Options << goEditing;
       EditorMode = true;
@@ -330,8 +328,7 @@ void __fastcall TGrid::MouseMove(TShiftState Shift, int X, int Y)
           break;
         GridRect.Right = ColCount-1;
         Selection = GridRect;
-        //Invalidate grid; InvalidateCol(ColCount-1) doesn't seem to work
-        ::InvalidateRect(Handle, &ClientRect, false);
+        Invalidate();
         break;
 
       case crColCursor:
@@ -339,8 +336,7 @@ void __fastcall TGrid::MouseMove(TShiftState Shift, int X, int Y)
           break;
         GridRect.Bottom = RowCount-1;
         Selection = GridRect;
-        //Invalidate grid; InvalidateRow(RowCount-1) doesn't seem to work
-        ::InvalidateRect(Handle, &ClientRect, false);
+        Invalidate();
         break;
 
       default:
@@ -429,7 +425,7 @@ void __fastcall TGrid::WMSetCursor(TMessage &Message)
 }
 //---------------------------------------------------------------------------
 //This function selects all cells in the grid
-void TGrid::SelectAll()
+void __fastcall TGrid::SelectAll()
 {
   TGridRect GridRect;
   GridRect.Left = FixedCols;
@@ -442,7 +438,7 @@ void TGrid::SelectAll()
 }
 //---------------------------------------------------------------------------
 //This function clears all cells in the grid
-void TGrid::ClearAll()
+void __fastcall TGrid::ClearAll()
 {
   if(AutoAddRows)
     RowCount = FixedRows+1;
@@ -452,7 +448,7 @@ void TGrid::ClearAll()
 }
 //---------------------------------------------------------------------------
 //This function celars all selected cells in the grid
-void TGrid::ClearSelection()
+void __fastcall TGrid::ClearSelection()
 {
   if(EditorMode)
   {
@@ -513,7 +509,7 @@ String TGrid::ExportText(wchar_t Delimiter, wchar_t DecimalSeparator)
 }
 //---------------------------------------------------------------------------
 //This function copies all selected cells to the clipboard
-void TGrid::CopyToClipboard(wchar_t DecimalSeparator)
+void __fastcall TGrid::CopyToClipboard(wchar_t DecimalSeparator)
 {
   if(EditorMode)
   {
@@ -527,7 +523,7 @@ void TGrid::CopyToClipboard(wchar_t DecimalSeparator)
 }
 //---------------------------------------------------------------------------
 //This function cuts all selected cells to the clipboard
-void TGrid::CutToClipboard(wchar_t DecimalSeparator)
+void __fastcall TGrid::CutToClipboard(wchar_t DecimalSeparator)
 {
   CopyToClipboard(DecimalSeparator);
   ClearSelection();
@@ -535,7 +531,7 @@ void TGrid::CutToClipboard(wchar_t DecimalSeparator)
 //---------------------------------------------------------------------------
 //This function pastes text from the clipboard and places it in the cells
 //begining with the top left cell of the selection
-void TGrid::PasteFromClipboard(wchar_t DecimalSeparator, wchar_t Separator)
+void __fastcall TGrid::PasteFromClipboard(wchar_t DecimalSeparator, wchar_t Separator)
 {
 	ImportText(Clipboard()->AsText, DecimalSeparator, Separator);
 }
@@ -586,17 +582,14 @@ void __fastcall TGrid::WMTimer(TMessage &Message)
         GridRect.Bottom = TopRow + VisibleRowCount - 1;
         Selection = GridRect;
       }
-      else
-        if(CursorPos.y < Cell.Top)
-        {
-          if(TopRow > FixedRows)
-            TopRow = TopRow - 1;
-          GridRect.Bottom = TopRow;
-          Selection = GridRect;
-        }
-      //Invalidate grid; InvalidateCol() doesn't seem to work, and the last marked
-      //cell may need to be invalidated too.
-      ::InvalidateRect(Handle, &ClientRect, false);
+      else if(CursorPos.y < Cell.Top)
+      {
+        if(TopRow > FixedRows)
+          TopRow = TopRow - 1;
+        GridRect.Bottom = TopRow;
+        Selection = GridRect;
+      }
+      Invalidate();
       break;
     case crColCursor:
       GridRect.Bottom = RowCount;
@@ -613,9 +606,7 @@ void __fastcall TGrid::WMTimer(TMessage &Message)
           GridRect.Right = LeftCol + VisibleColCount;
           Selection = GridRect;
         }
-      //Invalidate grid; InvalidateRow() doesn't seem to work, and the last marked
-      //cell may need to be invalidated too.
-      ::InvalidateRect(Handle, &ClientRect, false);
+        Invalidate();
       break;
     default:
       TDrawGrid::Dispatch(&Message);
@@ -670,7 +661,7 @@ void __fastcall TGrid::DblClick()
     AutoSizeCol(Index);
 }
 //---------------------------------------------------------------------------
-void TGrid::AutoSizeCol(int ColIndex)
+void __fastcall TGrid::AutoSizeCol(int ColIndex)
 {
   if(ColIndex < FixedCols || ColIndex >= ColCount)
     return;
@@ -871,7 +862,7 @@ void __fastcall TMyInplaceEdit::KeyPress(Char &Key)
   }
 }
 //---------------------------------------------------------------------------
-void TGrid::NextCell()
+void __fastcall TGrid::NextCell()
 {
   //Move focus to next column. If last column, move to next row
   if(Col < ColCount-1)
@@ -884,7 +875,7 @@ void TGrid::NextCell()
     }
 }
 //---------------------------------------------------------------------------
-void TGrid::LastCell()
+void __fastcall TGrid::LastCell()
 {
   //Move focus one column to the left. If first column, move one row up
   if(Col > FixedCols)
@@ -923,7 +914,7 @@ void __fastcall TMyInplaceEdit::WMPaste(TMessage &Message)
     MyGrid->PasteFromClipboard(0);
 }
 //---------------------------------------------------------------------------
-void TGrid::InsertRows(int Index, int Count)
+void __fastcall TGrid::InsertRows(int Index, int Count)
 {
   if(Index >= RowCount)
     Index = RowCount-1;
@@ -942,7 +933,7 @@ void TGrid::InsertRows(int Index, int Count)
       DoSetText(Col, Row, String());
 }
 //---------------------------------------------------------------------------
-void TGrid::RemoveRows(int Index, int Count)
+void __fastcall TGrid::RemoveRows(int Index, int Count)
 {
   if(Index >= RowCount)
     return;
@@ -954,11 +945,13 @@ void TGrid::RemoveRows(int Index, int Count)
     for(int Col = 0; Col < ColCount; Col++)
       DoSetText(Col, Row, DoGetText(Col, Row+Count));
 
-  if(AutoAddRows && RowCount-Count == FixedRows)
+  if(AutoAddRows)
   {
-    for(int Col = 0; Col < ColCount; Col++)
-      DoSetText(Col, FixedRows, String());
-    RowCount = FixedRows+1;
+    for(int Row = RowCount-Count; Row < RowCount; Row++)
+      for(int Col = 0; Col < ColCount; Col++)
+        DoSetText(Col, Row, String());
+    //If we removed the last row, add an empty row again
+    RowCount = Index + Count == RowCount ? RowCount - Count + 1 : RowCount - Count;
   }
   else
     RowCount = RowCount - Count;
@@ -971,14 +964,14 @@ void __fastcall TGrid::SetEditorPopupMenu(TPopupMenu *Menu)
     Edit->PopupMenu = Menu;
 }
 //---------------------------------------------------------------------------
-bool TGrid::CanCopy()
+bool __fastcall TGrid::CanCopy()
 {
   if(EditorMode)
     return InplaceEditor->SelLength;
   return true;
 }
 //---------------------------------------------------------------------------
-bool TGrid::ImportFromFile(const String &FileName, wchar_t DecimalSeparator, wchar_t Separator)
+bool __fastcall TGrid::ImportFromFile(String FileName, wchar_t DecimalSeparator, wchar_t Separator)
 {
 	std::ifstream Stream(FileName.c_str());
 	if(!Stream)
@@ -988,7 +981,7 @@ bool TGrid::ImportFromFile(const String &FileName, wchar_t DecimalSeparator, wch
 	return true;
  }
 //---------------------------------------------------------------------------
-void TGrid::Import(std::istream &Stream, wchar_t DecimalSeparator, wchar_t Separator)
+void __fastcall TGrid::Import(std::istream &Stream, wchar_t DecimalSeparator, wchar_t Separator)
 {
   TCsvGrid CsvGrid;
   if(Separator == 0)
@@ -1022,7 +1015,7 @@ void TGrid::Import(std::istream &Stream, wchar_t DecimalSeparator, wchar_t Separ
   AjustRows();
 }
 //---------------------------------------------------------------------------
-bool TGrid::ExportToFile(const String &FileName, wchar_t Delimiter, wchar_t DecimalSeparator, bool Utf8)
+bool __fastcall TGrid::ExportToFile(String FileName, wchar_t Delimiter, wchar_t DecimalSeparator, bool Utf8)
 {
   //Save binary; \r\n is already used as line feed
   std::ofstream Stream(FileName.c_str(), std::ios::binary);
@@ -1048,23 +1041,23 @@ TGridRect TGrid::GetCompleteGridRect()
   return GridRect;
 }
 //---------------------------------------------------------------------------
-String TGrid::DoGetText(unsigned ACol, unsigned ARow)
+String __fastcall TGrid::DoGetText(int ACol, int ARow)
 {
   String Value;
-  if(FOnGetText)
-    FOnGetText(this, ACol, ARow, Value);
-  else if(ACol < Data.size())
-    if(ARow < Data[ACol].size())
+  if(OnGetText)
+    OnGetText(this, ACol, ARow, Value);
+  else if(ACol >= 0 && ACol < static_cast<int>(Data.size()))
+    if(ARow >= 0 && ARow < static_cast<int>(Data[ACol].size()))
       return Data[ACol][ARow];
 
   return Value;
 }
 //---------------------------------------------------------------------------
-void TGrid::DoSetText(unsigned ACol, unsigned ARow, const String &Value)
+void __fastcall TGrid::DoSetText(int ACol, int ARow, String Value)
 {
-  if(FOnSetText)
-    FOnSetText(this, ACol, ARow, Value);
-  else if(ACol < (unsigned)ColCount && ARow < (unsigned)RowCount)
+  if(OnSetText)
+    OnSetText(this, ACol, ARow, Value);
+  else if(ACol >= 0 && ACol < ColCount && ARow >= 0 && ARow < RowCount)
   {
     Data.resize(std::max(ColCount, Col+1));
     for(unsigned I = 0; I < Data.size(); I++)
@@ -1072,7 +1065,7 @@ void TGrid::DoSetText(unsigned ACol, unsigned ARow, const String &Value)
     Data[ACol][ARow] = Value;
   }
   InvalidateCell(ACol, ARow);
-  if(ACol == static_cast<unsigned>(Col) && ARow == static_cast<unsigned>(Row) && !EditUpdate)
+  if(ACol == Col && ARow == Row && !EditUpdate)
     InvalidateEditor();
 }
 //---------------------------------------------------------------------------
@@ -1097,7 +1090,7 @@ void __fastcall TGrid::SetEditText(int ACol, int ARow, const String Value)
   EditUpdate--;
 }
 //---------------------------------------------------------------------------
-void TGrid::SetCursorPos(int Pos)
+void __fastcall TGrid::SetCursorPos(int Pos)
 {
   if(InplaceEditor)
     InplaceEditor->SelStart = Pos;

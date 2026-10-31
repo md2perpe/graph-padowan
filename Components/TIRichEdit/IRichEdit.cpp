@@ -6,6 +6,7 @@
 #include <memory>
 #include "ICompCommon.h"
 #pragma package(smart_init)
+#pragma link "RichEditOle"
 //---------------------------------------------------------------------------
 static TRegisterClass Dummy(__classid(TIRichEdit));
 // ValidCtrCheck is used to assure that the components created do not have
@@ -28,7 +29,7 @@ namespace Irichedit
 __fastcall TIRichEdit::TIRichEdit(TComponent* Owner)
   : TCustomRichEdit(Owner), FTransparent(false), TextFormat(this, false),
     GlobalTextFormat(this, true), FOnOleError(NULL), FBackgroundColor(clDefault),
-    FParagraph(new ::TParaFormat(this)), FOnLink(NULL), FProtectedChange(false),
+    FParagraph(new TRichEditParaFormat(this)), FOnLink(NULL), FProtectedChange(false),
     FOnActivateObject(NULL), RichEditOle(NULL), FEnableOLE(false), FWrapType(wtWord),
     OldEditWordBreakProc(NULL)
 {
@@ -51,7 +52,7 @@ void __fastcall TIRichEdit::CreateParams(Controls::TCreateParams &Params)
 
 	TCustomMemo::CreateParams(Params); //Don't call TCustomRichEdit::CreateParams
 
-	CreateSubClass(Params, L"RichEdit20W" /*RICHEDIT_CLASS*/);
+	CreateSubClass(Params, const_cast<wchar_t*>(L"RichEdit20W") /*RICHEDIT_CLASS*/);
 	Params.Style = Params.Style |
 		(HideScrollBars ? 0 : ES_DISABLENOSCROLL) |
 		(HideSelection ? 0 : ES_NOHIDESEL);
@@ -131,6 +132,18 @@ AnsiString TIRichEdit::GetRichText()
   return Str;
 }
 //---------------------------------------------------------------------------
+String TIRichEdit::GetPlainText(bool UseCrLf)
+{
+  GETTEXTLENGTHEX TextLengthEx = {GTL_NUMCHARS | (UseCrLf ? GTL_USECRLF : GTL_DEFAULT), 1200};
+  int Length = SendMessage(Handle, EM_GETTEXTLENGTHEX, reinterpret_cast<WPARAM>(&TextLengthEx), NULL);
+  GETTEXTEX TextEx = {2*(Length+1), UseCrLf ? GT_USECRLF : GT_DEFAULT, 1200, NULL, NULL};
+  String Str;
+  Str.SetLength(Length + 1);
+  SendMessage(Handle, EM_GETTEXTEX, reinterpret_cast<WPARAM>(&TextEx), reinterpret_cast<LPARAM>(&Str[1]));
+  Str.SetLength(Length);
+  return Str;
+}
+//---------------------------------------------------------------------------
 void TIRichEdit::Render(TCanvas *Canvas, const TPoint &Pos, int Width)
 {
   FORMATRANGE Format;
@@ -159,7 +172,7 @@ void TIRichEdit::Render(TCanvas *Canvas, const TPoint &Pos, int Width)
   SendMessage(Handle, EM_FORMATRANGE, 1, reinterpret_cast<long>(&Format));
   //Free cached memory
   SendMessage(Handle, EM_FORMATRANGE, 1, NULL);
-}                             
+}
 //---------------------------------------------------------------------------
 //Returns the size of the text
 TPoint TIRichEdit::GetTextSize()
@@ -185,11 +198,40 @@ bool TIRichEdit::IsEmpty() const
   return !Lines->Count;
 }
 //---------------------------------------------------------------------------
-TTextFormat::TTextFormat(TIRichEdit *ARichEdit, bool AGlobal) : RichEdit(ARichEdit), Global(AGlobal)
+void TIRichEdit::ReplaceText(unsigned Pos, unsigned Length, const String &Str)
+{
+  int OldSelStart = SelStart;
+  int OldSelLength = SelLength;
+  SelStart = Pos;
+  SelLength = Length;
+  SelText = Str;
+  SelStart = OldSelStart;
+  SelLength = OldSelLength;
+}
+//---------------------------------------------------------------------------
+void TIRichEdit::ReplaceText(unsigned Pos, unsigned Length, const String &Str, TColor Color)
+{
+  int OldSelStart = SelStart;
+  int OldSelLength = SelLength;
+
+  SelStart = Pos;
+  SelLength = Length;
+  SelText = Str;
+
+  SelStart = Pos;
+  SelLength = Str.Length();
+//  TextFormat.SetBold(true);
+  TextFormat.SetColor(Color);
+
+  SelStart = OldSelStart;
+  SelLength = OldSelLength;
+}
+//---------------------------------------------------------------------------
+TRichEditTextFormat::TRichEditTextFormat(TIRichEdit *ARichEdit, bool AGlobal) : RichEdit(ARichEdit), Global(AGlobal)
 {
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetFormat(::CHARFORMAT2 Format, unsigned Mask)
+void TRichEditTextFormat::SetFormat(::CHARFORMAT2 Format, unsigned Mask)
 {
   Format.cbSize = sizeof(Format);
   Format.dwMask = Mask;
@@ -197,18 +239,18 @@ void TTextFormat::SetFormat(::CHARFORMAT2 Format, unsigned Mask)
   if(!SendMessage(RichEdit->Handle,
                   EM_SETCHARFORMAT,
                   Global ? SCF_ALL : SCF_SELECTION,
-                  reinterpret_cast<long>(&Format)))
+                  reinterpret_cast<LPARAM>(&Format)))
     RaiseLastOSError();
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetFormat(unsigned Mask, unsigned Effects)
+void TRichEditTextFormat::SetFormat(unsigned Mask, unsigned Effects)
 {
   ::CHARFORMAT2 Format;
   Format.dwEffects = Effects;
   SetFormat(Format, Mask);
 }
 //---------------------------------------------------------------------------
-::CHARFORMAT2 TTextFormat::GetFormat() const
+CHARFORMAT2W TRichEditTextFormat::GetFormat() const
 {
   ::CHARFORMAT2 Format;
   Format.cbSize = sizeof(Format);
@@ -216,41 +258,41 @@ void TTextFormat::SetFormat(unsigned Mask, unsigned Effects)
   SendMessage(RichEdit->Handle,
               EM_GETCHARFORMAT,
               Global ? SCF_ALL : SCF_SELECTION,
-              reinterpret_cast<long>(&Format));
+              reinterpret_cast<LPARAM>(&Format));
   return Format;
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetSuperscript(bool Value)
+void TRichEditTextFormat::SetSuperscript(bool Value)
 {
   SetFormat(CFM_SUPERSCRIPT, Value ? CFE_SUPERSCRIPT : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetSubscript(bool Value)
+void TRichEditTextFormat::SetSubscript(bool Value)
 {
   SetFormat(CFM_SUBSCRIPT, Value ? CFE_SUBSCRIPT : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetBold(bool Value)
+void TRichEditTextFormat::SetBold(bool Value)
 {
   SetFormat(CFM_BOLD, Value ? CFE_BOLD : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetItalic(bool Value)
+void TRichEditTextFormat::SetItalic(bool Value)
 {
   SetFormat(CFM_ITALIC, Value ? CFE_ITALIC : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetUnderline(bool Value)
+void TRichEditTextFormat::SetUnderline(bool Value)
 {
   SetFormat(CFM_UNDERLINE, Value ? CFE_UNDERLINE : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetStrikeOut(bool Value)
+void TRichEditTextFormat::SetStrikeOut(bool Value)
 {
   SetFormat(CFM_STRIKEOUT, Value ? CFE_STRIKEOUT : 0);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetSize(unsigned Value)
+void TRichEditTextFormat::SetSize(unsigned Value)
 {
   ::CHARFORMAT2 Format;
   Format.yHeight = Value * 20;
@@ -271,17 +313,17 @@ unsigned GetCharset(const AnsiString &FontName)
   return Charset;
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetName(const String &Str)
+void TRichEditTextFormat::SetName(const String &Str)
 {
   ::CHARFORMAT2 Format;
   wcsncpy(Format.szFaceName, Str.c_str(), sizeof(Format.szFaceName));
-  Format.szFaceName[sizeof(Format.szFaceName) - 1] = 0;
+  Format.szFaceName[sizeof(Format.szFaceName)/sizeof(Format.szFaceName[0]) - 1] = 0;
   Format.bCharSet = GetCharset(Str);
   SetFormat(Format, CFM_FACE);    //We must set the font name first and the charset afterwards
   SetFormat(Format, CFM_CHARSET);
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetColor(TColor Value)
+void TRichEditTextFormat::SetColor(TColor Value)
 {
   ::CHARFORMAT2 Format;
   Format.crTextColor = ColorToRGB(Value);
@@ -290,7 +332,7 @@ void TTextFormat::SetColor(TColor Value)
 }
 //---------------------------------------------------------------------------
 //Set background color for text; Use clNone for transparent
-void TTextFormat::SetBackgroundColor(TColor Value)
+void TRichEditTextFormat::SetBackgroundColor(TColor Value)
 {
   ::CHARFORMAT2 Format;
   Format.crBackColor = ColorToRGB(Value);
@@ -298,52 +340,52 @@ void TTextFormat::SetBackgroundColor(TColor Value)
   SetFormat(Format, CFM_BACKCOLOR);
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetSuperscript() const
+bool TRichEditTextFormat::GetSuperscript() const
 {
   return GetFormat().dwEffects & CFE_SUPERSCRIPT;
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetSubscript() const
+bool TRichEditTextFormat::GetSubscript() const
 {
   return GetFormat().dwEffects & CFE_SUBSCRIPT;
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetBold() const
+bool TRichEditTextFormat::GetBold() const
 {
   return GetFormat().dwEffects & CFE_BOLD;
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetItalic() const
+bool TRichEditTextFormat::GetItalic() const
 {
   return GetFormat().dwEffects & CFE_ITALIC;
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetUnderline() const
+bool TRichEditTextFormat::GetUnderline() const
 {
   return GetFormat().dwEffects & CFE_UNDERLINE;
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetStrikeOut() const
+bool TRichEditTextFormat::GetStrikeOut() const
 {
   return GetFormat().dwEffects & CFE_STRIKEOUT;
 }
 //---------------------------------------------------------------------------
-unsigned TTextFormat::GetSize() const
+unsigned TRichEditTextFormat::GetSize() const
 {
   return GetFormat().yHeight / 20;
 }
 //---------------------------------------------------------------------------
-String TTextFormat::GetName() const
+String TRichEditTextFormat::GetName() const
 {
   return GetFormat().szFaceName;
 }
 //---------------------------------------------------------------------------
-TColor TTextFormat::GetColor() const
+TColor TRichEditTextFormat::GetColor() const
 {
   return static_cast<TColor>(GetFormat().crTextColor);
 }
 //---------------------------------------------------------------------------
-TColor TTextFormat::GetBackgroundColor() const
+TColor TRichEditTextFormat::GetBackgroundColor() const
 {
   ::CHARFORMAT2 Format = GetFormat();
   return Format.dwEffects & CFE_AUTOBACKCOLOR ? clDefault : static_cast<TColor>(Format.crBackColor);
@@ -468,12 +510,12 @@ void TIRichEdit::SetSelText(char Ch, const String &FontName, unsigned Size)
   SendMessage(Handle, EM_SETTEXTEX, reinterpret_cast<long>(&SetTextEx), reinterpret_cast<long>(Temp.c_str()));
 }
 //---------------------------------------------------------------------------
-TParaFormat::TParaFormat(TIRichEdit *ARichEdit)
+TRichEditParaFormat::TRichEditParaFormat(TIRichEdit *ARichEdit)
   : RichEdit(ARichEdit), TParaAttributes(ARichEdit)
 {
 }
 //---------------------------------------------------------------------------
-::PARAFORMAT2 TParaFormat::GetFormat() const
+::PARAFORMAT2 TRichEditParaFormat::GetFormat() const
 {
   ::PARAFORMAT2 Format;
   Format.cbSize = sizeof(Format);
@@ -482,36 +524,36 @@ TParaFormat::TParaFormat(TIRichEdit *ARichEdit)
   return Format;
 }
 //---------------------------------------------------------------------------
-TParaFormatAlignment TParaFormat::GetAlignment()
+TParaFormatAlignment TRichEditParaFormat::GetAlignment()
 {
   return static_cast<TParaFormatAlignment>(GetFormat().wAlignment);
 }
 //---------------------------------------------------------------------------
-void TParaFormat::SetAlignment(TParaFormatAlignment Value)
+void TRichEditParaFormat::SetAlignment(TParaFormatAlignment Value)
 {
   ::PARAFORMAT2 Format;
   Format.cbSize = sizeof(Format);
   Format.wAlignment = Value;
   Format.dwMask = PFM_ALIGNMENT;
-  SendMessage(RichEdit->Handle, EM_SETPARAFORMAT, 0, reinterpret_cast<long>(&Format));
+  SendMessage(RichEdit->Handle, EM_SETPARAFORMAT, 0, reinterpret_cast<LPARAM>(&Format));
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetLink(bool Value)
+void TRichEditTextFormat::SetLink(bool Value)
 {
   SetFormat(CFM_LINK, Value ? CFE_LINK : 0);
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetLink() const
+bool TRichEditTextFormat::GetLink() const
 {
   return GetFormat().dwEffects & CFE_LINK;
 }
 //---------------------------------------------------------------------------
-void TTextFormat::SetProtected(bool Value)
+void TRichEditTextFormat::SetProtected(bool Value)
 {
   SetFormat(CFM_PROTECTED, Value ? CFE_PROTECTED : 0);
 }
 //---------------------------------------------------------------------------
-bool TTextFormat::GetProtected() const
+bool TRichEditTextFormat::GetProtected() const
 {
   return GetFormat().dwEffects & CFE_PROTECTED;
 }
@@ -644,7 +686,7 @@ void __fastcall TIRichEdit::SetWrapType(TWrapType Value)
     FWrapType = Value;
     if(!ComponentState.Contains(csDesigning))
     {
-      TCustomRichEdit::WordWrap = Value != wtNone;
+      WordWrap = Value != wtNone;
       if(HandleAllocated())
         SendMessage(Handle, EM_SETWORDBREAKPROC, 0, Value == wtChar ? (LONG)&EditWordBreakProc : (LONG)OldEditWordBreakProc);
     }

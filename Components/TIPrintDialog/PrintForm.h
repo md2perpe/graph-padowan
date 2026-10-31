@@ -22,7 +22,6 @@ __published:	// IDE-managed Components
   TComboBox *ComboBox1;
   TLabel *Label1;
   TRadioGroup *RadioGroup1;
-  TRadioGroup *RadioGroup2;
   TGroupBox *GroupBox2;
   TCheckBox *CheckBox1;
   TLabel *Label3;
@@ -55,8 +54,9 @@ __published:	// IDE-managed Components
   void __fastcall ComboBox1Change(TObject *Sender);
   void __fastcall Button3Click(TObject *Sender);
 
-private:	// User declarations
+private:	// User declaration
   class TIPrintDialog *PrintDialog;
+  bool Updating;
 
   void PrinterChanged();
   void ResizePaper();

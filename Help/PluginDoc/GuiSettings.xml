@@ -100,6 +100,54 @@
 						</para>
 					</listitem>
 				</varlistentry>
+
+				<varlistentry>
+					<term><classname>TPlotSettings</classname>.<property>ThreadCount</property></term>
+					<listitem>
+						<indexterm><primary>ThreadCount (Graph.TPlotSettings attribute)</primary></indexterm>
+						<para>
+							The number of threads used for plotting.
+							<property>ThreadCount</property> is at least 1 and the default is the number of CPU cores detected.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term><classname>TPlotSettings</classname>.<property>SmoothingMode</property></term>
+					<listitem>
+						<indexterm><primary>SmoothingMode (Graph.TPlotSettings attribute)</primary></indexterm>
+						<para>
+							This specifies the rendering quality of lines. The following values are valid:
+							<informaltable>
+ 								<tgroup cols="2">
+									<colspec colnum="1" colwidth="*"/>
+									<colspec colnum="2" colwidth="*"/>
+									<thead>
+										<row>
+										<entry>Value</entry>
+										<entry>Description</entry>
+									</row>
+								</thead>
+ 								<tbody>
+    				  		<row>
+    				    		<entry>0, 1, 3</entry>
+    				    		<entry>Specifies that smoothing is not applied.</entry>
+    				  		</row>
+    				  		<row>
+    				    		<entry>2, 4</entry>
+    				    		<entry>Specifies that smoothing is applied using an 8 X 4 box filter.</entry>
+    				  		</row>
+    				  		<row>
+    				    		<entry>5</entry>
+    				    		<entry>Specifies that smoothing is applied using an 8 X 8 box filter</entry>
+    				  		</row>
+								</tbody>
+							</tgroup>
+						</informaltable>
+
+						</para>
+					</listitem>
+				</varlistentry>
 			</variablelist>
 		</para>
 	</section>
@@ -158,7 +206,41 @@
 						</para>
 					</listitem>
 				</varlistentry>
-			</variablelist>
+
+				<varlistentry>
+					<term><classname>TGuiSettings</classname>.<property>Font</property></term>
+					<listitem>
+						<indexterm><primary>Font (Graph.TGuiSettings attribute)</primary></indexterm>
+						<para>
+							VCL object of type <classname>TFont</classname> with the font used in the GUI dialogs.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term><classname>TGuiSettings</classname>.<property>MenuIconSize</property></term>
+					<listitem>
+						<indexterm><primary>MenuIconSize (Graph.TGuiSettings attribute)</primary></indexterm>
+						<para>
+						  A value indicating the pixel width and height of menu icons. This value will be scaled 
+						  with the Windows GUI scale setting and the 
+						  <classname>TOptions</classname>.<property>FontScale</property> setting. Default: 16
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term><classname>TGuiSettings</classname>.<property>ToolBarIconSize</property></term>
+					<listitem>
+						<indexterm><primary>ToolBarIconSize (Graph.TGuiSettings attribute)</primary></indexterm>
+						<para>
+						  A value indicating the pixel width and height of tool bar icons. This value will be scaled 
+						  with the Windows GUI scale setting and the 
+						  <classname>TOptions</classname>.<property>FontScale</property> setting. Default: 24
+						</para>
+					</listitem>
+				</varlistentry>
+      </variablelist>
 		</para>
 	</section>
 </section>

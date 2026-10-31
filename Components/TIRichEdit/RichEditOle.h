@@ -22,8 +22,8 @@
 
 #include <comctrls.hpp>
 #include <comobj.hpp>
-#include <ole2.hpp>
-#include <oledlg.hpp>
+#include <ole2.h>
+#include <oledlg.h>
 #include <richole.h>
 #include "RichEditOleCallback.h"
 //---------------------------------------------------------------------------

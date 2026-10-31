@@ -1,15 +1,47 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-07 21:22+0100\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:42+0200\n"
 "Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.2.1\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. Form1..Caption
+msgid "Plugin Manager"
+msgstr ""
+
+#. Form1..ListView......Caption
+msgid "Plugin name"
+msgstr ""
+
+#. Form1..ListView......Caption
+#, fuzzy
+msgid "Version"
+msgstr "Phiên bản"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "Nhập"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr ""
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "Đóng"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -74,7 +106,7 @@ msgstr "Vị trí tên sẽ nằm bên trên và ngay bên phải trục y."
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -138,10 +170,6 @@ msgstr "Xuất thành tập tin..."
 msgid "Export the selected point series to a file."
 msgstr "Xuất tập hợp điểm đã chọn thành một tập tin."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "Nhập"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -171,7 +199,7 @@ msgstr "Chỉnh sửa"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -230,7 +258,6 @@ msgstr "Internet"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -418,12 +445,12 @@ msgstr "Chèn tiếp tuyến/đường thẳng..."
 msgid "Insert a tangent or normal for the selected function."
 msgstr "Chèn một tiếp tuyến hoặc một đường thẳng vào hàm được chọn."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 #, fuzzy
 msgid "Insert shading..."
 msgstr "Chèn bóng..."
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "Chèn bóng vào hàm được chọn."
 
@@ -694,16 +721,6 @@ msgstr "Đóng góp"
 msgid "Donate money to the project."
 msgstr "Đóng góp tiền để hỗ trợ cho tác giả chương trình."
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "Hướng dẫn nhanh"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "Hiển thị hướng dẫn nhanh."
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "Hỗ trợ"
@@ -879,28 +896,6 @@ msgstr "Dưới trái"
 msgid "Show the legend in the bottom left corner."
 msgstr "Hiển thị ghi chú ở góc dưới bên trái"
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "Đóng"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "Tiếp theo"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "Trước đó"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "Hiển thị hướng dẫn nhanh lúc khởi động"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "Bạn có biết...."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "Chèn vào mối quan hệ"
@@ -980,7 +975,7 @@ msgstr "Nơi nhập vào phần ghi chú. Nếu để trống sẽ hiển thị 
 msgid "Properties"
 msgstr "Thuộc tính"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -988,7 +983,36 @@ msgstr "Thuộc tính"
 msgid "Style:"
 msgstr "Kiểu:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "Chọn kiểu để vẽ bất phương trình. Không áp dụng cho phương trình."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "Chọn màu."
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "Rộng:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "Kiểu đường:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+#, fuzzy
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "Chọn kiểu để vẽ bất phương trình. Không áp dụng cho phương trình."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -999,24 +1023,7 @@ msgstr "Kiểu:"
 msgid "Color:"
 msgstr "Màu:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "Rộng:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "Chọn kiểu để vẽ bất phương trình. Không áp dụng cho phương trình."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "Chọn màu."
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "Độ rộng theo điểm ảnh của đồ thị phương trình hoặc viền của đồ thị bất phương trình."
 
@@ -1063,12 +1070,6 @@ msgstr "Nơi nhập vào phần ghi chú. Nếu để trống sẽ hiển thị 
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "Thuộc tính đồ thị"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "Kiểu đường:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1388,10 +1389,6 @@ msgstr "Kiểm tra tọa độ hiển thị tại mỗi điểm."
 msgid "Show coordinates"
 msgstr "Hiển thị tọa độ điểm trên hệ trục"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "Chọn font chữ tọa độ điểm."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "Chọn nơi hiển thị tọa độ của điểm."
@@ -1431,6 +1428,10 @@ msgstr "Phần dưới đồ thị"
 #, fuzzy
 msgid "Below Right"
 msgstr "Trên phải"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "Chọn font chữ tọa độ điểm."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1522,6 +1523,11 @@ msgstr "Hiển thị  thanh lỗi y"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "Tất cả thanh hiển thị lỗi thì cùng tỉ lệ với trục y."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "Áp dụng"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1783,10 +1789,6 @@ msgstr "Khoảng đổ bóng của đồ thị 2"
 msgid "Custom functions/constants"
 msgstr "Tùy chỉnh hàm/hằng"
 
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "Áp dụng"
-
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
 msgstr "Tên"
@@ -2003,8 +2005,8 @@ msgstr "Phiên bản mới nhất và mã nguồn có thể tìm thấy tại:"
 
 #. Form2..Panel1..LinkLabel2..Caption
 #, fuzzy
-msgid "Email: %s"
-msgstr "Email:"
+msgid "Support: %s"
+msgstr "Hỗ trợ"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2220,29 +2222,6 @@ msgstr "Hiển thị đường lưới dọc."
 msgid "Show grid"
 msgstr "Hiển thị lưới"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-#, fuzzy
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "Hiển thị tên trục bên phải cửa sổ chính, trên trục x."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "Tên trục:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "Thay đổi tên trục tại đây."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "Trục x giao với trục y tại y ="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "Trục x và trục y giao nhau tại giá trị này."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "Sử dụng thang  logarit cho trục x."
@@ -2271,6 +2250,29 @@ msgstr "Hiển thị đơn vị trên trục theo dạng tích với pi."
 #, fuzzy
 msgid "Show as a multiple of π"
 msgstr "Hiển thị đơn vị theo dạng tích với pi"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "Thay đổi tên trục tại đây."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+#, fuzzy
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "Hiển thị tên trục bên phải cửa sổ chính, trên trục x."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "Tên trục:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "Trục x và trục y giao nhau tại giá trị này."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "Trục x giao với trục y tại y ="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2302,19 +2304,6 @@ msgstr "Hiển thị đánh dấu khoảng cách trên trục y."
 msgid "Show horizontal grid lines."
 msgstr "Hiển thị đường lưới ngang."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-#, fuzzy
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "Hiển thị tên trục bên trên cửa sổ chính, trên trục y."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "Trục y giao với trục x tại x ="
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "Trục y và trục x giao nhau tại giá trị này."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "Sử dụng thang Logarit cho trục y."
@@ -2322,6 +2311,19 @@ msgstr "Sử dụng thang Logarit cho trục y."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "Hiển thị đơn vị trên trục y."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "Trục y giao với trục x tại x ="
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "Trục y và trục x giao nhau tại giá trị này."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+#, fuzzy
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "Hiển thị tên trục bên trên cửa sổ chính, trên trục y."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2371,10 +2373,6 @@ msgstr "Độ"
 msgid "Enter a title to show above the coordinate system."
 msgstr "Nhập vào tiêu đề sẽ hiển thị phía trên hệ trục."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "Chọn font chữ cho tiêu đề."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "Chọn vị trí muốn đặt lời chú giải."
@@ -2390,6 +2388,10 @@ msgstr "Chọn để sử dụng chức năng tính toán số phức. Lưu ý: 
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "Tính toán số phức"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "Chọn font chữ cho tiêu đề."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2440,15 +2442,15 @@ msgstr "Font nhãn:"
 msgid "Legend font:"
 msgstr "Font lời chú thích:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "Chọn font chữ cho các nhãn trên hệ trục."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "Chọn font chữ hiển thị số trên hệ trục."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "Chọn font chữ hiển thị chú giải."
 
@@ -2627,48 +2629,48 @@ msgstr "Kích cỡ chữ."
 msgid "Text string"
 msgstr "Nội dung"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "Chèn ký tự đặc biệt (Ctrl+G))"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 #, fuzzy
 msgid "Insert object."
 msgstr "Chèn đối tượng"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "Đậm (Ctrl+B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "Nghiêng(Ctrl+I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "Gạch dưới (Ctrl+U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "Gạch ngang chữ (Ctrl+S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "Chỉ số trên (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "Chỉ số dưới (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "Canh trái (Ctrl+L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "Canh giữa (Ctrl+E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "Canh phải (Ctrl+R)"
 
@@ -3075,6 +3077,10 @@ msgstr ""
 msgid "An accurate result cannot be found."
 msgstr "Lỗi tính toán tràn bộ nhớ."
 
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "Đánh giá thất bại"
+
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "Lỗi chương trình. Xin vui lòng thông báo lỗi này cho tác giả, càng đầy đủ thông tin càng tốt."
 
@@ -3244,6 +3250,10 @@ msgstr ""
 msgid "Not enough memory to complete the operation."
 msgstr ""
 
+#, fuzzy
+msgid "Printing aborted!"
+msgstr "Lỗi in"
+
 msgid "Confirm delete"
 msgstr "Xác nhận xóa"
 
@@ -3335,7 +3345,8 @@ msgstr "Hiệu chỉnh hàm số"
 msgid "Edit tangent/normal"
 msgstr "Chỉnh sửa tiếp tuyến/pháp tuyến"
 
-msgid "Error processing file '%s' at line %s."
+#, fuzzy
+msgid "Error processing file at line %s."
 msgstr "Lỗi sử lý tập tin %s tại dòng %s."
 
 #, fuzzy
@@ -3468,169 +3479,6 @@ msgstr ""
 msgid "Thread is not responding"
 msgstr ""
 
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "Hướng dẫn nhanh cung cấp cho bạn những thông tin hữu ích để bạn có thể sử dụng chương trình hiệu quả hơn."
-
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr ""
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "Bạn có thể tùy chỉnh thanh công cụ bằng cách nhấp phải chuột vào nó và chọn 'Tùy chỉnh thanh công cụ'."
-
-#, fuzzy
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "Thay vì xóa một hàm bạn có thể ẩn nó bằng cách nhấp phải chuột vào nó trong danh sách hàm và bỏ chọn 'Hiện'."
-
-msgid "You can paste images into a text label."
-msgstr "Bạn có thể dán hình ảnh vào văn bản."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "Văn bản có thể bao gồm nhiều nhóm đối tượng OLE, ví dụ như Microsoft Equation. Khi thay đổi tên nhấp phải chuột vào chỗ cần thay đổi và chọn 'Chèn đối tượng'."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "Bạn có thể xuất một tập hợp điểm thành một tập tin, nó có thể đọc từ nhiều chương trình khác nhau, ví dụ như Microsoft Excel. Khi thay đổi điểm trên tập hợp điểm , nhấp phải chuột và chọn \"Truy xuất thành tập tin'."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "Đường x=5 có thể vẽ bằng hàm với thông số x(t)=5, y(t)=t hoặc bằng quan hệ x=5."
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "Bạn có thể sử dụng chức năng Phóng to/Thu nhỏ|Đều để đơn vị hệ trục đều nhau. Chức năng này rất có ích khi vẽ đường tròn hoặc các hình đồng dạng."
-
-msgid "You can find a list of all available functions in the help."
-msgstr "Bạn có thể tìm danh sách tất cả các hàm có sẵn trong trợ giúp."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "Bạn có thể sử dụng 'if' để kết hợp 2 hàm thành 1. Ví dụ: Hàm f(x)=x với x < 1 và f(x) = x^2 với x >= 1, ta có thể viết thành:f(x) = if (x < 1, x, x^2)."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "Bạn có thể mở nội dung của các tập tin Graph khác nhau vào chương trình bằng cách sử dụng 'Tập tin|Nhập|Tập tin Graph'."
-
-#, fuzzy
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "Nếu bạn chọn 'Lưu mặc định'"
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "Bấm giữ phím Ctrl và các phím mũi tên để di chuyển hệ trục."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "Bấm giữ phím Ctrl và phím + , - để phóng to hoặc thu nhỏ."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "Bạn có thể sử dụng nút cuộn trên con chuột để phóng to và thu nhỏ."
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "Nếu bạn không muốn hiển thị ghi chú, bạn có thể nhấp phải chuột vào đối tượng trên danh sách đối tượng và bỏ chọn 'Hiển thị ghi chú'."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "Nếu bạn muốn hiển thị hệ trục ở vị trí góc dưới bên trái, bạn có thể chọn hiển thị trục theo dạng hộp trong mục Chỉnh sửa|Thông số|Kiểu hiển thị trục."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "Graph có thể lưu hệ trục với 5 kiểu định dạng: bmp, emf, png, jpg và pdf."
-
-#, fuzzy
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "Bạn có thể sử dụng 'Chỉnh sửa|Sao chép ảnh' để sao chép vào tập giấy vẽ và dán nó vào chương trình khác."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "Bạn có thể mở một tập tin grf có sẵn bằng cách nhấp đúp chuột vào tập tin đó."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "Bạn có thể mở một tập tin grf bằng cách kéo biểu tượng tập tin vào trong cửa sổ làm việc của chương trình Graph."
-
-#, fuzzy
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "Chương trình Graph sẽ ghi nhớ kích thước và vị trí cửa sổ làm việc giữa những lần sử dụng chương trình. Chức năng này có thể thay đổi trong Tùy Chọn của chương trình."
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "Tính toán | Bảng có thể dùng để tạo ra một bảng nghiệm của hàm."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "Có thể xuất một phần bảng nghiệm của hàm ra tập tin bằng cách nhấn chuột phải và chọn 'Xuất ra tập tin'. Tập tin này có thể được mở bằng các chương trình khác như Microsoft Excel."
-
-#, fuzzy
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "Dữ liệu từ bảng nhiệm có thể được sao chép sang chương trình khác như Microsoft Excel thông qua bộ nhớ."
-
-#, fuzzy
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "Dữ liệu các điểm trong tập hợp điểm có thể sao chép qua chương trình khác như Microsoft Excel thông qua bộ nhớ."
-
-#, fuzzy
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "Hàm có thể được sao chép từ cửa sổ làm việc vào bộ nhớ bằng lệnh Chỉnh sửa|Sao chép."
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "Bạn có thể hoàn lại tác vụ cuối bằng cách sử dụng lệnh Chỉnh sửa|Hoàn tác."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "Nếu bạn lỡ bấm vào Chỉnh sửa|Hoàn tác, bạn có thể chọn Chỉnh sửa|Làm lại để hủy bỏ hoàn tác."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "Bạn có thể chèn thêm tiêu đề vào hệ trục."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "Bạn có thể thêm vào các tập hợp điểm từ những tập tin của những chương trình khác nhau, như là như Microsoft Excel. "
-
-#, fuzzy
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "Khi nhập một tập hợp điểm, bạn có thể sao chép dữ liệu từ những chương trình tương tự như Microsoft Excel, và dán vào Graph."
-
-#, fuzzy
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "Bạn có thể chọn 'Phóng to/Thu nhỏ|Tất cả các điểm' để có thể thấy tất cả các điểm trên hệ trục."
-
-#, fuzzy
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "Bạn có thể chọn 'Phóng to/Thu nhỏ|Vừa vặn' để có thể thấy hàm hoặc tập hợp điểm được chọn."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "Bấm giữ phím Shift và kéo thả chuột để di chuyển hệ trục."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "Bạn có thể sử dụng 'Tính|Thông số liên quan' để tìm giao điểm của các hàm số, giao điểm của hệ trục và cực trị."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "Khi bạn chọn một tập hợp điểm, bạn có thể thêm vào những điểm bằng cách bấm giữ phím Ctrl tọa độ điểm cần thêm vào trên hệ trục."
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "Bạn có thể sử dụng chức năng chèn mối quan hệ để vẽ đồ thị của bất phương trình , ví dụ như : sin(x^2) < cos(y^2)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "Bạn có thể sử dụng chức năng chèn mối quan hệ để vẽ đồ thị của phương trình , ví dụ như : x*sin x = y*cos y"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "Các đối tượng (hàm, bóng, nhãn, quan hệ, v.v...) được biểu diễn theo thứ tự của danh sách đối tượng phía bên trái."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "Bạn có thể di chuyển đối tượng được chọn trong danh sách đối tượng bằng chuột (kéo/thả) hoặc bấm phím ALT cùng với phím lên/xuống."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "Bạn có thể cho hiển thị hàm hoặc các đối tượng khác phía dưới hệ trục bằng cách di chuyển các đối tượng phía trên hệ trục sang bên trái. Muốn di chuyển bóng và tiếp tuyến bạn phải di chuyển hàm của tiếp tuyến/bóng."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "Có thể di chuyển các nhãn trên hệ trục bằng cách nhấp chuột phải vào nhãn và chọn chức năng vị trí nhãn trong trình đơn."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "Lời chú thích có thể được di chuyển túy thích bằng chuột hay gắn liền với một trong các góc bằng cách nhấn phải chuột trên lời chú thích và chọn nơi cần đặt trên menu con."
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "Như một giải pháp để làm trong suốt bạn có thể chọn 1 màu tùy chọn cho các nhãn.  Một chức năng hữu ích cho đặt các nhãn qua bóng."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "Trong hầu hết các nơi: tập hợp điểm, cấu hình hệ trục, khoảng, v.v..., bạn có thể sử dụng biểu thức (vd: pi/4) thay cho số."
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "Bạn có thể tạo các hằng số của riêng mình dưới Hàm số|Đặt hàm số sử dụng trong các hàm số, tập hợp điểm..v..v. Ví dụ: g=9.80665, R=8.31"
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "Bạn có thể tạo các hàm số của mình dưới Hàm số|Đặt hàm số  sử dụng trong các đồ thị hàm số, mối quan hệ các hàm..v..v. Ví dụ sinc(x)=if(x=0,0, sin(x)/x)"
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "Trong cửa sổ lưu hình ảnh có một nút tùy chọn mà bạn có thể sử dụng để xác định độ phân giải của ảnh. Nếu bạn muốn lưu ảnh với độ phân giải cao thì đây là một cách hữu ích."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "Tập hợp điểm có thể đánh dấu bằng những mũi tên. Một tập hợp điểm đánh dấu bằng những mũi tên và những đường thẳng giữa các điểm có thể được sử dụng để hiển thị các vectơ."
-
 msgid "Insert symbol"
 msgstr "Chèn ký hiệu"
 
@@ -3696,22 +3544,6 @@ msgstr "Chú giải"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "Chọn máy in. Những nút thuộc tính có thể được sử dụng để thay đổi những cấu hình chi tiết của máy in."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "Chọn in màu (hay xám nếu máy in không phải máy in màu) hoặc chuyển tất cả thành màu đen."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "Đầu ra bản in"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "Màu"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "Trắng đen"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "Vị trí (milimet)"
@@ -3749,6 +3581,253 @@ msgstr "Chọn số bản để in."
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "Nhập phần trăm so vơi kích cỡ gốc."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "Install failed"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:5
+#, fuzzy
+msgid "Show Console"
+msgstr "Hiển thị chú giải công cụ"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show Python interpreter"
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show the Python interpreter window."
+msgstr ""
+
+#~ msgid "Tip of the day"
+#~ msgstr "Hướng dẫn nhanh"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "Hiển thị hướng dẫn nhanh."
+
+#~ msgid "Next tip"
+#~ msgstr "Tiếp theo"
+
+#~ msgid "Previous tip"
+#~ msgstr "Trước đó"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "Hiển thị hướng dẫn nhanh lúc khởi động"
+
+#~ msgid "Did you know..."
+#~ msgstr "Bạn có biết...."
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "Hướng dẫn nhanh cung cấp cho bạn những thông tin hữu ích để bạn có thể sử dụng chương trình hiệu quả hơn."
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "Bạn có thể tùy chỉnh thanh công cụ bằng cách nhấp phải chuột vào nó và chọn 'Tùy chỉnh thanh công cụ'."
+
+#, fuzzy
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "Thay vì xóa một hàm bạn có thể ẩn nó bằng cách nhấp phải chuột vào nó trong danh sách hàm và bỏ chọn 'Hiện'."
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "Bạn có thể dán hình ảnh vào văn bản."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "Văn bản có thể bao gồm nhiều nhóm đối tượng OLE, ví dụ như Microsoft Equation. Khi thay đổi tên nhấp phải chuột vào chỗ cần thay đổi và chọn 'Chèn đối tượng'."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "Bạn có thể xuất một tập hợp điểm thành một tập tin, nó có thể đọc từ nhiều chương trình khác nhau, ví dụ như Microsoft Excel. Khi thay đổi điểm trên tập hợp điểm , nhấp phải chuột và chọn \"Truy xuất thành tập tin'."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "Đường x=5 có thể vẽ bằng hàm với thông số x(t)=5, y(t)=t hoặc bằng quan hệ x=5."
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "Bạn có thể sử dụng chức năng Phóng to/Thu nhỏ|Đều để đơn vị hệ trục đều nhau. Chức năng này rất có ích khi vẽ đường tròn hoặc các hình đồng dạng."
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "Bạn có thể tìm danh sách tất cả các hàm có sẵn trong trợ giúp."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "Bạn có thể sử dụng 'if' để kết hợp 2 hàm thành 1. Ví dụ: Hàm f(x)=x với x < 1 và f(x) = x^2 với x >= 1, ta có thể viết thành:f(x) = if (x < 1, x, x^2)."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "Bạn có thể mở nội dung của các tập tin Graph khác nhau vào chương trình bằng cách sử dụng 'Tập tin|Nhập|Tập tin Graph'."
+
+#, fuzzy
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "Nếu bạn chọn 'Lưu mặc định'"
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "Bấm giữ phím Ctrl và các phím mũi tên để di chuyển hệ trục."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "Bấm giữ phím Ctrl và phím + , - để phóng to hoặc thu nhỏ."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "Bạn có thể sử dụng nút cuộn trên con chuột để phóng to và thu nhỏ."
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "Nếu bạn không muốn hiển thị ghi chú, bạn có thể nhấp phải chuột vào đối tượng trên danh sách đối tượng và bỏ chọn 'Hiển thị ghi chú'."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "Nếu bạn muốn hiển thị hệ trục ở vị trí góc dưới bên trái, bạn có thể chọn hiển thị trục theo dạng hộp trong mục Chỉnh sửa|Thông số|Kiểu hiển thị trục."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "Graph có thể lưu hệ trục với 5 kiểu định dạng: bmp, emf, png, jpg và pdf."
+
+#, fuzzy
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "Bạn có thể sử dụng 'Chỉnh sửa|Sao chép ảnh' để sao chép vào tập giấy vẽ và dán nó vào chương trình khác."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "Bạn có thể mở một tập tin grf có sẵn bằng cách nhấp đúp chuột vào tập tin đó."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "Bạn có thể mở một tập tin grf bằng cách kéo biểu tượng tập tin vào trong cửa sổ làm việc của chương trình Graph."
+
+#, fuzzy
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "Chương trình Graph sẽ ghi nhớ kích thước và vị trí cửa sổ làm việc giữa những lần sử dụng chương trình. Chức năng này có thể thay đổi trong Tùy Chọn của chương trình."
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "Tính toán | Bảng có thể dùng để tạo ra một bảng nghiệm của hàm."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "Có thể xuất một phần bảng nghiệm của hàm ra tập tin bằng cách nhấn chuột phải và chọn 'Xuất ra tập tin'. Tập tin này có thể được mở bằng các chương trình khác như Microsoft Excel."
+
+#, fuzzy
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "Dữ liệu từ bảng nhiệm có thể được sao chép sang chương trình khác như Microsoft Excel thông qua bộ nhớ."
+
+#, fuzzy
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "Dữ liệu các điểm trong tập hợp điểm có thể sao chép qua chương trình khác như Microsoft Excel thông qua bộ nhớ."
+
+#, fuzzy
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "Hàm có thể được sao chép từ cửa sổ làm việc vào bộ nhớ bằng lệnh Chỉnh sửa|Sao chép."
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "Bạn có thể hoàn lại tác vụ cuối bằng cách sử dụng lệnh Chỉnh sửa|Hoàn tác."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "Nếu bạn lỡ bấm vào Chỉnh sửa|Hoàn tác, bạn có thể chọn Chỉnh sửa|Làm lại để hủy bỏ hoàn tác."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "Bạn có thể chèn thêm tiêu đề vào hệ trục."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "Bạn có thể thêm vào các tập hợp điểm từ những tập tin của những chương trình khác nhau, như là như Microsoft Excel. "
+
+#, fuzzy
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "Khi nhập một tập hợp điểm, bạn có thể sao chép dữ liệu từ những chương trình tương tự như Microsoft Excel, và dán vào Graph."
+
+#, fuzzy
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "Bạn có thể chọn 'Phóng to/Thu nhỏ|Tất cả các điểm' để có thể thấy tất cả các điểm trên hệ trục."
+
+#, fuzzy
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "Bạn có thể chọn 'Phóng to/Thu nhỏ|Vừa vặn' để có thể thấy hàm hoặc tập hợp điểm được chọn."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "Bấm giữ phím Shift và kéo thả chuột để di chuyển hệ trục."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "Bạn có thể sử dụng 'Tính|Thông số liên quan' để tìm giao điểm của các hàm số, giao điểm của hệ trục và cực trị."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "Khi bạn chọn một tập hợp điểm, bạn có thể thêm vào những điểm bằng cách bấm giữ phím Ctrl tọa độ điểm cần thêm vào trên hệ trục."
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "Bạn có thể sử dụng chức năng chèn mối quan hệ để vẽ đồ thị của bất phương trình , ví dụ như : sin(x^2) < cos(y^2)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "Bạn có thể sử dụng chức năng chèn mối quan hệ để vẽ đồ thị của phương trình , ví dụ như : x*sin x = y*cos y"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "Các đối tượng (hàm, bóng, nhãn, quan hệ, v.v...) được biểu diễn theo thứ tự của danh sách đối tượng phía bên trái."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "Bạn có thể di chuyển đối tượng được chọn trong danh sách đối tượng bằng chuột (kéo/thả) hoặc bấm phím ALT cùng với phím lên/xuống."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "Bạn có thể cho hiển thị hàm hoặc các đối tượng khác phía dưới hệ trục bằng cách di chuyển các đối tượng phía trên hệ trục sang bên trái. Muốn di chuyển bóng và tiếp tuyến bạn phải di chuyển hàm của tiếp tuyến/bóng."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "Có thể di chuyển các nhãn trên hệ trục bằng cách nhấp chuột phải vào nhãn và chọn chức năng vị trí nhãn trong trình đơn."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "Lời chú thích có thể được di chuyển túy thích bằng chuột hay gắn liền với một trong các góc bằng cách nhấn phải chuột trên lời chú thích và chọn nơi cần đặt trên menu con."
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "Như một giải pháp để làm trong suốt bạn có thể chọn 1 màu tùy chọn cho các nhãn.  Một chức năng hữu ích cho đặt các nhãn qua bóng."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "Trong hầu hết các nơi: tập hợp điểm, cấu hình hệ trục, khoảng, v.v..., bạn có thể sử dụng biểu thức (vd: pi/4) thay cho số."
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "Bạn có thể tạo các hằng số của riêng mình dưới Hàm số|Đặt hàm số sử dụng trong các hàm số, tập hợp điểm..v..v. Ví dụ: g=9.80665, R=8.31"
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "Bạn có thể tạo các hàm số của mình dưới Hàm số|Đặt hàm số  sử dụng trong các đồ thị hàm số, mối quan hệ các hàm..v..v. Ví dụ sinc(x)=if(x=0,0, sin(x)/x)"
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "Trong cửa sổ lưu hình ảnh có một nút tùy chọn mà bạn có thể sử dụng để xác định độ phân giải của ảnh. Nếu bạn muốn lưu ảnh với độ phân giải cao thì đây là một cách hữu ích."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "Tập hợp điểm có thể đánh dấu bằng những mũi tên. Một tập hợp điểm đánh dấu bằng những mũi tên và những đường thẳng giữa các điểm có thể được sử dụng để hiển thị các vectơ."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "Chọn in màu (hay xám nếu máy in không phải máy in màu) hoặc chuyển tất cả thành màu đen."
+
+#~ msgid "Print output"
+#~ msgstr "Đầu ra bản in"
+
+#~ msgid "Color"
+#~ msgstr "Màu"
+
+#~ msgid "Black && white"
+#~ msgstr "Trắng đen"
+
+#, fuzzy
+#~ msgid "Email: %s"
+#~ msgstr "Email:"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "Tích hợp tập tin *.grf với Graph."

@@ -1,15 +1,46 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-07 21:20+0100\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:38+0200\n"
 "Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.2.1\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. Form1..Caption
+msgid "Plugin Manager"
+msgstr ""
+
+#. Form1..ListView......Caption
+msgid "Plugin name"
+msgstr ""
+
+#. Form1..ListView......Caption
+msgid "Version"
+msgstr "Version"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "Uvezi"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr ""
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "Zatvori"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -74,7 +105,7 @@ msgstr "Postavlja natpis na vrh grafika desno od y-ose."
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -138,10 +169,6 @@ msgstr "Izvezi u fajl..."
 msgid "Export the selected point series to a file."
 msgstr "Izvozi izabranu seriju tacaka u fajl."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "Uvezi"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -171,7 +198,7 @@ msgstr "Uredi"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -230,7 +257,6 @@ msgstr "Internet"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -418,11 +444,11 @@ msgstr "Ubaci tangentu/normalu..."
 msgid "Insert a tangent or normal for the selected function."
 msgstr "Ubacuje tangentu ili normalu za izabranu funkciju."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "Ubaci srafuru..."
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "Dodaje srafuru izabranoj funkciji."
 
@@ -693,16 +719,6 @@ msgstr "Donirajte"
 msgid "Donate money to the project."
 msgstr "Donirajte novac za projekat."
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "Savet dana"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "Prikazuje savet dana"
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "Podrska"
@@ -878,28 +894,6 @@ msgstr "Na dnu levo"
 msgid "Show the legend in the bottom left corner."
 msgstr "Prikazuje legendu u donjem levom uglu prozora."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "Zatvori"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "Sledeci savet"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "Prethodni savet"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "Prikazi savete prilikom startovanja programa"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "Da li ste znali..."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "Ubaci relaciju"
@@ -979,7 +973,7 @@ msgstr "Unesite opisni tekst koji ce biti prikazan u legendi. Ukoliko ostavite p
 msgid "Properties"
 msgstr "Osobine"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -987,7 +981,36 @@ msgstr "Osobine"
 msgid "Style:"
 msgstr "Stil:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "Izaberite stil kojim zelite crtati nejednakost. Ne mozete koristiti za jednacine."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "Izaberite boju za crtanje relacije."
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "Sirina:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "Vrsta linije:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+#, fuzzy
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "Izaberite stil kojim zelite crtati nejednakost. Ne mozete koristiti za jednacine."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -998,24 +1021,7 @@ msgstr "Stil:"
 msgid "Color:"
 msgstr "Boja:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "Sirina:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "Izaberite stil kojim zelite crtati nejednakost. Ne mozete koristiti za jednacine."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "Izaberite boju za crtanje relacije."
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "Sirina linije u pikselima za crtanje jednacine odnosno sirina granicne linije u pikselima za crtanje nejednakosti."
 
@@ -1062,12 +1068,6 @@ msgstr "Unesite opisni tekst koji ce biti prikazan u legendi. Ukoliko ostavite p
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "Osobine grafika"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "Vrsta linije:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1387,10 +1387,6 @@ msgstr "Ukljucite ovu opciju ako zelite da prikazete koordinate svake tacke."
 msgid "Show coordinates"
 msgstr "Prikazi koordinate"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "Izaberite pismo za ispisivanje koordinata."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "Izaberite poziciju na kojoj ce koordinate biti prikazane."
@@ -1430,6 +1426,10 @@ msgstr "Ispod funkcije"
 #, fuzzy
 msgid "Below Right"
 msgstr "Na vrhu desno"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "Izaberite pismo za ispisivanje koordinata."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1521,6 +1521,11 @@ msgstr "Prikazi y-indikatore"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "Velicina svih indikatora greske predstavlja zadani procenat vrednosti y-koordinate tacke."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "Primeni"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1781,10 +1786,6 @@ msgstr "Opseg srafure druge funkcije"
 msgid "Custom functions/constants"
 msgstr "Vase funkcije/konstante"
 
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "Primeni"
-
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
 msgstr "Ime"
@@ -1998,8 +1999,8 @@ msgstr "Najnovija verzija programa kao i izvorni kod dostupni su na:"
 
 #. Form2..Panel1..LinkLabel2..Caption
 #, fuzzy
-msgid "Email: %s"
-msgstr "Email:"
+msgid "Support: %s"
+msgstr "Podrska"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2215,29 +2216,6 @@ msgstr "Prikazuje vertikalne mrezne linije."
 msgid "Show grid"
 msgstr "Prikazi mrezu"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-#, fuzzy
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "Prikazuje natpis na desnoj strani glavnog prozora, iznad x-ose."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "Natpis:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "Uredite natpis ose."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "x-osa sece y-osu u y="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "x-osa ce presecati y-osu na ovoj y-vrednosti."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "Koristi logaritamski skaliranu x-osu."
@@ -2266,6 +2244,29 @@ msgstr "Prikazuje podeoke izabrane ose kao umnozak od pi."
 #, fuzzy
 msgid "Show as a multiple of π"
 msgstr "Prikazi kao umnozak od pi"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "Uredite natpis ose."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+#, fuzzy
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "Prikazuje natpis na desnoj strani glavnog prozora, iznad x-ose."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "Natpis:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "x-osa ce presecati y-osu na ovoj y-vrednosti."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "x-osa sece y-osu u y="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2297,19 +2298,6 @@ msgstr "Prikazuje podeoke na y-osi."
 msgid "Show horizontal grid lines."
 msgstr "Prikazuje horizontalne mrezne linije."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-#, fuzzy
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "Prikazuje natpis na vrhu glavnog prozora, desno od y-ose."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "y-osa sece x-osu u x= "
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "y-osa ce presecati x-osu na ovoj x-vrednosti."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "Koristi logaritamski skaliranu y-osu."
@@ -2317,6 +2305,19 @@ msgstr "Koristi logaritamski skaliranu y-osu."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "Prikazuje brojeve na y-osi."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "y-osa sece x-osu u x= "
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "y-osa ce presecati x-osu na ovoj x-vrednosti."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+#, fuzzy
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "Prikazuje natpis na vrhu glavnog prozora, desno od y-ose."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2366,10 +2367,6 @@ msgstr "Stepen"
 msgid "Enter a title to show above the coordinate system."
 msgstr "Unesite naslov koji ce biti prikazan iznad koordinatnog sistema."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "Izaberite pismo naslova."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "Izaberite mesto postavljanja legende."
@@ -2385,6 +2382,10 @@ msgstr "Ukljucite ovu opciju ako zelite da koristite kompleksne brojeve prilikom
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "Racunaj sa kompleksnim brojevima"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "Izaberite pismo naslova."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2435,15 +2436,15 @@ msgstr "Pismo natpisa:"
 msgid "Legend font:"
 msgstr "Pismo legende:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "Izaberite pismo "
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "Izaberite pismo natpisa koji ce biti prikazan iznad osa."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "Izaberite pismo za tekst legende."
 
@@ -2622,48 +2623,48 @@ msgstr "Velicina teksta."
 msgid "Text string"
 msgstr "Tekst"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "Ubaci simbol (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 #, fuzzy
 msgid "Insert object."
 msgstr "Ubaci objekat"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "Podebljaj (Ctrl+B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "Iskosi (Ctrl+I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "Podvuci (Ctrl+U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "Precrtaj duplom linijom (Ctrl+S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "Gornji indeks (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "Donji indeks (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "Levo ravnanje (Ctrl+L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "Centralno (Ctrl+E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "Desno ravnanje (Ctrl+R)"
 
@@ -3070,6 +3071,10 @@ msgstr ""
 msgid "An accurate result cannot be found."
 msgstr "Rezultat proracuna je izvan opsega."
 
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "Proracun nije uspeo."
+
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "Interna greska. Molimo Vas dostavite programeru sto je moguce vise informacija o greskama."
 
@@ -3241,6 +3246,10 @@ msgstr ""
 msgid "Not enough memory to complete the operation."
 msgstr ""
 
+#, fuzzy
+msgid "Printing aborted!"
+msgstr "Greska u stampanju"
+
 msgid "Confirm delete"
 msgstr "Potvrda brisanja"
 
@@ -3332,7 +3341,8 @@ msgstr "Uredi funkciju"
 msgid "Edit tangent/normal"
 msgstr "Uredi tangentu/normalu"
 
-msgid "Error processing file '%s' at line %s."
+#, fuzzy
+msgid "Error processing file at line %s."
 msgstr "Greska u procesiranju fajla '%s' na liniji %s."
 
 #, fuzzy
@@ -3466,169 +3476,6 @@ msgstr ""
 msgid "Thread is not responding"
 msgstr ""
 
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "Savet dana vam pruza veliki broj informacija o programu sa kojima vecina korisnika nije upoznata."
-
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr ""
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "Paletu alatki mozete urediti prema vasoj zelji desnim klikom na samu paletu alatki i odabirom opcije 'Izaberite paletu alata'."
-
-#, fuzzy
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "Funkciju mozete uciniti nevidljivom desnim klikom na nju u okviru liste funkcija i potom iskljucivanjem opcije 'Vidljiv'. Ovim funkcija nije obrisana, ona i dalje postoji u programu samo sada nije prikazana na ekranu."
-
-msgid "You can paste images into a text label."
-msgstr "U okviru tekstualnog natpisa mozete postavljati i slike."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "Tekstualni natpisi mogu sadrzati bilo koju vrstu OLE objekata, na primer Microsoft Equation. Prilikom uredjivanja natpisa kliknite desnim klikom u prostor za ispisivanje natpisa i potom izaberite naredbu 'Ubaci objekat'."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "Tacke iz odgovarajucih serija tacaka mozete izvoziti u razlicite fajlove koje ce prepoznavati ostali programi, na primer Microsoft Excel. Iz tabele u kojoj se nalaze tacke izaberite tacke koje zelite da izvezete, kliknite desnim klikom na njih i odaberite naredbu 'Izvezi u fajl'."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "Vertikalnu liniju x=5 mozete nacrtati kao parametarsku funkciju x(t)=5, y(t)=t ili kao relaciju x=5. "
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "Izaberite naredbu Zumiraj|Kvadrat i prikazite ose jednako skalirane. Ova opcija je narocito korisna prilikom crtanja kruznica i slicnih funkcija. "
-
-msgid "You can find a list of all available functions in the help."
-msgstr "Listu svih dostupnih funkcija mozete naci u meniju Pomoc."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "Mozete kombinovati dve funkcije upotrebom opcije 'if'. Funkcije f(x)=x za x<1 i  f(x)=x^2 za x>=1 mozete napisati kao jednu funkciju f(x)=if(x<1, x, x^2)."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "Sadrzaje drugih Graph fajlova mozete uvesti u trenutni koordinatni sistem koristeci naredbu 'Fajl|Uvezi|Graph fajl'."
-
-#, fuzzy
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "Ukljucivanjem opcije 'Sacuvaj kao standardno' u okviru dijaloga Ose, trenutna podesavanja bice podrazumevana kao standardna prilikom kreiranja novog fajla."
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "Drzanjem pritisnutog tastera Ctrl uz istovremeno koriscenje tastera sa strelicama mozete pomerati sistem u zeljenom pravcu."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "Drzanjem pritisnutog tastera Ctrl uz istovremeno koriscenje tastera +/- mozete uvecavati odnosno smanjivati sliku."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "Koristite tockic na misu kako biste uvecavali ili smanjivali sliku u predelu kursora."
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "Ako ne zelite da prikazete neki element u legendi, kliknite desnim klikom na izabrani element u listi funkcija i iskljucite opciju 'Prikazi u legendi'."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "Ako zelite da prikazete ose u levom odnosno donjem delu ekrana, izaberite pomereni stil osa u okviru prozora za podesavanje osa."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "Graph moze da sacuva prikazani koordinatni sistem u pet razlicitih formata slike: bmp, emf, png, jpg i pdf."
-
-#, fuzzy
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "Koristite naredbu 'Uredi|Kopiraj sliku' da kopirate koordinatni sistem i postavite ga u neki drugi program."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "Mozete otvoriti sacuvani grf-fajl dvostrukim klikom na njega u Explorer-u."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "Sacuvani grf-fajl takodje mozete otvoriti tako sto cete ga prevuci iz Explorer-a u prozor vec pokrenutog Graph-a."
-
-#, fuzzy
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "Graph ce zapamtiti velicinu i polozaj glavnog prozora izmedju dve sesije. Ovu opciju mozete iskljuciti u okviru Dijaloga opcija. "
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "Naredbu Izracunaj|Tabela koristite da kreirate tabelu izracunatih vrednosti za neku funkciju."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "Izabrani deo proracunske tabele mozete izvesti u neki fajl, desnim klikom na njega i zadavanjem naredbe 'Izvezi u fajl'. Kasnije cete isti fajl moci da otvorite pomocu drugih programa, kao sto je na primer Microsoft Excel."
-
-#, fuzzy
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "Podatke iz proracunske tabele mozete kopirati u drugi program, na primer Microsoft Excel, koristeci klipbord."
-
-#, fuzzy
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "Tacke u okviru serije tacaka mozete kopirati u/iz nekog programa kao sto je Microsoft Excel, takodje pomocu klipborda."
-
-#, fuzzy
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "Funkcije mozete kopirati koriscenjem naredbe Uredi|Kopiraj."
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "Poslednju akciju mozete ponistiti naredbom Uredi|Ponisti."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "Ako greskom izaberete Uredi|Ponisti, onda koristite naredbu Uredi|Vrati kako biste vratili ono sto ste prethodno greskom ponistili."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "U okviru dijaloga Ose imate mogucnost dodeljivanja naslova koordinatnom sistemu."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "Seriju tacaka mozete uvesti iz fajlova snimljenih u drugim programima, kao sto je Microsoft Excel."
-
-#, fuzzy
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "Prilikom ubacivanja serije tacaka mozete kopirati tacke iz programa kao sto je Microsoft Excel, i postaviti ih u tabelu u okviru Graph-a."
-
-#, fuzzy
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "Koristite naredbu 'Zumiraj|Sve tacke' da na ekranu vidite sve tacke koje ste nacrtali."
-
-#, fuzzy
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "Koristite naredbu Zumiraj|Grafik da na ekranu vidite izabranu funkciju ili seriju tacaka."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "Drzanjem pritisnutog tastera Shift, misem mozete pomerati koordinatni sistem u zeljenom pravcu."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "Naredbom Izracunaj|Izracunaj pronadjite tacke preseka funkcija, tacke preseka funkcija i osa kao i ekstremne tacke funkcija."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "Kada izaberete odgovarajucu seriju tacaka, drzanjem pritisnutog tastera Ctrl i klikom misem na zeljenu poziciju u koordinatnom sistemu direktno cete uneti novu tacku u izabranu seriju tacaka. "
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "Koristite reaciju da nacrtate neku nejednakost, na primer sin(x^2) < cos(y^2)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "Nacrtajte jednakost pomocu relacije, na primer x*sin x = y*cos y"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "Elementi (funkcije, srafure, natpisi, relacije, i dr.) iscrtani su istim redosledom kojim su i prikazani u listi funkcija koja se nalazi na levoj strani prozora."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "Izabrani element mozete pomerati unutar liste funkcija ili njegovim prevlacenjem do zeljene pozicije ili koriscenjem tastera gore/dole uz istovremeno drzanje pritisnutog tastera ALT."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "Funkcije ili druge elemente mozete prikazati iza osa koordinatnog sistema tako sto cete ih postaviti iznad osa u listi funkcija sa leve strane. Da biste pomerili tangente i srafure morate pomeriti i funkciju na koju se odnose."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "Tekstualni natpis mozete vezati za ose koordinatnog sistema tako sto cete kliknuti desnim klikom na natpis i iz menija izabrati polozaj gde zelite da ga postavite."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "Legendu mozete slobodno pomerati pomocu misa ili je desnim klikom na nju i izborom polozaja vezati za jedan od uglova grafika. "
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "Izaberite boju pozadine natpisa prema vasim afinitetima. Ovo je narocito korisno kada postavljate natpis preko srafure."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "Na mnogim mestima kao sto su serije tacaka, podesavanja osa, opsezi funkcija, i dr., mozete umesto brojeva koristiti oznaku kao sto je pi/4. "
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "Kreirajte konstante koje cete kasnije koristiti u funkcijama, serijama tacaka, i dr., pomocu naredbe Funkcija|Vase funkcije. Na primer g=9.80665, R=8.31"
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "Kreirajte vase funkcije u Funkcija|Vase funkcije koje cete koristiti za crtanje funkcija, relacija, i dr. Na primer sinc(x)=if(x=0, 0,sin(x)/x)"
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "Dugme Opcije u okviru dijaloga Sacuvaj kao sliku omogucava vam da podesite zeljenu rezoluciju slike. Ovo je posebno korisno ukoliko zelite sliku visoke rezolucije."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "Serije tacaka mogu imati strelice kao markere. Serije tacaka sa strelicama kao  markerima i linijama izmedju tacaka mogu se koristiti za prikazivanje vektora."
-
 msgid "Insert symbol"
 msgstr "Ubaci simbol"
 
@@ -3695,22 +3542,6 @@ msgstr "Komentar:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "Izaberite stampac. Dugme Osobine mozete koristiti za napredna podesavanja stampaca."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "Izaberite da li zelite da stampate u boji ( ili u nijansama sive boje ukoliko vas stampac nije kolor stampac) ili zelite da sve boje konvertujete u crnu."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "Stampaj"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "U boji"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "Crno-belo"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "Pozicija (milimetri) "
@@ -3748,6 +3579,253 @@ msgstr "Izaberite broj kopija za stampanje."
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "Unesite procenat od originalne velicine."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "Install failed"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:5
+#, fuzzy
+msgid "Show Console"
+msgstr "Prikazi kratak opis"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show Python interpreter"
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show the Python interpreter window."
+msgstr ""
+
+#~ msgid "Tip of the day"
+#~ msgstr "Savet dana"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "Prikazuje savet dana"
+
+#~ msgid "Next tip"
+#~ msgstr "Sledeci savet"
+
+#~ msgid "Previous tip"
+#~ msgstr "Prethodni savet"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "Prikazi savete prilikom startovanja programa"
+
+#~ msgid "Did you know..."
+#~ msgstr "Da li ste znali..."
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "Savet dana vam pruza veliki broj informacija o programu sa kojima vecina korisnika nije upoznata."
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "Paletu alatki mozete urediti prema vasoj zelji desnim klikom na samu paletu alatki i odabirom opcije 'Izaberite paletu alata'."
+
+#, fuzzy
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "Funkciju mozete uciniti nevidljivom desnim klikom na nju u okviru liste funkcija i potom iskljucivanjem opcije 'Vidljiv'. Ovim funkcija nije obrisana, ona i dalje postoji u programu samo sada nije prikazana na ekranu."
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "U okviru tekstualnog natpisa mozete postavljati i slike."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "Tekstualni natpisi mogu sadrzati bilo koju vrstu OLE objekata, na primer Microsoft Equation. Prilikom uredjivanja natpisa kliknite desnim klikom u prostor za ispisivanje natpisa i potom izaberite naredbu 'Ubaci objekat'."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "Tacke iz odgovarajucih serija tacaka mozete izvoziti u razlicite fajlove koje ce prepoznavati ostali programi, na primer Microsoft Excel. Iz tabele u kojoj se nalaze tacke izaberite tacke koje zelite da izvezete, kliknite desnim klikom na njih i odaberite naredbu 'Izvezi u fajl'."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "Vertikalnu liniju x=5 mozete nacrtati kao parametarsku funkciju x(t)=5, y(t)=t ili kao relaciju x=5. "
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "Izaberite naredbu Zumiraj|Kvadrat i prikazite ose jednako skalirane. Ova opcija je narocito korisna prilikom crtanja kruznica i slicnih funkcija. "
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "Listu svih dostupnih funkcija mozete naci u meniju Pomoc."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "Mozete kombinovati dve funkcije upotrebom opcije 'if'. Funkcije f(x)=x za x<1 i  f(x)=x^2 za x>=1 mozete napisati kao jednu funkciju f(x)=if(x<1, x, x^2)."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "Sadrzaje drugih Graph fajlova mozete uvesti u trenutni koordinatni sistem koristeci naredbu 'Fajl|Uvezi|Graph fajl'."
+
+#, fuzzy
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "Ukljucivanjem opcije 'Sacuvaj kao standardno' u okviru dijaloga Ose, trenutna podesavanja bice podrazumevana kao standardna prilikom kreiranja novog fajla."
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "Drzanjem pritisnutog tastera Ctrl uz istovremeno koriscenje tastera sa strelicama mozete pomerati sistem u zeljenom pravcu."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "Drzanjem pritisnutog tastera Ctrl uz istovremeno koriscenje tastera +/- mozete uvecavati odnosno smanjivati sliku."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "Koristite tockic na misu kako biste uvecavali ili smanjivali sliku u predelu kursora."
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "Ako ne zelite da prikazete neki element u legendi, kliknite desnim klikom na izabrani element u listi funkcija i iskljucite opciju 'Prikazi u legendi'."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "Ako zelite da prikazete ose u levom odnosno donjem delu ekrana, izaberite pomereni stil osa u okviru prozora za podesavanje osa."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "Graph moze da sacuva prikazani koordinatni sistem u pet razlicitih formata slike: bmp, emf, png, jpg i pdf."
+
+#, fuzzy
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "Koristite naredbu 'Uredi|Kopiraj sliku' da kopirate koordinatni sistem i postavite ga u neki drugi program."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "Mozete otvoriti sacuvani grf-fajl dvostrukim klikom na njega u Explorer-u."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "Sacuvani grf-fajl takodje mozete otvoriti tako sto cete ga prevuci iz Explorer-a u prozor vec pokrenutog Graph-a."
+
+#, fuzzy
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "Graph ce zapamtiti velicinu i polozaj glavnog prozora izmedju dve sesije. Ovu opciju mozete iskljuciti u okviru Dijaloga opcija. "
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "Naredbu Izracunaj|Tabela koristite da kreirate tabelu izracunatih vrednosti za neku funkciju."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "Izabrani deo proracunske tabele mozete izvesti u neki fajl, desnim klikom na njega i zadavanjem naredbe 'Izvezi u fajl'. Kasnije cete isti fajl moci da otvorite pomocu drugih programa, kao sto je na primer Microsoft Excel."
+
+#, fuzzy
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "Podatke iz proracunske tabele mozete kopirati u drugi program, na primer Microsoft Excel, koristeci klipbord."
+
+#, fuzzy
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "Tacke u okviru serije tacaka mozete kopirati u/iz nekog programa kao sto je Microsoft Excel, takodje pomocu klipborda."
+
+#, fuzzy
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "Funkcije mozete kopirati koriscenjem naredbe Uredi|Kopiraj."
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "Poslednju akciju mozete ponistiti naredbom Uredi|Ponisti."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "Ako greskom izaberete Uredi|Ponisti, onda koristite naredbu Uredi|Vrati kako biste vratili ono sto ste prethodno greskom ponistili."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "U okviru dijaloga Ose imate mogucnost dodeljivanja naslova koordinatnom sistemu."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "Seriju tacaka mozete uvesti iz fajlova snimljenih u drugim programima, kao sto je Microsoft Excel."
+
+#, fuzzy
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "Prilikom ubacivanja serije tacaka mozete kopirati tacke iz programa kao sto je Microsoft Excel, i postaviti ih u tabelu u okviru Graph-a."
+
+#, fuzzy
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "Koristite naredbu 'Zumiraj|Sve tacke' da na ekranu vidite sve tacke koje ste nacrtali."
+
+#, fuzzy
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "Koristite naredbu Zumiraj|Grafik da na ekranu vidite izabranu funkciju ili seriju tacaka."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "Drzanjem pritisnutog tastera Shift, misem mozete pomerati koordinatni sistem u zeljenom pravcu."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "Naredbom Izracunaj|Izracunaj pronadjite tacke preseka funkcija, tacke preseka funkcija i osa kao i ekstremne tacke funkcija."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "Kada izaberete odgovarajucu seriju tacaka, drzanjem pritisnutog tastera Ctrl i klikom misem na zeljenu poziciju u koordinatnom sistemu direktno cete uneti novu tacku u izabranu seriju tacaka. "
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "Koristite reaciju da nacrtate neku nejednakost, na primer sin(x^2) < cos(y^2)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "Nacrtajte jednakost pomocu relacije, na primer x*sin x = y*cos y"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "Elementi (funkcije, srafure, natpisi, relacije, i dr.) iscrtani su istim redosledom kojim su i prikazani u listi funkcija koja se nalazi na levoj strani prozora."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "Izabrani element mozete pomerati unutar liste funkcija ili njegovim prevlacenjem do zeljene pozicije ili koriscenjem tastera gore/dole uz istovremeno drzanje pritisnutog tastera ALT."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "Funkcije ili druge elemente mozete prikazati iza osa koordinatnog sistema tako sto cete ih postaviti iznad osa u listi funkcija sa leve strane. Da biste pomerili tangente i srafure morate pomeriti i funkciju na koju se odnose."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "Tekstualni natpis mozete vezati za ose koordinatnog sistema tako sto cete kliknuti desnim klikom na natpis i iz menija izabrati polozaj gde zelite da ga postavite."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "Legendu mozete slobodno pomerati pomocu misa ili je desnim klikom na nju i izborom polozaja vezati za jedan od uglova grafika. "
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "Izaberite boju pozadine natpisa prema vasim afinitetima. Ovo je narocito korisno kada postavljate natpis preko srafure."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "Na mnogim mestima kao sto su serije tacaka, podesavanja osa, opsezi funkcija, i dr., mozete umesto brojeva koristiti oznaku kao sto je pi/4. "
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "Kreirajte konstante koje cete kasnije koristiti u funkcijama, serijama tacaka, i dr., pomocu naredbe Funkcija|Vase funkcije. Na primer g=9.80665, R=8.31"
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "Kreirajte vase funkcije u Funkcija|Vase funkcije koje cete koristiti za crtanje funkcija, relacija, i dr. Na primer sinc(x)=if(x=0, 0,sin(x)/x)"
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "Dugme Opcije u okviru dijaloga Sacuvaj kao sliku omogucava vam da podesite zeljenu rezoluciju slike. Ovo je posebno korisno ukoliko zelite sliku visoke rezolucije."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "Serije tacaka mogu imati strelice kao markere. Serije tacaka sa strelicama kao  markerima i linijama izmedju tacaka mogu se koristiti za prikazivanje vektora."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "Izaberite da li zelite da stampate u boji ( ili u nijansama sive boje ukoliko vas stampac nije kolor stampac) ili zelite da sve boje konvertujete u crnu."
+
+#~ msgid "Print output"
+#~ msgstr "Stampaj"
+
+#~ msgid "Color"
+#~ msgstr "U boji"
+
+#~ msgid "Black && white"
+#~ msgstr "Crno-belo"
+
+#, fuzzy
+#~ msgid "Email: %s"
+#~ msgstr "Email:"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "Povezite *.grf fajlove i Graph."

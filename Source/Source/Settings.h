@@ -83,7 +83,7 @@ struct TDefaultData
   void Set(unsigned AStyle, TColor AColor, unsigned ASize);
 };
 
-struct TProperty
+struct TOptions
 {
   int RoundTo; //decimals to round to
   bool SavePos;//True is the windows should have the same size at start as at last exit
@@ -91,14 +91,12 @@ struct TProperty
   bool CheckForUpdate;
   TDefaultData DefaultFunction, DefaultPoint, DefaultPointLine, DefaultShade, DefaultTrendline, DefaultRelation, DefaultTangent, DefaultDif;
   TVclObject<TFont> DefaultPointLabelFont, DefaultLabelFont;
-  bool ShowTipsAtStartup;
-  unsigned NextTip;
   std::wstring Language;
-  int FontScale; //Window scale in percent
+  unsigned FontScale; //Window scale in percent
   bool CustomDecimalSeparator; //Default system decimal separator is used when false
   wchar_t DecimalSeparator;    //Decimal separator used when exporting files
 
-  TProperty();
+  TOptions();
   void Read(const TConfigRegistry &Registry);
   void Write(class TConfigRegistry &Registry);
 };
@@ -164,6 +162,7 @@ public:
   void Replace(const std::wstring &Name, long double Value);
   void Delete(const std::wstring &Name);
   const TCustomFunction& GetValue(const std::wstring &Name) const;
+  TConstIterator GetIter(const std::wstring &Name) const;
   void Update(const TData &Data);
   void UpdateAll(bool IgnoreErrors=false);
   void Clear();
@@ -212,6 +211,8 @@ struct TPlotSettings
   int yNumberDist;
   int TickWidth;
   int TickLength;
+  int ThreadCount;
+  int SmoothingMode;
   TPlotSettings();
 };
 
@@ -225,10 +226,13 @@ struct TGuiSettings
   double MinorStepSize;
   double MouseZoomIn;
   double MouseZoomOut;
+  TVclObject<TFont> Font;
+  unsigned MenuIconSize;
+  unsigned ToolBarIconSize;
   TGuiSettings();
 };
 
-extern TProperty Property;
+extern TOptions Options;
 extern TGuiFormatSettings GuiFormatSettings;
 extern TPlotSettings PlotSettings;
 extern TGuiSettings GuiSettings;

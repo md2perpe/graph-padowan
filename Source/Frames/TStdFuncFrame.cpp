@@ -38,7 +38,7 @@ void TStdFuncFrame::Eval(const TGraphElem *Elem)
   {
     Clear();
     ErrorPrefix = "x: ";
-    bool UseReal = Property.ComplexFormat == cfReal;
+    bool UseReal = Options.ComplexFormat == cfReal;
     std::wstring xStr = ToWString(Edit1->Text);
     Func32::TComplex x = UseReal ? Func32::TComplex(Form1->Data.Calc(xStr)) : Form1->Data.CalcComplex(xStr);
 
@@ -51,7 +51,7 @@ void TStdFuncFrame::Eval(const TGraphElem *Elem)
 
     ErrorPrefix = "f'(x): ";
     Edit2->Text = ComplexToString(y);
-    Func32::TFunc Dif1 = Func->GetFunc().MakeDif();
+    const Func32::TFunc &Dif1 = Func->GetDif();
     Func32::TComplex yDif1 = UseReal ? Func32::TComplex(Dif1.CalcY(real(x))) : Dif1.CalcY(x);
     Edit3->Text = ComplexToString(yDif1);
 
@@ -66,7 +66,6 @@ void TStdFuncFrame::SetPoint(const TGraphElem *Elem, int X, int Y)
 {
   if(const TStdFunc *Func = dynamic_cast<const TStdFunc*>(Elem))
   {
-    Edit1->Text = "";
     TTraceType TraceType;
     switch(ComboBox1->ItemIndex)
     {
@@ -80,7 +79,7 @@ void TStdFuncFrame::SetPoint(const TGraphElem *Elem, int X, int Y)
     if(_isnan(t))
       Edit1->Text = "";
     else
-      Edit1->Text = RoundToStr(t, ComboBox1->ItemIndex == 0 ? Property.RoundTo : std::max(8, Property.RoundTo));
+      Edit1->Text = RoundToStr(t, ComboBox1->ItemIndex == 0 ? Options.RoundTo : std::max(8, Options.RoundTo));
   }
 }
 //---------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 #include "ICompCommon.h"
 #include "HandleCsv.h"
 #include <boost/tokenizer.hpp>
+#include "PyGraph.h"
 //---------------------------------------------------------------------------
 void TData::LoadFromFile(const std::wstring &FileName)
 {
@@ -164,7 +165,8 @@ void TData::Import(TConfigFile &IniFile)
   FormatSettings.DecimalSeparator = '.';
 
   //ElemList must be empty when reading shades and tangents from file
-  boost::shared_ptr<TTopGraphElem> Temp(new TTopGraphElem(this));
+  boost::shared_ptr<TTopGraphElem> Temp(new TTopGraphElem);
+  Temp->SetData(this);
   Temp.swap(TopElem);
   try
   {
@@ -231,11 +233,13 @@ bool TData::Save(const std::wstring &FileName, bool Remember) const
     {
       GrfName = FileName;
       Application->MainForm->Caption = String(NAME) + " - " + GrfName.c_str();
-      Application->Title = String(NAME) + " - " + ExtractFileName(GrfName.c_str());
+      Application->Title = String(NAME) + " - " + ExtractFileName(ToUString(GrfName));
       Modified = false;
     }
 
+#ifndef _WIN64
     SendOleAdvise(acDataSaved); //Notify OLE client that data has been saved
+#endif
     return true;
   }
   catch(EFCreateError &E)
@@ -274,8 +278,6 @@ void TData::SaveDefault() const
 //---------------------------------------------------------------------------
 bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
 {
-  const TColor Colors[] = {clRed, clGreen, clBlue, clYellow, clPurple, clAqua, clBlack, clGray, clSkyBlue	, clMoneyGreen, clDkGray};
-
   std::ifstream Stream(FileName.c_str());
   if(!Stream)
   {
@@ -283,7 +285,23 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
     return false;
   }
 
-	std::string Line;
+  try
+  {
+    ImportPointSeries(Stream, Separator);
+  }
+  catch(EGraphError &E)
+  {
+    MessageBox(E.Message, LoadString(RES_FILE_ERROR), MB_ICONSTOP);
+    return false;
+  }
+  return true;
+}
+//---------------------------------------------------------------------------
+void TData::ImportPointSeries(std::istream &Stream, char Separator)
+{
+  const TColor Colors[] = {clRed, clGreen, clBlue, clYellow, clPurple, clAqua, clBlack, clGray, clSkyBlue	, clMoneyGreen, clDkGray};
+
+ 	std::string Line;
 	while(Stream && Line.empty())
     std::getline(Stream, Line);
 	if(Separator == 0)
@@ -316,10 +334,10 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
           if(Col == Points.size())
      		    Points.push_back(std::make_pair(L"", std::vector<TPointSeriesPoint>()));
           std::wstring yStr = ToWString(*beg);
-          if(Property.DecimalSeparator != '.')
+          if(Options.DecimalSeparator != '.')
           {
-            std::replace(xStr.begin(), xStr.end(), Property.DecimalSeparator, L'.');
-            std::replace(yStr.begin(), yStr.end(), Property.DecimalSeparator, L'.');
+            std::replace(xStr.begin(), xStr.end(), Options.DecimalSeparator, L'.');
+            std::replace(yStr.begin(), yStr.end(), Options.DecimalSeparator, L'.');
           }
           Points[Col].second.push_back(TPointSeriesPoint(xStr, yStr));
           Col++;
@@ -330,23 +348,20 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
 	}
 	catch(Func32::EParseError &E)
 	{
-		MessageBox(LoadRes(526, FileName.c_str(), Row+1), LoadRes(RES_FILE_ERROR), MB_ICONSTOP);
-		return false;
+    throw EGraphError(ToWString(LoadRes(526, Row+1)));
 	}
 	catch(std::out_of_range &E)
 	{
-		MessageBox(LoadRes(526, FileName.c_str(), Row+1), LoadRes(RES_FILE_ERROR), MB_ICONSTOP);
-		return false;
+    throw EGraphError(ToWString(LoadRes(526, Row+1)));
   }
   catch(std::bad_alloc &E)
   {
-    MessageBox(LoadRes(RES_OUT_OF_MEMORY), LoadRes(RES_FILE_ERROR), MB_ICONSTOP);
-    return false;
+    throw EGraphError(LoadString(RES_OUT_OF_MEMORY));
   }
 
 	unsigned ColorIndex = 0;
-  unsigned Style = Property.DefaultPoint.Style;
-  unsigned LineStyle = Property.DefaultPointLine.Style;
+  unsigned Style = Options.DefaultPoint.Style;
+  unsigned LineStyle = Options.DefaultPointLine.Style;
 
 	UndoList.BeginMultiUndo();
 	for(unsigned I = 0; I < Points.size(); I++)
@@ -355,13 +370,13 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
 			clBlack,            //FrameColor
 			Colors[ColorIndex], //FillColor
 			Colors[ColorIndex], //LineColor
-			Property.DefaultPoint.Size, //Size
-			Property.DefaultPointLine.Size, //LineSize
+			Options.DefaultPoint.Size, //Size
+			Options.DefaultPointLine.Size, //LineSize
 			Style, //Style
 			static_cast<TPenStyle>(LineStyle), //LineStyle
 			iaLinear, //Onterpolation
 			false, //ShowLabels
-			Property.DefaultPointLabelFont, //Font
+			Options.DefaultPointLabelFont, //Font
 			lpBelow, //LabelPosition
 			ptCartesian, //PointType
 			ebtNone,  //xErrorBarType
@@ -374,6 +389,7 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
 		Insert(Series);
 		UndoList.Push(TUndoAdd(Series));
 		Series->Update();
+    Python::ExecutePluginEvent(Python::peNewElem, static_cast<TGraphElemPtr>(Series));
 		ColorIndex = ++ColorIndex % (sizeof(Colors)/sizeof(TColor));
 		Style = (Style+1) % 7;
 		LineStyle = (LineStyle+1) % 5;
@@ -381,7 +397,6 @@ bool TData::ImportPointSeries(const std::wstring &FileName, char Separator)
 
   UndoList.EndMultiUndo();
   Modified = true;
-  return true;
 }
 //---------------------------------------------------------------------------
 void TData::LoadDefault()

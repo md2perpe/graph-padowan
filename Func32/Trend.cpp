@@ -361,8 +361,8 @@ TParamFunc MovingAverage(const std::vector<TDblPoint> &Points, unsigned N)
     double x1 = Points[I-1].x - a*(I-N);
     double y1 = OldAverage - b*(I-N);
 
-    xStr << std::uppercase << "t<" << (I-N+1) << ',' << x1 << '+' << a << 't';
-    yStr << std::uppercase << "t<" << (I-N+1) << ',' << y1 << '+' << b << 't';
+    xStr << std::uppercase << "t<=" << (I-N+1) << ',' << x1 << '+' << a << 't';
+    yStr << std::uppercase << "t<=" << (I-N+1) << ',' << y1 << '+' << b << 't';
   }
 
   xStr << ')';
@@ -494,8 +494,8 @@ double Correlation(const std::vector<TDblPoint> &Points, const TFunc &Func)
     { //Ignore errors and continue without using the affected point
     }
 
-  if(St == 0) //Prevent division by zero. St==0 means that the line is a perfect fit.
-    return 1;
+  if(St == 0) //Prevent division by zero.
+    return Sy == 0 ? 1 : std::numeric_limits<double>::quiet_NaN(); //Sy==0,St==0 means that the line is a perfect fit.
   return 1 - Sy/St;
 }
 //---------------------------------------------------------------------------

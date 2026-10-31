@@ -9,8 +9,8 @@
 
 #include <comctrls.hpp>
 #include <comobj.hpp>
-#include <\ole2.hpp>
-#include <oledlg.hpp>
+#include <ole2.h>
+#include <oledlg.h>
 #include <richole.h>
 //---------------------------------------------------------------------------
 class TRichEditOleCallback : public IRichEditOleCallback
@@ -64,7 +64,7 @@ public:
       /* [in] */ DWORD reco,
       /* [out] */ IDataObject **lplpdataobj);
 
-  HRESULT STDMETHODCALLTYPE TRichEditOleCallback::GetDragDropEffect(
+  HRESULT STDMETHODCALLTYPE GetDragDropEffect(
       /* [in] */ BOOL fDrag,
       /* [in] */ DWORD grfKeyState,
       /* [out] */ DWORD *pdwEffect);

@@ -63,7 +63,7 @@ void __fastcall TForm15::Button2Click(TObject *Sender)
   if(Max < Min)
     ds = -ds;
 
-  bool UseReal = Property.ComplexFormat == cfReal;
+  bool UseReal = Options.ComplexFormat == cfReal;
   if(const TStdFunc *F = dynamic_cast<const TStdFunc*>(Func))
   {
     Func32::TFunc Dif1;
@@ -263,7 +263,7 @@ void TForm15::ShowTable(const TBaseFuncType *F)
 //---------------------------------------------------------------------------
 void __fastcall TForm15::Popup1_CopyClick(TObject *Sender)
 {
-  Grid1->CopyToClipboard(Property.DecimalSeparator);
+  Grid1->CopyToClipboard(Options.DecimalSeparator);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm15::Popup1_SelectClick(TObject *Sender)
@@ -286,7 +286,7 @@ void __fastcall TForm15::Popup1_ExportClick(TObject *Sender)
 {
   if(SaveDialog1->Execute())
     //We need UTF8 to show the angle symbol
-    if(!Grid1->ExportToFile(SaveDialog1->FileName, SaveDialog1->FilterIndex == 1 ? ';' : '\t', Property.DecimalSeparator, Property.ComplexFormat == cfPolar))
+    if(!Grid1->ExportToFile(SaveDialog1->FileName, SaveDialog1->FilterIndex == 1 ? ';' : '\t', Options.DecimalSeparator, Options.ComplexFormat == cfPolar))
       MessageBox(LoadRes(RES_FILE_ACCESS, SaveDialog1->FileName), LoadRes(RES_WRITE_FAILED), MB_ICONSTOP);
 }
 //---------------------------------------------------------------------------

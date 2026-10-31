@@ -16,10 +16,9 @@
 #include <values.h>
 #include <algorithm>
 #include <ctime>
-#include <float.h>
-#include "PointSelect.h"
+#include <cfloat>
+#include <set>
 #include "IGraphic.h"
-#include "StackTrace.h"
 #pragma warn -8072 //Disable warning: Suspicous pointer arithmetic
 #include <boost/tr1/complex.hpp>
 
@@ -30,6 +29,10 @@ const unsigned MaxExtraPoints = 100;
 //---------------------------------------------------------------------------
 using std::real;
 using std::imag;
+#ifdef _WIN64
+inline long double imag(long double v) {return 0;}
+inline long double real(long double v) {return v;}
+#endif
 //---------------------------------------------------------------------------
 template<typename T> inline bool TDrawThread::IsError(Func32::TErrorCode ErrorCode, const Func32::TCoord<T> &Coord)
 {
@@ -43,96 +46,76 @@ inline bool TDrawThread::InsideImage(const TPoint &P)
 }
 //---------------------------------------------------------------------------
 __fastcall TDrawThread::TDrawThread(TDraw *ADraw)
- : TIThread(false),
+ : Thread::TIThread(true),
    Data(ADraw->Data), AxesRect(ADraw->AxesRect), Aborted(false),
-   ForceBlack(ADraw->ForceBlack), SizeMul(ADraw->SizeMul),
-   Draw(ADraw), Context(ADraw->Context), Axes(ADraw->Axes)
+   SizeMul(ADraw->SizeMul), Draw(ADraw), Context(ADraw->Context), Axes(ADraw->Axes)
 {
 }
 //---------------------------------------------------------------------------
 void __fastcall TDrawThread::Execute()
 {
 	randomize();
-	SetThreadName("DrawThread");
+  bool Init = true;
 
   while(!Terminated)
   {
-    try
-    {
-      if(Aborted)
-        ClearMessageQueue();
-      if(!HasMessage())
-        IdleEvent.SetEvent();
-      Aborted = false;
-      TMessage Message;
-      GetMessage(Message);
-      IdleEvent.ResetEvent();
+    if(Aborted)
+      ClearMessageQueue();
+    Aborted = false;
+    if(!HasMessage())
+      Draw->IncThreadInIdle(Init);
+    Init = false;
+    TMessage Message;
+    GetMessage(Message);
 
-      //No need to prepare drawings if we are just terminating
-      if(Message.Msg == dmTerminate)
+    switch(Message.Msg)
+    {
+      case dmDrawAll:
+        DrawAll();
+        break;
+
+      case dmTerminate:
         return;
-
-      AxesRect = Draw->AxesRect;
-      SizeMul = Draw->SizeMul;
-
-      Synchronize(&BeginUpdate);
-
-      switch(Message.Msg)
-      {
-        case dmDrawAll:
-          DrawAll();
-          break;
-
-        case dmDrawFunc:
-          reinterpret_cast<TGraphElem*>(Message.WParam)->Accept(*this);
-          break;
-      }
     }
-    catch(Exception &E)
-    {
-      LogUncaughtException(this, &E);
-      Synchronize(&Form1->ShowStatusError, String("Internal error. Log file Graph.err created."));
-    }
-    catch(std::exception &E)
-    {
-      LogUncaughtCppException(E.what(), "DrawThread");
-      Synchronize(&Form1->ShowStatusError, String("Internal error. Log file Graph.err created."));
-    }
-    catch(...)
-    {
-      LogUncaughtCppException(NULL, "DrawThread");
-      Synchronize(&Form1->ShowStatusError, String("Internal error. Log file Graph.err created."));
-    }
-    Synchronize(&EndUpdate);
   }
+}
+//---------------------------------------------------------------------------
+bool TDrawThread::EvalNext()
+{
+  TGraphElemPtr Elem = Draw->GetNextEvalElem();
+  if(!Elem)
+    return false;
+  if(Elem->GetVisible() && !Aborted)
+    Elem->Accept(*this);
+
+  unsigned Count = Elem->ChildCount();
+  for(unsigned N = 0; N < Count && !Aborted; N++)
+  {
+    const TGraphElemPtr &Child = Elem->GetChild(N);
+    if(Child->GetVisible())
+      Child->Accept(*this);
+  }
+
+  if(!Aborted)
+    Elem->SetUpdateFinished();
+  return !Aborted && !Terminated;
 }
 //---------------------------------------------------------------------------
 void TDrawThread::DrawAll()
 {
-  for(unsigned I = 0; I < Data->ElemCount() && !Aborted; I++)
-  {
-    const boost::shared_ptr<TGraphElem> &Elem = Data->GetElem(I);
-    unsigned Count = Elem->ChildCount();
-    for(unsigned N = 0; N < Count && !Aborted; N++)
-    {
-      const TGraphElemPtr &Child = Elem->GetChild(N);
-      if(Child->GetVisible())
-        Child->Accept(*this);
-    }
-    if(Elem->GetVisible() && !Aborted)
-      Elem->Accept(*this);
-  }
+  while(EvalNext())
+    Queue(&Draw->DrawElem.DrawNext);
 }
 //---------------------------------------------------------------------------
 void TDrawThread::PrepareFunction(TBaseFuncType *F)
 {
-  if(F->Points.empty())
+  if(F->GetPoints().empty())
   {
     //Use axes range for standard functions if the axes range is smaller than the function range
     double Min, Max, ds;
     F->GetCurrentRange(Min, Max, ds);
-    if(Min > Max)
-      return; //No range
+    if(!_finite(Min) || !_finite(Max) || Min > Max)
+      return; //No range or evaluation of Min or Max failed
 
     bool LogScl = Axes.xAxis.LogScl && ds == 0;
     if(ds == 0)
@@ -155,29 +138,6 @@ void TDrawThread::PrepareFunction(TBaseFuncType *F)
 void TDrawThread::Visit(TBaseFuncType &Func)
 {
   PrepareFunction(&Func);
-
-  if(!Aborted)
-    Synchronize(&DrawFunction, Func);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawFunction(const TBaseFuncType &Func)
-{
-//  TContextLock ContextLock(Context);
-  Draw->SetClippingRegion();
-
-  if(Func.DrawType == dtDots)
-    Draw->DrawPolydots(Func.Points.begin(), Func.Points.end(), Func.Size, Func.Color);
-  else
-  {
-    std::vector<TPoint>::const_iterator iter = Func.Points.begin();
-    for(unsigned I = 0; I < Func.PointNum.size(); I++)
-    {
-      Draw->DrawPolyline(iter, iter + Func.PointNum[I], Func.Style, Func.Size, Func.Color);
-      iter += Func.PointNum[I];
-    }
-  }
-  
-  DrawEndPoints(Func);
 }
 //---------------------------------------------------------------------------
 //This function draws a mathematical function on the canvas
@@ -188,10 +148,17 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
 {
   try
   {
+    std::vector<TPoint> Points;
+    std::vector<unsigned> PointNum;
+    std::vector<Func32::TCoordSet<> > CoordList;
     Func32::ECalcError CalcError;
     const Func32::TBaseFunc &Func = F.GetFunc();
     Func32::TCoord<T> Coord = Func.Calc(T(sMin), CalcError); //Calc first x- and y-coordinate
     TPoint Pos;
+
+    //We allow points to be just outside the AxesRect as a thick line just outside might be visible inside
+    TRect ClipRect = AxesRect;
+    ClipRect.Inflate(F.GetSize() / 2, F.GetSize() / 2);
 
     //Calculate position in pixel coordinates
     TPoint LastPos;
@@ -225,7 +192,7 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
           //If we just went outside defined range
           //Use binary search to find the place between the last defined point and
           //the undefined point where the pixel position no longer changes.
-          if(!Err && F.DrawType == dtAuto)
+          if(!Err && F.GetDrawType() == dtAuto)
           {
             double s2 = sLast;   //The last defined point
             Pos = LastPos;       //Current pixel position
@@ -249,10 +216,10 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
 
             //If we have a new position, add it. We do not check for error here.
             //Even if the last calculation was an error, we may have a better position.
-            if(Pos != F.Points.back())
+            if(Pos != Points.back())
             {
-              F.Points.push_back(Pos);
-              F.sList.push_back(Func32::TCoordSet<>(s2, real(Coord.x), real(Coord.y)));
+              Points.push_back(Pos);
+              CoordList.push_back(Func32::TCoordSet<>(s2, real(Coord.x), real(Coord.y)));
             }
           }
           Err = true;
@@ -260,8 +227,8 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
         }
 
         //If no error occured: Check if Pos and LastPos are not outside the image on the same side
-        if(!Err && F.DrawType == dtAuto)
-          if(!((Pos.x < 0 && LastPos.x < 0) || (Pos.x > AxesRect.Right && LastPos.x > AxesRect.Right) || (Pos.y < 0 && LastPos.y < 0) || (Pos.y > AxesRect.Bottom && LastPos.y > AxesRect.Bottom)))
+        if(!Err && F.GetDrawType() == dtAuto)
+          if(!((Pos.x < 0 && LastPos.x < 0) || (Pos.x > ClipRect.Right && LastPos.x > ClipRect.Right) || (Pos.y < 0 && LastPos.y < 0) || (Pos.y > ClipRect.Bottom && LastPos.y > ClipRect.Bottom)))
           {
             unsigned Count = MaxExtraPoints; //Use a max loop count to prevent the algorithm from running wild
             //If there is more than 10 pixels between the two points, calculate a point in the middle.
@@ -285,8 +252,8 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
                 }
                 sLast = sMiddle;
                 LastPos = P;
-                F.Points.push_back(LastPos);
-                F.sList.push_back(Func32::TCoordSet<>(sLast, real(Coord.x), real(Coord.y)));
+                Points.push_back(LastPos);
+                CoordList.push_back(Func32::TCoordSet<>(sLast, real(Coord.x), real(Coord.y)));
               }
               else
               {
@@ -301,7 +268,7 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
               }
 
               //If both points are outside the image, simulate an error at LastPos to break the line between LastPos and Pos
-              if(!InsideRect(AxesRect, LastPos) && !InsideRect(AxesRect, Pos))
+              if(!InsideRect(ClipRect, LastPos) && !InsideRect(ClipRect, Pos))
               {
                 Err = 3; //Simulate error at LastPos to make Pos part of a new line
                 break;
@@ -312,21 +279,21 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
         if(Err)             //If an error happened last but not now
         {
           //If points has been added since last calculation
-          if(F.Points.size() > OldSize)
+          if(Points.size() > OldSize)
             //Add number of points in piece of line
-            F.PointNum.push_back(F.Points.size() - OldSize);
+            PointNum.push_back(Points.size() - OldSize);
 
-          OldSize = F.Points.size();
+          OldSize = Points.size();
 
           //If line was split because of we were out of image area
           if(Err == 2)
           {
              //Add last point
-             F.Points.push_back(LastPos);
+             Points.push_back(LastPos);
              Func32::TCoord<T> Coord = Func.Calc(T(s-ds), CalcError);
-             F.sList.push_back(Func32::TCoordSet<>(s - ds, real(Coord.x), real(Coord.y)));
+             CoordList.push_back(Func32::TCoordSet<>(s - ds, real(Coord.x), real(Coord.y)));
           }
-          else if(Err == 1 && F.DrawType == dtAuto)   //If calculation error
+          else if(Err == 1 && F.GetDrawType() == dtAuto)   //If calculation error
           {
             //If we just went inside defined range
             //Use binary tree to find the place between the last undefined point and
@@ -359,14 +326,14 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
             //was an error, Pos2 might be better than Pos
             if(Pos2 != Pos)
             {
-              F.Points.push_back(Pos2);
-              F.sList.push_back(Func32::TCoordSet<>(s2, real(Coord2.x), real(Coord2.y)));
+              Points.push_back(Pos2);
+              CoordList.push_back(Func32::TCoordSet<>(s2, real(Coord2.x), real(Coord2.y)));
             }
           }
 
           //Add point to vector
-          F.Points.push_back(Pos);
-          F.sList.push_back(Func32::TCoordSet<>(s, real(Coord.x), real(Coord.y)));
+          Points.push_back(Pos);
+          CoordList.push_back(Func32::TCoordSet<>(s, real(Coord.x), real(Coord.y)));
           Err = false;            //Indicate no error
         }
         else //No errors
@@ -374,8 +341,8 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
           //Add point to vector
           if(Pos != LastPos)
           {
-            F.Points.push_back(Pos);
-            F.sList.push_back(Func32::TCoordSet<>(s, real(Coord.x), real(Coord.y)));
+            Points.push_back(Pos);
+            CoordList.push_back(Func32::TCoordSet<>(s, real(Coord.x), real(Coord.y)));
           }
         }
         LastPos = Pos; //Save point
@@ -386,33 +353,33 @@ void TDrawThread::CalcFunc(TBaseFuncType &F, double sMin, double sMax, double ds
         continue;
       }
     }
-    if(F.Points.size() > OldSize)
-      F.PointNum.push_back(F.Points.size() - OldSize);
+    if(Points.size() > OldSize)
+      PointNum.push_back(Points.size() - OldSize);
 
     //Clear points if aborted
     if(Aborted)
       F.ClearCache();
+    else
+      F.SetPoints(Points, PointNum, CoordList);
   }
   catch(Exception &E)
   {
-    Synchronize(&Form1->ShowStatusError, "Internal error. Unexpected exception: " + E.Message);
+    ShowStatusError("Internal error. Unexpected exception: " + E.Message);
   }
   catch(std::exception &E)
   {
-    Synchronize(&Form1->ShowStatusError, "Internal error. Unexpected exception: " + String(E.what()));
+    ShowStatusError("Internal error. Unexpected exception: " + String(E.what()));
   }
   catch(...)
   {
-    Synchronize(&Form1->ShowStatusError, String("Internal error. Unknown exception"));
+    ShowStatusError("Internal error. Unknown exception");
   }
 }
 //---------------------------------------------------------------------------
 void TDrawThread::Visit(TShading &Shade)
 {
-  if(Shade.Region.get() == NULL)
+  if(Shade.GetRegion() == NULL)
     CreateShade(Shade);
-  if(!Aborted)
-    Synchronize(&DrawShade, Shade);
 }
 //---------------------------------------------------------------------------
 int ComparePoint(const TPoint &P1, const TPoint &P2, TShadeStyle Style)
@@ -434,7 +401,7 @@ int ComparePoint(const TPoint &P1, const TPoint &P2, TShadeStyle Style)
 //---------------------------------------------------------------------------
 TPoint TDrawThread::GetFixedPoint(const TShading &Shade, const TPoint &P)
 {
-  switch(Shade.ShadeStyle)
+  switch(Shade.GetShadeStyle())
   {
     case ssAbove:
       return TPoint(P.x, AxesRect.Top - 1);
@@ -452,38 +419,50 @@ TPoint TDrawThread::GetFixedPoint(const TShading &Shade, const TPoint &P)
 void TDrawThread::CreateShade(TShading &Shade)
 {
   TBaseFuncType *F = dynamic_cast<TBaseFuncType*>(Shade.GetParent().get());
+  const std::vector<TPoint> &P1 = F->GetPoints();
+  const std::vector<unsigned> &PointNum = F->GetPointNum();
+  const std::vector<Func32::TCoordSet<> > &CoordList = F->GetCoordList();
 
-  PrepareFunction(F);
-  if(Shade.Func2)
-    PrepareFunction(Shade.Func2.get());
+  //If the shading is attached to a Func2, we continue evaluating until
+  //Func2 has been evaluated so we can use the data from it.
+  if(Shade.GetFunc2())
+    while(!Shade.GetFunc2()->IsUpdateFinished())
+      if(!EvalNext())
+      {
+        //If there are no more to do, wait for Func2 to finish
+        if(Aborted)
+          return;
+        else
+          Sleep(10);
+      }
 
-	if(F->sList.empty() || (Shade.Func2.get() && Shade.Func2->sList.empty()))
+	if(CoordList.empty() || (Shade.GetFunc2().get() && Shade.GetFunc2()->GetCoordList().empty()))
     return;
 
   //The intervals can go both ways. Make sure sMin is always less than sMax
-  double sMin = std::min(Shade.sMin.Value, Shade.sMax.Value);
-  double sMax = std::max(Shade.sMin.Value, Shade.sMax.Value);
+  double sMin = std::min(Shade.GetMin().Value, Shade.GetMax().Value);
+  double sMax = std::max(Shade.GetMin().Value, Shade.GetMax().Value);
   double Min, Max;
 
   //If shade is outside the function area, nothing to draw
-  if(sMax < F->sList.front().t || sMin > F->sList.back().t)
+  if(sMax < CoordList.front().t || sMin > CoordList.back().t)
     return;
 
   if(dynamic_cast<const TStdFunc*>(F))
   {
     //If Min or Max is outside coordinate system: Make sure they are just one pixel outside
-    Min = Range(std::max(Draw->xCoord(-1), F->From.Value), sMin, Draw->xCoord(AxesRect.Right+1));
-    Max = Range(Draw->xCoord(-1), sMax, std::min(Draw->xCoord(AxesRect.Right+1), F->To.Value));
+    Min = Range(std::max(Draw->xCoord(-1), F->GetFrom().Value), sMin, Draw->xCoord(AxesRect.Right+1));
+    Max = Range(Draw->xCoord(-1), sMax, std::min(Draw->xCoord(AxesRect.Right+1), F->GetTo().Value));
   }
   else
   {
-    Min = std::_finite(sMin) ? sMin : F->From.Value;
-    Max = std::_finite(sMax) ? sMax : F->To.Value;
+    Min = std::_finite(sMin) ? sMin : F->GetFrom().Value;
+    Max = std::_finite(sMax) ? sMax : F->GetTo().Value;
   }
 
   //Find starting and ending points in point vector
-  unsigned N1 = std::lower_bound(F->sList.begin(), F->sList.end() - 1, Min, TCompCoordSet()) - F->sList.begin();
-  unsigned N2 = std::upper_bound(F->sList.begin() + N1, F->sList.end(), Max, TCompCoordSet()) - F->sList.begin() - 1;
+  unsigned N1 = std::lower_bound(CoordList.begin(), CoordList.end() - 1, Min, TCompCoordSet()) - CoordList.begin();
+  unsigned N2 = std::upper_bound(CoordList.begin() + N1, CoordList.end(), Max, TCompCoordSet()) - CoordList.begin() - 1;
 
 	if(N2 <= N1)
 		return; //This may happen because we subtracted 1 when we calculated N2
@@ -494,87 +473,87 @@ void TDrawThread::CreateShade(TShading &Shade)
   //Position of y-axis on the x-axis
   int xAxisPixel = Range<int>(AxesRect.Left, xPoint(Axes.yAxis.AxisCross), AxesRect.Right);
 
-  if(Shade.ExtendMinToIntercept)
+  if(Shade.GetExtendMinToIntercept())
   {
-    switch(Shade.ShadeStyle)
+    switch(Shade.GetShadeStyle())
     {
       case ssAbove:
       case ssBelow:
       case ssXAxis:
         int CrossLine;
-        if(Shade.ShadeStyle == ssAbove)
+        if(Shade.GetShadeStyle() == ssAbove)
           CrossLine = 0;
-        else if(Shade.ShadeStyle == ssBelow)
+        else if(Shade.GetShadeStyle() == ssBelow)
           CrossLine = AxesRect.Bottom;
         else
           CrossLine = yAxisPixel;
 
-        //Decrease N1 until F->Points[N1] intercepts with the x-axis, top or bottom of image
+        //Decrease N1 until P1[N1] intercepts with the x-axis, top or bottom of image
         bool Above;
-        Above = F->Points[N1].y < CrossLine;
-        while(N1 && (Above ? F->Points[N1].y < CrossLine : F->Points[N1].y > CrossLine))
+        Above = P1[N1].y < CrossLine;
+        while(N1 && (Above ? P1[N1].y < CrossLine : P1[N1].y > CrossLine))
           --N1;
         break;
       case ssYAxis:
-        //Decrease N1 until F->Points[N1] intercepts with the y-axis
+        //Decrease N1 until P1[N1] intercepts with the y-axis
         bool Left;
-        Left = F->Points[N1].x < xAxisPixel;
-        while(N1 && (Left ? F->Points[N1].x < xAxisPixel : F->Points[N1].x > xAxisPixel))
+        Left = P1[N1].x < xAxisPixel;
+        while(N1 && (Left ? P1[N1].x < xAxisPixel : P1[N1].x > xAxisPixel))
           --N1;
         break;
       case ssBetween:
-        N1 = F->Points.rend() - FindCrossing(F->Points.rend() - (N1+1), F->Points.rend(), Shade.Func2->Points.begin(), Shade.Func2->Points.end());
+        N1 = P1.rend() - FindCrossing(P1.rend() - (N1+1), P1.rend(), Shade.GetFunc2()->GetPoints().begin(), Shade.GetFunc2()->GetPoints().end());
         if(N1)
           N1--;
         break;
       case ssInside:
-        N1 = F->Points.rend() - FindCrossing(F->Points.rend() - (N1+1), F->Points.rend(), F->Points.begin() + N2, F->Points.end());
+        N1 = P1.rend() - FindCrossing(P1.rend() - (N1+1), P1.rend(), P1.begin() + N2, P1.end());
         if(N1)
           N1--;
     }
-    Min = F->sList[N1].t;
+    Min = CoordList[N1].t;
   }
 
-  if(Shade.ExtendMaxToIntercept)
+  if(Shade.GetExtendMaxToIntercept())
   {
-    switch(Shade.ShadeStyle)
+    switch(Shade.GetShadeStyle())
     {
       case ssAbove:
       case ssBelow:
       case ssXAxis:
         int CrossLine;
-        if(Shade.ShadeStyle == ssAbove)
+        if(Shade.GetShadeStyle() == ssAbove)
           CrossLine = 0;
-        else if(Shade.ShadeStyle == ssBelow)
+        else if(Shade.GetShadeStyle() == ssBelow)
           CrossLine = AxesRect.Bottom;
         else
           CrossLine = yAxisPixel;
 
-        //Increase N2 until F->Points[N2] intercepts with the x-axis, top or bottom of image
+        //Increase N2 until P1[N2] intercepts with the x-axis, top or bottom of image
         bool Above;
-        Above = F->Points[N2].y < CrossLine;
-        while(N2 < F->Points.size() && (Above ? F->Points[N2].y < CrossLine : F->Points[N2].y > CrossLine))
+        Above = P1[N2].y < CrossLine;
+        while(N2 < P1.size() && (Above ? P1[N2].y < CrossLine : P1[N2].y > CrossLine))
           ++N2;
         break;
 
       case ssYAxis:
-        //Increase N2 until F->Points[N2] intercepts with the y-axis
+        //Increase N2 until P1[N2] intercepts with the y-axis
         bool Left;
-        Left = F->Points[N2].x < xAxisPixel;
-        while(N2 < F->Points.size() && (Left ? F->Points[N2].x < xAxisPixel : F->Points[N2].x > xAxisPixel))
+        Left = P1[N2].x < xAxisPixel;
+        while(N2 < P1.size() && (Left ? P1[N2].x < xAxisPixel : P1[N2].x > xAxisPixel))
           ++N2;
         break;
 
       case ssBetween:
-        N2 = FindCrossing(F->Points.begin() + N2, F->Points.end(), Shade.Func2->Points.begin(), Shade.Func2->Points.end()) - F->Points.begin();
+        N2 = FindCrossing(P1.begin() + N2, P1.end(), Shade.GetFunc2()->GetPoints().begin(), Shade.GetFunc2()->GetPoints().end()) - P1.begin();
         break;
 
       case ssInside:
-        N2 = FindCrossing(F->Points.begin() + N2, F->Points.end(), F->Points.rend() - N1, F->Points.rend()) - F->Points.begin();
+        N2 = FindCrossing(P1.begin() + N2, P1.end(), P1.rend() - N1, P1.rend()) - P1.begin();
     }
     if(N2)
       N2--;
-    Max = F->sList[N2].t;
+    Max = CoordList[N2].t;
   }
 
   //Find start and end points of function; May not have been drawn, and may not be valid
@@ -586,8 +565,8 @@ void TDrawThread::CreateShade(TShading &Shade)
   }
   catch(...)
   {
-    x1 = F->Points[N1].x;
-    y1 = F->Points[N1].y;
+    x1 = P1[N1].x;
+    y1 = P1[N1].y;
   }
 
   try
@@ -597,8 +576,8 @@ void TDrawThread::CreateShade(TShading &Shade)
   }
   catch(...)
   {
-    x2 = F->Points[N2].x;
-    y2 = F->Points[N2].y;
+    x2 = P1[N2].x;
+    y2 = P1[N2].y;
   }
 
   if(x1 == AxesRect.Left)
@@ -614,9 +593,9 @@ void TDrawThread::CreateShade(TShading &Shade)
   unsigned CountIndex = 0;
   unsigned Sum = 0;
   while(Sum <= N1)
-    Sum += F->PointNum[CountIndex++];
+    Sum += PointNum[CountIndex++];
 
-  switch(Shade.ShadeStyle)
+  switch(Shade.GetShadeStyle())
   {
     case ssAbove:
     case ssBelow:
@@ -627,103 +606,127 @@ void TDrawThread::CreateShade(TShading &Shade)
       //Set start point
       Points.push_back(GetFixedPoint(Shade, TPoint(x1, y1)));
       Points.push_back(TPoint(x1, y1));
-      int y = F->Points[N1].y;
+      int y = P1[N1].y;
       unsigned I = N1+1;
-      bool Pos = ComparePoint(F->Points[N1], F->Points[I], Shade.ShadeStyle) >= 0;
+      bool Pos = ComparePoint(P1[N1], P1[I], Shade.GetShadeStyle()) >= 0;
       while(I < N2+1)
       {
         while(I < N2+1 && I < Sum)
         {
-          int Pos2 = ComparePoint(F->Points[I-1], F->Points[I], Shade.ShadeStyle);
+          int Pos2 = ComparePoint(P1[I-1], P1[I], Shade.GetShadeStyle());
           if(Pos ? Pos2 < 0 : Pos2 > 0)
             break;
           I++;
         }
         if(I == Sum)
         {
-          if(CountIndex < F->PointNum.size())
-            Sum += F->PointNum[CountIndex++];
+          if(CountIndex < PointNum.size())
+            Sum += PointNum[CountIndex++];
         }
         else
           Pos = !Pos;
-        Points.insert(Points.end(), F->Points.begin()+N1, F->Points.begin()+I);
+        Points.insert(Points.end(), P1.begin()+N1, P1.begin()+I);
         if(I < N2+1)
         {
           Points.push_back(GetFixedPoint(Shade, Points.back()));
-          *Region |= TRegion(Points);
+          try
+          {
+            *Region |= TRegion(Points);
+          }
+          catch(...)
+          { //Ignore errors; It looks like some impossible regions will throw an exception.
+          }
           Points.clear();
           N1 = I;
-          Points.push_back(GetFixedPoint(Shade, F->Points[I]));
+          Points.push_back(GetFixedPoint(Shade, P1[I]));
         }
       }
       Points.push_back(TPoint(x2, y2));
       Points.push_back(GetFixedPoint(Shade, TPoint(x2, y2)));
-      *Region |= TRegion(Points);
+      try
+      {
+        *Region |= TRegion(Points);
+      }
+      catch(...)
+      { //Ignore errors; It looks like some impossible regions will throw an exception.
+      }
       Region->Widen(0, 0, 1, 1);
       Points.clear();
       break;
     }
 
     case ssInside:
-      if(N1 != N2)
-        *Region |= TRegion(&F->Points[N1], N2-N1);
+      try
+      {
+        if(N1 != N2)
+          *Region |= TRegion(&P1[N1], N2-N1);
+      }
+      catch(...)
+      { //Ignore errors; It looks like some impossible regions will throw an exception.
+      }
       break;
 
     case ssBetween:
     {
+      //Func2 may be NULL after a copy-paste of the function
+      if(!Shade.GetFunc2())
+        return;
       std::vector<TPoint> Points;
       Points.push_back(TPoint(x1, y1));
-      Points.insert(Points.end(), F->Points.begin()+N1, F->Points.begin()+N2+1);
+      Points.insert(Points.end(), P1.begin()+N1, P1.begin()+N2+1);
       Points.push_back(TPoint(x2, y2));
 
+      const std::vector<TPoint> &P2 = Shade.GetFunc2()->GetPoints();
+
       //The intervals can go both ways. Make sure sMin is always less than sMax
-      double sMin2 = std::min(Shade.sMin2.Value, Shade.sMax2.Value);
-      double sMax2 = std::max(Shade.sMin2.Value, Shade.sMax2.Value);
+      double sMin2 = std::min(Shade.GetMin2().Value, Shade.GetMax2().Value);
+      double sMax2 = std::max(Shade.GetMin2().Value, Shade.GetMax2().Value);
 
       double Min2, Max2;
 
-      if(dynamic_cast<const TStdFunc*>(Shade.Func2.get()))
+      if(dynamic_cast<const TStdFunc*>(Shade.GetFunc2().get()))
       {
         Min2 = Range(Draw->xCoord(-1), sMin2, Draw->xCoord(AxesRect.Right+1));
         Max2 = Range(Draw->xCoord(-1), sMax2, Draw->xCoord(AxesRect.Right+1));
       }
       else
       {
-        Min2 = std::_finite(sMin2) ? sMin2 : Shade.Func2->From.Value;
-        Max2 = std::_finite(sMax2) ? sMax2 : Shade.Func2->To.Value;
+        Min2 = std::_finite(sMin2) ? sMin2 : Shade.GetFunc2()->GetFrom().Value;
+        Max2 = std::_finite(sMax2) ? sMax2 : Shade.GetFunc2()->GetTo().Value;
       }
 
+      const std::vector<Func32::TCoordSet<> > &CoordList2 = Shade.GetFunc2()->GetCoordList();
       //Find starting and ending points in point vector
       //If list is empty: M1=-1, M2=-1
-      int M1 = std::lower_bound(Shade.Func2->sList.begin(), Shade.Func2->sList.end() - 1, Min2, TCompCoordSet()) - Shade.Func2->sList.begin();
-      int M2 = std::upper_bound(Shade.Func2->sList.begin()+M1, Shade.Func2->sList.end(), Max2, TCompCoordSet()) - Shade.Func2->sList.begin() - 1;
+      int M1 = std::lower_bound(CoordList2.begin(), CoordList2.end() - 1, Min2, TCompCoordSet()) - CoordList2.begin();
+      int M2 = std::upper_bound(CoordList2.begin()+M1, CoordList2.end(), Max2, TCompCoordSet()) - CoordList2.begin() - 1;
 
       //Find start and end points of function; May not have been drawn, and may not be valid
       int X1, Y1, X2, Y2;
       try
       {
-        X1 = xPoint(Shade.Func2->GetFunc().CalcX(Min2));
-        Y1 = yPoint(Shade.Func2->GetFunc().CalcY(Min2));
+        X1 = xPoint(Shade.GetFunc2()->GetFunc().CalcX(Min2));
+        Y1 = yPoint(Shade.GetFunc2()->GetFunc().CalcY(Min2));
       }
       catch(...)
       {
-        X1 = Shade.Func2->Points[M1].x;
-        Y1 = Shade.Func2->Points[M1].y;
+        X1 = P2[M1].x;
+        Y1 = P2[M1].y;
       }
 
       try
       {
-        X2 = xPoint(Shade.Func2->GetFunc().CalcX(Max2));
-        Y2 = yPoint(Shade.Func2->GetFunc().CalcY(Max2));
+        X2 = xPoint(Shade.GetFunc2()->GetFunc().CalcX(Max2));
+        Y2 = yPoint(Shade.GetFunc2()->GetFunc().CalcY(Max2));
       }
       catch(...)
       {
-        X2 = Shade.Func2->Points[M2].x;
-        Y2 = Shade.Func2->Points[M2].y;
+        X2 = P2[M2].x;
+        Y2 = P2[M2].y;
       }
 
       //Check if Max is actually less than min for one of the functions
-      bool SwapMinMax = (Shade.sMin.Value < Shade.sMax.Value) != (Shade.sMin2.Value < Shade.sMax2.Value);
+      bool SwapMinMax = (Shade.GetMin().Value < Shade.GetMax().Value) != (Shade.GetMin2().Value < Shade.GetMax2().Value);
 
       if(X1 == AxesRect.Left)
         X1--;
@@ -735,20 +738,19 @@ void TDrawThread::CreateShade(TShading &Shade)
         Y2--;
 
       //Add start point to the polygon points list
-      if(!Shade.ExtendMax2ToIntercept)
+      if(!Shade.GetExtendMax2ToIntercept())
         Points.push_back(SwapMinMax ? TPoint(X1, Y1) : TPoint(X2, Y2));
 
-      if(Shade.ExtendMin2ToIntercept)
+      if(Shade.GetExtendMin2ToIntercept())
       {
-        M1 = Shade.Func2->Points.rend() -
-          FindCrossing(Shade.Func2->Points.rend() - (M1+1), Shade.Func2->Points.rend(), F->Points.begin(), F->Points.end());
+        M1 = P2.rend() - FindCrossing(P2.rend() - (M1+1), P2.rend(), P1.begin(), P1.end());
         if(M1)
           M1--;
       }
 
-      if(Shade.ExtendMax2ToIntercept)
+      if(Shade.GetExtendMax2ToIntercept())
       {
-        M2 = FindCrossing(Shade.Func2->Points.begin() + M2, Shade.Func2->Points.end(), F->Points.begin(), F->Points.end()) - Shade.Func2->Points.begin();
+        M2 = FindCrossing(P2.begin() + M2, P2.end(), P1.begin(), P1.end()) - P2.begin();
         if(M2)
           M2--;
       }
@@ -757,441 +759,155 @@ void TDrawThread::CreateShade(TShading &Shade)
       if(M2 > M1)
       {
         if(SwapMinMax)
-          Points.insert(Points.end(), Shade.Func2->Points.begin()+M1, Shade.Func2->Points.begin()+M2);
+          Points.insert(Points.end(), P2.begin()+M1, P2.begin()+M2);
         else
-          Points.insert(Points.end(), Shade.Func2->Points.rend()-M2-1, Shade.Func2->Points.rend()-M1);
+          Points.insert(Points.end(), P2.rend()-M2-1, P2.rend()-M1);
       }
 
       //Add end point to the polygon points list
       //Add start point to the polygon points list
-      if(!Shade.ExtendMin2ToIntercept)
+      if(!Shade.GetExtendMin2ToIntercept())
         Points.push_back(SwapMinMax ? TPoint(X2, Y2) : TPoint(X1, Y1));
-      *Region |= TRegion(Points);
+      try
+      {
+        *Region |= TRegion(Points);
+      }
+      catch(...)
+      { //Ignore errors; It looks like some impossible regions will throw an exception.
+      }
       break;
     }
   }
 
-  Shade.Region = Region;
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawShade(const TShading &Shade)
-{
-	if(!Shade.Region)
-	  return;
-  Draw->SetClippingRegion();
-
-  Context.SetBrush(Shade.BrushStyle, ForceBlack ? clBlack : Shade.Color);
-
-  //Draw marked area, and clip at AxesRect
-  Context.DrawRegion(*Shade.Region);
-
-  Context.SetBrush(bsSolid, ForceBlack ? clBlack : Shade.Color);
-  if(Shade.MarkBorder)
-    Context.DrawFrameRegion(*Shade.Region, 1);
-}
-//---------------------------------------------------------------------------
-void __fastcall TDrawThread::BeginUpdate()
-{
-  Form1->BeginUpdate();
-  Form1->ShowStatusMessage(LoadRes(RES_UPDATE));
-}
-//---------------------------------------------------------------------------
-//Must be synchronized
-void __fastcall TDrawThread::EndUpdate()
-{
-  try
-  {
-    Form1->EndUpdate();
-    Form1->ShowStatusMessage("");
-    Form1->UpdateEval();
-    if(Draw->OnComplete)
-      Draw->OnComplete();
-  }
-  catch(Exception &E)
-  {
-    Form1->ShowStatusError("Internal error. Unexpected exception: " + E.Message);
-  }
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawEndPoints(const TBaseFuncType &Func)
-{
-  if(Func.StartPointStyle != 0)
-  {
-    long double t = Func.From.Value;
-    if(_finitel(t))
-      DrawEndPoint(Func, t, Func.StartPointStyle, true);
-    else
-    {
-      //If a start value has not been specified, search for the first point inside the visible area
-      //that is close to the border, and show the end point here.
-      for(unsigned I = 0; I < Func.sList.size(); I++)
-        if(InsideRect(AxesRect, Func.Points[I]))
-        {
-          if(!IsInRange(Func.Points[I].x, AxesRect.Left + 5, AxesRect.Right - 5) ||
-             !IsInRange(Func.Points[I].y, AxesRect.Top + 5, AxesRect.Bottom - 5))
-          {
-            t = Func.sList[I].t;
-            TPoint Pos = Func.Points[I];
-            if(I > 0)
-              //This only works because we know the function is a standard function
-              Pos = TContext::ClipLine(Func.Points[I-1], Func.Points[I], AxesRect);
-            DrawEndPoint(Func, t, Pos, Func.StartPointStyle, true);
-          }
-          break;
-        }
-    }
-  }
-
-  if(Func.EndPointStyle != 0)
-  {
-    long double t = Func.To.Value;
-    if(_finitel(t))
-      DrawEndPoint(Func, t, Func.EndPointStyle, false);
-    else if(!Func.sList.empty())
-    {
-      //If a start value has not been specified, search for the first point inside the visible area
-      //that is close to the border, and show the end point here.
-      for(unsigned I = Func.sList.size()-1; I > 0; I--)
-        if(InsideRect(AxesRect, Func.Points[I]))
-        {
-          if(!IsInRange(Func.Points[I].x, AxesRect.Left + 5, AxesRect.Right - 5) ||
-             !IsInRange(Func.Points[I].y, AxesRect.Top + 5, AxesRect.Bottom - 5))
-          {
-            t = Func.sList[I].t;
-            TPoint Pos = Func.Points[I];
-            if(I < Func.sList.size() - 1)
-              //This only works because we know the function is a standard function
-              Pos = TContext::ClipLine(Func.Points[I+1], Func.Points[I], AxesRect);
-            DrawEndPoint(Func, t, Pos, Func.EndPointStyle, false);
-          }
-          break;
-        }
-    }
-  }
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawEndPoint(const TBaseFuncType &Func, long double t, const TPoint &Pos, unsigned Style, bool InvertArrow)
-{
-  if(_finitel(t))
-    try
-    {
-      Func32::TCoord<long double> Coord = Func.GetFunc().Calc(t);
-      if(IsError(Func32::ecNoError, Coord))
-        return; //Invalid coordinate because of log axes
-
-      switch(Style)
-      {
-        case 1:
-          TPointSelect::DrawPoint(Context.GetCanvas(), Pos, 0, Func.Color, Axes.BackgroundColor, SizeScale(Func.Size + 3));
-          break;
-
-        case 2:
-          TPointSelect::DrawPoint(Context.GetCanvas(), Pos, 0, Func.Color, Func.Color, SizeScale(Func.Size + 3));
-          break;
-
-        case 3:
-          if(InvertArrow)
-						DrawArrow(Pos, Func.GetFunc().CalcAngleSlope(t) + M_PI, Func.Color, Func.Size);
-					else
-            DrawArrow(Pos, Func.GetFunc().CalcAngleSlope(t), Func.Color, Func.Size);
-          break;
-
-        case 4:
-          DrawHalfCircle(Pos, Func.GetFunc().CalcAngleSlope(t), Func.Color, Func.Size);
-          break;
-
-        case 5:
-          DrawHalfCircle(Pos, Func.GetFunc().CalcAngleSlope(t) + M_PI, Func.Color, Func.Size);
-          break;
-
-        case 6:
-          DrawSquareBracket(Pos, Func.GetFunc().CalcAngleSlope(t), Func.Color, Func.Size);
-          break;
-
-        case 7:
-          DrawSquareBracket(Pos, Func.GetFunc().CalcAngleSlope(t) + M_PI, Func.Color, Func.Size);
-          break;
-      }
-    }
-    catch(Func32::EFuncError&)
-    {
-    }
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawEndPoint(const TBaseFuncType &Func, long double t, unsigned Style, bool InvertArrow)
-{
-  if(_finitel(t))
-    try
-    {
-      Func32::TCoord<long double> Coord = Func.GetFunc().Calc(t);
-      if(IsError(Func32::ecNoError, Coord))
-        return; //Invalid coordinate because of log axes
-
-      DrawEndPoint(Func, t, Draw->xyPoint(Coord), Style, InvertArrow);
-    }
-    catch(Func32::EFuncError&)
-    {
-    }
+  Shade.SetRegion(Region);
 }
 //---------------------------------------------------------------------------
 void TDrawThread::Visit(TTextLabel &Label)
 {
-  Synchronize(&DrawLabel, Label);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawLabel(TTextLabel &Label)
-{
-  if(_isnan(Label.GetXPos().Value) || _isnan(Label.GetYPos().Value))
-    return;
-
-  TPoint Pos;
-  switch(Label.GetPlacement())
-  {
-    case lpAboveX:
-      Pos = TPoint(AxesRect.Right - Label.GetRect().Width() + 2, Draw->yPixelCross - Label.GetRect().Height() - 4);
-      break;
-
-    case lpBelowX:
-      Pos = TPoint(AxesRect.Right - Label.GetRect().Width() + 2, Draw->yPixelCross);
-      break;
-
-    case lpRightOfY:
-      Pos = TPoint(Draw->xPixelCross + 12, AxesRect.Top + 1);
-      break;
-
-    case lpLeftOfY:
-      Pos = TPoint(Draw->xPixelCross - Label.GetRect().Width(), AxesRect.Top + 1);
-      break;
-
-    case lpUserTopLeft:
-    default:
-      Pos = Draw->xyPoint(Label.GetXPos().Value, Label.GetYPos().Value);
-      break;
-
-    case lpUserTopRight:
-      Pos = Draw->xyPoint(Label.GetXPos().Value, Label.GetYPos().Value);
-      Pos.x -= Label.GetRect().Width();
-      break;
-
-    case lpUserBottomLeft:
-      Pos = Draw->xyPoint(Label.GetXPos().Value, Label.GetYPos().Value);
-      Pos.y -= Label.GetRect().Height();
-      break;
-
-    case lpUserBottomRight:
-      Pos = Draw->xyPoint(Label.GetXPos().Value, Label.GetYPos().Value);
-      Pos.x -= Label.GetRect().Width();
-      Pos.y -= Label.GetRect().Height();
-      break;
-  }
-
-  Label.UpdateRect(Pos.x, Pos.y);
-
-  //Check for valid coordinate; The label may have a negative position on a log axis
-  if(Pos.x != MAXINT && Pos.y != MAXINT)
-  {
-    Draw->SetClippingRegion();
-    Context.GetCanvas()->Draw(Pos.x, Pos.y, Label.GetImage());
-  }
 }
 //---------------------------------------------------------------------------
 void TDrawThread::Visit(TPointSeries &PointSeries)
 {
-  Synchronize(&DrawPointSeries, PointSeries);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawPointSeries(const TPointSeries &PointSeries)
-{
-  Draw->SetClippingRegion();
-
-  std::vector<TPoint> PointArray;
-  const std::vector<TPointSeriesPoint> &PointData = PointSeries.GetPointData();
-  const TPointSeries::TPointList PointList = PointSeries.GetPointList();
-  TPointSeries::TPointList::const_iterator End = PointList.end();
-	for(TPointSeries::TPointList::const_iterator Iter = PointList.begin(); Iter != End; ++Iter)
-		//Check that point is valid (NAN is used to indicate invalid value)
-		if((!Axes.xAxis.LogScl || Iter->x > 0) && (!Axes.yAxis.LogScl || Iter->y > 0) && _finite(Iter->x) && _finite(Iter->y))
-		{
-			TPoint P = xyPoint(*Iter);
-			if(PointArray.empty() || P != PointArray.back())
-				PointArray.push_back(P);
-		}
-
-  if(PointSeries.GetLineStyle() != psClear && PointSeries.GetLineSize() > 0)
-  {
-    std::vector<TPoint> SplinePoints;
-    Interpolate(SplinePoints, PointArray, PointSeries.GetInterpolation());
-    Draw->DrawPolyline(SplinePoints.begin(), SplinePoints.end(), PointSeries.GetLineStyle(), PointSeries.GetLineSize(), PointSeries.GetLineColor());
-  }
-
-  if(PointSeries.GetShowLabels())
-  {
-    Context.SetFont(PointSeries.GetFont());
-    if(ForceBlack)
-      Context.SetFontColor(clBlack);
-  }
-
-  //Only draw for point sizes >0
-  if(PointSeries.GetSize() == 0)
-    return;
-
-  std::wstring FormatStr;
-  if(PointSeries.GetPointType() == ptPolar)
-    FormatStr = Axes.Trigonometry == Func32::Degree ? GuiFormatSettings.DegreePointFormat : GuiFormatSettings.RadianPointFormat;
-  else
-    FormatStr = GuiFormatSettings.CartesianPointFormat;
-  boost::wformat Format(FormatStr);
-
-  //First draw all error bars and labels
-  if(PointSeries.GetxErrorBarType() != ebtNone || PointSeries.GetyErrorBarType() != ebtNone ||  PointSeries.GetShowLabels())
-    for(TPointSeries::TPointList::const_iterator Iter = PointList.begin(); Iter != End; ++Iter)
-    {
-      double x = Iter->x;
-      double y = Iter->y;
-      if(!_finite(x) || !_finite(y))
-        continue;
-
-      //Check that point is valid (NAN is used to indicate invalid value)
-      if((!Axes.xAxis.LogScl || x > 0) && (!Axes.yAxis.LogScl || y > 0) )
-      {
-        TPoint Pos = xyPoint(*Iter);
-        if(!InsideRect(AxesRect, Pos)) //We might get rounding errors if the point is too much outside the visible area
-          continue;
-
-        //Draw x error bar
-        Context.SetPen(psSolid, clBlack, SizeScale(1));
-        unsigned I = Iter - PointList.begin();
-        double Delta = PointSeries.GetXError(I);
-        if(Delta)
-        {
-          int X1 = xPoint(x - Delta);
-          int X2 = xPoint(x + Delta);
-          Context.DrawLine(X1, Pos.y, X2, Pos.y);
-          Context.DrawLine(X1, Pos.y - 4, X1, Pos.y +5);
-          Context.DrawLine(X2, Pos.y - 4, X2, Pos.y +5);
-        }
-
-        //Draw y error bar
-        Delta = PointSeries.GetYError(I);
-        if(Delta)
-        {
-          int Y1 = yPoint(y - Delta);
-          int Y2 = yPoint(y + Delta);
-          Context.DrawLine(Pos.x, Y1, Pos.x, Y2);
-          Context.DrawLine(Pos.x - 4, Y1, Pos.x +5, Y1);
-          Context.DrawLine(Pos.x - 4, Y2, Pos.x +5, Y2);
-        }
-
-        if(PointSeries.GetShowLabels())
-        {
-          std::wstring Str = str(Format % PointData[I].First % PointData[I].Second);
-          int PointSize = SizeScale(PointSeries.GetSize());
-          TDraw::DrawPointLabel(Context.GetCanvas(), Pos, PointSize, Str, PointSeries.GetLabelPosition());
-        }
-      }
-    }
-
-  //Remove clipping region and draw all markers.
-  //This is done so you either is all the marker or none of it. InsideRect checks if it should be shown.
-  Context.DestroyClipRect();
-  for(TPointSeries::TPointList::const_iterator Iter = PointList.begin(); Iter != End; ++Iter)
-  {
-    //Check that point is valid (NAN is used to indicate invalid value)
-    if((!Axes.xAxis.LogScl || Iter->x > 0) && (!Axes.yAxis.LogScl || Iter->y > 0) && _finite(Iter->x) && _finite(Iter->y))
-    {
-      TPoint Pos = xyPoint(*Iter);
-      if(!InsideRect(AxesRect, Pos)) //We might get rounding errors if the point is too much outside the visible area
-        continue;
-
-      //Check if we are inside the legend
-      if(Axes.ShowLegend && InsideRect(Draw->LegendRect, Pos))
-        continue;
-
-      int PointSize = SizeScale(PointSeries.GetSize());
-      TColor FillColor = ForceBlack ? clWhite : PointSeries.GetFillColor();
-      TColor FrameColor = ForceBlack ? clBlack : PointSeries.GetFrameColor();
-
-      if(PointSeries.GetStyle() != 7)
-        TPointSelect::DrawPoint(Context.GetCanvas(), Pos, PointSeries.GetStyle(), FrameColor, FillColor, PointSize); //Draw normalt markers
-      else if(Iter != PointList.begin()) //Draw arrow
-      {
-        Context.SetPen(PointSeries.GetLineStyle() == psClear ? psSolid : PointSeries.GetLineStyle(), PointSeries.GetFillColor(), PointSize);
-        unsigned I = Iter - PointList.begin();
-        double Angle = InterpolationAngle(PointList[std::max((int)I-2, 0)], PointList[I-1],
-          PointList[I], PointList[std::min(I+1, PointList.size()-1)], PointSeries.GetInterpolation());
-
-        DrawArrow(Pos, Angle, PointSeries.GetFillColor(), PointSeries.GetSize());
-      }
-    }
-  }
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawArrow(const TPoint &P, long double Angle, TColor Color, unsigned Size)
-{
-  Context.SetPen(psSolid, Color, SizeScale(Size/2+1), psjMiter);
-  Context.SetBrush(bsSolid, Color);
-
-  long double Angle2 = RealToVisualAngle(Angle);
-  int Length = SizeScale(13 + 2*Size);
-  int dX1 = Length * std::cos(Angle2 + 2.8);
-  int dY1 = Length * std::sin(Angle2 + 2.8);
-  int dX2 = Length * std::cos(Angle2 - 2.8);
-  int dY2 = Length * std::sin(Angle2 - 2.8);
-  TPoint Arrow[] = {TPoint(P.x + dX1, P.y - dY1), P, TPoint(P.x + dX2, P.y - dY2)};
-  Context.DrawPolygon(Arrow, 3);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::LineToAngle(int X, int Y, double Angle, double Length)
-{
-  int dX = Length * std::cos(Angle);
-  int dY = Length * std::sin(Angle);
-
-  Context.DrawLine(X, Y, X + dX, Y - dY);
-}
-//---------------------------------------------------------------------------
-long double TDrawThread::RealToVisualAngle(long double Angle)
-{
-  //Adjust angle for visual coordinate system instead of real system
-  long double Sin = std::sin(Angle) * Draw->yScale;
-  long double Cos = std::cos(Angle) * Draw->xScale;
-  return std::atan2(Sin, Cos);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawHalfCircle(const TPoint &Point, long double Angle, TColor Color, unsigned Size)
-{
-  Context.SetPen(psSolid, Color, SizeScale(Size));
-  long double Angle2 = RealToVisualAngle(Angle);
-
-  int r = SizeScale(3 + Size);
-  int a = r * std::sin(Angle2);
-  int b = r * std::cos(Angle2);
-  TPoint C(Point.x - b, Point.y + a);
-
-  Context.DrawArc(C.x - r, C.y - r, C.x + r, C.y + r, C.x + a, C.y + b, C.x - a, C.y - b);
-}
-//---------------------------------------------------------------------------
-void TDrawThread::DrawSquareBracket(const TPoint &P, long double Angle, TColor Color, unsigned Size)
-{
-  Context.SetPen(psSolid, Color, SizeScale(Size), psjMiter);
-  long double Angle2 = RealToVisualAngle(Angle);
-  double Length = SizeScale(3 + Size);
-  double a = Length * std::cos(Angle2);
-  double b = Length * std::sin(Angle2);
-  TPoint Data[] = {TPoint(P.x - b - a + 0.5, P.y - a + b + 0.5), TPoint(P.x - b + 0.5, P.y - a + 0.5),
-                   TPoint(P.x + b + 0.5, P.y + a + 0.5), TPoint(P.x + b - a + 0.5, P.y + a + b + 0.5)};
-  Context.DrawPolyline(Data, 4);
 }
 //---------------------------------------------------------------------------
 void TDrawThread::Visit(TAxesView &AxesView)
 {
-  Synchronize(&Draw->DrawAxes);
+}
+//---------------------------------------------------------------------------
+struct TCompY
+{
+  inline bool operator()(const TPoint &P1, const TPoint &P2) const
+  {
+    return P1.y == P2.y ? P1.x < P2.x : P1.y < P2.y;
+  }
+};
+//---------------------------------------------------------------------------
+struct TCompX
+{
+  inline bool operator()(const TPoint &P1, const TPoint &P2) const
+  {
+    return P1.x == P2.x ? P1.y < P2.y : P1.x < P2.x;
+  }
+};
+//---------------------------------------------------------------------------
+void RemoveSharedVertice(std::set<TPoint,TCompY> &Points, const TPoint &P)
+{
+  std::set<TPoint,TCompY>::iterator Iter = Points.find(P);
+  if(Iter != Points.end())
+    Points.erase(Iter);
+  else
+    Points.insert(P);
+}
+//---------------------------------------------------------------------------
+//Converted from Python script found at
+//http://stackoverflow.com/questions/13746284/merging-multiple-adjacent-rectangles-into-one-polygon
+void RegionToPolygons(const std::vector<TRect> &Region, std::vector<TPoint> &PolygonPoints, std::vector<int> &PolygonCount)
+{
+  std::set<TPoint,TCompY> yPoints;
+  for(std::vector<TRect>::const_iterator RectIter = Region.begin(); RectIter != Region.end(); ++RectIter)
+  {
+    RemoveSharedVertice(yPoints, RectIter->TopLeft());
+    RemoveSharedVertice(yPoints, RectIter->BottomRight());
+    RemoveSharedVertice(yPoints, TPoint(RectIter->Right, RectIter->Top));
+    RemoveSharedVertice(yPoints, TPoint(RectIter->Left, RectIter->Bottom));
+  }
+
+  std::map<TPoint,TPoint,TCompY> hEdges;
+  std::set<TPoint,TCompY>::const_iterator Iter = yPoints.begin();
+  while(Iter != yPoints.end())
+  {
+    int Y = Iter->y;
+    while(Iter != yPoints.end() && Iter->y == Y)
+    {
+      const TPoint &P = *Iter;
+      ++Iter;
+      hEdges.insert(std::make_pair(P, *Iter));
+      hEdges.insert(std::make_pair(*Iter, P));
+      ++Iter;
+    }
+  }
+
+  std::map<TPoint,TPoint,TCompX> vEdges;
+  std::set<TPoint,TCompX> xPoints(yPoints.begin(), yPoints.end());
+  std::set<TPoint,TCompX>::const_iterator Iter2 = xPoints.begin();
+  while(Iter2 != xPoints.end())
+  {
+    int X = Iter2->x;
+    while(Iter2 != xPoints.end() && Iter2->x == X)
+    {
+      const TPoint &P = *Iter2;
+      ++Iter2;
+      vEdges.insert(std::make_pair(P, *Iter2));
+      vEdges.insert(std::make_pair(*Iter2, P));
+      ++Iter2;
+    }
+  }
+
+  //Get all the polygons
+  while(!hEdges.empty())
+  {
+    std::vector<std::pair<TPoint,int> > Polygon;
+    Polygon.push_back(std::make_pair(hEdges.begin()->first,0)); //We can start with any point.
+    hEdges.erase(hEdges.begin());
+
+    while(true)
+    {
+      if(Polygon.back().second == 0)
+      {
+        std::map<TPoint,TPoint,TCompX>::iterator NextVertex = vEdges.find(Polygon.back().first);
+        Polygon.push_back(std::make_pair(NextVertex->second, 1));
+        vEdges.erase(NextVertex);
+      }
+      else
+      {
+        std::map<TPoint,TPoint,TCompY>::iterator NextVertex = hEdges.find(Polygon.back().first);
+        Polygon.push_back(std::make_pair(NextVertex->second, 0));
+        hEdges.erase(NextVertex);
+      }
+
+      if(Polygon.front() == Polygon.back())
+      {
+        //Closed polygon
+        Polygon.erase(Polygon.end()-1);
+        break;
+      }
+    }
+    //Remove implementation-markers from the polygon.
+    PolygonCount.push_back(Polygon.size());
+    for(unsigned I = 0; I < Polygon.size(); I++)
+    {
+      PolygonPoints.push_back(TPoint(Polygon[I].first.x, Polygon[I].first.y));
+      hEdges.erase(Polygon[I].first);
+      vEdges.erase(Polygon[I].first);
+    }
+  }
 }
 //---------------------------------------------------------------------------
 void TDrawThread::CreateInequality(TRelation &Relation)
 {
   bool xLogScl = Axes.xAxis.LogScl;
   bool yLogScl = Axes.yAxis.LogScl;
-  int dX = (Draw->Width > 1200) ? (Draw->Width > 2400 ? Draw->Width / 120 : 2 ) : 1;
+  int dX = (Draw->Width > 1500) ? (Draw->Width > 2400 ? Draw->Width / 120 : 2 ) : 1;
   std::exp(1.0); //Workaround for stupid bug in bcc 5.6.4
   double dx = xLogScl ? std::exp(dX/Draw->xScale) : dX/Draw->xScale;
   double dx2 = xLogScl ? std::exp(1/Draw->xScale) : 1/Draw->xScale;
@@ -1230,7 +946,7 @@ void TDrawThread::CreateInequality(TRelation &Relation)
               XStart = X2;
             else
               Points.push_back(TRect(
-                XStart <= AxesRect.Left ? -100 : XStart + 1,
+                XStart <= AxesRect.Left ? -100 : XStart,
                 Y <= AxesRect.Top ? -100 : Y,
                 X2,
                 Y >= AxesRect.Bottom ? AxesRect.Bottom + 100 : Y + 1));
@@ -1247,34 +963,17 @@ void TDrawThread::CreateInequality(TRelation &Relation)
       return;
     if(LastResult)
       Points.push_back(TRect(
-        XStart <= AxesRect.Left ? -100 : XStart + 1,
+        XStart <= AxesRect.Left ? -100 : XStart,
         Y <= AxesRect.Top ? -100 : Y,
         AxesRect.Right + 100,
         Y >= AxesRect.Bottom ? AxesRect.Bottom + 100 : Y + 1));
     yLogScl ? y *= dy : y += dy;
   }
 
-  Relation.Region.reset(new TRegion(Points));
-
-  if(Relation.GetBrushStyle() != bsSolid && Relation.GetSize() > 0)
-  {
-    //Create bounding region as a region Delta pixels large than the real region, and subtract the real region
-    //to get the bounding region
-    const std::vector<TRect>::iterator End = Points.end();
-    for(std::vector<TRect>::iterator Iter = Points.begin(); Iter != End; ++Iter)
-    {
-      unsigned Delta = SizeScale(Relation.GetSize());
-      Iter->Left -= Delta;
-      Iter->Right += Delta;
-      Iter->Top -= Delta;
-      Iter->Bottom += Delta;
-    }
-
-    Relation.BoundingRegion.reset(new TRegion(Points));
-    *Relation.BoundingRegion -= *Relation.Region;
-  }
-  else
-    Relation.BoundingRegion.reset(); //Don't draw frame when brush style is bsSolid
+  std::vector<TPoint> PolygonPoints;
+  std::vector<int> PolygonCounts;
+  RegionToPolygons(Points, PolygonPoints, PolygonCounts);
+  Relation.SetPoints(PolygonPoints, PolygonCounts);
 }
 //---------------------------------------------------------------------------
 //Check if there is a possibility for a zero point in f(x,y).
@@ -1283,11 +982,9 @@ bool TDrawThread::CheckResult1(const long double Result[3])
 {
   //If the sign has changed, at least one of the current and last result is valid, or
   //the increase/decrease state has changed, which might indicate an asymptote.
-  return (Result[1] < 0) == (Result[2] > 0) && !(_isnanl(Result[1]) && _isnanl(Result[2])) ||
-    (Result[0] < Result[1]) != (Result[1] < Result[2]);
-  if((Result[0] < Result[1]) != (Result[1] < Result[2]))
-    return true;
-  return false;
+  return (((Result[1] < 0) == (Result[2] > 0) && !(_isnanl(Result[1]) && _isnanl(Result[2]))) ||
+    (Result[0] < Result[1]) != (Result[1] < Result[2]));/* ||
+    _isnanl(Result[1]) != _isnanl(Result[2]);*/
 }
 //---------------------------------------------------------------------------
 //Check if there actually is a zero point in f(x,y) for certain.
@@ -1299,7 +996,17 @@ bool TDrawThread::CheckResult2(const long double Result[3])
     (Result[0] < Result[1]) == (Result[1] < Result[2]);
 }
 //---------------------------------------------------------------------------
-void TDrawThread::EquationLoop(TRelation &Relation, std::vector<TRect> &Points, bool Loop)
+/** Mark a point in the equation bitmap as used by the equation.
+ */
+inline void TDrawThread::AddPoint(const TPoint &P, std::vector<BYTE> &EquationBitmap)
+{
+  EquationBitmap[(P.y-AxesRect.Top)*AxesRect.Width()+(P.x-AxesRect.Left)] = 1;
+}
+//---------------------------------------------------------------------------
+/** Mark all pixels for the equation in the EquationBitmap.
+ *  param Loop: false: Loop through every x-pixel while scaning y-pixels for change in sign; true: Loop through every y-pixel while scanning x-pixels for change in sign.
+ */
+void TDrawThread::EquationLoop(TRelation &Relation, std::vector<BYTE> &EquationBitmap, bool Loop)
 {
   std::vector<long double> Args(2);
   Func32::ECalcError CalcError;
@@ -1308,20 +1015,21 @@ void TDrawThread::EquationLoop(TRelation &Relation, std::vector<TRect> &Points, 
   bool LogScl1 = Loop ? Axes.xAxis.LogScl : Axes.yAxis.LogScl;
   bool LogScl2 = Loop ? Axes.yAxis.LogScl : Axes.xAxis.LogScl;
 
-  int M1 = SizeScale(Relation.GetSize()) / 2;
-  int M2 = std::max((SizeScale(Relation.GetSize()) + 1) / 2, 1);
-
   double s1Min = Loop ? Axes.xAxis.Min : Axes.yAxis.Max;
   double s2Min = Loop ? Axes.yAxis.Max : Axes.xAxis.Min;
 
   int S1Min = Loop ? AxesRect.Left - 1 : AxesRect.Top - 1;
   int S2Min = Loop ? AxesRect.Top : AxesRect.Left;
 
-  int S1Max = Loop ? AxesRect.Right + 1 : AxesRect.Bottom + 1;
-  int S2Max = Loop ? AxesRect.Bottom + 1 : AxesRect.Right + 1;
-
   int dS1 = Draw->Width > 1200 ? Draw->Width / 120 : 5;
-  int dS2 = M2;
+
+  int S1Max = Loop ? AxesRect.Right + dS1 : AxesRect.Bottom + dS1;
+  int S2Max = Loop ? AxesRect.Bottom : AxesRect.Right;
+
+  int S3Min = S1Min;
+  int S3Max = Loop ? AxesRect.Right : AxesRect.Bottom;
+
+  const int dS2 = 1;
 
   LogScl1 ? s1Min /= std::exp(ds1/2) : s1Min -= ds1/2;
 
@@ -1342,19 +1050,25 @@ void TDrawThread::EquationLoop(TRelation &Relation, std::vector<TRect> &Points, 
     for(int S1 = S1Min; S1 < S1Max; S1 += dS1)
     {
       Args[!Loop] = s1;
-      Result[2] = Relation.Eval(Args, CalcError);
+      //Only evaluate relation and not constraints here to be able to find change in sign close to the constraints
+      Result[2] = Relation.EvalRelation(Args, CalcError);
       if(CheckResult1(Result))
       {
         double s3 = LogScl1 ? s1 / ds1 * ds3 : s1 - ds1 + ds3;
         for(int S3 = S1 - dS1 + 1; S3 <= S1; S3++)
         {
           Args[!Loop] = s3;
-          Result[2] = Relation.Eval(Args, CalcError);
-          if(CheckResult2(Result))
-            if(Loop)
-              Points.push_back(TRect(S3 - M1, S2 - M1, S3 + M2, S2 + M2));
-            else
-              Points.push_back(TRect(S2 - M1, S3 - M1, S2 + M2, S3 + M2));
+          Result[2] = Relation.EvalRelation(Args, CalcError);
+          if(CheckResult2(Result) && S3 > S3Min && S3 < S3Max) //Filter out points outside the axes; Could probably be done better
+          {
+            if(Relation.EvalConstraints(Args, CalcError))
+            {
+              if(Loop)
+                AddPoint(TPoint(S3, S2), EquationBitmap);
+              else
+                AddPoint(TPoint(S2, S3), EquationBitmap);
+            }
+          }
           Result[0] = Result[1];
           Result[1] = Result[2];
           if(LogScl1)
@@ -1378,48 +1092,170 @@ void TDrawThread::EquationLoop(TRelation &Relation, std::vector<TRect> &Points, 
   }
 }
 //---------------------------------------------------------------------------
+void DumpPoints(const std::deque<TPoint> &Points)
+{
+  if(Points.empty())
+    return;
+  String Str;
+  for(unsigned I = 0; I < Points.size(); I++)
+    Str += "(" + String(Points[I].x) + "," + Points[I].y + "), ";
+  OutputDebugString(Str.c_str());
+}
+//---------------------------------------------------------------------------
+/** Convert an index into the equation bitmap to a point.
+ */
+inline TPoint TDrawThread::IndexToPoint(unsigned I)
+{
+  return TPoint(I % AxesRect.Width() + AxesRect.Left, I / AxesRect.Width() + AxesRect.Top);
+}
+//---------------------------------------------------------------------------
+/** Convert a point to an index into the equation bitmap.
+ */
+inline unsigned TDrawThread::PointToIndex(const TPoint &P)
+{
+  return (P.y - AxesRect.Top) * AxesRect.Width() + (P.x - AxesRect.Left);
+}
+//---------------------------------------------------------------------------
+/** Convert the equation bitmap to polylines.
+ *  1. Search for the first pixel in the EquationBitmap. Store it in the Line dequeue, which will hold one polyline.
+ *  2. Keep checking if there is a point next to the back of Line and add it to the back.
+ *  3. Keep checking if there is a point next to the front of the Line and add it to the front.
+ *  4. If the front and back of the Line are close, add the front point to the back to close the loop.
+ *  5. Repeat back to 1 as long as there are still points in the EquationBitmap.
+ *
+ *  \param EquationBitmap: Vector with 1 byte for every pixel.
+ *  \param PolylinePoints: Vector to fil? with all the points found.
+ *  \param: PolylineCounts: Vector with size of every polyline in PolylinePoints.
+ */
+void TDrawThread::BitmapToPolylines(std::vector<BYTE> &EquationBitmap, std::vector<TPoint> &PolylinePoints, std::vector<int> &PolylineCounts)
+{
+  std::deque<TPoint> Line;
+  int BitmapWidth = AxesRect.Width();
+  int LastIndex = -1;
+  int EquationBitmapSize = EquationBitmap.size();
+  //List of index offsets for poxels that are close to the current pixel index, i.e. the pixel below Index will be at Index+BitmapWidth
+  int OffsetList[] = {-1, 1, -BitmapWidth, BitmapWidth, -BitmapWidth+1, -BitmapWidth-1, BitmapWidth+1, BitmapWidth-1};
+  while(true)
+  {
+    int Index;
+    //Find the first pixel in the equation and use it as the first point in the line
+    for(Index = LastIndex+1; Index < EquationBitmapSize; Index++)
+      if(EquationBitmap[Index])
+      {
+        Line.push_back(IndexToPoint(Index));
+        EquationBitmap[Index] = 0;
+        LastIndex = Index;
+        break;
+      }
+    if(Index == EquationBitmapSize)
+      return;
+
+    //Continue adding points to the end if a pixel is found close to the last one
+    bool Found;
+    int Index1 = PointToIndex(Line.back());
+    do
+    {
+      Found = false;
+      for(unsigned I = 0; I < sizeof(OffsetList)/sizeof(OffsetList[0]); I++)
+      {
+        int NewIndex = Index1 + OffsetList[I];
+        if(NewIndex >= 0 && NewIndex < EquationBitmapSize && EquationBitmap[NewIndex])
+        {
+          Line.push_back(IndexToPoint(NewIndex));
+          EquationBitmap[NewIndex] = 0;
+          Index1 = NewIndex;
+          Found = true;
+          break;
+        }
+      }
+    } while(Found);
+
+    //Continue adding points to the front if a pixel is found close to the last one
+    int Index2 = PointToIndex(Line.front());
+    do
+    {
+      Found = false;
+      for(unsigned I = 0; I < sizeof(OffsetList)/sizeof(OffsetList[0]); I++)
+      {
+        int NewIndex = Index2 + OffsetList[I];
+        if(NewIndex >= 0 && NewIndex < EquationBitmapSize && EquationBitmap[NewIndex])
+        {
+          Line.push_front(IndexToPoint(NewIndex));
+          EquationBitmap[NewIndex] = 0;
+          Index2 = NewIndex;
+          Found = true;
+          break;
+        }
+      }
+    } while(Found);
+
+    //If the first and last point are close together, add the first point as the last to close the loop
+    for(unsigned I = 0; I < sizeof(OffsetList)/sizeof(OffsetList[0]); I++)
+      if(Index1 + OffsetList[I] == Index2)
+      {
+        Line.push_back(Line.front());
+        break;
+      }
+
+//    DumpPoints(Line);
+    PolylinePoints.insert(PolylinePoints.end(), Line.begin(), Line.end());
+    PolylineCounts.push_back(Line.size());
+    Line.clear();
+  }
+}
+
+//---------------------------------------------------------------------------
+/** Create data to draw a relation that is an equation.
+ *  1. Create an array with 1 byte per pixel.
+ *  2. Loop through every row while scanning x-pixels for change in sign. Mark all pixels found.
+ *  3. Loop through every column while scanning y-pixels for change in sign. Mark all pixels found.
+ *  4. Convert the pixels found to polylines.
+ */
 void TDrawThread::CreateEquation(TRelation &Relation)
 {
+//  LARGE_INTEGER Start, End;
+//  QueryPerformanceCounter(&Start);
+  //EquationBitmap contains 1 byte pixel in the image.
+  //The byte is set to 1 if it is part of the equation.
+  std::vector<BYTE> EquationBitmap(AxesRect.Width()*AxesRect.Height());
 
-  std::vector<TRect> Points;
-  Points.reserve(500);
+  EquationLoop(Relation, EquationBitmap, 1);
+  EquationLoop(Relation, EquationBitmap, 0);
+  if(Aborted)
+    return;
 
-  EquationLoop(Relation, Points, 1);
-  EquationLoop(Relation, Points, 0);
+  std::vector<TPoint> PolylinePoints;
+  std::vector<int> PolylineCounts;
+  PolylinePoints.reserve(10000);
+  BitmapToPolylines(EquationBitmap, PolylinePoints, PolylineCounts);
 
-  if(!Aborted)
-    Relation.Region.reset(new TRegion(Points));
+  Relation.SetPoints(PolylinePoints, PolylineCounts);
+//  QueryPerformanceCounter(&End);
+//  int Diff = End.QuadPart - Start.QuadPart;
+//  OutputDebugString(("Time: " + IntToStr(Diff)).c_str());
 }
 //---------------------------------------------------------------------------
 void TDrawThread::Visit(TRelation &Relation)
 {
-  if(!Relation.Region)
+  if(Relation.GetPolylinePoints().empty())
   {
     if(Relation.GetRelationType() == rtEquation)
       CreateEquation(Relation);
     else
       CreateInequality(Relation);
   }
-
-  if(!Aborted)
-    Synchronize(&DrawRelation, Relation);
 }
 //---------------------------------------------------------------------------
-void TDrawThread::DrawRelation(const TRelation &Relation)
+void TDrawThread::SynchronizedShowStatusError(const String &Str)
 {
-  Draw->SetClippingRegion();
-  TColor Color = ForceBlack ? clBlack : Relation.GetColor();
-  Context.SetBrush(Relation.GetRelationType() == rtInequality ? Relation.GetBrushStyle() : bsSolid, Color);
-  Context.DrawRegion(*Relation.Region);
-
-  //Draw a frame around inequalities using BoundingRegion
-  //Warning: Do not try to use DrawFrameRegion(), which calls FrameRgn(), which
-  //may be extremely slow for complex regions. Actually DrawRegion() can be slow too.
-  if(Relation.BoundingRegion)
-  {
-    Context.SetBrush(bsSolid, Color);
-    Context.DrawRegion(*Relation.BoundingRegion);
-  }
+  Form1->ShowStatusError(Str);
+}
+//---------------------------------------------------------------------------
+void TDrawThread::ShowStatusError(const String &Str)
+{
+  //Synchronizing directly to Form1->ShowStatusError will sometimes
+  //cause an ICE on C++ Builder XE
+  Synchronize(&SynchronizedShowStatusError, Str);
 }
 //---------------------------------------------------------------------------
 } //namespace Graph

@@ -8,6 +8,8 @@
 		<indexterm><primary>TGraphElem (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TGraphElem</classname></title>
 		<para>
+		  This is the base class of all elements that can be added to the function list. 
+		  This class cannot be directly instantiated. 
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -23,12 +25,25 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>ShowInLegend (Graph.TProperty attribute)</primary></indexterm>
+						<indexterm><primary>ShowInLegend (Graph.TGraphElem attribute)</primary></indexterm>
 						<classname>TGraphElem</classname>.<property>ShowInLegend</property>
 					</term>
 					<listitem>
 						<para>
 							Indicates if the element is shown in the legend.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term>
+						<indexterm><primary>ShowInFunctionList (Graph.TGraphElem attribute)</primary></indexterm>
+						<classname>TGraphElem</classname>.<property>ShowInFunctionList</property>
+					</term>
+					<listitem>
+						<para>
+							Indicates if the element is shown in function list in the GUI.
+							If False, the user will not be able to interact with the element.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -41,6 +56,18 @@
 					<listitem>
 						<para>
 							This is the text string shown in the legend.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term>
+						<indexterm><primary>Caption (Graph.TGraphElem attribute)</primary></indexterm>
+						<classname>TGraphElem</classname>.<property>Caption</property>
+					</term>
+					<listitem>
+						<para>
+							This read only attribute will return the text shown in the function list.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -103,11 +130,13 @@
 		<indexterm><primary>TBaseFuncType (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TBaseFuncType</classname></title>
 		<para>
+		  <classname>TBaseFuncType</classname> derives from <classname><xref linkend="Graph.TGraphElem"/></classname> and contains all attributes from that class.
+			It is the base class of all functions and cannot be instantiated directly.
 			<variablelist>
 				<varlistentry>
 					<term>
-						<indexterm><primary>sList (Graph.TBaseFuncType attribute)</primary></indexterm>
-						<classname>TBaseFuncType</classname>.<property>sList</property>
+						<indexterm><primary>CoordList (Graph.TBaseFuncType attribute)</primary></indexterm>
+						<classname>TBaseFuncType</classname>.<property>CoordList</property>
 					</term>
 					<listitem>
 						<para>
@@ -172,7 +201,8 @@
 					</term>
 					<listitem>
 						<para>
-							This specifies the line style of the function.
+							This is a <ulink url="WIKI/Vcl.Graphics.TPenStyle"><classname>vcl.TPenStyle</classname></ulink> 
+							that specifies the line style used to draw the function.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -185,19 +215,19 @@
 						<indexterm><primary>To (Graph.TBaseFuncType attribute)</primary></indexterm>
 						<para>
 							<property>From</property> and <property>To</property> specifies the the range of the function.
-							Standard functions may use <code>float("-inf")</code> and <code>float("inf")</code> for an infinite range.
+							They are always read as strings, but can be set as strings or numbers. When set as strings they can be any 
+							formula including custom functions and constants.
+							Standard functions may use "-inf" and "inf" for an infinite range.
 						</para>
 					</listitem>
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TBaseFuncType</classname>.<property>StartPointStyle</property></term>
-					<term><classname>TBaseFuncType</classname>.<property>EndPointStyle</property></term>
+					<term><classname>TBaseFuncType</classname>.<property>EndpointStyle</property></term>
 					<listitem>
-						<indexterm><primary>StartPointStyle (Graph.TBaseFuncType attribute)</primary></indexterm>
-						<indexterm><primary>EndPointStyle (Graph.TBaseFuncType attribute)</primary></indexterm>
+						<indexterm><primary>EndpointStyle (Graph.TBaseFuncType attribute)</primary></indexterm>
 						<para>
-							These indicates the style of the end points. Use 0 if you don't want an endpoint.
+							This is a tuple with two numbers indicating the style of the end points. Use 0 if you don't want an endpoint.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -235,7 +265,7 @@
 					<listitem>
 						<para>
 							This evaluates the function at the specified independent variable <parameter>t</parameter>.
-							The result is a tuple if the (x,y) coordinate pair.
+							The result is a tuple with the (x,y) coordinate pair.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -247,9 +277,21 @@
 					</term>
 					<listitem>
 						<para>
-							Calculates the signed area over the range between <parameter>From</parameter> and <parameter>To</parameter> by numeric integration.
+							Calculates the length along the curve between <parameter>From</parameter> and <parameter>To</parameter>. by numeric integration.
 							The calculated area is between the function and the x-axis for standard and parametric functions,
 							while it is the area between the function and the center for polar functions.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term>
+						<indexterm><primary>CalcArcLength (in class TBaseFuncType)</primary></indexterm>
+						<classname>TBaseFuncType</classname>.<property>CalcArcLength</property>(<parameter>From, To</parameter>)
+					</term>
+					<listitem>
+						<para>
+							Calculates the signed area over the range between <parameter>From</parameter> and <parameter>To</parameter> by numeric integration.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -261,6 +303,8 @@
 		<indexterm><primary>TStdFunc (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TStdFunc</classname></title>
 		<para>
+		  <classname>TStdFunc</classname> derives from <classname><xref linkend="Graph.TBaseFuncType"/></classname> and contains all attributes from that class.
+			<classname>TStdFunc</classname> objects are used to plot functions on the form y=f(x).
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -275,12 +319,12 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>Text (Graph.TStdFunc attribute)</primary></indexterm>
-						<classname>TStdFunc</classname>.<property>Text</property>
+						<indexterm><primary>Equation (Graph.TStdFunc attribute)</primary></indexterm>
+						<classname>TStdFunc</classname>.<property>Equation</property>
 					</term>
 					<listitem>
 						<para>
-							This is the same string as was passed to the constructor.
+							This is the same string as was passed to the constructor. Changing the string will update the function.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -292,6 +336,8 @@
 		<indexterm><primary>TParFunc (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TParFunc</classname></title>
 		<para>
+		  <classname>TParFunc</classname> derives from <classname><xref linkend="Graph.TBaseFuncType"/></classname> and contains all attributes from that class.
+			<classname>TParFunc</classname> is used to plot parametric functions on the form x(t), y(t).
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -306,14 +352,13 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>xText (Graph.TParFunc attribute)</primary></indexterm>
-						<indexterm><primary>yText (Graph.TParFunc attribute)</primary></indexterm>
-						<classname>TParFunc</classname>.<property>xText</property>
-						<classname>TParFunc</classname>.<property>yText</property>
+						<indexterm><primary>Equation (Graph.TParFunc attribute)</primary></indexterm>
+						<classname>TParFunc</classname>.<property>Equation</property>
 					</term>
 					<listitem>
 						<para>
-							These are the same strings as was passed to the constructor.
+							This is a tuple with the two equation string that was passed to the constructor. 
+							You can assign a new tuple with two strings, for example ("cos t", "sin t"), to update the function. 
 						</para>
 					</listitem>
 				</varlistentry>
@@ -325,6 +370,8 @@
 		<indexterm><primary>TPolFunc (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TPolFunc</classname></title>
 		<para>
+		  <classname>TPolFunc</classname> derives from <classname><xref linkend="Graph.TBaseFuncType"/></classname> and contains all attributes from that class.
+			<classname>TPolFunc</classname> is used to plot polar functions on the form r=f(t).
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -339,12 +386,13 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>Text (Graph.TPolFunc attribute)</primary></indexterm>
-						<classname>TParFunc</classname>.<property>Text</property>
+						<indexterm><primary>Equation (Graph.TPolFunc attribute)</primary></indexterm>
+						<classname>TPolFunc</classname>.<property>Equation</property>
 					</term>
 					<listitem>
 						<para>
 							This is the same string as was passed to the constructor.
+							You can change it to another expression to update the function.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -352,14 +400,16 @@
 		</para>
 	</section>
 
-	<section id="Graph.TTan" xreflabel="Graph.TTan">
-		<indexterm><primary>TTan (class in Graph)</primary></indexterm>
-		<title>class <classname>Graph.TTan</classname></title>
+	<section id="Graph.TTangen" xreflabel="Graph.TTangent">
+		<indexterm><primary>TTangent (class in Graph)</primary></indexterm>
+		<title>class <classname>Graph.TTangent</classname></title>
 		<para>
+		  <classname>TTangent</classname> derives from <classname><xref linkend="Graph.TBaseFuncType"/></classname> and contains all attributes from that class.
+			<classname>TTangent</classname> is used to plot a tangent or normal. It must be added to a function and not directly to the function list.
 			<variablelist>
 				<varlistentry>
 					<term>
-						class <classname>Graph</classname>.<property>TTan</property>()
+						class <classname>Graph</classname>.<property>TTangent</property>()
 					</term>
 					<listitem>
 						<para>
@@ -371,8 +421,8 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>Valid (Graph.TTan attribute)</primary></indexterm>
-						<classname>TTan</classname>.<property>Valid</property>
+						<indexterm><primary>Valid (Graph.TTangent attribute)</primary></indexterm>
+						<classname>TTangent</classname>.<property>Valid</property>
 					</term>
 					<listitem>
 						<para>
@@ -383,20 +433,22 @@
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>t (Graph.TTan attribute)</primary></indexterm>
-						<classname>TTan</classname>.<property>t</property>
+						<indexterm><primary>Pos (Graph.TTangent attribute)</primary></indexterm>
+						<classname>TTangent</classname>.<property>Pos</property>
 					</term>
 					<listitem>
 						<para>
-							This is the value where the tangent/normal interacts with the its parent function.
+							This is the position where the tangent/normal interacts with the its parent function.
+							It is always read as a string, but can be set as a string or number. When set as a string, it can be any 
+							formula including custom functions and constants.
 						</para>
 					</listitem>
 				</varlistentry>
 
 				<varlistentry>
 					<term>
-						<indexterm><primary>TangentType (Graph.TTan attribute)</primary></indexterm>
-						<classname>TTan</classname>.<property>TangentType</property>
+						<indexterm><primary>TangentType (Graph.TTangent attribute)</primary></indexterm>
+						<classname>TTangent</classname>.<property>TangentType</property>
 					</term>
 					<listitem>
 						<para>
@@ -413,6 +465,8 @@
 		<indexterm><primary>TPointSeries (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TPointSeries</classname></title>
 		<para>
+		  <classname>TPointSeries</classname> derives from <classname><xref linkend="Graph.TGraphElem"/></classname> and contains all attributes from that class.
+      <classname>TPointSeries</classname> is used to plot a series of points optionally connected by a line.
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -556,7 +610,7 @@
 					</term>
 					<listitem>
 						<para>
-							This is a list of tuples with (x,y) coordinates for the points.
+							This is a list of named tuples with (x,y) coordinates for the points.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -575,6 +629,75 @@
 						</para>
 					</listitem>
 				</varlistentry>
+
+			<varlistentry>
+				<term>
+					<indexterm><primary>CreateTrendline (Graph.TPointSeries attribute)</primary></indexterm>
+					<classname>TPointSeries</classname>.<property>CreateTrendline</property>(<parameter>Type, Order=2</parameter>)
+				</term>
+				<listitem>
+					<para>  
+					  Creates a trendline as a <classname><xref linkend="Graph.TStdFunc" /></classname>, 
+					  which is a line of best fit for the point series. Valid values for <parameter>Type</parameter> are: 
+					  <classname>Graph.ttLinear</classname>, <classname>Graph.ttLogarithmic</classname>, <classname>Graph.ttPolynomial</classname>, 
+					  <classname>Graph.ttPower</classname>, <classname>Graph.ttExponential</classname>.
+					  <parameter>Order</parameter> is only used for polynomial trendlines and is the order of the polynomium.
+					</para>
+				</listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term>
+					<indexterm><primary>CreateMovingAverage (Graph.TPointSeries attribute)</primary></indexterm>
+					<classname>TPointSeries</classname>.<property>CreateMovingAverage</property>(<parameter>Period</parameter>)
+				</term>
+				<listitem>
+					<para>  
+					  Creates a moving average as a <classname><xref linkend="Graph.TParFunc" /></classname>. 
+					  <parameter>Period</parameter> determines how many points are used for the average.
+					</para>
+				</listitem>
+			</varlistentry>
+
+			<varlistentry>
+				<term>
+					<indexterm><primary>CreateModelTrendline (Graph.TPointSeries attribute)</primary></indexterm>
+					<classname>TPointSeries</classname>.<property>CreateModelTrendline</property>(<parameter>Model, Guess=None</parameter>)
+				</term>
+				<listitem>
+					<para>  
+					  Creates a trendline as a <classname><xref linkend="Graph.TStdFunc" /></classname>
+					  from a custom model. <parameter>Model</parameter> must be a string with a valid function 
+					  where all the constants that you want Graph to find are named with a $ followed by any 
+					  combination of characters (a-z) and digits (0-9). Examples of valid constants are: $a, $y0, $const. 
+					</para>
+          <para>
+            An example of a model could be "$a*x^$b+$c".
+            Graph tries to calculate the constants <constant>$a</constant>, <constant>$b</constant> and <constant>$c</constant>
+            so that f(x) will be as close to the point series as possible.
+          </para>
+          <para>
+            Graph needs a guess for where to start the search for the optimum. As default the guess for all constants is 1.
+            <parameter>Guess</parameter> can be a dictionary with the constant names as keys and the starting guess as values.  
+            A better guess will increase the possibility that an optimum can be found.
+          </para>
+          <para>
+            Graph will try to find the constants for the model f(x) so the sum of squares
+            <mathphrase>&Sigma;(y<subscript>i</subscript>-f(x<subscript>i</subscript>))<superscript>2</superscript></mathphrase>
+            will be the smallest possible.
+            Graph will start with the guess and move towards the minimum of the sum of squares.
+            If a solution is not found after 100 iterations or the given guess is not valid, the program gives up.
+          </para>
+          <example>
+            <title>Example of creating trendline</title>
+            <programlisting>
+# The selected item in the function list is the point series we want to create a trendline for
+Trendline = Graph.Selected.CreateModelTrendline("$a*x^$b+$c", {"$a": 27, "$b": 0.5})
+Graph.FunctionList.append(Trendline)
+            </programlisting>
+          </example>          
+				</listitem>
+			</varlistentry>
 			</variablelist>
 		</para>
 	</section>
@@ -583,6 +706,8 @@
 		<indexterm><primary>TTextLabel (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TTextLabel</classname></title>
 		<para>
+		  <classname>TTextLabel</classname> derives from <classname><xref linkend="Graph.TGraphElem"/></classname> and contains all attributes from that class.
+      <classname>TTextLabel</classname> objects are used to show formatted text.
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -602,7 +727,7 @@
 					</term>
 					<listitem>
 						<para>
-							This is the text in the label in Rich Text format.
+							This is the text in the label in Rich Text format. It is the same as .rtf files created by WordPad.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -648,15 +773,17 @@
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TTextLabel</classname>.<property>xPos</property></term>
-					<term><classname>TTextLabel</classname>.<property>yPos</property></term>
+					<term>
+					  <indexterm><primary>Pos (Graph.TTextLabel attribute)</primary></indexterm>
+            <classname>TTextLabel</classname>.<property>Pos</property>
+          </term>
 					<listitem>
-						<indexterm><primary>xPos (Graph.TTextLabel attribute)</primary></indexterm>
-						<indexterm><primary>yPos (Graph.TTextLabel attribute)</primary></indexterm>
 						<para>
-							<classname>xPos</classname> and <classname>yPos</classname> indicates the (x,y) coordinate of the label when <property>Placement</property> is
+							<classname>Pos</classname> is a tuple that indicates the (x,y) coordinate of the label when <property>Placement</property> is
 							<classname>Graph.lpUserTopLeft</classname>, <classname>Graph.lpUserTopRight</classname>, <classname>Graph.lpUserBottomLeft</classname> or
 							<classname>Graph.lpUserBottomRight</classname>.
+							They values in the tuple are always read as strings, but can be set as strings or numbers. When set as strings they can be any 
+							formula including custom functions and constants.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -668,6 +795,9 @@
 		<indexterm><primary>TShading (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TShading</classname></title>
 		<para>
+		  <classname>TShading</classname> derives from <classname><xref linkend="Graph.TGraphElem"/></classname> and contains all attributes from that class.
+      <classname>TShading</classname> objects are used to plot shading related to a function. 
+      The object must be attached to a function and not directly to the function list.
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -732,25 +862,30 @@
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TShading</classname>.<property>sMin</property></term>
-					<term><classname>TShading</classname>.<property>sMax</property></term>
+					<term><classname>TShading</classname>.<property>Min</property></term>
+					<term><classname>TShading</classname>.<property>Max</property></term>
 					<listitem>
-						<indexterm><primary>sMin (Graph.TShading attribute)</primary></indexterm>
-						<indexterm><primary>sMax (Graph.TShading attribute)</primary></indexterm>
+						<indexterm><primary>Min (Graph.TShading attribute)</primary></indexterm>
+						<indexterm><primary>Max (Graph.TShading attribute)</primary></indexterm>
 						<para>
 							This is the start and end values on the function for the shading.
+							They are always read as strings, but can be set as strings or numbers. When set as strings, they can be any 
+							formula including custom functions and constants.
 						</para>
 					</listitem>
 				</varlistentry>
 
 				<varlistentry>
-					<term><classname>TShading</classname>.<property>sMin2</property></term>
-				  <term><classname>TShading</classname>.<property>sMax2</property></term>
+					<term><classname>TShading</classname>.<property>Min2</property></term>
+				  <term><classname>TShading</classname>.<property>Max2</property></term>
 					<listitem>
-						<indexterm><primary>sMin2 (Graph.TShading attribute)</primary></indexterm>
-						<indexterm><primary>sMax2 (Graph.TShading attribute)</primary></indexterm>
+						<indexterm><primary>Min2 (Graph.TShading attribute)</primary></indexterm>
+						<indexterm><primary>Max2 (Graph.TShading attribute)</primary></indexterm>
 						<para>
-							When <property>ShadeStyle</property> is <classname>Graph.ssBetween</classname> this is the start and end value on <property>Func2</property> for the shading.
+							When <property>ShadeStyle</property> is <classname>Graph.ssBetween</classname> 
+							this is the start and end value on <property>Func2</property> for the shading.
+							They are always read as strings, but can be set as strings or numbers. When set as strings, they can be any 
+							formula including custom functions and constants.
 						</para>
 					</listitem>
 				</varlistentry>
@@ -766,7 +901,7 @@
 						<indexterm><primary>ExtendMin2ToIntercept (Graph.TShading attribute)</primary></indexterm>
 						<indexterm><primary>ExtendMax2ToIntercept (Graph.TShading attribute)</primary></indexterm>
 						<para>
-							When True, <property>sMin</property> and <property>sMin2</property> are decreased and <property>sMax</property> and <property>sMax2</property> are
+							When True, <property>Min</property> and <property>Min2</property> are decreased and <property>Max</property> and <property>Max2</property> are
 							increased until the function is crossing the axis, the edge of the graphing area, itself or another graph depending of the value in <property>ShadeStyle</property>.
 						</para>
 					</listitem>
@@ -791,6 +926,8 @@
 		<indexterm><primary>TRelation (class in Graph)</primary></indexterm>
 		<title>class <classname>Graph.TRelation</classname></title>
 		<para>
+		  <classname>TRelation</classname> derives from <classname><xref linkend="Graph.TGraphElem"/></classname> and contains all attributes from that class.
+			<classname>TRelation</classname> is used to plot an equation or inequality.
 			<variablelist>
 				<varlistentry>
 					<term>
@@ -817,12 +954,37 @@
 
 				<varlistentry>
 					<term>
+						<indexterm><primary>LineStyle (Graph.TRelation attribute)</primary></indexterm>
+						<classname>TRelation</classname>.<property>LineStyle</property>
+					</term>
+					<listitem>
+						<para>
+							This is a <ulink url="WIKI/Vcl.Graphics.TPenStyle"><classname>vcl.TPenStyle</classname></ulink> 
+							that specifies the line style used to draw equations and the border around inequalities.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term>
 						<indexterm><primary>Color (Graph.TRelation attribute)</primary></indexterm>
 						<classname>TRelation</classname>.<property>Color</property>
 					</term>
 					<listitem>
 						<para>
 							This specifies the color of the relation.
+						</para>
+					</listitem>
+				</varlistentry>
+
+				<varlistentry>
+					<term>
+						<indexterm><primary>Alpha (Graph.TRelation attribute)</primary></indexterm>
+						<classname>TRelation</classname>.<property>Alpha</property>
+					</term>
+					<listitem>
+						<para>
+							This specifies the alpha channel for the relation in percent if it is an inequality, but it does not affect the border around the inequality.
 						</para>
 					</listitem>
 				</varlistentry>

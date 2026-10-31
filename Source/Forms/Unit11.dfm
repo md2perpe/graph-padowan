@@ -6,7 +6,7 @@ object Form11: TForm11
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Insert relation'
-  ClientHeight = 226
+  ClientHeight = 255
   ClientWidth = 396
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,7 +20,7 @@ object Form11: TForm11
   ShowHint = True
   DesignSize = (
     396
-    226)
+    255)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -41,7 +41,7 @@ object Form11: TForm11
   end
   object Button1: TButton
     Left = 137
-    Top = 192
+    Top = 220
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -52,7 +52,7 @@ object Form11: TForm11
   end
   object Button2: TButton
     Left = 225
-    Top = 192
+    Top = 220
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -63,7 +63,7 @@ object Form11: TForm11
   end
   object Button3: TButton
     Left = 313
-    Top = 192
+    Top = 220
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -103,118 +103,216 @@ object Form11: TForm11
     end
   end
   object GroupBox2: TGroupBox
-    Left = 9
-    Top = 130
+    Left = 8
+    Top = 127
     Width = 379
-    Height = 47
+    Height = 84
     Margins.Right = 8
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Properties'
     TabOrder = 3
-    object Label7: TLabel
-      AlignWithMargins = True
-      Left = 8
-      Top = 18
-      Width = 26
-      Height = 24
-      Margins.Left = 6
-      Align = alLeft
-      Caption = 'Style:'
-      FocusControl = ShadeSelect1
-      Layout = tlCenter
-      ExplicitHeight = 13
-    end
-    object Label9: TLabel
-      AlignWithMargins = True
-      Left = 148
-      Top = 18
-      Width = 27
-      Height = 24
-      Align = alRight
-      Alignment = taRightJustify
-      Caption = 'Color:'
-      FocusControl = ExtColorBox1
-      Layout = tlCenter
-      ExplicitHeight = 13
-    end
-    object Label3: TLabel
-      AlignWithMargins = True
-      Left = 277
-      Top = 18
-      Width = 31
-      Height = 24
-      Align = alRight
-      Alignment = taRightJustify
-      Caption = 'Width:'
-      Layout = tlCenter
-      ExplicitHeight = 13
-    end
-    object ShadeSelect1: TShadeSelect
-      AlignWithMargins = True
-      Left = 40
-      Top = 18
-      Width = 81
-      Height = 22
-      Hint = 
-        'Select the style used for drawing the inequality. Not used for e' +
-        'quations.'
-      Align = alLeft
-      TabOrder = 0
-    end
-    object ExtColorBox1: TExtColorBox
-      AlignWithMargins = True
-      Left = 181
-      Top = 18
-      Width = 81
-      Height = 22
-      Hint = 'Select the color for drawing the relation.'
-      Margins.Right = 12
-      Align = alRight
-      TabOrder = 1
-      AutoDroppedWidth = True
-      Selected = clScrollBar
-      DefaultName = 'Default'
-      CustomName = 'Custom...'
-    end
-    object Panel1: TPanel
-      AlignWithMargins = True
-      Left = 314
-      Top = 18
-      Width = 56
-      Height = 24
-      Margins.Right = 7
-      Align = alRight
-      AutoSize = True
+    object GridPanelEx1: TGridPanelEx
+      Left = 2
+      Top = 15
+      Width = 375
+      Height = 67
+      Align = alClient
       BevelOuter = bvNone
-      TabOrder = 2
-      object Edit4: TEdit
-        Left = 0
+      ColumnCollection = <
+        item
+          SizeStyle = ssAuto
+          Value = 50.000000000000000000
+        end
+        item
+          SizeStyle = ssAuto
+          Value = 100.000000000000000000
+        end
+        item
+          Value = 100.000000000000000000
+        end
+        item
+          SizeStyle = ssAuto
+          Value = 33.333333333333340000
+        end
+        item
+          SizeStyle = ssAuto
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = Label7
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = ShadeSelect1
+          Row = 0
+        end
+        item
+          Column = 4
+          Control = ExtColorBox1
+          Row = 0
+        end
+        item
+          Column = 3
+          Control = Label3
+          Row = 1
+        end
+        item
+          Column = 0
+          Control = Label4
+          Row = 1
+        end
+        item
+          Column = 1
+          Control = LineSelect1
+          Row = 1
+        end
+        item
+          Column = 3
+          Control = Label9
+          Row = 0
+        end
+        item
+          Column = 4
+          Control = Panel1
+          Row = 1
+        end>
+      Padding.Left = 3
+      Padding.Right = 3
+      RowCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      TabOrder = 0
+      DesignSize = (
+        375
+        67)
+      object Label7: TLabel
+        Left = 6
         Top = 0
-        Width = 41
-        Height = 21
-        Hint = 
-          'Width in pixels of the equation line or the borderline of the in' +
-          'equality.'
-        TabOrder = 0
-        Text = '1'
-        OnKeyPress = Edit4KeyPress
+        Width = 26
+        Height = 33
+        Align = alLeft
+        Caption = 'Style:'
+        FocusControl = ShadeSelect1
+        Layout = tlCenter
+        ExplicitHeight = 13
       end
-      object UpDown1: TUpDown
-        Left = 41
-        Top = 0
-        Width = 15
-        Height = 21
-        Associate = Edit4
-        Max = 20
-        Position = 1
+      object ShadeSelect1: TShadeSelect
+        Left = 59
+        Top = 5
+        Width = 81
+        Height = 22
+        Hint = 
+          'Select the style used for drawing the inequality. Not used for e' +
+          'quations.'
+        TabOrder = 0
+        Anchors = [akLeft]
+      end
+      object ExtColorBox1: TExtColorBox
+        Left = 288
+        Top = 5
+        Width = 81
+        Height = 22
+        Hint = 'Select the color for drawing the relation.'
+        Margins.Right = 12
+        Anchors = [akLeft, akTop, akBottom]
         TabOrder = 1
+        AutoDroppedWidth = True
+        Selected = clScrollBar
+        DefaultName = 'Default'
+        CustomName = 'Custom...'
+      end
+      object Label3: TLabel
+        AlignWithMargins = True
+        Left = 248
+        Top = 36
+        Width = 31
+        Height = 28
+        Align = alLeft
+        Alignment = taRightJustify
+        Caption = 'Width:'
+        FocusControl = Edit4
+        Layout = tlCenter
+        ExplicitHeight = 13
+      end
+      object Label4: TLabel
+        Left = 6
+        Top = 33
+        Width = 47
+        Height = 34
+        Align = alLeft
+        Caption = 'Line style:'
+        FocusControl = LineSelect1
+        Layout = tlCenter
+        ExplicitHeight = 13
+      end
+      object LineSelect1: TLineSelect
+        Left = 59
+        Top = 39
+        Width = 81
+        Height = 22
+        Hint = 
+          'Select line style used to draw equations and the border of inequ' +
+          'alities.'
+        TabOrder = 2
+        Anchors = [akLeft]
+      end
+      object Label9: TLabel
+        AlignWithMargins = True
+        Left = 248
+        Top = 3
+        Width = 27
+        Height = 27
+        Align = alLeft
+        Alignment = taRightJustify
+        Caption = 'Color:'
+        FocusControl = ExtColorBox1
+        Layout = tlCenter
+        ExplicitHeight = 13
+      end
+      object Panel1: TPanel
+        Left = 288
+        Top = 33
+        Width = 81
+        Height = 34
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 3
+        object Edit4: TEdit
+          Left = 0
+          Top = 8
+          Width = 49
+          Height = 21
+          Hint = 
+            'Width in pixels of the equation line or the borderline of the in' +
+            'equality.'
+          TabOrder = 0
+          Text = '1'
+          OnKeyPress = Edit4KeyPress
+        end
+        object UpDown1: TUpDown
+          Left = 49
+          Top = 8
+          Width = 16
+          Height = 21
+          Associate = Edit4
+          Max = 20
+          Position = 1
+          TabOrder = 1
+        end
       end
     end
   end
   object Edit1: TMyEdit
-    Left = 64
-    Top = 8
-    Width = 322
+    Left = 66
+    Top = 10
+    Width = 320
     Height = 21
     Hint = 'Enter the relation, for example "x^2+y^2 = 25" or "y < sin(x)"'
     Anchors = [akLeft, akTop, akRight]
@@ -223,9 +321,9 @@ object Form11: TForm11
     TabOrder = 0
   end
   object Edit2: TMyEdit
-    Left = 64
-    Top = 40
-    Width = 321
+    Left = 66
+    Top = 42
+    Width = 320
     Height = 21
     Hint = 
       'Enter constraints for the relation, for example "x > 0 and y < 5' +

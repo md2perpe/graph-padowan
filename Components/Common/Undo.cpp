@@ -69,9 +69,26 @@ void TUndoList::Undo()
     return;
 
   BeginMultiUndo();
-  UndoStack.back()->Undo(*this);
-  UndoStack.pop_back();
-  EndMultiUndo(usUndoing);
+  try
+  {
+    UndoStack.back()->Undo(*this);
+    UndoStack.pop_back();
+  }
+  __finally
+  {
+    EndMultiUndo(usUndoing);
+  }
+}
+//---------------------------------------------------------------------------
+void TUndoList::Pop()
+{
+  if(MultiUndo > 0)
+  {
+    if(!MultiUndoItem->List.empty())
+      MultiUndoItem->List.pop_back();
+  }
+  else if(!UndoStack.empty())
+    UndoStack.pop_back();
 }
 //---------------------------------------------------------------------------
 void TUndoList::Redo()

@@ -1,12 +1,14 @@
 import Graph
-import vcl
 
-def Update(action):
-  Action.Caption = "Show Python interpreter" if not Graph.Form22.Visible else "Hide Python interpreter"
-  Action.Hint = "Show the Python interpreter window." if not Graph.Form22.Visible else "Hide the Python interpreter window."
+_ = Graph.GetText
 
-def Execute(action):
-  Graph.Form22.Visible = not Graph.Form22.Visible
+PluginName = _("Show Console")
+PluginVersion = "0.2"
+PluginDescription = _("This is a very simple plugin that creates a menu item to show/hide the Python interpreter window.")
 
-Action = Graph.CreateAction(Caption="Show Python interpreter", OnExecute=Execute, OnUpdate=Update, ShortCut="F11")
+def Execute(Action):
+    Graph.Form22.Visible = not Graph.Form22.Visible
+    Action.Checked = Graph.Form22.Visible
+
+Action = Graph.CreateAction(Caption=_("Show Python interpreter"), OnExecute=Execute, ShortCut="F11", IconFile="ShowConsole.png", Hint = _("Show the Python interpreter window."))
 Graph.AddActionToMainMenu(Action)

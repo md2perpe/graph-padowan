@@ -43,7 +43,7 @@ void TSymbolDialog::Execute()
 {
   if(FSymbolFrm == NULL)
   {
-    FSymbolFrm = new TSymbolFrm(NULL, CharacterSet == csUnicodeSet && Win32Platform == VER_PLATFORM_WIN32_NT, FSymbol);
+	FSymbolFrm = new TSymbolFrm(NULL, CharacterSet == csUnicodeSet, FSymbol);
     DoShow();
   }
   FSymbolFrm->ShowModal();
@@ -53,7 +53,7 @@ void TSymbolDialog::Show()
 {
   if(FSymbolFrm == NULL)
   {
-    FSymbolFrm = new TSymbolFrm(NULL, CharacterSet == csUnicodeSet && Win32Platform == VER_PLATFORM_WIN32_NT, FSymbol);
+	FSymbolFrm = new TSymbolFrm(NULL, CharacterSet == csUnicodeSet, FSymbol);
     DoShow();
     FSymbolFrm->Show();
   }
@@ -67,7 +67,7 @@ void TSymbolDialog::Close()
 //---------------------------------------------------------------------------
 void __fastcall TSymbolDialog::Button2Click(TObject *Sender)
 {
-  if(CharacterSet == csUnicodeSet && Win32Platform == VER_PLATFORM_WIN32_NT)
+  if(CharacterSet == csUnicodeSet)
   {
     if(OnInsertWideChar)
       OnInsertWideChar(this, FSymbolFrm->GetSelected(), FSymbolFrm->ComboBox1->Text);

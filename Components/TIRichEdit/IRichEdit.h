@@ -14,7 +14,7 @@ typedef void __fastcall (__closure *TOleErrorEvent)(TIRichEdit* Sender, int Oper
 typedef void __fastcall (__closure *TLinkEvent)(TIRichEdit* Sender, unsigned Min, unsigned Max);
 typedef bool __fastcall (__closure *TActivateObjectEvent)(TIRichEdit* Sender);
 
-class TTextFormat
+class TRichEditTextFormat
 {
   class TIRichEdit *RichEdit;
   bool Global;
@@ -23,11 +23,11 @@ class TTextFormat
   void SetFormat(unsigned Format, unsigned Effects);
   ::CHARFORMAT2 GetFormat() const;
 
-  TTextFormat(const TTextFormat&);                  //Not implemented
-  const TCharFormat& operator=(const TTextFormat&); //Not implemented
+  TRichEditTextFormat(const TRichEditTextFormat&);                  //Not implemented
+  const TCharFormat& operator=(const TRichEditTextFormat&); //Not implemented
 
 public:
-  TTextFormat(TIRichEdit *ARichEdit, bool AGlobal);
+  TRichEditTextFormat(TIRichEdit *ARichEdit, bool AGlobal);
   void SetBold(bool Value);
   void SetItalic(bool Value);
   void SetUnderline(bool Value);
@@ -63,7 +63,7 @@ enum TParaFormatAlignment
   pfaFullInterword = PFA_FULL_INTERWORD
 };
 
-class TParaFormat : public TParaAttributes
+class TRichEditParaFormat : public TParaAttributes
 {
   TIRichEdit *RichEdit;
   TParaFormatAlignment GetAlignment();
@@ -71,7 +71,7 @@ class TParaFormat : public TParaAttributes
   ::PARAFORMAT2 GetFormat() const;
 
 public:
-  TParaFormat(TIRichEdit *ARichEdit);
+  TRichEditParaFormat(TIRichEdit *ARichEdit);
   __property TParaFormatAlignment Alignment = {read=GetAlignment, write=SetAlignment};
 };
 
@@ -97,7 +97,7 @@ private:
   HINSTANCE FLibHandle;
   TOleErrorEvent FOnOleError;
   TColor FBackgroundColor;
-  ::TParaFormat *FParagraph;
+  TRichEditParaFormat *FParagraph;
   TLinkEvent FOnLink;
   TActivateObjectEvent FOnActivateObject;
   bool FProtectedChange;
@@ -127,14 +127,15 @@ protected:
   void __fastcall SetOnActivateObject(TActivateObjectEvent Value);
 
 public:
-  ::TTextFormat TextFormat;
-  ::TTextFormat GlobalTextFormat;
+  TRichEditTextFormat TextFormat;
+  TRichEditTextFormat GlobalTextFormat;
 
   __fastcall TIRichEdit(TComponent* Owner);
   __fastcall ~TIRichEdit();
 
   void SetRichText(const AnsiString &Str);
   AnsiString GetRichText();
+  String GetPlainText(bool UseCrLf=true);
   void Render(TCanvas *Canvas, const TPoint &Pos, int Width = MAXSHORT);
   TPoint GetTextSize();
   bool IsEmpty() const;
@@ -142,7 +143,6 @@ public:
   bool CanRedo();
   bool CanPaste();
   void SetUndoLimit(unsigned Limit);
-  String GetPlainText() {return Lines->Text;}
   int LineIndex(int Line);
   int LineCount();
   int LineLength(int Index);
@@ -152,8 +152,10 @@ public:
   void SetEventMask(DWORD Mask, DWORD Value);
   int TextSize();
   unsigned FindWordBreak(TWordBreak WordBreak, unsigned Pos);
+  void ReplaceText(unsigned Pos, unsigned Length, const String &Str);
+  void ReplaceText(unsigned Pos, unsigned Length, const String &Str, TColor Color);
 
-  __property ::TParaFormat *Paragraph = {read=FParagraph};
+  __property TRichEditParaFormat *Paragraph = {read=FParagraph};
 //  __property Lines; //Don't use this
   String GetText(int Min, int Max);
 

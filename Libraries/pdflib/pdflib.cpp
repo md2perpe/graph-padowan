@@ -17,7 +17,7 @@
 // Implementation of C++ wrapper for PDFlib
 //
 //
-
+#ifndef _WIN64
 #if _MSC_VER >= 1310    /* VS .NET 2003 and later */
 /* pdflib.h declares some functions as deprecated, but we don't want to see
  * these warnings here */
@@ -1596,3 +1596,4 @@ PDFlib::xshow(string text, const double *xadvancelist)
                                                 xadvancelist);
     PDFCPP_CATCH;
 }
+#endif

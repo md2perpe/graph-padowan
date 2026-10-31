@@ -34,8 +34,9 @@ __fastcall TLineSelect::TLineSelect(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TLineSelect::DrawItem(int Index, const TRect &Rect, TOwnerDrawState State)
 {
-  Canvas->Pen->Style = (TPenStyle)Index;
-  Canvas->Pen->Color = FColor;
+  LOGBRUSH LogBrush = {BS_SOLID, FColor};
+  Canvas->Pen->Handle = ExtCreatePen(PS_GEOMETRIC | Index | PS_ENDCAP_ROUND, (2*Screen->PixelsPerInch + 48)/ 96, &LogBrush, 0, NULL);
+
   Canvas->Brush->Color = clWhite;
   Canvas->FillRect(Rect);
   Canvas->MoveTo(Rect.Left, (Rect.Top + Rect.Bottom)/2);
@@ -89,7 +90,8 @@ void __fastcall TLineSelect::SetEnableClear(bool Value)
 void __fastcall TLineSelect::ChangeScale(int M, int D)
 {
   TCustomComboBox::ChangeScale(M, D); // Call inherited
-  ItemHeight = (ItemHeight * M) / D; 
+  ItemHeight = (ItemHeight * M) / D;
+  Height = (Height *M) / D;
 }
 //---------------------------------------------------------------------------
 

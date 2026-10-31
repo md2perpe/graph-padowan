@@ -24,6 +24,7 @@
 #include "MediaPlayerEx.h"
 #include <MPlayer.hpp>
 #include <Graphics.hpp>
+#include "ScaledImageList.h"
 //---------------------------------------------------------------------------
 class TForm20 : public TForm
 {
@@ -32,7 +33,6 @@ __published:	// IDE-managed Components
   TSaveDialog *SaveDialog1;
   TPopupMenu *PopupMenu1;
   TMenuItem *Save1;
-  TImageList *ImageList1;
   TMenuItem *N1;
   TMenuItem *Repeat1;
   TMenuItem *Reverse1;
@@ -57,6 +57,8 @@ __published:	// IDE-managed Components
   TMenuItem *Saveimageas1;
   TSaveDialog *SaveDialog2;
   TMenuItem *Saveimagesequence1;
+  TImageList *ImageList1;
+  TScaledImageList *ScaledImageList1;
   void __fastcall Save1Click(TObject *Sender);
   void __fastcall MediaPlayer1Signal(TMediaPlayerEx *Sender,
           unsigned Position);
@@ -75,6 +77,7 @@ __published:	// IDE-managed Components
   void __fastcall TrackBar1KeyPress(TObject *Sender, char &Key);
   void __fastcall Saveimageas1Click(TObject *Sender);
   void __fastcall Saveimagesequence1Click(TObject *Sender);
+  void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 private:	// User declarations
   bool BackwardDirection;
   double Min;

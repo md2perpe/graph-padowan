@@ -14,6 +14,9 @@
 #include <cmath>
 #include "DrawThread.h"
 #include "PointSelect.h"
+#include "IThread.h"
+#include "Unit1.h"
+
 namespace Graph
 {
 //Windows 2000/XP uses signed 32 bit numbers (Says Windows SDK). It looks like only only 21 bits are used (signed).
@@ -37,14 +40,15 @@ inline long abs(long x) {return std::abs(static_cast<int>(x));}
 struct TDrawLegend : public TGraphElemVisitor
 {
   const int TextWidth, TextHeight;
-  TDraw *Draw;
+  TContext &Context;
+  double SizeMul;
   int x,y;
-  TDrawLegend(TDraw *ADraw, int ATextWidth, int ATextHeight, int X, int Y)
-    : Draw(ADraw), TextWidth(ATextWidth), TextHeight(ATextHeight), x(X), y(Y) {}
-  int Size(int I) const {return Draw->SizeScale(I);}
+  TDrawLegend(TContext &AContext, int ATextWidth, int ATextHeight, int X, int Y, double ASizeMul)
+    : Context(AContext), TextWidth(ATextWidth), TextHeight(ATextHeight), x(X), y(Y), SizeMul(ASizeMul) {}
+  int SizeScale(int I) const {return I*SizeMul+0.5;}
 
   void Visit(TBaseFuncType &Func);
-  void Visit(TTan &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));}
+  void Visit(TTangent &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));}
   void Visit(TShading &Shade);
   void Visit(TPointSeries &Series);
   void Visit(TTextLabel &Label) {};
@@ -52,24 +56,24 @@ struct TDrawLegend : public TGraphElemVisitor
   void Visit(TAxesView &AxesView) {};
 };
 //---------------------------------------------------------------------------
-TDraw::TDraw(TCanvas *Canvas, TData *pData, bool AForceBlack, const std::string &ThreadName) :
-  Context(Canvas), Data(pData), AxesRect(0, 0, 0, 0), OnComplete(NULL),
-  SizeMul(1), ForceBlack(AForceBlack), Axes(Data->Axes), Thread(NULL), Width(0), Height(0)
+TDraw::TDraw(TCanvas *Canvas, TData *pData, const std::string &AThreadName, bool UseGdiPlus) :
+  Context(Canvas, UseGdiPlus), Data(pData), AxesRect(0, 0, 0, 0), OnComplete(NULL),
+  SizeMul(1), Axes(Data->Axes), Width(0), Height(0),
+  ThreadName(AThreadName), IdleEvent(new Thread::TIEvent(true, true)), IdleThreadCount(0),
+  EvalIndex(0), DrawElem(this, AxesRect, Data->Axes, Context)
 {
-  //Make sure everything is initialized before creating thread
-  Thread = new TDrawThread(this);
-  Wait(); //Wait for thread to be running before setting name
-  Thread->SetName(ThreadName);
+  SetThreadCount(PlotSettings.ThreadCount);
 }
 //---------------------------------------------------------------------------
 TDraw::~TDraw()
 {
   if(!AbortUpdate())
     return; //Return if thread is stuck
-  Thread->IdleEvent.ResetEvent();
-  Thread->PostMessage(dmTerminate);
-  Thread->WaitFor();
-  delete Thread;
+  SetThreadCount(0);
+
+  //Ensure that all queued function calls are executed before the object is destroyed.
+  if(GetCurrentThreadId() == MainThreadID)
+    CheckSynchronize();
 }
 //---------------------------------------------------------------------------
 //Converts an x-coordinate to a pixel value
@@ -128,30 +132,36 @@ double TDraw::yPointExact(long double y) const
   return (Axes.yAxis.Max - y) * yScale + AxesRect.Top;
 }
 //---------------------------------------------------------------------------
-void TDraw::DrawFunc(const TGraphElem *F)
-{
-  DrawLegend();
-  Thread->IdleEvent.ResetEvent();
-  Thread->PostMessage(dmDrawFunc, reinterpret_cast<unsigned>(F));
-}
-//---------------------------------------------------------------------------
 void TDraw::DrawAll()
 {
   AbortUpdate();
+  Context.SetCanvas(Context.GetCanvas());
   Context.DestroyClipRect(); //Remove all clipping regions; Must be done if printing more than one page
+  Context.SetSmoothingMode(static_cast<TSmoothingMode>(PlotSettings.SmoothingMode));
+
+  //Check for invalid values that could be set from a script.
+  if(Axes.xAxis.LogScl && (Axes.yAxis.AxisCross <= 0 || Axes.xAxis.TickUnit <= 0 || Axes.xAxis.GridUnit <= 0 || Axes.xAxis.Min <= 0 || Axes.xAxis.Max <= 0))
+    return;
+  if(Axes.yAxis.LogScl && (Axes.xAxis.AxisCross <= 0 || Axes.yAxis.TickUnit <= 0 || Axes.yAxis.GridUnit <= 0 || Axes.yAxis.Min <= 0 || Axes.yAxis.Max <= 0))
+    return;
 
   RedrawAxes();
 
-#ifdef LIMITED_EDITION
-  Context.SetFont("Times New Roman", 10, clBlack);
-  std::string Str = "Graph Limited School Edition";
-  Context.DrawText(Str, 0, Height - Context.GetTextHeight(Str));
-#endif
-
   if(Data->ElemCount() != 0)
   {
-    Thread->IdleEvent.ResetEvent();
-    Thread->PostMessage(dmDrawAll);
+    unsigned Count = Data->ElemCount();
+    for(unsigned I = 0; I < Count; I++)
+      Data->GetElem(I)->SetUpdateFinished(false);
+    IdleEvent->ResetEvent();
+    IdleThreadCount = 0;
+    EvalIndex = 0;
+    DrawElem.ClearPlotIndex();
+    for(unsigned I = 0; I < Threads.size(); I++)
+    {
+      Threads[I]->ClearAborted();
+      Threads[I]->PostMessage(dmDrawAll);
+    }
+    Form1->BeginUpdate();
   }
 }
 //---------------------------------------------------------------------------
@@ -168,7 +178,7 @@ double TDraw::xCoord(int x) const
   if(Axes.xAxis.LogScl)
     return Axes.xAxis.Min / std::exp(x * std::log(Axes.xAxis.Min / Axes.xAxis.Max) / AxesRect.Width());
   else
-    return (x / xScale) + Axes.xAxis.Min;
+    return xScale != 0 ? (x / xScale) + Axes.xAxis.Min : 0;
 }
 //---------------------------------------------------------------------------
 //This returns the actual y coordinate from y-pixel coordinate
@@ -178,32 +188,37 @@ double TDraw::yCoord(int y) const
   if(Axes.yAxis.LogScl)
     return Axes.yAxis.Max / std::exp(y * std::log(Axes.yAxis.Max / Axes.yAxis.Min) / AxesRect.Height());
   else
-    return Axes.yAxis.Max - (y / yScale);
+    return yScale != 0 ? Axes.yAxis.Max - (y / yScale) : 0;
 }
 //---------------------------------------------------------------------------
 bool TDraw::AbortUpdate()
 {
-  Thread->AbortUpdate();
-  return Wait();
+  if(IdleEvent->TestEvent())
+    return true;
+  for(unsigned I = 0; I < Threads.size(); I++)
+    Threads[I]->AbortUpdate();
+  return Wait(false);
 }
 //---------------------------------------------------------------------------
-bool TDraw::Wait()
+bool TDraw::Wait(bool WaitInfinitely)
 {
   static bool AbortWait = false;
   if(!AbortWait)
   {
     bool Loop;
-    if(!Thread->IsAborted())
-      Thread->IdleEvent.WaitFor(); //Wait infinitely
+    if(WaitInfinitely)
+      IdleEvent->WaitFor(); //Wait infinitely
     else
       do
       {
 				Loop = false;
-        if(Thread->IdleEvent.WaitFor(1000) == wrTimeout)
+        if(IdleEvent->WaitFor(1000) == wrTimeout)
+        {
           if(MessageBox(LoadRes(559), LoadRes(560), MB_RETRYCANCEL|MB_ICONSTOP) == IDCANCEL)
             AbortWait = true;
           else
             Loop = true;
+        }
       } while(Loop);
   }
   return !AbortWait;
@@ -211,7 +226,7 @@ bool TDraw::Wait()
 //---------------------------------------------------------------------------
 bool TDraw::Updating()
 {
-  return !Thread->IdleEvent.TestEvent();
+  return !IdleEvent->TestEvent();
 }
 //---------------------------------------------------------------------------
 //Selects the drawing area
@@ -230,9 +245,13 @@ void TDraw::DrawPolyline(TConstPointIter Begin, TConstPointIter End, TPenStyle S
 {
   if(End - Begin >= 2)
   {
-    Context.SetBrush(bsClear); //Enable drawing of other than solid lines on win9x
-    Context.SetPen(Style, ForceBlack ? clBlack : Color, SizeScale(LineSize), Style == psSolid ? ecFlat : ecRound);
-    Context.DrawPolyline(&*Begin, End - Begin, AxesRect);
+    //ecFlat causes functions to look strange at the endsfor large Width when the end is not
+    //0, 45 or 90 degrees.
+    Context.SetPen(Style, Color, SizeScale(LineSize), ecRound, psjRound);
+    //We clip outside AxesRect as a thick line might be outside and visible inside the area
+    TRect ClipRect = AxesRect;
+    ClipRect.Inflate(LineSize, LineSize);
+    Context.DrawPolyline(&*Begin, End - Begin, ClipRect);
   }
 }
 //---------------------------------------------------------------------------
@@ -243,7 +262,7 @@ void TDraw::DrawPolydots(TConstPointIter Begin, TConstPointIter End, int LineSiz
   if(Width > 1)
   {
     Context.SetBrush(bsSolid, Color);
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Color, 1);
+    Context.SetPen(psSolid, Color, 1);
     while(Begin != End)
     {
       Context.DrawEllipse(Begin->x - Width / 2, Begin->y - Width / 2, Begin->x + (Width+1) / 2, Begin->y + (Width+1) / 2);
@@ -259,9 +278,10 @@ void TDraw::DrawPolydots(TConstPointIter Begin, TConstPointIter End, int LineSiz
 double TDraw::GetMinValue(double Unit, double Min, double Max, double AxisCross, bool Log)
 {
   if(Log) //Is log scale used?
+  {
     //Get the first number to be shown
-//    return std::exp(std::floor(std::log(Min / AxisCross * Unit) / std::log(Unit)) * std::log(Unit) + std::log(AxisCross));
     return std::exp(std::floor(std::log(Min / AxisCross) / std::log(Unit)) * std::log(Unit) + std::log(AxisCross));
+  }
   //Get the first number to be shown
 //  return std::floor((Min - AxisCross) / Unit) * Unit + AxisCross + Unit;
   return std::ceil((Min - AxisCross) / Unit) * Unit + AxisCross;
@@ -289,7 +309,8 @@ unsigned TDraw::FindLabels()
 				//Check that we are not showing a number at the axis when they are crossed
 			if(Axes.AxesStyle == asBoxed || std::abs(yPixel - yPixelCross) > 1)
 				//Check if we are not too close to the boundery of the window
-				if(yPixel + NumberHeight / 2 < Height && yPixel - NumberHeight / 2 > AxesRect.Top)
+				if(yPixel + NumberHeight / 2 < Height && yPixel < AxesRect.Bottom &&
+           yPixel - NumberHeight / 2 > AxesRect.Top)
 				{
 					TLabelInfo LabelInfo;
 					LabelInfo.Label = MakeNumber(y, Axes.yAxis.MultipleOfPi);
@@ -325,7 +346,8 @@ void TDraw::PreCalcXAxis()
 
   if(Axes.xAxis.AutoTick)
   {
-    int TextDist = SizeScale(40);
+		Context.SetFont(Axes.NumberFont);
+    int TextDist = Context.GetTextWidth("1234567");
     int Ticks = AxesRect.Width() / TextDist;
     if(Ticks == 0)
       Ticks = 1;
@@ -353,9 +375,6 @@ void TDraw::PreCalcYAxis()
   if(Axes.AxesStyle == asBoxed)
   {
     AxesRect.Bottom = Height - NumberHeight - SizeScale(4);
-#ifdef LIMITED_EDITION
-    AxesRect.Bottom -= Size(15); //Make space for "Graph Limited School Edition" text at the bottom
-#endif
   }
 
   if(Axes.yAxis.LogScl)
@@ -365,7 +384,9 @@ void TDraw::PreCalcYAxis()
 
   if(Axes.yAxis.AutoTick)
   {
-    int TextDist = SizeScale(40);
+    //The distance depends on the font and resolution
+		Context.SetFont(Axes.NumberFont);
+    int TextDist = Context.GetTextWidth("1234567");
     int Ticks = AxesRect.Height() / TextDist;
     if(Ticks == 0)
       Ticks = 1; //Avoid division by zero, just in case.
@@ -382,8 +403,8 @@ void TDraw::PreCalcYAxis()
     }
   }
 
-  xAxisCross = Axes.AxesStyle == asBoxed ? (Axes.yAxis.LogScl ? 0.1 : 0) : Axes.xAxis.AxisCross;
-  yAxisCross = Axes.AxesStyle == asBoxed ? (Axes.xAxis.LogScl ? 0.1 : 0) : Axes.yAxis.AxisCross;
+  xAxisCross = Axes.AxesStyle == asBoxed && !Axes.yAxis.LogScl ? 1 : Axes.xAxis.AxisCross;
+  yAxisCross = Axes.AxesStyle == asBoxed && !Axes.xAxis.LogScl ? 1 : Axes.yAxis.AxisCross;
   yTickMin = GetMinValue(Axes.yAxis.TickUnit, Axes.yAxis.Min, Axes.yAxis.Max, xAxisCross, Axes.yAxis.LogScl);
   yPixelCross = Axes.AxesStyle == asBoxed ? AxesRect.Bottom : yPoint(xAxisCross);
 
@@ -402,8 +423,6 @@ void TDraw::RedrawAxes()
 	{
 		Context.SetFont(Axes.TitleFont);
 		Context.SetBrush(bsClear);
-		if(ForceBlack)
-			Context.SetFontColor(clBlack);
 		TSize TextSize = Context.GetTextExtent(Axes.Title);
 		Context.DrawText(Axes.Title, (AxesRect.Width() - TextSize.cx) / 2, 0);
 		AxesRect.Top = TextSize.cy;
@@ -461,11 +480,12 @@ void TDraw::DrawAxes()
 			for(; x < x2 + 1; x += GridPixelScl)
 				//Don't show at or beside axis (when scaled it might be moved a pixel or two)
 				if(std::abs(x - xPixelCross) > 1)
+        {
 					if(Axes.xAxis.LogScl)
 						xGridMajor.push_back(x + 0.5);
 					else
 						xGridMinor.push_back(x + 0.5);
-
+        }
 			if(x < x2 + 1 && x > x2 - 1)
 				x += GridPixelScl;
 
@@ -507,11 +527,12 @@ void TDraw::DrawAxes()
 			for(; y > y2 - 1 && y >= MaxPixel; y -= GridPixelScl)
 				//Don't show at or beside axis (when scaled it might be moved a pixel or two)
 				if(std::abs(y - yPixelCross) > 1 && y < AxesRect.Bottom)
+        {
 					if(Axes.yAxis.LogScl)
 						yGridMajor.push_back(y + 0.5);
 					else
 						yGridMinor.push_back(y + 0.5);
-
+        }
 			if(y < y2 + 1 && y > y2 - 1)
 				y -= GridPixelScl;
 
@@ -526,9 +547,8 @@ void TDraw::DrawAxes()
 				for(unsigned n = 1; n < 9; n++)
 				{
 					double Y = yPoint(y*(1+(Axes.yAxis.GridUnit-1)*n/9));
-					if(Y < AxesRect.Top || Y > AxesRect.Bottom)
-						break;
-					yGridMinor.push_back(Y);
+					if(Y >= AxesRect.Top && Y <= AxesRect.Bottom)
+  					yGridMinor.push_back(Y);
 				}
 		}
 	}
@@ -536,24 +556,27 @@ void TDraw::DrawAxes()
 	if(Axes.GridStyle == gsLines)
 	{
 		//Draw solid lines
-		Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.GridColor, SizeScale(PlotSettings.GridWidth));
+		Context.SetPen(psSolid, Axes.GridColor, SizeScale(PlotSettings.GridWidth));
 		for(std::vector<int>::const_iterator Iter = xGridMajor.begin(); Iter != xGridMajor.end(); ++Iter)
 			Context.DrawLine(*Iter, AxesRect.Top, *Iter, AxesRect.Bottom);
 		for(std::vector<int>::const_iterator Iter = yGridMajor.begin(); Iter != yGridMajor.end(); ++Iter)
 			Context.DrawLine(AxesRect.Left, *Iter, AxesRect.Right, *Iter);
 
 		//Draw dotted lines
-		Context.SetGridPen(ForceBlack ? clBlack : Axes.GridColor, SizeScale(PlotSettings.GridWidth));
+		Context.SetGridPen(Axes.GridColor, SizeScale(PlotSettings.GridWidth));
+    TSmoothingMode OldSmoothingMode = Context.GetSmoothingMode();
+    Context.SetSmoothingMode(smNone);
 		for(std::vector<int>::const_iterator Iter = xGridMinor.begin(); Iter != xGridMinor.end(); ++Iter)
 			Context.DrawLine(*Iter, AxesRect.Top, *Iter, AxesRect.Bottom);
 		for(std::vector<int>::const_iterator Iter = yGridMinor.begin(); Iter != yGridMinor.end(); ++Iter)
 			Context.DrawLine(AxesRect.Left, *Iter, AxesRect.Right, *Iter);
+    Context.SetSmoothingMode(OldSmoothingMode);
 	}
 	else
 	{
 		int Width = SizeScale(PlotSettings.GridWidth);
-		Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.GridColor, 1);
-		Context.SetBrush(bsSolid, ForceBlack ? clBlack : Axes.GridColor);
+		Context.SetPen(psSolid, Axes.GridColor, 1);
+		Context.SetBrush(bsSolid, Axes.GridColor);
 		for(std::vector<int>::const_iterator xIter = xGridMinor.begin(); xIter != xGridMinor.end(); ++xIter)
 			for(std::vector<int>::const_iterator yIter = yGridMinor.begin(); yIter != yGridMinor.end(); ++yIter)
 				Context.DrawEllipse(*xIter - Width, *yIter - Width, *xIter + Width, *yIter + Width);
@@ -561,14 +584,14 @@ void TDraw::DrawAxes()
 	}
 
 	//If axes are diabled, don't draw axes, numbers and labels
-	if(Axes.AxesStyle == ::asNone)
+	if(Axes.AxesStyle == Graph::asNone)
 		return;
 
 	//Make sure texts are written on transperent background
 	Context.SetBrush(bsClear);
 
 	//Set pen width and style; Used when drawing axes
-	Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.GridColor, SizeScale(2));
+	Context.SetPen(psSolid, Axes.GridColor, SizeScale(2));
 
 	if(Axes.xAxis.ShowNumbers && Axes.xAxis.Visible)
 	{
@@ -630,11 +653,11 @@ void TDraw::DrawAxes()
     int X2 = AxesRect.Right - 1;
     int Y = yPixelCross;
     double xPixelScl = (Axes.xAxis.LogScl ? std::log(xTickUnit) : xTickUnit) * xScale;
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, SizeScale(PlotSettings.AxisWidth));
+    Context.SetPen(psSolid, Axes.AxesColor, SizeScale(PlotSettings.AxisWidth));
     Context.DrawLine(X1, Y, X2 - SizeScale(3), Y);
 
-    Context.SetBrush(bsSolid, ForceBlack ? clBlack : Axes.AxesColor);
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, 1);
+    Context.SetBrush(bsSolid, Axes.AxesColor);
+    Context.SetPen(psSolid, Axes.AxesColor, 1);
     int a = SizeScale(5*ArrowScale);
     int b = PlotSettings.AxisWidth % 2 ? 0 : 1;
     const TPoint LeftArrow[] = {TPoint(X1+a, Y-a-b), TPoint(X1, Y-b), TPoint(X1, Y), TPoint(X1+a, Y+a)};
@@ -645,7 +668,7 @@ void TDraw::DrawAxes()
     if(Axes.xAxis.ShowPositiveArrow)
       Context.DrawPolygon(RightArrow, 4);
 
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, SizeScale(PlotSettings.TickWidth));
+    Context.SetPen(psSolid, Axes.AxesColor, SizeScale(PlotSettings.TickWidth));
     //Only show ticks if we have not already drawn a solid grid line instead
 		if(Axes.xAxis.ShowTicks && (!Axes.xAxis.ShowGrid || Axes.GridStyle != gsLines || Axes.xAxis.TickUnit <= Axes.xAxis.GridUnit))
       //Show coordinate points on x-axis
@@ -659,14 +682,18 @@ void TDraw::DrawAxes()
   //If y-axis is inside the view
   if(xPixelCross >= AxesRect.Left && xPixelCross <= AxesRect.Right && Axes.yAxis.Visible)
   {
+    //We need to set clip rect again; No idea why
+	  if(Axes.ShowLegend)
+		  Context.ExcludeClipRect(LegendRect);
+
     int X = xPixelCross;
     int Y1 = AxesRect.Top;
     int Y2 = AxesRect.Bottom;
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, SizeScale(PlotSettings.AxisWidth));
+    Context.SetPen(psSolid, Axes.AxesColor, SizeScale(PlotSettings.AxisWidth));
     Context.DrawLine(X, Y1 + SizeScale(3), X, Y2);
 
-    Context.SetBrush(bsSolid, ForceBlack ? clBlack : Axes.AxesColor);
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, 1);
+    Context.SetBrush(bsSolid, Axes.AxesColor);
+    Context.SetPen(psSolid, Axes.AxesColor, 1);
     int a = SizeScale(5*ArrowScale);
     int b = PlotSettings.AxisWidth % 2 ? 0 : 1;
     TPoint TopArrow[] = {TPoint(X-a-b, Y1+a), TPoint(X-b, Y1), TPoint(X, Y1), TPoint(X+a, Y1+a)};
@@ -678,7 +705,7 @@ void TDraw::DrawAxes()
     if(Axes.yAxis.ShowPositiveArrow)
       Context.DrawPolygon(TopArrow, 4);
 
-    Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.AxesColor, SizeScale(PlotSettings.TickWidth));
+    Context.SetPen(psSolid, Axes.AxesColor, SizeScale(PlotSettings.TickWidth));
     double yPixelScl = (Axes.yAxis.LogScl ? std::log(yTickUnit) : yTickUnit) * yScale;
     //Only show ticks if we have not already drawn a solid grid line instead
 		if(Axes.yAxis.ShowTicks && (!Axes.yAxis.ShowGrid || Axes.GridStyle != gsLines || yTickUnit <= yGridUnit))
@@ -697,11 +724,9 @@ void TDraw::DrawLegend()
     return;
 
   Context.SetFont(Axes.LegendFont);
-  Context.SetBrush(bsClear); //Change brush style to enable drawing of other than solid lines in Win9x
-
   int LegendCount = 0;
   int TextHeight = Context.GetTextHeight("0");
-  int TextWidth = SizeScale(40);
+  int TextWidth = SizeScale(80);
 
   for(unsigned I = 0; I < Data->ElemCount(); I++)
   {
@@ -721,7 +746,7 @@ void TDraw::DrawLegend()
         LegendCount++;
         TextWidth = std::max(TextWidth, Context.GetTextWidth(Child->MakeLegendText()));
       }
-  }
+    }
   }
 
   if(!LegendCount || !Axes.ShowLegend)
@@ -752,8 +777,8 @@ void TDraw::DrawLegend()
       break;
 
     default:
-      if(Axes.xAxis.LogScl && Axes.LegendPos.x <= 0 ||
-         Axes.yAxis.LogScl && Axes.LegendPos.y <= 0)
+      if((Axes.xAxis.LogScl && Axes.LegendPos.x <= 0) ||
+         (Axes.yAxis.LogScl && Axes.LegendPos.y <= 0))
            return;
       LegendRect.Top = yPoint(Axes.LegendPos.y);
       LegendRect.Left = xPoint(Axes.LegendPos.x);
@@ -762,10 +787,24 @@ void TDraw::DrawLegend()
   LegendRect.Bottom = LegendRect.Top + LegendHeight;
   LegendRect.Right = LegendRect.Left + LegendWidth;
 
+  DrawLegend(Context, LegendRect);
+}
+//---------------------------------------------------------------------------
+/** Draw legend on the specified context at the given position.
+ *  This is useful to draw the legend in another context than used by the TDraw
+ *  object.
+ */
+void TDraw::DrawLegend(TContext &Context, const TRect &LegendRect)
+{
+  Context.SetFont(Axes.LegendFont);
+  Context.SetBrush(bsClear); //Change brush style to enable drawing of other than solid lines in Win9x
+
+  int TextHeight = Context.GetTextHeight("0");
+  int TextWidth = LegendRect.Width() - SizeScale(10);
   int x = LegendRect.Left + SizeScale(5);
   int y = LegendRect.Top + TextHeight + SizeScale(6);
 
-  TDrawLegend DrawLegendItems(this, TextWidth, TextHeight, x, y);
+  TDrawLegend DrawLegendItems(Context, TextWidth, TextHeight, x, y, SizeMul);
   for(unsigned I = 0; I < Data->ElemCount(); I++)
   {
     TGraphElem *Elem = Data->GetElem(I).get();
@@ -781,9 +820,13 @@ void TDraw::DrawLegend()
   }
 
   //Draw rectangle around legend
-  Context.SetPen(psSolid, ForceBlack ? clBlack : Axes.LegendFont->Color, SizeScale(1));
+  int BorderWidth = SizeScale(1);
+  TSmoothingMode OldSmoothingMode = Context.GetSmoothingMode();
+  Context.SetSmoothingMode(smNone);
+  Context.SetPen(psSolid, Axes.LegendFont->Color, BorderWidth);
   Context.SetBrush(bsClear);
-  Context.DrawRectangle(LegendRect);
+  Context.DrawRectangle(LegendRect.Left + BorderWidth / 2, LegendRect.Top + BorderWidth / 2, LegendRect.Right - (BorderWidth-1) / 2, LegendRect.Bottom - (BorderWidth-1) / 2);
+  Context.SetSmoothingMode(OldSmoothingMode);
 }
 //---------------------------------------------------------------------------
 void TDraw::SetClippingRegion()
@@ -831,86 +874,77 @@ std::wstring TDraw::MakeNumber(double Number, bool MultiplyByPi)
   return ToWString(FloatToStrF(Number, ffGeneral, 8, 8));
 }
 //---------------------------------------------------------------------------
-void TDraw::SetSizeMul(double xSizeMul, double ySizeMul)
-{
-  SizeMul = xSizeMul;
-
-  //We need to update size of all text labels
-  //This is only used for printing, and this is not a good way to find the size; To make it work I scaled by 1.1
-  for(unsigned I = 0; I < Data->ElemCount(); I++)
-    if(TTextLabel *Label = dynamic_cast<TTextLabel*>(Data->GetElem(I).get()))
-      Label->Scale(xSizeMul, ySizeMul);
-}
-//---------------------------------------------------------------------------
 void TDrawLegend::Visit(TBaseFuncType &Func)
 {
-  TPenStyle Style = Func.DrawType == dtDots ? psDot : Func.Style;
-  Draw->Context.SetBrush(bsClear); //Enable drawing of other than solid lines on win9x
-  Draw->Context.SetPen(Style, Draw->ForceBlack ? clBlack : Func.Color, Size(Func.Size), Style == psSolid ? ecFlat : ecRound);
-  Draw->Context.DrawLine(TPoint(x, y), TPoint(x + TextWidth, y));
+  TPenStyle Style = Func.GetDrawType() == dtDots ? psDot : Func.GetStyle();
+  Context.SetBrush(bsClear); //Enable drawing of other than solid lines on win9x
+  Context.SetPen(Style, Func.GetColor(), SizeScale(std::min(Func.GetSize(), 10U)), Style == psSolid ? ecFlat : ecRound);
+  Context.DrawLine(TPoint(x, y), TPoint(x + TextWidth, y));
 
-  Draw->Context.DrawText(Func.MakeLegendText(), x, y - TextHeight - Size(1));
-  y += TextHeight + Size(6);
+  Context.DrawText(Func.MakeLegendText(), x, y - TextHeight - SizeScale(1));
+  y += TextHeight + SizeScale(6);
 }
 //---------------------------------------------------------------------------
 void TDrawLegend::Visit(TPointSeries &Series)
 {
   if(Series.GetLineStyle() != psClear)
   {
-    std::vector<TPoint> LinePoints;
-    LinePoints.push_back(TPoint(x,y));
-    LinePoints.push_back(TPoint(x + TextWidth, y));
-    Draw->DrawPolyline(LinePoints.begin(), LinePoints.end(), Series.GetLineStyle(), Series.GetLineSize(), Series.GetLineColor());
+    TPoint LinePoints[2] = {TPoint(x,y), TPoint(x + TextWidth, y)};
+    Context.SetPen(Series.GetLineStyle(), Series.GetLineColor(), SizeScale(Series.GetLineSize()), ecSquare, psjRound);
+    Context.DrawPolyline(LinePoints, 2);
   }
 
   //Adjust point size in legend to max 6 (4 for arrow)
   unsigned PointSize = std::min(Series.GetSize(), 6U);
-  TColor FrameColor = Draw->ForceBlack ? clBlack : Series.GetFrameColor();
-  TColor FillColor = Draw->ForceBlack ? clWhite : Series.GetFillColor();
+  TColor FrameColor = Series.GetFrameColor();
+  TColor FillColor = Series.GetFillColor();
   if(PointSize > 0)
-    for(int X = x + Size(20); X < x + TextWidth - Size(10); X += Size(50))
-     TPointSelect::DrawPoint(Draw->Context.GetCanvas(), TPoint(X, y), Series.GetStyle(), Series.GetSize() > 2 ? FrameColor : FillColor, FillColor, Size(PointSize));
+    for(int X = x + SizeScale(20); X < x + TextWidth - SizeScale(10); X += SizeScale(50))
+     TPointSelect::DrawPoint(Context.GetCanvas(), TPoint(X, y), Series.GetStyle(), Series.GetSize() > 2 ? FrameColor : FillColor, FillColor, SizeScale(PointSize));
 
-  Draw->Context.SetBrush(bsClear);
-  Draw->Context.DrawText(Series.MakeLegendText(), x, y - TextHeight - Size(1));
-  y += TextHeight + Size(6);
+  Context.SetBrush(bsClear);
+  Context.DrawText(Series.MakeLegendText(), x, y - TextHeight - SizeScale(1));
+  y += TextHeight + SizeScale(6);
 }
 //---------------------------------------------------------------------------
 void TDrawLegend::Visit(TShading &Shade)
 {
   //Don't Use FillRect() as it will not shade transparent
-  Draw->Context.SetPen(psClear, clWhite, 1);
-  Draw->Context.SetBrush(Shade.BrushStyle, Draw->ForceBlack ? clBlack : Shade.Color);
-  TRect R(x, y - Size(3), x + TextWidth, y + Size(6));
+  Context.SetPen(psClear, clWhite, 1);
+  Context.SetBrush(Shade.GetBrushStyle(), Shade.GetColor());
+  TRect R(x, y - SizeScale(3), x + TextWidth, y + SizeScale(6));
   TPoint Points[] = {TPoint(R.Left, R.Top), TPoint(R.Right, R.Top), TPoint(R.Right, R.Bottom), TPoint(R.Left, R.Bottom)};
-  Draw->Context.DrawPolygon(Points, 4);
+  Context.DrawPolygon(Points, 4);
 
-  Draw->Context.DrawText(Shade.MakeLegendText(), x, y - TextHeight - Size(1));
-  y += TextHeight + Size(6);
+  Context.DrawText(Shade.MakeLegendText(), x, y - TextHeight - SizeScale(1));
+  y += TextHeight + SizeScale(6);
 }
 //---------------------------------------------------------------------------
 void TDrawLegend::Visit(TRelation &Relation)
 {
   if(Relation.GetRelationType() == rtEquation)
   {
-    std::vector<TPoint> LinePoints;
-    LinePoints.push_back(TPoint(x, y));
-    LinePoints.push_back(TPoint(x + TextWidth, y));
-    Draw->DrawPolyline(LinePoints.begin(), LinePoints.end(), psSolid, Relation.GetSize(), Relation.GetColor());
+    TPoint LinePoints[2] = {TPoint(x, y), TPoint(x + TextWidth, y)};
+    Context.SetPen(
+      Relation.GetLineStyle(),
+      Relation.GetColor(),
+      SizeScale(std::min(Relation.GetSize(), 10U)),
+      Relation.GetLineStyle() == psSolid ? ecFlat : ecRound);
+    Context.DrawPolyline(LinePoints, 2);
   }
   else
   {
     //Draw relation as a shading. Don't Use FillRect() as it will not shade transparent
-    Draw->Context.SetPen(psClear, clWhite, 1);
-    Draw->Context.SetBrush(Relation.GetBrushStyle(), Draw->ForceBlack ? clBlack : Relation.GetColor());
-    TRect R(x, y - Size(3), x + TextWidth, y + Size(6));
+    Context.SetPen(psClear, clWhite, 1);
+    Context.SetBrush(Relation.GetBrushStyle(), Relation.GetColor());
+    TRect R(x, y - SizeScale(3), x + TextWidth, y + SizeScale(6));
     TPoint Points[] = {TPoint(R.Left, R.Top), TPoint(R.Right, R.Top), TPoint(R.Right, R.Bottom), TPoint(R.Left, R.Bottom)};
-    Draw->Context.DrawPolygon(Points, 4);
+    Context.DrawPolygon(Points, 4);
   }
 
-  Draw->Context.SetBrush(bsClear); //Draw text transparent
-  Draw->Context.DrawText(Relation.MakeLegendText(), x, y - TextHeight - Size(1));
-  y += TextHeight + Size(6);
+  Context.SetBrush(bsClear); //Draw text transparent
+  Context.DrawText(Relation.MakeLegendText(), x, y - TextHeight - SizeScale(1));
+  y += TextHeight + SizeScale(6);
 }
 //---------------------------------------------------------------------------
 void TDraw::DrawPointLabel(TCanvas *Canvas, TPoint Pos, int PointSize, const std::wstring &Label, TLabelPosition LabelPosition)
@@ -967,6 +1001,70 @@ void TDraw::DrawPointLabel(TCanvas *Canvas, TPoint Pos, int PointSize, const std
   }
 
   Canvas->TextOut(Pos.x, Pos.y, Label.c_str());
+}
+//---------------------------------------------------------------------------
+void TDraw::SetThreadCount(unsigned Count)
+{
+  if(!AbortUpdate())
+    return;
+
+  if(Count > Threads.size())
+    IdleEvent->ResetEvent();
+
+  while(Count > Threads.size())
+  {
+    //The thread is created suspended so we can add it to the Threads vector
+    //before the thread starts running.
+    Threads.push_back(new TDrawThread(this));
+    Threads.back()->SetName(ThreadName + "[" + ToString(Threads.size() - 1) + "]");
+    Threads.back()->Start();
+  }
+
+  while(Count < Threads.size())
+  {
+    Threads.back()->Terminate();
+    Threads.back()->PostMessage(dmTerminate);
+    Threads.back()->WaitFor();
+    delete Threads.back();
+    Threads.pop_back();
+  }
+
+  //Ensure that the threads has created the queues before trying to send
+  //messages to them.
+  Wait();
+}
+//---------------------------------------------------------------------------
+void __fastcall TDraw::EndUpdate()
+{
+  try
+  {
+    Form1->EndUpdate();
+    if(OnComplete)
+      OnComplete();
+  }
+  catch(Exception &E)
+  {
+    Form1->ShowStatusError("Internal error. Unexpected exception: " + E.Message);
+  }
+}
+//---------------------------------------------------------------------------
+void TDraw::IncThreadInIdle(bool Init)
+{
+  if(InterlockedIncrement(&IdleThreadCount) == static_cast<LONG>(Threads.size()))
+  {
+    IdleEvent->SetEvent();
+    if(!Init)
+      TThread::Synchronize(NULL, &EndUpdate);
+  }
+}
+//---------------------------------------------------------------------------
+TGraphElemPtr TDraw::GetNextEvalElem()
+{
+  const TTopGraphElemPtr &Top = Data->GetTopElem();
+  int NewIndex = InterlockedIncrement(&EvalIndex);
+  if(NewIndex <= static_cast<LONG>(Top->ChildCount()))
+    return Top->GetChild(NewIndex - 1);
+  return TGraphElemPtr();
 }
 //---------------------------------------------------------------------------
 } //namespace Graph

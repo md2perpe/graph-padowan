@@ -10,6 +10,7 @@
 // OLESERVERIMPL : Implementation of TOleServerImpl (CoClass: OleServer, Interface: IOleServer)
 #include "Graph.h"
 #pragma hdrstop
+#ifndef _WIN64
 #include <PngImage.hpp>
 #include "OleServerImpl.h"
 #include "VersionInfo.h"
@@ -182,7 +183,7 @@ bool TOleServerImpl::Register(bool AllUsers)
     String Clsid = Comobj::GUIDToString(CLSID_OleServer);
     String ClassKey = "Software\\Classes\\CLSID\\" + Comobj::GUIDToString(CLSID_OleServer);
     String ProgID = "Software\\Classes\\" + String(GetProgID());
-    DWORD RootKey = reinterpret_cast<DWORD>(AllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER);
+	HKEY RootKey = AllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER;
 
     CreateRegKey(ClassKey, "", LoadRes(RES_OLE_GRAPH_SYSTEM), RootKey);
     CreateRegKey(ClassKey + "\\InprocHandler32", "", "OLE32.DLL", RootKey);
@@ -248,7 +249,7 @@ HRESULT WINAPI TOleServerImpl::UpdateRegistry(BOOL bRegister)
     {
       UpgradeSettings();
       //Update version info to last registered version for current user
-      CreateRegKey(REGISTRY_KEY, L"Version", TVersionInfo().ProductVersion().Text().c_str(), (unsigned)HKEY_CURRENT_USER);
+      CreateRegKey(REGISTRY_KEY, L"Version", TVersionInfo().ProductVersion().Text().c_str(), HKEY_CURRENT_USER);
 
       //If "Install for all users" was selected under installation,
       //first try to register for all users. If that fails, register for current user only.
@@ -289,10 +290,11 @@ void TOleServerImpl::DrawMetafile(TMetafile *Metafile, unsigned ImageWidth, unsi
 
   Form1->Draw.Wait(); //Don't copy data while it might be in use
   TData MetaData(Form1->Data);
-  TDraw DrawMeta(MetaCanvas.get(), &MetaData, false, "OLE Metafile DrawThread");
+  TDraw DrawMeta(MetaCanvas.get(), &MetaData, "OLE Metafile DrawThread", false);
 
   //Set width and height
   DrawMeta.SetSize(ImageWidth, ImageHeight);
+  DrawMeta.SetSizeMul(Screen->PixelsPerInch / 96.0);
   DrawMeta.DrawAll();
   DrawMeta.Wait();
 }
@@ -953,6 +955,7 @@ HRESULT STDMETHODCALLTYPE TOleServerImpl::Load(
   TConfigFile ConfigFile;
   ConfigFile.LoadFromString(ToWString(UTF8ToString(Str)));
   std::wstring SavedVersion = ConfigFile.Section(L"Graph").Read(L"Version", L"NA");
+  LOG_DATA(L"Version=" + AnsiString(SavedVersion.c_str()));
   if(SavedVersion < TVersion(L"4.4.0.414"))
     ConfigFile.LoadFromString(String(Str.c_str()).c_str());
 
@@ -1084,13 +1087,5 @@ HRESULT STDMETHODCALLTYPE TOleServerImpl::GetCurFile(
   return LOG_RESULT(S_OK);
 }
 //---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
+#endif
 

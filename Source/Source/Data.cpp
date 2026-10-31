@@ -26,24 +26,48 @@
 
 namespace Graph
 {
-TUndoList UndoList(50);
 //---------------------------------------------------------------------------
-TData::TData() : TopElem(new TTopGraphElem(this))
+TData::TData() : TopElem(new TTopGraphElem), Modified(false),  OnAbortUpdate(NULL), FNeedDrawing(false)
 {
+  TopElem->SetData(this);
 }
 //---------------------------------------------------------------------------
  TData::TData(const TData &OldData) : Axes(OldData.Axes), CustomFunctions(OldData.CustomFunctions),
-  Modified(false), OnAbortUpdate(NULL), TopElem(OldData.TopElem->Clone(this))
+  Modified(false), OnAbortUpdate(NULL), TopElem(boost::dynamic_pointer_cast<TTopGraphElem>(OldData.TopElem->Clone())), FNeedDrawing(false)
 {
-  for(unsigned int I = 0; I < TopElem->ChildCount(); I++)
-    for(unsigned J = 0; J < TopElem->GetChild(I)->ChildCount(); J++)
-      if(TShading *Shade = dynamic_cast<TShading*>(TopElem->GetChild(I)->GetChild(J).get()))
-        if(Shade->Func2)
+  const TTopGraphElemPtr &OldTopElem = OldData.TopElem;
+  for(unsigned int I = 0; I < OldTopElem->ChildCount(); I++)
+  {
+    const TGraphElemPtr &Elem = OldTopElem->GetChild(I);
+    TGraphElemPtr NewElem = Elem->Clone();
+		TopElem->InsertChild(NewElem);
+    for(unsigned J = 0; J < Elem->ChildCount(); J++)
+    {
+      const TGraphElemPtr &Elem2 = Elem->GetChild(J);
+      TGraphElemPtr NewElem2 = Elem2->Clone();
+      NewElem->InsertChild(NewElem2);
+    }
+  }
+
+  //Loop through everything and update Func2 for shadings
+  for(unsigned int I = 0; I < OldTopElem->ChildCount(); I++)
+  {
+    const TGraphElemPtr &Elem = OldTopElem->GetChild(I);
+    for(unsigned J = 0; J < Elem->ChildCount(); J++)
+    {
+      const TGraphElemPtr &Elem2 = Elem->GetChild(J);
+      if(const TShading *OldShade = dynamic_cast<TShading*>(Elem2.get()))
+        if(OldShade->GetFunc2())
         {
           //Update pointer cross references
-          int Index = OldData.TopElem->GetChildIndex(Shade->Func2);
-          Shade->Func2 = boost::dynamic_pointer_cast<TBaseFuncType>(TopElem->GetChild(Index));
+          int Index = OldTopElem->GetChildIndex(OldShade->GetFunc2());
+          if(TShading *Shade = dynamic_cast<TShading*>(TopElem->GetChild(I)->GetChild(J).get()))
+            Shade->SetFunc2(boost::dynamic_pointer_cast<TBaseFuncType>(TopElem->GetChild(Index)));
         }
+    }
+  }
+
+  TopElem->SetData(this);
   Update();
 }
 //---------------------------------------------------------------------------
@@ -88,9 +112,8 @@ struct TElemCount
   unsigned Shade;
   unsigned Label;
   unsigned Relation;
-  unsigned OleObject;
-  TElemCount::TElemCount() : Func(0), PointSeries(0), Shade(0), Label(0),
-    Relation(0), OleObject(0) {}
+  TElemCount() : Func(0), PointSeries(0), Shade(0), Label(0),
+    Relation(0) {}
 };
 //---------------------------------------------------------------------------
 void TData::WriteElem(TConfigFile &IniFile, const TGraphElemPtr &Elem, struct TElemCount &Count)
@@ -103,7 +126,7 @@ void TData::WriteElem(TConfigFile &IniFile, const TGraphElemPtr &Elem, struct TE
     //Write tangents
     unsigned TanCount = 0;
     for(unsigned N = 0; N < Func->ChildCount(); N++)
-      if(dynamic_cast<TTan*>(Func->GetChild(N).get()))
+      if(dynamic_cast<TTangent*>(Func->GetChild(N).get()))
         Func->GetChild(N)->WriteToIni(IniFile.Section(SectionName + L"Tan" + ToWString(++TanCount)));
     IniFile.Section(SectionName).Write(L"TanCount", TanCount, 0U);
   }
@@ -130,7 +153,6 @@ void TData::WriteCount(TConfigFile &ConfigFile, const TElemCount &Count)
   DataSection.Write(L"PointSeriesCount", Count.PointSeries);
   DataSection.Write(L"ShadeCount", Count.Shade);
   DataSection.Write(L"RelationCount", Count.Relation);
-  DataSection.Write(L"OleObjectCount", Count.OleObject);
 }
 //---------------------------------------------------------------------------
 std::wstring TData::SaveToString(const TGraphElemPtr &Elem) const
@@ -143,14 +165,16 @@ std::wstring TData::SaveToString(const TGraphElemPtr &Elem) const
 	TData Temp;
 	TGraphElemPtr TempElem = Elem->Clone();
 	Temp.Insert(TempElem);
-	unsigned Count = TempElem->ChildCount();
-	for(int I = Count-1; I >= 0; I--)
+	unsigned Count = Elem->ChildCount();
+	for(unsigned I = 0; I < Count; I++)
 	{
-		TShadingPtr Shading = boost::dynamic_pointer_cast<TShading>(TempElem->GetChild(I));
-		if(Shading && Shading->Func2)
-			TempElem->RemoveChild(I);
+    TGraphElemPtr Child = Elem->GetChild(I);
+		TShadingPtr Shading = boost::dynamic_pointer_cast<TShading>(Child);
+		if(!Shading || !Shading->GetFunc2())
+			TempElem->InsertChild(Child->Clone());
 	}
-	Temp.WriteElem(ConfigFile, TempElem, ElemCount);
+
+  Temp.WriteElem(ConfigFile, TempElem, ElemCount);
 	WriteCount(ConfigFile, ElemCount);
 	return ConfigFile.GetAsString();
 }
@@ -197,7 +221,7 @@ void TData::LoadData(const TConfigFile &IniFile)
     int TanCount = Section.Read(L"TanCount", 0);
     for(int I = 0; I < TanCount; I++)
     {
-      boost::shared_ptr<TTan> Tan(new TTan);
+      boost::shared_ptr<TTangent> Tan(new TTangent);
       Elem->InsertChild(Tan);
       Tan->ReadFromIni(IniFile.Section(SectionName + L"Tan" + ToWString(I+1)));
     }
@@ -223,17 +247,18 @@ void TData::LoadData(const TConfigFile &IniFile)
 int FindNearestPointN(const TBaseFuncType *Func, int X, int Y)
 {
   unsigned BestN = 0;
-  double BestDist = INF;
+  unsigned BestDist = MAXUINT;
+  const std::vector<TPoint> &Points = Func->GetPoints();
 
   //If no part of function visible
-  if(Func->Points.size() == 0)
+  if(Points.size() == 0)
     return -1;
 
-  for(unsigned N = 0; N < Func->Points.size(); N++)
+  for(unsigned N = 0; N < Points.size(); N++)
   {
-    double dX = X - Func->Points[N].x;
-    double dY = Y - Func->Points[N].y;
-    double Dist = dX*dX + dY*dY;
+    int dX = X - Points[N].x;
+    int dY = Y - Points[N].y;
+    unsigned Dist = dX*dX + dY*dY;
     if(Dist < BestDist)
     {
       BestDist = Dist;
@@ -248,24 +273,25 @@ int FindNearestPointN(const TBaseFuncType *Func, int X, int Y)
 double FindNearestPoint(const TBaseFuncType *Func, int X, int Y)
 {
   int N = FindNearestPointN(Func, X, Y);
-  return N == -1 ? NAN : Func->sList[N].t;
+  return N == -1 ? NAN : Func->GetCoordList()[N].t;
 }
 //---------------------------------------------------------------------------
 //Find interception between Func and other functions
 //Returns NAN if no interception is found
 double TData::FindInterception(const TBaseFuncType *Func, int X, int Y) const
 {
-  if(Func->Points.size() < 3)
+  if(Func->GetPoints().size() < 3)
     return NAN;
   unsigned N = FindNearestPointN(Func, X, Y);
   if(N == 0)
     N = 1;
-  else if(N == Func->Points.size() - 1)
+  else if(N == Func->GetPoints().size() - 1)
     N--;
 
   typedef std::vector<Func32::TCoordSet<> >::const_iterator TCoordSetIter;
-  TCoordSetIter Begin = Func->sList.begin();
-  TCoordSetIter End = Func->sList.end();
+  const std::vector<Func32::TCoordSet<> > &CoordList = Func->GetCoordList();
+  TCoordSetIter Begin = CoordList.begin();
+  TCoordSetIter End = CoordList.end();
   TCoordSetIter p1 = Begin + N; //p1 used to search backwards
   TCoordSetIter p2 = p1;        //p2 is always p1+1
   TCoordSetIter p3 = p2;        //p3 used to search forward
@@ -284,6 +310,7 @@ double TData::FindInterception(const TBaseFuncType *Func, int X, int Y) const
           if(StdFunc2 && Func == Func2)
             continue; //If it is the same function, and the function is a TFunc there is no crossing
 
+          const std::vector<Func32::TCoordSet<> > &CoordList2 = Func2->GetCoordList();
           if(p1 != Begin)
           {
             //Standard function is a special case optimized for speed
@@ -298,24 +325,24 @@ double TData::FindInterception(const TBaseFuncType *Func, int X, int Y) const
               }
             else
             {
-              TCoordSetIter Iter = Func2->sList.end();
+              TCoordSetIter Iter = CoordList2.end();
               if(Func == Func2)
               { //Special handling for crossing with self: Split the search in two
-                if(p1 != Func->sList.begin()+1)
+                if(p1 != CoordList.begin()+1)
                 {
-                  Iter = FindCrossing(p1, Func->sList.begin(), p1-2);
+                  Iter = FindCrossing(p1, CoordList.begin(), p1-2);
                   if(Iter == p1-2)
-                    Iter = FindCrossing(p1, p1+2, Func->sList.end());
+                    Iter = FindCrossing(p1, p1+2, CoordList.end());
                 }
               }
               else
-                Iter = FindCrossing(p1, Func2->sList.begin(), Func2->sList.end());
-              if(Iter != Func2->sList.end())
+                Iter = FindCrossing(p1, CoordList2.begin(), CoordList2.end());
+              if(Iter != CoordList2.end())
               {
-                unsigned N = Range<unsigned>(1, p1 - Begin, Func->sList.size() - 3);
-                unsigned M = Range<unsigned>(1, Iter - Func2->sList.begin(), Func2->sList.size() - 3);
+                unsigned N = Range<unsigned>(1, p1 - Begin, CoordList.size() - 3);
+                unsigned M = Range<unsigned>(1, Iter - CoordList2.begin(), CoordList2.size() - 3);
                 //Use binary search to increase acuracy of found position
-                return Func32::FindCrossing(Func->GetFunc(), Func->sList[N].t, Func->sList[N+1].t, Func2->GetFunc(), Func2->sList[M].t, Func2->sList[M+1].t);
+                return Func32::FindCrossing(Func->GetFunc(), CoordList[N].t, CoordList[N+1].t, Func2->GetFunc(), CoordList2[M].t, CoordList2[M+1].t);
               }
             }
           }
@@ -334,23 +361,23 @@ double TData::FindInterception(const TBaseFuncType *Func, int X, int Y) const
               }
             else
             {
-              TCoordSetIter Iter = Func2->sList.end();
+              TCoordSetIter Iter = CoordList2.end();
               if(Func == Func2)
               { //Special handling for crossing with self: Split the search in two
-                if(p3 != Func->sList.begin() + 1)
+                if(p3 != CoordList.begin() + 1)
                 {
-                  Iter = FindCrossing(p3, Func->sList.begin(), p3-2);
+                  Iter = FindCrossing(p3, CoordList.begin(), p3-2);
                   if(Iter == p3-2)
-                    Iter = FindCrossing(p3, p3+2, Func->sList.end());
+                    Iter = FindCrossing(p3, p3+2, CoordList.end());
                 }
               }
               else
-                Iter = FindCrossing(p3, Func2->sList.begin(), Func2->sList.end());
-              if(Iter != Func2->sList.end())
+                Iter = FindCrossing(p3, CoordList2.begin(), CoordList2.end());
+              if(Iter != CoordList2.end())
               {
-                unsigned N = Range<unsigned>(1, p3 - Begin, Func->Points.size() - 3);
-                unsigned M = Range<unsigned>(1, Iter - Func2->sList.begin(), Func2->sList.size() - 3);
-                return Func32::FindCrossing(Func->GetFunc(), Func->sList[N].t, Func->sList[N+1].t, Func2->GetFunc(), Func2->sList[M].t, Func2->sList[M+1].t);
+                unsigned N = Range<unsigned>(1, p3 - Begin, Func->GetPoints().size() - 3);
+                unsigned M = Range<unsigned>(1, Iter - CoordList2.begin(), CoordList2.size() - 3);
+                return Func32::FindCrossing(Func->GetFunc(), CoordList[N].t, CoordList[N+1].t, Func2->GetFunc(), CoordList2[M].t, CoordList2[M+1].t);
               }
             }
           }
@@ -406,7 +433,7 @@ void TData::ImportUserModels(const std::wstring &Str)
     for(TConfigFileSection::TIterator Iter = Section.Begin(); Iter != Section.End(); ++Iter)
     {
       if(Iter->first[0] == '$')
-        UserModel.Defaults.push_back(std::make_pair(Iter->first, Iter->second));
+        UserModel.Defaults[Iter->first] = ToDouble(Iter->second);
     }
 
     UserModels[Section.GetName()] = UserModel;
@@ -422,17 +449,11 @@ std::wstring TData::ExportUserModels() const
     TConfigFileSection &Section = IniFile.Section(Iter->first);
     Section.Write(L"Model", Iter->second.Model);
 
-    for(unsigned J = 0; J < Iter->second.Defaults.size(); J++)
-      Section.Write(Iter->second.Defaults[J].first, Iter->second.Defaults[J].second);
+    for(TDefaultsMap::const_iterator Iter2 = Iter->second.Defaults.begin(); Iter2 != Iter->second.Defaults.end(); ++Iter2)
+      Section.Write(Iter2->first, Iter2->second);
   }
 
   return IniFile.GetAsString();
-}
-//---------------------------------------------------------------------------
-void TData::SetModified()
-{
-  Modified = true;
-  SendOleAdvise(acDataChanged);
 }
 //---------------------------------------------------------------------------
 double FindNearestValue(const std::vector<Func32::TCoordSet<> > &Values, int X, int Y, const TDraw &Draw)
@@ -535,6 +556,8 @@ void TData::Delete(const TGraphElemPtr &Elem)
 int TData::GetIndex(const TGraphElemPtr &Elem)
 {
   const TGraphElemPtr &Parent = Elem->GetParent();
+  if(!Parent)
+    return -1;
   return Parent->GetChildIndex(Elem);
 }
 //---------------------------------------------------------------------------
@@ -548,6 +571,7 @@ void TData::Replace(const TGraphElemPtr &OldElem, const TGraphElemPtr &Elem)
   int Index = OldElem->GetParent()->GetChildIndex(OldElem);
   const boost::shared_ptr<TTopGraphElem> &TopElem = OldElem->GetData().TopElem;
   OldElem->GetParent()->ReplaceChild(Index, Elem);
+	OldElem->ClearCache();
 
   while(OldElem->ChildCount() > 0)
   {
@@ -559,10 +583,14 @@ void TData::Replace(const TGraphElemPtr &OldElem, const TGraphElemPtr &Elem)
   for(unsigned I = 0; I < TopElem->ChildCount(); I++)
     for(unsigned J = 0; J < TopElem->GetChild(I)->ChildCount(); J++)
       if(const boost::shared_ptr<TShading> &Shade = boost::dynamic_pointer_cast<TShading>(TopElem->GetChild(I)->GetChild(J)))
-        if(Shade->Func2 == OldElem)
-          Shade->Func2 = boost::dynamic_pointer_cast<TBaseFuncType>(Elem);
+        if(Shade->GetFunc2() == OldElem)
+        {
+       		Shade->ClearCache();
+          Shade->SetFunc2(boost::dynamic_pointer_cast<TBaseFuncType>(Elem));
+        }
 
   Elem->Update(); //Update tangents
+	OldElem->ClearCache();
 }
 //---------------------------------------------------------------------------
 void TData::Insert(const boost::shared_ptr<TGraphElem> &Elem, int Index)
@@ -607,6 +635,73 @@ bool TData::IsDependent(const std::wstring &Expression, const std::wstring &Symb
   catch(Func32::EFuncError &E)
   {
     return false;
+  }
+}
+//---------------------------------------------------------------------------
+TBaseFuncPtr CreateTrendline(const TPointSeries *Series, const TTrendData &Trend)
+{
+  const std::vector<Func32::TDblPoint> &Points = Series->GetPointList();
+  std::vector<double> Weights;
+  if(Series->GetyErrorBarType() == ebtCustom)
+  {
+    Weights.reserve(Points.size());
+    unsigned Count = Series->PointCount();
+    for(unsigned I = 0; I < Count; I++)
+    {
+      double yError = Series->GetYError(I);
+      if(yError == 0)
+        throw Exception(LoadRes(RES_NOT_EQUAL_ZERO, LoadRes(RES_UNCERTAINTY, "Y")));
+      Weights.push_back(1/(yError*yError));
+    }
+  }
+
+  if(Trend.Type == ttUserModel)
+  {
+    const TData &Data = Series->GetData();
+    std::vector<std::wstring> Arguments = Func32::FindUnknowns(Trend.Model);
+    std::vector<long double> Values(Arguments.size(), 1);
+
+    for(unsigned I = 0; I < Values.size(); I++)
+    {
+      TDefaultsMap::const_iterator Iter = Trend.Defaults.find(Arguments[I]);
+      if(Iter != Trend.Defaults.end())
+        Values[I] = Iter->second;
+    }
+
+    Arguments.insert(Arguments.begin(), L"x");
+    Func32::TCustomFunc TempFunc(Trend.Model, Arguments, Data.CustomFunctions.SymbolList, Data.Axes.Trigonometry);
+    Regression(Points, TempFunc, Values, Weights, 300);
+
+    boost::shared_ptr<TStdFunc> Func(new TStdFunc(TempFunc.ConvToFunc(Values, 0)));
+    Func->SetLegendText(L"f(x)=" + Func->GetFunc().MakeText(L"x", Options.RoundTo) + L"; R²=" + RoundToString(Correlation(Points, Func->GetFunc()), Data));
+    Func->SetFrom(TTextValue(-INF));
+    Func->SetTo(TTextValue(+INF));
+    Func->SetSteps(TTextValue(0, L""));
+    return Func;
+  }
+  else if(Trend.Type == ttMovingAverage)
+  {
+    //Workaround for compiler bug in bcc 5.6.4. The following two lines may not be put together.
+    boost::shared_ptr<TParFunc> Func;
+    Func.reset(new TParFunc(Func32::MovingAverage(Points, Trend.Period)));
+
+    Func->SetFrom(TTextValue(0, L"0"));
+    Func->SetTo(TTextValue(Points.size() - Trend.Period, ToWString(Points.size() - Trend.Period)));
+    Func->SetSteps(TTextValue(1000));
+    Func->SetLegendText(LoadString(RES_MOVING_AVERAGE));
+    return Func;
+  }
+  else
+  {
+    //WARNING: Do not initialize Func with pointer. It will crash if Trendline() fails because of bug in Bcc 5.6.4
+    boost::shared_ptr<TStdFunc> Func;
+    Func32::TTrendType Type = static_cast<Func32::TTrendType>(Trend.Type);
+    Func.reset(new TStdFunc(TrendLine(Type, Points, Weights, Trend.Order, Trend.Intercept)));
+    Func->SetLegendText(L"f(x)=" + Func->GetFunc().MakeText(L"x", Options.RoundTo) + L"; R²=" + RoundToString(Correlation(Points, Func->GetFunc()), Series->GetData()));
+    Func->SetFrom(TTextValue(-INF));
+    Func->SetTo(TTextValue(+INF));
+    Func->SetSteps(TTextValue(0, L""));
+    return Func;
   }
 }
 //---------------------------------------------------------------------------

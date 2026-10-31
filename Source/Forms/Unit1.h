@@ -22,16 +22,10 @@
 #include <TRecent.h>
 #include <ImgList.hpp>
 #include <AppEvnts.hpp>
-#include "IPageSetup.h"
 #include "IColorSelect.h"
 #include "Cross.h"
 #include "FocusPanel.h"
 #include "MySplitter.h"
-#include <IdBaseComponent.hpp>
-#include <IdComponent.hpp>
-#include <IdHTTP.hpp>
-#include <IdTCPClient.hpp>
-#include <IdTCPConnection.hpp>
 #include <ActnCtrls.hpp>
 #include <ActnList.hpp>
 #include <ActnMan.hpp>
@@ -39,11 +33,8 @@
 #include <ToolWin.hpp>
 #include <StdActns.hpp>
 #include "IColorSelect.h"
-#include "IPageSetup.h"
 #include "IPolygon.h"
 #include "IRichEdit.h"
-#include <IdAntiFreeze.hpp>
-#include <IdAntiFreezeBase.hpp>
 #include <OleCtnrs.hpp>
 #include <ExtDlgs.hpp>
 #include "OpenPreviewDialog.h"
@@ -54,21 +45,27 @@
 #include <ActnMenus.hpp>
 #include <ActnPopup.hpp>
 #include <XPMan.hpp>
+#include <pngimage.hpp>
+#include "ScaledImageList.h"
+#include <System.Actions.hpp>
+#include <Vcl.XPStyleActnCtrls.hpp>
+#include <Vcl.StdStyleActnCtrls.hpp>
 #include <stack>
 #include <boost/scoped_ptr.hpp>
 //---------------------------------------------------------------------------
+const unsigned DockCaptionHeight = 12;
 enum TCursorState {csIdle, csMoveLabel, csMoveLegend, csZoomWindow, csMove, csMoving};
 
 enum TIconIndex
 {
-  iiSave, //Position of save icon used in StatusBar in image list
-  iiPrint,
-  iiFuncNode,
+  //Position of icons in ImageList1 list
   iiTanNode,
   iiLabelNode,
   iiAxesNode,
-  iiBullet,
   iiNormalNode,
+  //Position of icons in ImageList2 list
+  iiSave = 0,
+  iiPrint,
   iiUnChecked,
   iiChecked,
   iiGrayed
@@ -85,7 +82,6 @@ __published:	// IDE-managed Components
   TMenuItem *Tree_Properties;
   TApplicationEvents *ApplicationEvents;
   TTimer *Timer1;
-  TImageList *ImageList1;
   TMenuItem *Tree_Copy;
   TMenuItem *Tree_Cut;
   TMenuItem *Tree_Paste;
@@ -95,7 +91,6 @@ __published:	// IDE-managed Components
   TMenuItem *Tree_InsDiff;
   TMenuItem *Tree_InsTrend;
   TMenuItem *Tree_InsShade;
-  TImageList *ImageList2;
   TCustomizeDlg *CustomizeDlg;
   TActionManager *ActionManager;
   TAction *NewAction;
@@ -116,7 +111,7 @@ __published:	// IDE-managed Components
   TAction *OptionsAction;
   TAction *InsertFunctionAction;
   TAction *InsertTangentAction;
-  TAction *InsertShadeAction;
+  TAction *InsertShadingAction;
   TAction *InsertPointsAction;
   TAction *InsertTrendlineAction;
   TAction *EditAction;
@@ -156,7 +151,6 @@ __published:	// IDE-managed Components
   TMenuItem *Label_Edit;
   TMenuItem *Label_Delete;
   TAction *DonateAction;
-  TAction *TipAction;
   TAction *SaveCopyAsAction;
   TOpenPreviewDialog *OpenPreviewDialog1;
   TMenuItem *Tree_Export;
@@ -223,6 +217,15 @@ __published:	// IDE-managed Components
   TSplitter *Splitter2;
   TMenuItem *N1;
   TAction *ScriptDocAction;
+  TImageList *ImageList64x64;
+  TTimer *Timer3;
+  TScaledImageList *ScaledImageList2;
+  TImageList *TreeViewImageList;
+  TScaledImageList *ScaledImageList1;
+  TImageList *ImageList1;
+  TScaledImageList *ScaledImageList3;
+  TImageList *ImageList2;
+  TActionList *ActionList1;
   void __fastcall Image1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Image1MouseMove(TObject *Sender, TShiftState Shift, int X,int Y);
   void __fastcall Image1MouseUp(TObject *Sender, TMouseButton Button,	TShiftState Shift, int X, int Y);
@@ -261,9 +264,6 @@ __published:	// IDE-managed Components
   void __fastcall Panel2MouseLeave(TObject *Sender);
   bool __fastcall Recent1LoadFile(TRecent *Sender,
     String FileName);
-  void __fastcall xPageSetupDialogPaintText(TIPageSetupDialog *Sender,
-    TCanvas *PageCanvas, const TRect &UpdateRect,
-    const TRect &PaperSize);
   void __fastcall NewActionExecute(TObject *Sender);
   void __fastcall OpenActionExecute(TObject *Sender);
   void __fastcall SaveActionExecute(TObject *Sender);
@@ -281,7 +281,7 @@ __published:	// IDE-managed Components
   void __fastcall OptionsActionExecute(TObject *Sender);
   void __fastcall InsertFunctionActionExecute(TObject *Sender);
   void __fastcall InsertTangentActionExecute(TObject *Sender);
-  void __fastcall InsertShadeActionExecute(TObject *Sender);
+  void __fastcall InsertShadingActionExecute(TObject *Sender);
   void __fastcall InsertPointsActionExecute(TObject *Sender);
   void __fastcall InsertTrendlineActionExecute(TObject *Sender);
   void __fastcall EditActionExecute(TObject *Sender);
@@ -328,12 +328,11 @@ __published:	// IDE-managed Components
   void __fastcall Label_EditClick(TObject *Sender);
   void __fastcall Label_DeleteClick(TObject *Sender);
   void __fastcall DonateActionExecute(TObject *Sender);
-  void __fastcall TipActionExecute(TObject *Sender);
   void __fastcall FormKeyUp(TObject *Sender, WORD &Key, TShiftState Shift);
   void __fastcall SaveCopyAsActionExecute(TObject *Sender);
   void __fastcall TreeViewKeyDown(TObject *Sender, WORD &Key,
     TShiftState Shift);
-  bool __fastcall OpenPreviewDialog1PreviewFile(TOpenPreviewDialog *Dialog,
+  void __fastcall OpenPreviewDialog1PreviewFile(TOpenPreviewDialog *Dialog,
     const String &FileName, TCanvas *Canvas, const TRect &Rect);
   void __fastcall OpenPreviewDialog1Show(TObject *Sender);
   void __fastcall OpenPreviewDialog1Close(TObject *Sender);
@@ -360,8 +359,6 @@ __published:	// IDE-managed Components
   void __fastcall PlacementClick(TObject *Sender);
   void __fastcall PopupMenu3Popup(TObject *Sender);
   void __fastcall PopupMenu1Popup(TObject *Sender);
-  void __fastcall ApplicationEventsException(TObject *Sender,
-          Exception *E);
   void __fastcall RotationClick(TObject *Sender);
   void __fastcall AnimateActionExecute(TObject *Sender);
   void __fastcall ImportGraphFileActionExecute(TObject *Sender);
@@ -383,11 +380,32 @@ __published:	// IDE-managed Components
   void __fastcall MainMenuChange(TObject *Sender, TMenuItem *Source,
           bool Rebuild);
   void __fastcall StatusBar1Hint(TObject *Sender);
-  void __fastcall Image1Click(TObject *Sender);
-  void __fastcall FormShortCut(TWMKey &Msg, bool &Handled);
   void __fastcall TreeViewMouseLeave(TObject *Sender);
   void __fastcall SaveDialogEx1Close(TObject *Sender);
   void __fastcall ScriptDocActionExecute(TObject *Sender);
+  void __fastcall ApplicationEventsModalBegin(TObject *Sender);
+  void __fastcall Splitter2Moved(TObject *Sender);
+  void __fastcall UndoActionUpdate(TObject *Sender);
+  void __fastcall RedoActionUpdate(TObject *Sender);
+  void __fastcall Timer3Timer(TObject *Sender);
+  void __fastcall CustomizeDlgShow(TObject *Sender);
+  void __fastcall InsertDifActionUpdate(TObject *Sender);
+  void __fastcall InsertShadingActionUpdate(TObject *Sender);
+  void __fastcall InsertTrendlineActionUpdate(TObject *Sender);
+  void __fastcall InsertTangentActionUpdate(TObject *Sender);
+  void __fastcall TableActionUpdate(TObject *Sender);
+  void __fastcall CopyActionUpdate(TObject *Sender);
+  void __fastcall EditActionUpdate(TObject *Sender);
+  void __fastcall DeleteActionUpdate(TObject *Sender);
+  void __fastcall PasteActionUpdate(TObject *Sender);
+  void __fastcall ZoomSquareActionUpdate(TObject *Sender);
+  void __fastcall ZoomFitActionUpdate(TObject *Sender);
+  void __fastcall AnimateActionUpdate(TObject *Sender);
+  void __fastcall ApplicationEventsShortCut(TWMKey &Msg, bool &Handled);
+  void __fastcall ApplicationEventsMessage(tagMSG &Msg, bool &Handled);
+
+
+
 
 
 private:	// User declarations
@@ -395,6 +413,7 @@ private:	// User declarations
 
   //Form pos in standard size
   int StdTop, StdLeft, StdWidth, StdHeight;
+  int ConsoleHeight;
   String StatusError;
   TColor StatusErrorColor;
   int IsResizing;     // >0 when the window is being resized or dragged
@@ -411,7 +430,6 @@ private:	// User declarations
   boost::scoped_ptr<class TForm9> Form9;
   TData PreviewData;
   boost::scoped_ptr<TDraw> PreviewDraw; //Only availble while open dialog is shown
-  const int FixedImages; //Number of fixed images in ImageList1 (The rest are dynamically added and deleted)
   boost::scoped_ptr<struct TImageOptions> ActionImageOptions; //Used when saving as image from menu
   TGraphElemPtr Selected;
 
@@ -420,6 +438,8 @@ private:	// User declarations
   bool AbortPrinting; //Set in OnClose to signal that we should abort printing
   TPoint ImagePos;   //The actual Position of Image2. The real position may vary from this when it snaps
   TPoint MouseDownPos; //Set from OnMouseDown on Image1
+  bool FunctionListModified; //The TreeView needs to be updated
+  bool UndoFlag;
 
   bool AskSave();
   void LoadSettings();
@@ -444,14 +464,15 @@ private:	// User declarations
   void HandleCommandLine();
   void SetPanelCoordText();
 
-  int AddImage(int Index, TColor Color);
+  int AddFuncImage(TColor Color);
   int AddImage(TColor Color, TBrushStyle Style);
+  int AddImage(TBitmap *Bitmap, TColor BackgroundColor);
+  void __fastcall AxesFontChanged(TObject *Sender);
 
   //Declare message handlers
   void __fastcall WMDropFiles(TMessage &Message);
   void __fastcall WMEnterSizeMove(TMessage &Message);
   void __fastcall WMExitSizeMove(TMessage &Message);
-  void __fastcall WMUser(TMessage &Message);
   void __fastcall ExecuteFunction(TMessage &Message);
 
   //Workaround for bug in VCL
@@ -461,7 +482,6 @@ BEGIN_MESSAGE_MAP
   VCL_MESSAGE_HANDLER(WM_DROPFILES, TMessage, WMDropFiles)
   VCL_MESSAGE_HANDLER(WM_ENTERSIZEMOVE,TMessage, WMEnterSizeMove)
   VCL_MESSAGE_HANDLER(WM_EXITSIZEMOVE,TMessage, WMExitSizeMove)
-  VCL_MESSAGE_HANDLER(WM_USER, TMessage, WMUser)
   VCL_MESSAGE_HANDLER(WM_USER+1, TMessage, ExecuteFunction);
 END_MESSAGE_MAP(TForm)
 
@@ -473,7 +493,7 @@ public:		// User declarations
   __fastcall ~TForm1();
   void Redraw();
   void UpdateMenu();
-  bool ZoomWindow(double xMin, double xMax, double yMin, double yMax, bool Update=true, bool SaveUndo=true);
+  bool ZoomWindow(long double xMin, long double xMax, long double yMin, long double yMax, bool Update=true, bool SaveUndo=true);
   bool Zoom(TPoint Pos, double ZoomRate, bool ChangeUnits=true);
   bool Zoom(double x, double y, double xZoomRate, double yZoomRate, bool ChangeUnits=true);
   bool Zoom(double ZoomRate, bool ChangeUnits=true);
@@ -484,11 +504,12 @@ public:		// User declarations
   void ShowStatusMessage(const String &Str, bool AutoHint=false);
   void SetStatusIcon(int AStatusIcon);
 
+  void RecreateTreeView();
   void UpdateTreeView(const boost::shared_ptr<TGraphElem> &Selected = boost::shared_ptr<TGraphElem>());
 
   void SetCross(int X, int Y);
   void SetCrossPos(long double x, long double y);
-  void ChangeLanguage(const String &Ext);
+  void ChangeLanguage(const String &Ext, bool Force=false);
   void ActivateOleUserInterface();
 
   boost::shared_ptr<TGraphElem> GetGraphElem(TTreeNode *Node);
@@ -496,12 +517,17 @@ public:		// User declarations
   void __fastcall UpdateEval();
   void __fastcall BeginUpdate();
   void __fastcall EndUpdate();
+  void __fastcall ConsoleFormShown(TObject*);
 
   bool LoadFromFile(const String &FileName, bool AddToRecent = true, bool ShowErrorMessages = true);
   void LoadDefault();
+  void RecreateToolBar();
+  void ScaleImages();
 
-  void SetSelected(const TGraphElemPtr &Elem) {TreeView->Selected = GetNode(Elem);}
-  TGraphElemPtr GetSelected() {return GetGraphElem(TreeView->Selected);}
+  void SetSelected(const TGraphElemPtr &Elem);
+  TGraphElemPtr GetSelected() {return Selected;}
+
+  inline bool ForceUndo() {bool OldUndo = UndoFlag; UndoFlag = true; return !OldUndo;}
 };
 
 //---------------------------------------------------------------------------

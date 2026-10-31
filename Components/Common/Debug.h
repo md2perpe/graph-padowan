@@ -13,7 +13,7 @@ extern const TNameValue HResultList[];
 
 //Defines and functions used for logging OLE calls
 #ifdef _DEBUG
-  #define DEBUG_CALL() AddToDebugLog("\n" __FUNC__)
+  #define DEBUG_CALL() AddToDebugLog(AnsiString("\n") + __FUNC__)
   #define LOG_RESULT(x) DebugLogReturn(HResultList, x)
   #define LOG_ARG(x) AddToDebugLog(AnsiString("(") + x + ")")
   #define LOG_DATA(x) AddToDebugLog(AnsiString(", [") + x + "]")

@@ -17,23 +17,24 @@
 class TConfigFile;
 namespace Graph
 {
+typedef std::map<std::wstring, double> TDefaultsMap;
 struct TUserModel
 {
   std::wstring Model;
-  std::vector<std::pair<std::wstring, std::wstring> > Defaults;
+  TDefaultsMap Defaults;
 };
 
 typedef std::map<std::wstring, TUserModel> TUserModels;
 
 typedef bool (__closure *TAbortUpdateEvent)();
 
-
 class TData
 {
   mutable bool Modified;
+  mutable bool FNeedDrawing;
   mutable std::wstring GrfName;
   TAbortUpdateEvent OnAbortUpdate;
-  boost::shared_ptr<TTopGraphElem> TopElem;
+  TTopGraphElemPtr TopElem;
 
   void SaveData(TConfigFile &IniFile) const;
   const TData& operator=(const TData&);             //Not implemented
@@ -47,7 +48,7 @@ public:
   TUserModels UserModels;
   TCustomFunctions CustomFunctions;
   TAnimationInfo AnimationInfo;
-  std::map<std::wstring,std::wstring> PluginData;
+  TStringMap PluginData;
 
   TData();
   TData(const TData &OldData);
@@ -66,14 +67,17 @@ public:
   void PreprocessGrfFile(TConfigFile &IniFile);
   void Import(const std::wstring &FileName);
   void Import(TConfigFile &ConfigFile);
+  void ImportPointSeries(std::istream &Stream, char Separator);
   bool ImportPointSeries(const std::wstring &FileName, char Separator);
   std::wstring CreatePointSeriesDescription() const;
   boost::shared_ptr<TTextLabel> FindLabel(int X, int Y) const; //NULL indicates not label found
   void DeleteLabel(int Index);
   void ImportUserModels(const std::wstring &Str);
   std::wstring ExportUserModels() const;
-  void SetModified();
+  void SetModified() const {Modified = true; FNeedDrawing = true;}
   bool IsModified() const {return Modified;}
+  void SetNeedDrawing(bool Value=true) {FNeedDrawing = Value;}
+  bool NeedDrawing() {return FNeedDrawing;}
   double FindInterception(const TBaseFuncType *Func, int X, int Y) const;
 
   static void Delete(const TGraphElemPtr &Elem);
@@ -84,7 +88,7 @@ public:
   unsigned ElemCount() const {return TopElem->ChildCount();}
   TGraphElemPtr GetElem(unsigned Index) const;
   boost::shared_ptr<TBaseFuncType> GetFuncFromIndex(unsigned Index) const;
-  const boost::shared_ptr<TTopGraphElem>& GetTopElem() const {return TopElem;}
+  const TTopGraphElemPtr& GetTopElem() const {return TopElem;}
   TGraphElemPtr Back() const {return GetElem(ElemCount()-1);}
 
   const std::wstring& GetFileName() const {return GrfName;}
@@ -95,6 +99,11 @@ public:
   long double Calc(const std::wstring &Str) const
   {
     return Eval(Str, CustomFunctions.SymbolList, Axes.Trigonometry);
+  }
+
+  long double CalcNoThrow(const std::wstring &Str) const
+  {
+    return Func32::EvalNoThrow(Str, CustomFunctions.SymbolList, Axes.Trigonometry);
   }
 
   Func32::TComplex CalcComplex(const std::wstring &Str) const
@@ -111,6 +120,32 @@ enum TTraceType {ttTrace, ttIntersection, ttXAxis, ttYAxis, ttExtremeX, ttExtrem
 double TraceFunction(const TBaseFuncType *Func, TTraceType TraceType, int X, int Y, const TData &Data, const class TDraw &Draw);
 bool ExportPointSeries(const TPointSeries *Series, const wchar_t *FileName, char Delimiter, char DecimalSeparator);
 double FindNearestPoint(const TBaseFuncType *Func, int X, int Y);
+
+//! This is compatible with Func32::TTrendType
+enum TTrendType
+{
+  ttLinear,       //!< Linear trend (y = a*x + b)
+  ttLogarithmic,  //!< Logarithmic trend (y = a*ln(x) + b)
+  ttPolynomial,   //!< Polynomial trend (y = an*x^n + ... + a3*x^3 + a2*x^2 + a1*x + a0). The order is given as argument to TrendLine().
+  ttPower,        //!< Power trend (y = a*x^b)
+  ttExponential,  //!< Exponential trend (y = a*b^x)
+  ttMovingAverage,
+  ttUserModel
+};
+
+struct TTrendData
+{
+  TTrendType Type;
+  unsigned Order; //Only used by Polynomial
+  double Intercept; //Not used by UserDefined and MovingAverage
+  unsigned Period; //Only use by MovingAverage
+
+  std::wstring Model;    //Only used by UserModel
+  TDefaultsMap Defaults; //Only used by UserModel
+  TTrendData() : Type(ttLinear), Order(2), Intercept(NAN), Period(1) {}
+};
+
+TBaseFuncPtr CreateTrendline(const TPointSeries *Series, const TTrendData &Trend);
 } //namespace Graph
 using namespace Graph;
 //---------------------------------------------------------------------------

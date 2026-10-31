@@ -16,16 +16,26 @@
 #pragma link "IRichEdit"
 #pragma link "ExtColorBox"
 #pragma link "SymbolDialog"
+#pragma link "ScaledImageList"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TForm6::TForm6(TComponent* Owner, TVclObject<TFont> DefaultFont, const String &HostApp, const String &HostDoc)
   : TForm(Owner)
 {
-  ScaleForm(this);
   TranslateProperties(this);
   SetAccelerators(this);
+  ScaleForm(this);
   TranslateStrings(ColorBox1->Items);
   FlipForm(this);
+
+  ScaledImageList1->SetSize(GuiScale(16), GuiScale(16));
+  if(NeedScaling())
+  {
+    ToolBar1->Indent = GuiScale(ToolBar1->Indent);
+    ToolBar1->Height = GuiScale(25);
+    ToolBar1->ButtonWidth = GuiScale(23);
+    ToolBar1->ButtonHeight = GuiScale(22);
+  }
 
   OrgComboBox1WindowProc = ComboBox1->WindowProc;
   ComboBox1->WindowProc = ComboBox1Proc;
@@ -93,10 +103,12 @@ void __fastcall TForm6::ComboBoxKeyDown(TObject *Sender, WORD &Key,
   else if(Key == VK_ESCAPE)
   {
     if(TCustomCombo *ComboBox = dynamic_cast<TCustomCombo*>(Sender))
+    {
       if(ComboBox->DroppedDown)
         ComboBox->DroppedDown = false;
       else
         Button2->Click();
+    }
   }
 }
 //---------------------------------------------------------------------------
@@ -236,6 +248,7 @@ void TForm6::UpdateFont()
     case pfaLeft:    ToolButton5->Down = true; ToolButton6->Down = false; ToolButton7->Down = false; break;
     case pfaCenter:  ToolButton6->Down = true; ToolButton5->Down = false; ToolButton7->Down = false; break;
     case pfaRight:   ToolButton7->Down = true; ToolButton5->Down = false; ToolButton6->Down = false; break;
+    case pfaJustify: ToolButton5->Down = false; ToolButton6->Down = false; ToolButton7->Down = false; break;
   }
 
   ToolButton9->Down = IRichEdit1->TextFormat.GetSuperscript();
@@ -295,7 +308,14 @@ void __fastcall TForm6::Popup_PasteSpecialClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm6::Popup_InsertObjectClick(TObject *Sender)
 {
-  IRichEdit1->InsertObject();
+  try
+  {
+    IRichEdit1->InsertObject();
+  }
+  catch(Exception &E)
+  {
+    ShowErrorMsg(E);
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm6::Popup_EditObjectClick(TObject *Sender)
@@ -357,7 +377,14 @@ void __fastcall TForm6::ToolButton11Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm6::ToolButton13Click(TObject *Sender)
 {
-  IRichEdit1->InsertObject();
+  try
+  {
+    IRichEdit1->InsertObject();
+  }
+  catch(Exception &E)
+  {
+    ShowErrorMsg(E);
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm6::SymbolDialog1InsertWideChar(TSymbolDialog *Sender,
@@ -401,4 +428,5 @@ bool TForm6::GetOleLink()
   return IRichEdit1->HasOleLink();
 }
 //---------------------------------------------------------------------------
+
 

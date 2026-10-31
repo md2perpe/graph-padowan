@@ -22,7 +22,7 @@ __fastcall TTanFrame::TTanFrame(TComponent* Owner)
 {
 }
 //---------------------------------------------------------------------------
-void TTanFrame::EvalTan(const TTan *Tan)
+void TTanFrame::EvalTan(const TTangent *Tan)
 {
   Edit2->Text = "";
 
@@ -44,9 +44,9 @@ void TTanFrame::EvalSeries(const TPointSeries *Series)
   Form1->SetCrossPos(Coord.x, Coord.y);
 }
 //---------------------------------------------------------------------------
-void TTanFrame::SetPoint(const TTan *Tan, int X)
+void TTanFrame::SetPoint(const TTangent *Tan, int X)
 {
-  Edit1->Text = RoundToStr(Range(Tan->From.Value, Form1->Draw.xCoord(X), Tan->To.Value));
+  Edit1->Text = RoundToStr(Range(Tan->GetFrom().Value, Form1->Draw.xCoord(X), Tan->GetTo().Value));
 }
 //---------------------------------------------------------------------------
 void TTanFrame::SetPoint(const TPointSeries *Series, int X)
@@ -56,7 +56,7 @@ void TTanFrame::SetPoint(const TPointSeries *Series, int X)
 //---------------------------------------------------------------------------
 void TTanFrame::Eval(const TGraphElem *Elem)
 {
-  if(const TTan *Tan = dynamic_cast<const TTan*>(Elem))
+  if(const TTangent *Tan = dynamic_cast<const TTangent*>(Elem))
     EvalTan(Tan);
   else if(const TPointSeries *Series = dynamic_cast<const TPointSeries*>(Elem))
     EvalSeries(Series);
@@ -64,7 +64,7 @@ void TTanFrame::Eval(const TGraphElem *Elem)
 //---------------------------------------------------------------------------
 void TTanFrame::SetPoint(const TGraphElem *Elem, int X, int Y)
 {
-  if(const TTan *Tan = dynamic_cast<const TTan*>(Elem))
+  if(const TTangent *Tan = dynamic_cast<const TTangent*>(Elem))
     SetPoint(Tan, X);
   else if(const TPointSeries *Series = dynamic_cast<const TPointSeries*>(Elem))
     SetPoint(Series, X);

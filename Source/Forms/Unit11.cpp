@@ -10,10 +10,13 @@
 #include "Graph.h"
 #pragma hdrstop
 #include "Unit11.h"
+#include "PyGraph.h"
 //---------------------------------------------------------------------------
 #pragma link "ShadeSelect"
 #pragma link "MyEdit"
 #pragma link "ExtColorBox"
+#pragma link "LineSelect"
+#pragma link "GridPanelEx"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TForm11::TForm11(TComponent* Owner, TData &AData)
@@ -22,9 +25,10 @@ __fastcall TForm11::TForm11(TComponent* Owner, TData &AData)
   Translate();
   ScaleForm(this);
 
-  ShadeSelect1->ShadeStyle = static_cast<TBrushStyle>(Property.DefaultRelation.Style);
-  ExtColorBox1->Selected = Property.DefaultRelation.Color;
-  UpDown1->Position = Property.DefaultRelation.Size;
+  ShadeSelect1->ShadeStyle = static_cast<TBrushStyle>(Options.DefaultRelation.Style);
+  LineSelect1->LineStyle = psSolid;
+  ExtColorBox1->Selected = Options.DefaultRelation.Color;
+  UpDown1->Position = Options.DefaultRelation.Size;
   FlipForm(this);
 }
 //---------------------------------------------------------------------------
@@ -55,7 +59,7 @@ int TForm11::EditRelation(const boost::shared_ptr<TRelation> &ARelation)
   UpDown1->Position = Relation->GetSize();
   ExtColorBox1->Selected = Relation->GetColor();
   ShadeSelect1->ShadeStyle = Relation->GetBrushStyle();
-
+  LineSelect1->LineStyle = Relation->GetLineStyle();
   return ShowModal();
 }
 //---------------------------------------------------------------------------
@@ -93,14 +97,16 @@ void __fastcall TForm11::Button1Click(TObject *Sender)
       NewRelation->SetSize(1);
     NewRelation->SetColor(ExtColorBox1->Selected);
     NewRelation->SetBrushStyle(ShadeSelect1->ShadeStyle);
+    NewRelation->SetLineStyle(LineSelect1->LineStyle);
 
     Data.AbortUpdate();
     if(Relation)
     {
       NewRelation->SetVisible(Relation->GetVisible());
       NewRelation->SetShowInLegend(Relation->GetShowInLegend());
+      NewRelation->Swap(*Relation);
       UndoList.Push(TUndoChange(Relation, NewRelation));
-      Data.Replace(Relation, NewRelation);
+      Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(Relation));
     }
     else
     {
@@ -109,7 +115,7 @@ void __fastcall TForm11::Button1Click(TObject *Sender)
     }
     Data.SetModified();
 
-    Property.DefaultRelation.Set(ShadeSelect1->ShadeStyle, ExtColorBox1->Selected, Edit4->Text.ToInt());
+    Options.DefaultRelation.Set(ShadeSelect1->ShadeStyle, ExtColorBox1->Selected, Edit4->Text.ToInt());
     ModalResult = mrOk;
   }
   catch(Func32::EFuncError &E)

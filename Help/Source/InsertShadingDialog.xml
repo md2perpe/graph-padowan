@@ -23,7 +23,7 @@
 	<simplesect>
 		<title>Shading</title>
 		<para>
-  		<graphic fileref="DialogShade1.png" align="center" scale="80"/>
+  		<graphic fileref="DialogShading1.png" align="center" scale="80"/>
 		</para>
 		<para>
 			In the <guilabel>Shading</guilabel> tab you can choose between the following types of shadings:
@@ -111,7 +111,7 @@
 			At the <guilabel>Options</guilabel> tab shown below, you may change the options for the shading.
 		</para>
 
-		<graphic fileref="DialogShade2.png" align="center" scale="60"/>
+		<graphic fileref="DialogShading2.png" align="center" scale="60"/>
 
 		<variablelist>
 			<varlistentry>
@@ -180,7 +180,7 @@
 			The dialog with the <guilabel>2nd function</guilabel> tab is shown below.
 		</para>
 
-		<graphic fileref="DialogShade3.png" align="center" scale="60"/>
+		<graphic fileref="DialogShading3.png" align="center" scale="60"/>
 
 		<variablelist>
 			<varlistentry>
@@ -189,9 +189,7 @@
 					<para>
 						This is used to select the interval for the second function,
 						just like you selected the interval for the first function in the <guilabel>Options</guilabel> tab.
-						This is only available for parametric functions and not for standard functions.
-						For standard functions the interval for the second function is always the same as the interval for the first function.
-						If you enter neither a start nor an end of interval for a parametric function, the values for the first function will be used for the second function as well.
+						If you enter neither a start nor an end of interval, the values for the first function will be used for the second function as well.
 					</para>
 				</listitem>
 			</varlistentry>

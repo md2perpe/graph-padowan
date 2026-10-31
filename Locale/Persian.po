@@ -1,15 +1,48 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-07 21:20+0100\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:23+0200\n"
 "Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.2.1\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. Form1..Caption
+#, fuzzy
+msgid "Plugin Manager"
+msgstr "شاخه های ورودی"
+
+#. Form1..ListView......Caption
+#, fuzzy
+msgid "Plugin name"
+msgstr "شاخه های ورودی"
+
+#. Form1..ListView......Caption
+msgid "Version"
+msgstr ""
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "وارد کردن"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr ""
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "بستن"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -74,7 +107,7 @@ msgstr "ها ، بالای تصویر قرار بده y برچسب را در س�
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -137,10 +170,6 @@ msgstr "قرار دادن در داخل پرونده"
 msgid "Export the selected point series to a file."
 msgstr "صدور دنباله نقاط انتخاب شده به یک پرونده"
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "وارد کردن"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -170,7 +199,7 @@ msgstr "ویرایش"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -229,7 +258,6 @@ msgstr "اینترنت"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -407,11 +435,11 @@ msgstr "رسم خط مماس یا میانه"
 msgid "Insert a tangent or normal for the selected function."
 msgstr "رسم خط مماس یا میانه برای تابع مشخص شده"
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "سایه گذاری..."
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "سایه گذاری برای تابع مشخص شده"
 
@@ -666,16 +694,6 @@ msgstr "اهداء"
 msgid "Donate money to the project."
 msgstr "اهداء پول به پروژه"
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "نکته روز"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "نمایش نکته روز"
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "پشتیبانی"
@@ -852,28 +870,6 @@ msgstr "پایین چپ"
 msgid "Show the legend in the bottom left corner."
 msgstr "نمایش اختصارات در گوشه پایین و چپ."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "بستن"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "نکته بعدی"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "نکته قبلی"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "نمایش نکات در شروع"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "آیا می دانستید..."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "درج رابطه"
@@ -952,7 +948,7 @@ msgstr "نوشتن یک متن توضیحی برای نشان دادن لیست 
 msgid "Properties"
 msgstr "خصوصیات"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -960,7 +956,36 @@ msgstr "خصوصیات"
 msgid "Style:"
 msgstr "قلم:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "انتخاب قلم استفاده شده برای رسم نا مساوی. برای تساوی ها استفاده نمی شود."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "انتخاب رنگ برای رسم رابطه."
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "عرض:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "نوع خط:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+#, fuzzy
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "انتخاب قلم استفاده شده برای رسم نا مساوی. برای تساوی ها استفاده نمی شود."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -971,24 +996,7 @@ msgstr "قلم:"
 msgid "Color:"
 msgstr "رنگ:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "عرض:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "انتخاب قلم استفاده شده برای رسم نا مساوی. برای تساوی ها استفاده نمی شود."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "انتخاب رنگ برای رسم رابطه."
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "عرض بر حسب پیکسل برای خط تساوی یا خط مرزی نا مساوی."
 
@@ -1034,12 +1042,6 @@ msgstr "نوشتن یک متن توضیحی برای نشان دادن در اخ
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "خصوصیات گراف"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "نوع خط:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1354,10 +1356,6 @@ msgstr "مشخص کردن مختصات هر نقطه."
 msgid "Show coordinates"
 msgstr "نمایش مختصات"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "انتخاب قلم برای مختصات."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "انتخاب محل نمایش مختصات."
@@ -1397,6 +1395,10 @@ msgstr "پایین چپ"
 #, fuzzy
 msgid "Below Right"
 msgstr "پایین راست"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "انتخاب قلم برای مختصات."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1486,6 +1488,11 @@ msgstr "نمایش نوار های Y"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "تمام نوار های خطا درصد یکسانی از مختصات Y هستند."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "اعمال تغییرات"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1744,10 +1751,6 @@ msgstr "بازه هاشور زنی برای تابع دوم"
 msgid "Custom functions/constants"
 msgstr "توابع و ثابت های سفارشی"
 
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "اعمال تغییرات"
-
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
 msgstr "نام ها"
@@ -1948,8 +1951,9 @@ msgid "The newest version as well as the source code are available at: %s"
 msgstr ""
 
 #. Form2..Panel1..LinkLabel2..Caption
-msgid "Email: %s"
-msgstr ""
+#, fuzzy
+msgid "Support: %s"
+msgstr "پشتیبانی"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2157,28 +2161,6 @@ msgstr "نمایش خطوط عمودی شبکه."
 msgid "Show grid"
 msgstr "نمایش شبکه"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "نمایش برچسب در سمت راست ناحیه تصویری بالای محور x."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "برچسب:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "برچسب محور را اینجا ویرایش کنید."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "محور x عبور می کند از y="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "محور x، محور y را در این مقدار قطع می کند."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "استفاده از مقیاس لگاریتمی روی محور x."
@@ -2206,6 +2188,28 @@ msgstr "نمایش واحد ها روی محور انتخاب شده بصورت 
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox18..Caption
 msgid "Show as a multiple of π"
 msgstr ""
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "برچسب محور را اینجا ویرایش کنید."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "نمایش برچسب در سمت راست ناحیه تصویری بالای محور x."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "برچسب:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "محور x، محور y را در این مقدار قطع می کند."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "محور x عبور می کند از y="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2238,18 +2242,6 @@ msgstr "نمایش نشانه های تیک روی محور y."
 msgid "Show horizontal grid lines."
 msgstr "نمایش خطوط افقی شبکه."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "نمایش برچسب در بالای ناحیه تصویری سمت راست محور y."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "محور x عبور می کند از y="
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "محور y، محور x را در این مقدار قطع می کند."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "استفاده از مقیاس لگاریتمی روی محور y."
@@ -2257,6 +2249,18 @@ msgstr "استفاده از مقیاس لگاریتمی روی محور y."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "نمایش واحد ها روی محور y."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "محور x عبور می کند از y="
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "محور y، محور x را در این مقدار قطع می کند."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "نمایش برچسب در بالای ناحیه تصویری سمت راست محور y."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2306,10 +2310,6 @@ msgstr "درجه"
 msgid "Enter a title to show above the coordinate system."
 msgstr "وارد کردن عنوان برای نمایش در بالای دستگاه مختصات."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "انتخاب قلم برای عنوان."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "انتخاب مکان قرار دادن اختصارات."
@@ -2325,6 +2325,10 @@ msgstr "انتخاب اعداد مختلط برای محاسبات. توجه، �
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "محاسبه با اعداد مختلط"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "انتخاب قلم برای عنوان."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2375,15 +2379,15 @@ msgstr "برچسب قلم:"
 msgid "Legend font:"
 msgstr "قلم اختصارات:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "انتخاب قلم مورد استفاده برای نمایش برچسب روی محور ها."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "انتخاب قلم مورد استفاده برای نمایش اعداد روی محورها."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "انتخاب قلم مورد استفاده برای نمایش متن علایم."
 
@@ -2560,47 +2564,47 @@ msgstr "اندازه متن."
 msgid "Text string"
 msgstr "رشته متن"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "درج نماد (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 msgid "Insert object."
 msgstr "درج شی ء"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "ضخیم (Ctrl+B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "خوابیده (Ctrl+I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "خط زیرین (Ctrl+U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "خط میانی (Ctrl+S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "بالا نویس (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "زیر نویس (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "تراز به چپ (Ctrl+L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "وسط (Ctrl+E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "تراز به راست (Ctrl+R)"
 
@@ -2990,6 +2994,10 @@ msgstr ""
 msgid "An accurate result cannot be found."
 msgstr "نتیجه یک محاسبه سر ریز شده است."
 
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "محاسبه با شکست مواجه شد."
+
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "خطای داخلی. لطفا برنامه نویس را با حداکثر اطلاعات ممکن آگاه کنید."
 
@@ -3155,6 +3163,10 @@ msgstr ""
 msgid "Not enough memory to complete the operation."
 msgstr ""
 
+#, fuzzy
+msgid "Printing aborted!"
+msgstr "خطای چاپ"
+
 msgid "Confirm delete"
 msgstr "تایید حذف"
 
@@ -3246,7 +3258,8 @@ msgstr "ویرایش تابع"
 msgid "Edit tangent/normal"
 msgstr "ویرایش خط مماس یا میانه"
 
-msgid "Error processing file '%s' at line %s."
+#, fuzzy
+msgid "Error processing file at line %s."
 msgstr "خطا دز پردازش پرونده '%s' در خط %s."
 
 msgid "Edit text label"
@@ -3370,159 +3383,6 @@ msgstr "به نظر می رسد برنامه در یک حلقه بی پایان 
 msgid "Thread is not responding"
 msgstr "زیر برنامه جواب نمی دهد"
 
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "نکته روز می تواند اطلاعات زیادی را در مورد برنامه به شما بدهد که اکثر کاربران از آن اطلاع ندارند."
-
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr ""
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "شما می توانید نوار ابزار را با کلیک راست کردن بر روی آن و انتخاب \"سفارشی کردن نوار ابزار\" سفارشی کنید."
-
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "به جای حذف یک تابع می توانید آن را با انتخاب گزینه آن در لیست تابع نامرئی کنید."
-
-msgid "You can paste images into a text label."
-msgstr "شما می توانید تصاویر را در متن برچسب تابع درج کنید."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "متن برچسب می تواند شامل هر نوع شیء OLE باشد. برای مثال \"Microsoft Equation\" برای ویرایش یک برچسب در ناحیه ویرایش کلیک راست کرده و گزینه درج شیء را انتخاب کنید."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "شما می توانید نقاط را از یک دنباله نقاط به یک پرونده که خوانا توسط سایر برنامه ها، برای مثال \"Microsoft Excel\" خوانا باشد صادر کنید. برای ویرایش دنباله نقاط، نقاط را انتخاب کنید، بر روس آن کلیک راست کرده و گزینه\"صدور به\" را انتخاب کنید."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "یک خط عمودی در x=5 می تواند به عنوان تابع پارامتری x(t)=5، y(t)=t یا به عنوان رابطه ای از x=5  می تواند رسم شود."
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "شما می توانید از گزینه بزرگنمایی|مربع برای یکسان نمایش دادن مقیاس محور ها استفاده کنید. این گزینه به خصوص برای رسم دایره  توابع مشابه مفید است."
-
-msgid "You can find a list of all available functions in the help."
-msgstr "شما می توانید لیست تمامی توابع موجود را در پنجره کمکی بیابید."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "شما می توانید دو تابع را با استفاده از if، به یک تابع تبدیل کنید. برای مثال تابع f(x)=x برای x<1 و تابع f(x)=x^2 برای x>=1 می توانند به صورت تابع f(x)=if(x<1,x,x^2) نوشته شوند."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "شما می توانید محتویات پرونده دیگری از گراف را در دستگاه مختصات فعلی مورد استفاده وارد کنید. برای این کار از دستور پرونده|وارد کردن|پرونده گراف استفاده کنید."
-
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "در صورت انتخاب گزینه ذخیره به عنوان پیش فرض در پنجره محوذ ها تنظیمات فعلی به عنوان پیش فرض به هنگام ایجاد دستگاه های جدید استفاده می شوند."
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "در صورت پایین نگه داشتن کلید Ctrl شما میتوانید با کلید های جهتی دستگاه را به حرکت در آورید."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "در صورت پایین نگه داشتم کلید Ctrl شما می توانید از کلید های + و - برای بزرگنمایی و کوچکنمایی استفاده کنید."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "شما می توانید از دکمه چرخشی ماوس برای بزرگنمایی و یا کوچکنمایی در مکان، مکان نمای ماوس استفاده کنید."
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "اگر می خواهید بخشی در اختصارات نمایش داده نشود، می توانید روی بخش، از لیست تابع کلیک راست کرده و گزینه نمایش در صفحه را از انتخاب خارج کنید."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "در صورت تمایل برای نشان دادن محور ها در سمت چپ و پایین تصویر شما می توانید نوع محور ها را به صورت جعبه ای در برگه تنظیمات در پنجره محور ها انتخاب کنید."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "گراف می تواند دستگاه مختصات نمایش داده شده را با پنج قالب متفاوت ذخیره کند: bmp,emf,png,jpg, و pdf"
-
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "شما می توانید گزینه ویرایش|کپی تصویر را برای کپی کردن دستگاه مختصات و درج آن در برنامه دیگر استفاده کنید. برای مثال Microsoft Word. بعدا شما می توانید برای ویرایش تصویر در گراف روی تصویر در برنامه دیگر دوبار کلیک کنید."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "شما می توانید پرونده grf ذخیره شده را به عنوان یک نمونه جدید برای برنامه با دوبار کلیک روی آن در Explorer باز کنید."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "شما می توانید برای باز کردن  پرونده grf را از explorer گرفته و در نمونه باز برنامه گراف رها کنید."
-
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "گراف اندازه پنجره اصلی خود را بین اجرا ها نگه می دارد. این ویژگی را می توان در گزینه ها غیر فعال کرد."
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "محاسبه|جدول برای ایجاد یک جدول با مقادیر محاسبه برای یک تابع به کار می رود."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "بخشی از جدول محاسبه را می توان به یک پرونده صادر کرد با کلیک راست روی آن و انتخاب 'صدور به پرونده'. در دفعات دیگر این پرونده می تواند در برنامه هایی مانند Microsoft Excel باز شود."
-
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "داده های جدول محاسبه را می توان در برنامه دیگری مثل Mirosoft Excel کپی کرد."
-
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "داده های نقاط در دنباله نقاط را می توان در برنامه های دیگری مثل Microsoft Excel کپی کرد."
-
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "عناصر به عنوان تابع ها، دنباله های نقاط و غیره می توانند از یک پنجره برنامه در دیگری کپی شوند. برای این کار از گزینه ویرایش|کپی استفاده کنید."
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "شما همیشه می توانید آخرین کاری که انجام داده اید را لغو کنید. برای این کار از گزینه ویرایش|لغو استفاده کنید."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "در صورت استفاده نا درست از گزینه ویرایش|لغو شما می توانید از گزینه ویرایش|تکرار برای تکرار عملیات لغو شده استفاده کنید."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "در پنجره محور ها شما می توانید عنوانی به دستگاه مختصات اضافه کنید."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "شما می توانید دنباله نقاطی را از پرونده های ذخیره شده سایر برنامه ها مانند Microsoft Excel وارد کنید."
-
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "برای درج دنباله نقاط شما می توانید داده های خود را از برنامه هایی مانند Microsoft Excel کپی کرده و آنها را در شبکه ای در گراف درج کنید."
-
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "شما می توانید گزینه متمرکز کردن |متناسب کردن همه را بعد از تغییر دستگاه مختصات و مرئی کردن تمام تابع ها و دنباله نقاط انتخاب کنید."
-
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "شما می توانید گزینه متمرکز کردن |متناسب کردن را برای تغییر دستگاه مختصات و نمایش همه بخش های تابع یا نقطه انتخاب شده، انتخاب کنید."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "هنگامی که دکمه Shift را پایین نگه داشته اید می توانید دستگاه مختصات را با حرکت دادن ماوس جا به جا کنید."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "شما می توانید گزینه محاسبه|ارزیابس را برای پیدا کردن نقاط تقاطع بین توابع با محور ها و نقاط اکسترمم انتخاب کنید."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "شما می توانید نقاطی را به دنباله نقاط انتخاب شده اضافه کنید. برای این کار با پایین نگه داشتن کلید Ctrl بر روی تصویر کلیک کنید."
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "شما می توانید از یک رابطه برای رسم هر نا مساوی استفاده کنید. برای مثال sin(x^2) < cos(y^2)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "شما می توانید از یک رابطه برای رسم هر تساوی استفاده کنید. برای مثال x*sin x = y*cos y"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "عناصر (توابع، هاشور ها، برچسب ها، روابط و غیره) برای نمایش در لیست تابع در سمت چپ  به صورت یکسان رسم می شوند."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "برای انتقال دادن عنصر انتخابی در لیست تابع می توانید آن را با ماوس رها کنید یا با کلید های جهتی و پایین نگه داشتن Alt این کار را انجام دهید."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "برای نمایش توابع و سایر عناصر پشت محور ها می توانید عنصر بالای محور ها را در لیست تابع به سمت چپ حرکت دهید. برای حرکت هاشور ها و خط مماس ها باید توابع ضمیمه شده را حرکت دهید."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "متن برچسب سفارشی به محور ها ضمیمه می شود. برای این کار روی برچسب کلیک راست کرده و جایگاه انتخاب شده را از منوی متن انتخاب کنید."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "علائم و اختصارات می توانند به آزادی با ماوس حرکت کرده یا به یکی از چهار گوشه با کلیک راست روی آن و انتخاب جایگاه آن از روی منوی متن ضمیمه شود."
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "به جای شفاف کردن پش زمینه می توانید یک رنگ پس زمینه دلخواه برای برچسب ها انتخاب کنید. این کار برای برچسب های رسم شده زیر هاشور مفید است."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "در مکان هایی مانند دنباله نقاط، تنظیمات محور ها، بازه تابع و غیره شما می توانید عبارتی مانند pi/4 را به جای اعداد به کار برید."
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "شما می توانید ثابت اختیاری را در گزینه تابع|تابع سفارشی برای استفاده از توابع، دنباله نقاط و غیره انتخاب کنید. برای مثال g=9.80665, R=8.31"
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "شما می توانید تابع سفارشی خود را در گزینه تابع|توابع سفارشی برای رسم توابع، روابط و غیره استفاده کنید. برای مثال sinc(x)=if(x=0, 0, sin(x)/x)"
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "در پنجره ذخیره به عنوان تصویر گزینه ای وجود دارد که کیفیت تصویر را مشخص می کند. این ویژگی به طور خاص برای ذخیره تصاویر با کیفیت بالا استفاده می شود."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "دنباله نقاط دارای نشان گر جهت هستند. دنباله نقاط دارای نشانگر جهت و خطوط بین این نقاط برای نمایش بردار ها استفاده می شوند."
-
 msgid "Insert symbol"
 msgstr "درج نماد"
 
@@ -3588,22 +3448,6 @@ msgstr "توضیح:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "انتخاب چاپگر مورد استفاده. دکمه خصوصیات برای تغییر تنظیمات پیشرفته چاپگر استفاده می شود."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "انتخاب چاپ رنگی (یا سیاه و سفید در صورت رنگی نبودن چاپگر) یا تبدیل همه رنگ ها به سیاه."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "چاپ خروجی"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "رنگ"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "سیاه و سفید"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "موقعیت (میلیمتر)"
@@ -3640,6 +3484,242 @@ msgstr "انتخاب تعداد رونوشت ها برای چاپ."
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "وارد کردن درصد اندازه اصلی."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+#, fuzzy
+msgid "Install failed"
+msgstr "نصب برای همه کاربران"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:5
+#, fuzzy
+msgid "Show Console"
+msgstr "نمایش راهنما"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show Python interpreter"
+msgstr "مترجم Python"
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show the Python interpreter window."
+msgstr "مترجم Python"
+
+#~ msgid "Tip of the day"
+#~ msgstr "نکته روز"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "نمایش نکته روز"
+
+#~ msgid "Next tip"
+#~ msgstr "نکته بعدی"
+
+#~ msgid "Previous tip"
+#~ msgstr "نکته قبلی"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "نمایش نکات در شروع"
+
+#~ msgid "Did you know..."
+#~ msgstr "آیا می دانستید..."
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "نکته روز می تواند اطلاعات زیادی را در مورد برنامه به شما بدهد که اکثر کاربران از آن اطلاع ندارند."
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "شما می توانید نوار ابزار را با کلیک راست کردن بر روی آن و انتخاب \"سفارشی کردن نوار ابزار\" سفارشی کنید."
+
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "به جای حذف یک تابع می توانید آن را با انتخاب گزینه آن در لیست تابع نامرئی کنید."
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "شما می توانید تصاویر را در متن برچسب تابع درج کنید."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "متن برچسب می تواند شامل هر نوع شیء OLE باشد. برای مثال \"Microsoft Equation\" برای ویرایش یک برچسب در ناحیه ویرایش کلیک راست کرده و گزینه درج شیء را انتخاب کنید."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "شما می توانید نقاط را از یک دنباله نقاط به یک پرونده که خوانا توسط سایر برنامه ها، برای مثال \"Microsoft Excel\" خوانا باشد صادر کنید. برای ویرایش دنباله نقاط، نقاط را انتخاب کنید، بر روس آن کلیک راست کرده و گزینه\"صدور به\" را انتخاب کنید."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "یک خط عمودی در x=5 می تواند به عنوان تابع پارامتری x(t)=5، y(t)=t یا به عنوان رابطه ای از x=5  می تواند رسم شود."
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "شما می توانید از گزینه بزرگنمایی|مربع برای یکسان نمایش دادن مقیاس محور ها استفاده کنید. این گزینه به خصوص برای رسم دایره  توابع مشابه مفید است."
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "شما می توانید لیست تمامی توابع موجود را در پنجره کمکی بیابید."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "شما می توانید دو تابع را با استفاده از if، به یک تابع تبدیل کنید. برای مثال تابع f(x)=x برای x<1 و تابع f(x)=x^2 برای x>=1 می توانند به صورت تابع f(x)=if(x<1,x,x^2) نوشته شوند."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "شما می توانید محتویات پرونده دیگری از گراف را در دستگاه مختصات فعلی مورد استفاده وارد کنید. برای این کار از دستور پرونده|وارد کردن|پرونده گراف استفاده کنید."
+
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "در صورت انتخاب گزینه ذخیره به عنوان پیش فرض در پنجره محوذ ها تنظیمات فعلی به عنوان پیش فرض به هنگام ایجاد دستگاه های جدید استفاده می شوند."
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "در صورت پایین نگه داشتن کلید Ctrl شما میتوانید با کلید های جهتی دستگاه را به حرکت در آورید."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "در صورت پایین نگه داشتم کلید Ctrl شما می توانید از کلید های + و - برای بزرگنمایی و کوچکنمایی استفاده کنید."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "شما می توانید از دکمه چرخشی ماوس برای بزرگنمایی و یا کوچکنمایی در مکان، مکان نمای ماوس استفاده کنید."
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "اگر می خواهید بخشی در اختصارات نمایش داده نشود، می توانید روی بخش، از لیست تابع کلیک راست کرده و گزینه نمایش در صفحه را از انتخاب خارج کنید."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "در صورت تمایل برای نشان دادن محور ها در سمت چپ و پایین تصویر شما می توانید نوع محور ها را به صورت جعبه ای در برگه تنظیمات در پنجره محور ها انتخاب کنید."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "گراف می تواند دستگاه مختصات نمایش داده شده را با پنج قالب متفاوت ذخیره کند: bmp,emf,png,jpg, و pdf"
+
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "شما می توانید گزینه ویرایش|کپی تصویر را برای کپی کردن دستگاه مختصات و درج آن در برنامه دیگر استفاده کنید. برای مثال Microsoft Word. بعدا شما می توانید برای ویرایش تصویر در گراف روی تصویر در برنامه دیگر دوبار کلیک کنید."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "شما می توانید پرونده grf ذخیره شده را به عنوان یک نمونه جدید برای برنامه با دوبار کلیک روی آن در Explorer باز کنید."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "شما می توانید برای باز کردن  پرونده grf را از explorer گرفته و در نمونه باز برنامه گراف رها کنید."
+
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "گراف اندازه پنجره اصلی خود را بین اجرا ها نگه می دارد. این ویژگی را می توان در گزینه ها غیر فعال کرد."
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "محاسبه|جدول برای ایجاد یک جدول با مقادیر محاسبه برای یک تابع به کار می رود."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "بخشی از جدول محاسبه را می توان به یک پرونده صادر کرد با کلیک راست روی آن و انتخاب 'صدور به پرونده'. در دفعات دیگر این پرونده می تواند در برنامه هایی مانند Microsoft Excel باز شود."
+
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "داده های جدول محاسبه را می توان در برنامه دیگری مثل Mirosoft Excel کپی کرد."
+
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "داده های نقاط در دنباله نقاط را می توان در برنامه های دیگری مثل Microsoft Excel کپی کرد."
+
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "عناصر به عنوان تابع ها، دنباله های نقاط و غیره می توانند از یک پنجره برنامه در دیگری کپی شوند. برای این کار از گزینه ویرایش|کپی استفاده کنید."
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "شما همیشه می توانید آخرین کاری که انجام داده اید را لغو کنید. برای این کار از گزینه ویرایش|لغو استفاده کنید."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "در صورت استفاده نا درست از گزینه ویرایش|لغو شما می توانید از گزینه ویرایش|تکرار برای تکرار عملیات لغو شده استفاده کنید."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "در پنجره محور ها شما می توانید عنوانی به دستگاه مختصات اضافه کنید."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "شما می توانید دنباله نقاطی را از پرونده های ذخیره شده سایر برنامه ها مانند Microsoft Excel وارد کنید."
+
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "برای درج دنباله نقاط شما می توانید داده های خود را از برنامه هایی مانند Microsoft Excel کپی کرده و آنها را در شبکه ای در گراف درج کنید."
+
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "شما می توانید گزینه متمرکز کردن |متناسب کردن همه را بعد از تغییر دستگاه مختصات و مرئی کردن تمام تابع ها و دنباله نقاط انتخاب کنید."
+
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "شما می توانید گزینه متمرکز کردن |متناسب کردن را برای تغییر دستگاه مختصات و نمایش همه بخش های تابع یا نقطه انتخاب شده، انتخاب کنید."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "هنگامی که دکمه Shift را پایین نگه داشته اید می توانید دستگاه مختصات را با حرکت دادن ماوس جا به جا کنید."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "شما می توانید گزینه محاسبه|ارزیابس را برای پیدا کردن نقاط تقاطع بین توابع با محور ها و نقاط اکسترمم انتخاب کنید."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "شما می توانید نقاطی را به دنباله نقاط انتخاب شده اضافه کنید. برای این کار با پایین نگه داشتن کلید Ctrl بر روی تصویر کلیک کنید."
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "شما می توانید از یک رابطه برای رسم هر نا مساوی استفاده کنید. برای مثال sin(x^2) < cos(y^2)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "شما می توانید از یک رابطه برای رسم هر تساوی استفاده کنید. برای مثال x*sin x = y*cos y"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "عناصر (توابع، هاشور ها، برچسب ها، روابط و غیره) برای نمایش در لیست تابع در سمت چپ  به صورت یکسان رسم می شوند."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "برای انتقال دادن عنصر انتخابی در لیست تابع می توانید آن را با ماوس رها کنید یا با کلید های جهتی و پایین نگه داشتن Alt این کار را انجام دهید."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "برای نمایش توابع و سایر عناصر پشت محور ها می توانید عنصر بالای محور ها را در لیست تابع به سمت چپ حرکت دهید. برای حرکت هاشور ها و خط مماس ها باید توابع ضمیمه شده را حرکت دهید."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "متن برچسب سفارشی به محور ها ضمیمه می شود. برای این کار روی برچسب کلیک راست کرده و جایگاه انتخاب شده را از منوی متن انتخاب کنید."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "علائم و اختصارات می توانند به آزادی با ماوس حرکت کرده یا به یکی از چهار گوشه با کلیک راست روی آن و انتخاب جایگاه آن از روی منوی متن ضمیمه شود."
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "به جای شفاف کردن پش زمینه می توانید یک رنگ پس زمینه دلخواه برای برچسب ها انتخاب کنید. این کار برای برچسب های رسم شده زیر هاشور مفید است."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "در مکان هایی مانند دنباله نقاط، تنظیمات محور ها، بازه تابع و غیره شما می توانید عبارتی مانند pi/4 را به جای اعداد به کار برید."
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "شما می توانید ثابت اختیاری را در گزینه تابع|تابع سفارشی برای استفاده از توابع، دنباله نقاط و غیره انتخاب کنید. برای مثال g=9.80665, R=8.31"
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "شما می توانید تابع سفارشی خود را در گزینه تابع|توابع سفارشی برای رسم توابع، روابط و غیره استفاده کنید. برای مثال sinc(x)=if(x=0, 0, sin(x)/x)"
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "در پنجره ذخیره به عنوان تصویر گزینه ای وجود دارد که کیفیت تصویر را مشخص می کند. این ویژگی به طور خاص برای ذخیره تصاویر با کیفیت بالا استفاده می شود."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "دنباله نقاط دارای نشان گر جهت هستند. دنباله نقاط دارای نشانگر جهت و خطوط بین این نقاط برای نمایش بردار ها استفاده می شوند."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "انتخاب چاپ رنگی (یا سیاه و سفید در صورت رنگی نبودن چاپگر) یا تبدیل همه رنگ ها به سیاه."
+
+#~ msgid "Print output"
+#~ msgstr "چاپ خروجی"
+
+#~ msgid "Color"
+#~ msgstr "رنگ"
+
+#~ msgid "Black && white"
+#~ msgstr "سیاه و سفید"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "آمیختن پرونده های *.grf با برنامه گراف."

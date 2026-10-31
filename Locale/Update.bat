@@ -1,3 +1,3 @@
 @echo off
-c:\python32\python.exe Update.py -nomerge
+py Update.py -nomerge
 pause

@@ -10,14 +10,13 @@
 #include <vector>
 #include <memory>
 #include <StrUtils.hpp>
-#include <Shlwapi.h>
 #include "ICompCommon.h"
 #pragma package(smart_init)
-#pragma link "Shlwapi.lib"
-
-//Header that isn't included correct
-#define SHARD_PATH     0x00000002L
-SHSTDAPI_(void) SHAddToRecentDocs(UINT uFlags, LPCVOID pv);
+#ifdef _WIN64
+#pragma link "shlwapi.a"
+#else
+#pragma link "shlwapi.lib"
+#endif
 static TRegisterClass Dummy(__classid(TRecent));
 
 class TOpenFileAction : public TCustomAction
@@ -119,7 +118,7 @@ void __fastcall TRecent::FileUsed(const String &FileName)
     else
       FileList.erase(FileList.begin() + Index);//Remove FileName from list
 
-    FileList.push_front(std::pair<String, TActionClientItem*>(FileName, NULL));//Add FileName to start of list
+    FileList.push_front(std::pair<String, TActionClientItem*>(FileName, (TActionClientItem*)NULL));//Add FileName to start of list
     SaveToRegistry();//Write new file list to registry
     ShowMenuItems();//Show new list of menu items
   }
@@ -152,8 +151,12 @@ void __fastcall TRecent::ShowMenuItems(void)
   if(!FFileMenu || FileList.empty() || !Enabled)//If nowhere to show or nothing to show
     return;
 
-  Seperator1 = FFileMenu->Add();
-  Seperator1->Caption = '-';//Make seperator
+  //If there is not already a separator
+  if(FFileMenu->Count > 0 && !FFileMenu->ActionClients[FFileMenu->Count - 1]->Separator)
+  {
+    Seperator1 = FFileMenu->Add();
+    Seperator1->Caption = '-';//Make seperator
+  }
 
   for(unsigned I = 0; I < FileList.size(); I++)
   {
@@ -212,7 +215,7 @@ void __fastcall TRecent::ReadFromRegistry(void)
   if(Registry->OpenKeyReadOnly(FRegistryKey))
     for(unsigned I = 1; I <= FMaxFiles; I++)//Loop through all values in registry
       if(Registry->ValueExists("Recent" + String(I)))
-        FileList.push_back(std::pair<String,TActionClientItem*>(Registry->ReadString("Recent" + String(I)), NULL));//Add file name to list
+        FileList.push_back(std::pair<String,TActionClientItem*>(Registry->ReadString("Recent" + String(I)), (TActionClientItem*)NULL));//Add file name to list
 }
 //---------------------------------------------------------------------------
 //This function saves file names to the registry

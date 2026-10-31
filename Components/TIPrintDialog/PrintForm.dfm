@@ -41,7 +41,7 @@ object PrintFrm: TPrintFrm
   end
   object Label6: TLabel
     Left = 304
-    Top = 304
+    Top = 302
     Width = 62
     Height = 13
     Alignment = taRightJustify
@@ -63,7 +63,7 @@ object PrintFrm: TPrintFrm
     Caption = 'OK'
     Default = True
     ModalResult = 1
-    TabOrder = 7
+    TabOrder = 6
   end
   object Button2: TButton
     Left = 360
@@ -73,7 +73,7 @@ object PrintFrm: TPrintFrm
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 8
+    TabOrder = 7
   end
   object GroupBox1: TGroupBox
     Left = 8
@@ -84,7 +84,7 @@ object PrintFrm: TPrintFrm
     TabOrder = 0
     object Label1: TLabel
       Left = 16
-      Top = 24
+      Top = 22
       Width = 31
       Height = 13
       Caption = 'Name:'
@@ -141,7 +141,6 @@ object PrintFrm: TPrintFrm
         'Select the printer to use. The Properties button may be used to ' +
         'change more advanced settings for the printer.'
       Style = csDropDownList
-      ItemHeight = 13
       TabOrder = 0
       OnChange = ComboBox1Change
     end
@@ -169,21 +168,6 @@ object PrintFrm: TPrintFrm
     TabOrder = 1
     OnClick = RadioGroup1Click
   end
-  object RadioGroup2: TRadioGroup
-    Left = 8
-    Top = 264
-    Width = 113
-    Height = 57
-    Hint = 
-      'Select to print in color (or grayscale if your printer is not a ' +
-      'color printer) or convert all colors to black.'
-    Caption = 'Print output'
-    ItemIndex = 0
-    Items.Strings = (
-      'Color'
-      'Black && white')
-    TabOrder = 3
-  end
   object GroupBox2: TGroupBox
     Left = 128
     Top = 136
@@ -193,7 +177,7 @@ object PrintFrm: TPrintFrm
     TabOrder = 2
     object Label3: TLabel
       Left = 12
-      Top = 52
+      Top = 50
       Width = 55
       Height = 13
       Caption = 'Left margin:'
@@ -201,7 +185,7 @@ object PrintFrm: TPrintFrm
     end
     object Label4: TLabel
       Left = 12
-      Top = 80
+      Top = 78
       Width = 56
       Height = 13
       Caption = 'Top margin:'
@@ -267,10 +251,10 @@ object PrintFrm: TPrintFrm
     Top = 264
     Width = 177
     Height = 57
-    TabOrder = 4
+    TabOrder = 3
     object Label5: TLabel
       Left = 12
-      Top = 24
+      Top = 22
       Width = 86
       Height = 13
       Caption = 'Number of copies:'
@@ -306,7 +290,7 @@ object PrintFrm: TPrintFrm
     Min = 1
     Max = 1000
     Position = 100
-    TabOrder = 6
+    TabOrder = 5
   end
   object Edit4: TEdit
     Left = 368
@@ -314,7 +298,7 @@ object PrintFrm: TPrintFrm
     Width = 41
     Height = 21
     Hint = 'Enter percent of original size.'
-    TabOrder = 5
+    TabOrder = 4
     Text = '100'
     OnChange = Edit1Change
     OnKeyPress = EditKeyPress

@@ -7,7 +7,7 @@
 
 template<typename T> class TVclObject
 {
-  T *const Object;
+  T *Object;
 public:
   TVclObject() : Object(new T) {}
   TVclObject(T *O) : Object(new T) {if(O != NULL) Object->Assign(O);}
@@ -17,6 +17,7 @@ public:
   operator T*() const {return Object;}
   T* operator->() {return Object;}
   T* Get() const {return Object;}
+  void Swap(TVclObject<T> &Other) {std::swap(Object, Other.Object);}
 };
 
 template<typename T> class TVclControl

@@ -10,7 +10,6 @@
 //---------------------------------------------------------------------------
 class TIPrintDialog;
 typedef void __fastcall (__closure *TPaintSampleEvent)(TIPrintDialog *Sender, TCanvas *PageCanvas, const TRect &PaintRect, const TRect &PaperSize);
-enum TPrintOutput {poColor, poBlackWhite};
 
 class PACKAGE TIPrintDialog : public TComponent
 {
@@ -22,7 +21,6 @@ private:
   int FTopMargin;
   int FScale;
   bool FCenterOnPage;
-  TPrintOutput FPrintOutput;
   int FImageWidth;
   int FImageHeight;
   int FCopies;
@@ -47,7 +45,6 @@ __published:
   __property int TopMargin = {read=FTopMargin, write=FTopMargin, default=75};
   __property int Scale = {read=FScale, write=FScale, default=100};
   __property bool CenterOnPage = {read=FCenterOnPage, write=FCenterOnPage, default=false};
-  __property TPrintOutput PrintOutput = {read=FPrintOutput, write=FPrintOutput, default=poColor};
   __property int ImageWidth = {read=FImageWidth, write=FImageWidth, default=100};
   __property int ImageHeight = {read=FImageHeight, write=FImageHeight, default=100};
   __property int Copies = {read=FCopies, write=FCopies, default=1};

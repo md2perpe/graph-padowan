@@ -10,16 +10,6 @@
 #ifndef GuiUtilH
 #define GuiUtilH
 //---------------------------------------------------------------------------
-namespace Tntextctrls
-{
-  class TTntRadioGroup;
-}
-
-namespace Tntclasses
-{
-  class TTntStrings;
-}
-
 void DrawComboBoxEndPoint(TCanvas *Canvas, int Index, const TRect &Rect);
 
 void ResizeControl(TControl *Control, int Left);
@@ -27,7 +17,7 @@ void ResizeControl(TControl *Control, TControl *Control1, TControl *Control2 = N
 void MoveLabel(TControl *Control, TCustomLabel *Label);
 void MoveControl(TControl *Control, TCustomLabel *Label);
 
-void SetAccelerators(TWinControl *Control);
+void SetAccelerators(TCustomForm *Form);
 
 String GetControlText(TControl *Control);
 void SetControlText(TControl *Control, const String &Str);
@@ -51,10 +41,21 @@ void ShowErrorMsg(const Func32::EFuncError &Error, TCustomEdit *Edit=NULL);//Sho
 void ShowErrorMsg(const class ECustomFunctionError &Error, TCustomEdit *Edit=NULL);
 void ShowErrorMsg(const class EGraphError &Error, TCustomEdit *Edit=NULL);
 void ShowErrorMsg(const std::exception &Error, TCustomEdit *Edit=NULL);
+void ShowErrorMsg(const Exception &Error, TCustomEdit *Edit=NULL);
 void ShowStatusError(const String &Str);
 
-bool InputQuery(const String &Caption, const String &Prompt, int &Value);
-bool GetKeyState(Classes__1 Key);
+bool InputQuery(const String &Caption, const String &Prompt, double &Value);
+bool GetKeyState(System_Classes__1 Key);
 void ShowHelp(const String &File, const String &HelpFile=String());
+
+void ScaleImageList(TImageList *List, TImageList *DestList);
+bool NeedScaling();
+unsigned GuiScale(unsigned Value);
+
+namespace Vcl {namespace Imaging {namespace Pngimage {class TPngImage;}}}
+void SmoothResize(Vcl::Imaging::Pngimage::TPngImage *apng, int NuWidth, int NuHeight);
+void ConvertTransparentToAlpha(Vcl::Imaging::Pngimage::TPngImage *Image, TColor TransparentColor);
+
+void SetEditText(TEdit *Edit, const String &Str);
 
 #endif

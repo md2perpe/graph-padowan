@@ -9,7 +9,6 @@
 #include "Func32.h"
 #include "Func32Impl.h"
 #pragma hdrstop
-#pragma warn -8072
 #include <cmath>
 #include <limits>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -18,7 +17,12 @@
 #include <boost/math/complex/atan.hpp>
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_errno.h>
+
+//Workaround for C++ Builder XE4 64 bit compiler. See QC #117415
+#include <boost/tr1/detail/config.hpp>
+#undef BOOST_HAS_TR1_COMPLEX_OVERLOADS
 #include <boost/tr1/complex.hpp>
+
 #define BOOST_THREAD_USE_LIB //Needed by thread.hpp
 #include <boost/thread.hpp>
 //Disable Warnings: "Condition is always true/false", "Unreachable code"
@@ -29,7 +33,7 @@
 #define PI    3.141592653589793238462643L
 namespace Func32
 {
-//The using derectives are necessary because names in std:: will not be used if they are found in Func32::
+//The using directives are necessary because names in std:: will not be used if they are found in Func32::
 using namespace std;
 using std::pow;
 using std::fmod;
@@ -609,7 +613,6 @@ T TFuncData::CalcFunc(TConstIterator &Iter, TDynData<T> &DynData)
 	switch(Elem.Ident)
 	{
 		case CodeNumber:
-//			return boost::any_cast<long double>(Elem.Value);
 			return *boost::unsafe_any_cast<long double>(&Elem.Value);
 
     case CodeArgument:
@@ -648,6 +651,8 @@ T TFuncData::CalcFunc(TConstIterator &Iter, TDynData<T> &DynData)
 			//Check for backward compatibility
 			long double *Constant = Elem.Value.empty() ? NULL :
 				&*boost::any_cast<boost::shared_ptr<long double> >(Elem.Value);
+      const T *OldValue = DynData.Args;
+      T Temp;
 			TConstIterator F = Iter;
 			Iter = FindEnd(Iter);
 			T Min = real(CalcFunc(Iter, DynData));
@@ -656,7 +661,14 @@ T TFuncData::CalcFunc(TConstIterator &Iter, TDynData<T> &DynData)
 				ErrorCode = ecComplexError;
 			if(ErrorCode)
 				return 0;
-			return Integrate(F, real(Min), real(Max), 1E-3, DynData, Constant);
+      if(Constant == NULL)
+      {
+        DynData.Args = &Temp;
+        long double Result = Integrate(F, real(Min), real(Max), 1E-3, DynData, &Temp);
+        DynData.Args = OldValue;
+        return Result;
+      }
+      return Integrate(F, real(Min), real(Max), 1E-3, DynData, Constant);
     }
 
     case CodeSum:
@@ -1095,23 +1107,29 @@ T TFuncData::CalcFunc(TConstIterator &Iter, TDynData<T> &DynData)
 	}
 }
 //---------------------------------------------------------------------------
+template<typename T, typename T2>
+struct TGSLFunction
+{
+  TConstIterator Func;
+  TDynData<T> &DynData;
+  T2 *Value;
+  TGSLFunction(TConstIterator AFunc, TDynData<T> &ADynData, T2 *AValue)
+    : Func(AFunc), DynData(ADynData), Value(AValue) {}
+};
+//---------------------------------------------------------------------------
 /** Call back function called by the GNU Scientific Library (GSL) to evaluate a
  *  function.
+ *  \param x: Parameter to function.
+ *  \param Params: In this case a pointer to a TGSLFunction structure.
  */
-template<typename T>
+template<typename T, typename T2>
 double TFuncData::CalcGSLFunc(double x, void *Params)
 {
-	TGSLFunction<T> *Function = reinterpret_cast<TGSLFunction<T>*>(Params);
-	T X = x;
-	const T *OldArgs = Function->DynData.Args; //Workaround for backward compatibility
-	if(Function->Value) //Check for backward compatibility
-		*Function->Value = x;
-	else
-		Function->DynData.Args = &X;
+	TGSLFunction<T,T2> *Function = reinterpret_cast<TGSLFunction<T,T2>*>(Params);
+  *Function->Value = x;
 	Function->DynData.Error.ErrorCode = ecNoError;
 	TConstIterator Iter = Function->Func;
 	T Result = CalcFunc(Iter, Function->DynData);
-	Function->DynData.Args = OldArgs;
 	if(Function->DynData.Error.ErrorCode != ecNoError || imag(Result) != 0)
 		return std::numeric_limits<double>::quiet_NaN();
 	return real(Result);
@@ -1126,20 +1144,21 @@ boost::recursive_mutex Mutex;
  *  \param Min:  Start value
  *  \param Max:  End value
  *  \param RelError: Estimated relative error to stop integration at.
- *  \param Trigonometry: Used to tell if we should use radians or degrees for trigonometric functions.
- *  \param ErrorCode: Filled with error information on return.
+ *  \param DynData: A TDynData structure to work on
+ *  \param Value: Pointer to variable that is integrated over, i.e. the variable will be updated before each evaluation.
  */
- template<typename T>
- double TFuncData::Integrate(TConstIterator Func, double Min, double Max, double RelError, TDynData<T> &DynData, long double *Value)
+template<typename T, typename T2>
+double TFuncData::Integrate(TConstIterator Func, double Min, double Max, double RelError, TDynData<T> &DynData, T2 *Value)
 {
 	const int MaxSubIntervals = 1000;
 	if(Max < Min)
 		return -Integrate(Func, Max, Min, RelError, DynData, Value);
-	TGSLFunction<T> Function(Func, DynData, Value);
+	TGSLFunction<T,T2> Function(Func, DynData, Value);
 	gsl_integration_workspace *w = gsl_integration_workspace_alloc(MaxSubIntervals);
-	gsl_function F = {CalcGSLFunc<T>, &Function};
+	gsl_function F = {CalcGSLFunc<T,T2>, &Function};
 
-	//! \todo Find a metter way to do this without locking
+	//! \todo Find a better way to do this without locking
+  //We need to lock because ware are changing the constant stored in the integrate function.
 	boost::lock_guard<boost::recursive_mutex> Guard(Mutex);
 
 	double Result, Error;
@@ -1177,14 +1196,13 @@ boost::recursive_mutex Mutex;
  *  \param Max:  End value. May be INF
  *  \param RelError: Estimated relative error to stop integration at.
  *  \param Trigonometry: Used to tell if we should use radians or degrees for trigonometric functions.
- *  \throw ECalcError: If the maximum relative error specified in RelError is not reached.
  */
-double TFuncData::Integrate(double Min, double Max, double RelError, TTrigonometry Trigonometry) const
+ double TFuncData::Integrate(double Min, double Max, double RelError, TTrigonometry Trigonometry) const
 {
-	long double Value;
+	TComplex Value;
 	ECalcError Error;
-	TDynData<long double> DynData(&Value, Trigonometry, Error);
-	double Result = Integrate(Data.begin(), Min, Max, RelError, DynData, &Value);
+	TDynData<TComplex> DynData(&Value, Trigonometry, Error);
+	double Result = Integrate<TComplex>(Data.begin(), Min, Max, RelError, DynData, &Value);
 	if(Error.ErrorCode != ecNoError)
     throw Error;
   return Result;
@@ -1203,12 +1221,21 @@ public:
 	TInitGSL(){gsl_set_error_handler(GSL_ErrorHandler);}
 } InitGSL;
 //---------------------------------------------------------------------------
+/** Function for initializing all static data.
+ *  It is not required to call this for single threaded applications.
+ *  However multi threaded applications must call this function before any calculations
+ *  are done in threads.
+ */
+void Init()
+{
+  FunctionTable(CodeCsc);
+}
 } //namespace Func32
 
 //Math error handler
 //Called on any math errors; Do not set errno. It is very slow
 #ifdef __BORLANDC__
-int _RTLENTRY _matherrl(_exceptionl *a)
+int _RTLENTRY matherrl(_exceptionl *a)
 {
 	using namespace std;
 //  DEBUG_LOG(std::wclog << "Math error: " << a->name << "(" << a->arg1 << ", " << a->arg2 << ")" << std::endl);
@@ -1221,20 +1248,34 @@ int _RTLENTRY _matherrl(_exceptionl *a)
 //---------------------------------------------------------------------------
 //Math error handler
 //Called on any math errors;
-int _matherr(_exception *a)
+int matherr(_exception *a)
 {
 	//Bug in RTL (cosl.asm) cosl() will call _matherr() instead of _matherrl() on error
 	//Because of this a->arg1 is also wrong
 	a->retval = std::numeric_limits<double>::quiet_NaN();
 	return 1;
 }
+
+typedef int  (*matherrptr)  (struct _exception  *);
+typedef int  (*matherrptrl) (struct _exceptionl *);
+extern matherrptr  _pmatherr;
+extern matherrptrl _pmatherrl;
+struct TInitMathErr
+{
+  TInitMathErr()
+  {
+    _pmatherr = &matherr;
+    _pmatherrl = &matherrl;
+  }
+} InitMathErr;
 #endif
+
 //---------------------------------------------------------------------------
 //Instantiate versions of the template calculation functions for
 //long double and std::complex<long double>
 //Ignore by Doxygen
 #ifndef DOXYGEN
 template long double Func32::TFuncData::CalcF<long double>(TDynData<long double>&) const;
-template Func32::TComplex Func32::TFuncData::CalcF<Func32::TComplex>(TDynData<Func32::TComplex>&) const;
+//template Func32::TComplex Func32::TFuncData::CalcF<Func32::TComplex>(TDynData<Func32::TComplex>&) const;
 #endif
 

@@ -47,6 +47,10 @@ boost::shared_ptr<TFuncData> TFuncData::MakeDif(const TElem &Var, TTrigonometry 
   {
     throw EFuncError(ecInternalError);
   }
+  catch(std::bad_alloc &E)
+  {
+    throw EFuncError(ecMemAllocFailed);
+  }
 }
 //---------------------------------------------------------------------------
 /** Returns an iterator to the element following Iter. Jumps over parameters.

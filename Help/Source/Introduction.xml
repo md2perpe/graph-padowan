@@ -31,10 +31,9 @@
 			Graph has been tested under
 			<markup><simplelist type="inline">
 			  <?dbchoice choice="and"?>
-				<member><application>Windows 2000</application></member>
-				<member><application>Windows XP</application></member>
-				<member><application>Windows Vista</application></member>
 				<member><application>Windows 7</application></member>
+				<member><application>Windows 8</application></member>
+				<member><application>Windows 10</application></member>
 			</simplelist></markup>,
 			but there may still be bugs left.
 			If you need help using Graph or have suggestions for future improvements, please use the <ulink url="http://www.padowan.dk/forum">Graph support forum</ulink>.
@@ -47,7 +46,7 @@
 			<listitem>
 				<para>
 					Which version are you using?
-					This is shown in the <menuchoice><guimenu>Help</guimenu><guimenuitem>About Graph...</guimenuitem></menuchoice> dialog box.
+					This is shown in the <menuchoice><guimenu>Help</guimenu><guimenuitem>About Graph</guimenuitem></menuchoice> dialog box.
 					You should check that you are using the newest version as the bug may have been fixed already.
 				</para>
 			</listitem>

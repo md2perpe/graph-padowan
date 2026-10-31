@@ -27,10 +27,7 @@
 
  * \section Use
  * Applications that use %Func32 must include %Func32.h and link to the source files
- * in the library or a library file created from the source files. The Spirit
- * parser library is necessary to compile %Func32. Spirit can be downloaded from
- * http://spirit.sourceforge.net or as part of Boost library collection from
- * http://boost.org. %Func32 has been tested with Spirit 1.6.1. Note that the whole
+ * in the library or a library file created from the source files. Note that the whole
  * %Func32 library has been placed in namespace Func32.
  */
 /** \page license License
@@ -40,18 +37,10 @@
 #ifndef Func32H
 #define Func32H
 //---------------------------------------------------------------------------
-#ifdef _DEBUG
-	#define BOOST_ENABLE_ASSERT_HANDLER //Assertion handler defined in application
-	namespace Func32 {void LogDebugString(const char *Str, const char *Str2);}
-	//_DEBUG_ERROR2 is used in Dinkumware STL
-	#define _DEBUG_ERROR2(mesg, where) Func32::LogDebugString("error " mesg " at ", where)
-#else
-	#define BOOST_DISABLE_ASSERTS
-	#ifdef __BCPLUSPLUS__
-		//Nasty hack: C++ Builder does not inline functions with throw specifications
-		#undef throw
-		#define throw(...)
-	#endif
+#if !defined(_DEBUG) && defined(__BCPLUSPLUS__) && defined(_WIN32) && !defined(_WIN64)
+  //Nasty hack: C++ Builder does not inline functions with throw specifications
+  #undef throw
+  #define throw(...)
 #endif
 #include <vector>
 #include <complex>
@@ -84,7 +73,7 @@ enum TErrorCode
   ecComplexError    =  6, //!< Some error ocoured because the value had an imaginary part
   ecDivByZero       =  7, //!< Division by zero
   ecArcError        =  8, //!< Inverse trogonometric function out of range [-1;1]
-  ecNotDefError     =  9, //!< Position not defined; returned by Sign(x) or U(x) if x=0, or by Undef
+  ecNotDefError     =  9, //!< Position not defined; returned by Undef or if(a,b) when a=0
   ecATanhError      = 10, //!< atanh(x) is only defined for x=]-1;1] for real numbers
   ecACoshError      = 11, //!< acosh(x) is undefined for z < 1 for real numbers
   ecArgError        = 12, //!< arg(0) is undefined
@@ -129,6 +118,7 @@ enum TErrorCode
   ecBadGuess        = 87, //!< Too many iterations before solution found; bad guess
   ecNoResult        = 88, //!< There was no valid result, eg. from a trend line
   ecNoAccurateResult= 89, //!< A result with the required accuracy could not be found
+  ecMemAllocFailed  = 90, //!< Memory allocation failed
   ecInternalError   = 99  //!< Unknown error
 };
 
@@ -136,14 +126,17 @@ enum TErrorCode
 /*! \brief This class and its decendents are only used for throwing exceptions. This
  *  specific class is used when one of the decendents doesn't fit.
  */
-struct EFuncError : public std::exception
+class EFuncError : public std::exception
 {
+protected:
+  mutable std::string ErrorStr; //!< Only used by what()
+public:
   TErrorCode ErrorCode; //!<The error code indicating the precise cause of the error.
-  std::wstring Str;      //!< A text supplement to the error code; Can be an unknown variable name
+  std::wstring Str;     //!< A text supplement to the error code; Can be an unknown variable name
   EFuncError(TErrorCode AErrorCode) : ErrorCode(AErrorCode) {}
   EFuncError(TErrorCode AErrorode, const std::wstring &AStr) : ErrorCode(AErrorode), Str(AStr) {}
   ~EFuncError() throw() {} //Required by g++ 3.3.3
-  const char* what() const throw() {return "Func32::EFuncError";}
+  const char* what() const throw();
 };
 
 //!Type used to indicate where an error occured.
@@ -164,7 +157,7 @@ struct EParseError : public EFuncError
     : EFuncError(AErrorCode, AStr), ErrorPos(AErrorPos), ErrorFunc(efFunc) {}
   EParseError(TErrorCode AErrorCode=ecNoError, int AErrorPos=-1)
     : EFuncError(AErrorCode), ErrorPos(AErrorPos), ErrorFunc(efFunc) {}
-  const char* what() const throw() {return "Func32::EParseError";}
+  const char* what() const throw();
 };
 
 //!Thrown when an error occured while calculating.
@@ -172,7 +165,7 @@ struct ECalcError : public EFuncError
 {
   ECalcError(TErrorCode AErrorCode = ecNoError) : EFuncError(AErrorCode) {}
   ECalcError(TErrorCode AErrorCode, const std::wstring &Str) : EFuncError(AErrorCode, Str) {}
-  const char* what() const throw() {return "Func32::ECalcError";}
+  const char* what() const throw();
 };
 
 template<typename T> class TCoordSet;
@@ -338,6 +331,7 @@ class TFunc : public TBaseFunc
   friend TFunc pow(const TFunc&, const TFunc&);
   friend TFunc log(const TFunc&);
   friend TFunc sqrt(const TFunc&);
+  friend TFunc sqr(const TFunc&);
   friend class TBaseFunc;
   friend class TParamFunc;
   friend class TPolarFunc;
@@ -355,13 +349,13 @@ public:
   //!Copy constructor creates a TFunc object from another function
   TFunc(const TFunc &Func) : TBaseFunc(Func), FuncData(Func.FuncData) {}
   TFunc(long double Value);
-  TFunc(const std::wstring &Text, const std::wstring &Variable = L"x", TTrigonometry ATrigonometry = Radian);
+  TFunc(const std::wstring &Text, const std::wstring &Variable = std::wstring(1, L'x'), TTrigonometry ATrigonometry = Radian);
   TFunc(const std::wstring &Text, const std::wstring &Variable, const TSymbolList &SymbolList, TTrigonometry ATrigonometry = Radian);
   TFunc(const boost::shared_ptr<TFuncData> &AFuncData, TTrigonometry ATrigonometry) : TBaseFunc(ATrigonometry), FuncData(AFuncData) {}
 
   TFunc* Clone() const {return new TFunc(*this);}
 
-  void SetFunc(const std::wstring &Text, const std::wstring &Variable = L"x");
+  void SetFunc(const std::wstring &Text, const std::wstring &Variable = std::wstring(1, L'x'));
   void SetFunc(const std::wstring &Text, const std::wstring &Variable, const TSymbolList &SymbolList);
 
   long double CalcX(long double x, ECalcError &E) const; //throw()
@@ -374,8 +368,8 @@ public:
   TCoord<TComplex> Calc(TComplex, ECalcError &E) const; //throw()
 
   long double CalcSlope(long double x) const;
-  double CalcArea(double xMin, double xMax, double RelError) const;
-  double CalcArc(double xMin, double xMax, double RelError) const;
+  double CalcArea(double xMin, double xMax, double RelError=1E-4) const;
+  double CalcArc(double xMin, double xMax, double RelError=1E-4) const;
   long double CalcAngleSlope(long double s) const;
 
   TFunc* MakeDifPtr() const;
@@ -385,7 +379,7 @@ public:
 
   void Clear();
   bool IsEmpty() const; //throw()
-  std::wstring MakeText(const std::wstring &Variable = L"x", unsigned Decimals=8) const;
+  std::wstring MakeText(const std::wstring &Variable = std::wstring(1, L'x'), unsigned Decimals=8) const;
 
   void Simplify();
   void Swap(TFunc &Func); //throw()
@@ -432,7 +426,7 @@ public:
   using TBaseFunc::CalcY;
 
   TParamFunc();
-  TParamFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable = L"t", TTrigonometry ATrigonometry = Radian);
+  TParamFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable = std::wstring(1, L't'), TTrigonometry ATrigonometry = Radian);
   TParamFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable, const TSymbolList &SymbolList, TTrigonometry ATrigonometry = Radian);
   TParamFunc(const TParamFunc &Func) : TBaseFunc(Func), xFuncData(Func.xFuncData), yFuncData(Func.yFuncData) {}
   TParamFunc(long double xValue, long double yValue);
@@ -441,7 +435,7 @@ public:
     : TBaseFunc(ATrigonometry), xFuncData(AxFuncData), yFuncData(AyFuncData) {}
 
 	TParamFunc* Clone() const {return new TParamFunc(*this);}
-	void SetFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable = L"t");
+	void SetFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable = std::wstring(1, L't'));
 	void SetFunc(const std::wstring &xText, const std::wstring &yText, const std::wstring &Variable, const TSymbolList &SymbolList);
 
 	long double CalcX(long double t, ECalcError &E) const; //throw()
@@ -454,8 +448,8 @@ public:
   TCoord<TComplex> Calc(TComplex, ECalcError &E) const; //throw()
 
   long double CalcSlope(long double t) const;
-  double CalcArea(double sMin, double sMax, double RelError) const;
-  double CalcArc(double tMin, double tMax, double RelError) const;
+  double CalcArea(double sMin, double sMax, double RelError=1E-4) const;
+  double CalcArc(double tMin, double tMax, double RelError=1E-4) const;
   long double CalcAngleSlope(long double s) const;
 
   TParamFunc* MakeDifPtr() const;
@@ -465,8 +459,8 @@ public:
 
   void Clear();
   bool IsEmpty() const; //throw()
-  std::wstring MakeXText(const std::wstring &Variable = L"t", unsigned Decimals=8) const;
-  std::wstring MakeYText(const std::wstring &Variable = L"t", unsigned Decimals=8) const;
+  std::wstring MakeXText(const std::wstring &Variable = std::wstring(1, L't'), unsigned Decimals=8) const;
+  std::wstring MakeYText(const std::wstring &Variable = std::wstring(1, L't'), unsigned Decimals=8) const;
 
   TFunc ConvXToFunc() const;
   TFunc ConvYToFunc() const;
@@ -508,13 +502,13 @@ public:
   using TBaseFunc::CalcY;
 
   TPolarFunc();
-  TPolarFunc(const std::wstring &Text, const std::wstring &Variable = L"t", TTrigonometry ATrigonometry = Radian);
+  TPolarFunc(const std::wstring &Text, const std::wstring &Variable = std::wstring(L't', 1), TTrigonometry ATrigonometry = Radian);
   TPolarFunc(const std::wstring &Text, const std::wstring &Variable, const TSymbolList &SymbolList, TTrigonometry ATrigonometry = Radian);
   TPolarFunc(const TPolarFunc &Func) : TBaseFunc(Func), FuncData(Func.FuncData) {}
   TPolarFunc(const boost::shared_ptr<TFuncData> &AFuncData, TTrigonometry ATrigonometry) : TBaseFunc(ATrigonometry), FuncData(AFuncData) {}
 
   TPolarFunc* Clone() const {return new TPolarFunc(*this);}
-  void SetFunc(const std::wstring &Text, const std::wstring &Variable = L"t");
+  void SetFunc(const std::wstring &Text, const std::wstring &Variable = std::wstring(1, L't'));
   void SetFunc(const std::wstring &Text, const std::wstring &Variable, const TSymbolList &SymbolList);
 
   long double CalcX(long double t, ECalcError &E) const; //throw()
@@ -528,8 +522,8 @@ public:
 
   long double CalcSlope(long double t) const;
   long double CalcR(long double t) const;
-  double CalcArc(double tMin, double tMax, double RelError) const;
-  double CalcArea(double tMin, double tMax, double RelError) const;
+  double CalcArc(double tMin, double tMax, double RelError=1E-4) const;
+  double CalcArea(double tMin, double tMax, double RelError=1E-4) const;
   long double CalcAngleSlope(long double s) const;
 
   TPolarFunc* MakeDifPtr() const;
@@ -539,7 +533,7 @@ public:
 
   void Clear();
   bool IsEmpty() const; //throw()
-  std::wstring MakeText(const std::wstring &Variable = L"t", unsigned Decimals=8) const;
+  std::wstring MakeText(const std::wstring &Variable = std::wstring(1, L't'), unsigned Decimals=8) const;
 
   TFunc ConvXToFunc() const;
   TFunc ConvYToFunc() const;
@@ -592,6 +586,7 @@ public:
   TCustomFunc(long double Value);
   TCustomFunc(const TComplex &Complex);
 
+  void Swap(TCustomFunc &O);
   void SetFunc(const std::wstring &Text, const TArgType &AArgs);
   void SetFunc(const std::wstring &Text, const TArgType &AArgs, const TSymbolList &SymbolList);
   void SetFunc(long double Value);
@@ -689,15 +684,18 @@ double Regression(const std::vector<TDblPoint> &Points, const TCustomFunc &Func,
 double CalcSSQ(const std::vector<TDblPoint> &Points, const TFunc &Func);
 double LinearCorrelation(const std::vector<TDblPoint> &Points);
 double Correlation(const std::vector<TDblPoint> &Points, const TFunc &Func);
+void Init();
 
 std::wistream& operator>>(std::wistream &is, TFunc &Func);
 
 long double Eval(const std::wstring &Expr, TTrigonometry Trig = Radian);
 long double Eval(const std::wstring &Expr, const TSymbolList &SymbolList, TTrigonometry Trig = Radian);
-long double Eval(const std::wstring &Expr, long double x, const std::wstring &Var = L"x", TTrigonometry Trig = Radian);
+long double Eval(const std::wstring &Expr, long double x, const std::wstring &Var = std::wstring(1, L'x'), TTrigonometry Trig = Radian);
 TComplex EvalComplex(const std::wstring &Expr, TTrigonometry Trig = Radian);
 TComplex EvalComplex(const std::wstring &Expr, const TSymbolList &SymbolList, TTrigonometry Trig = Radian);
-TComplex EvalComplex(const std::wstring &Expr, TComplex x, const std::wstring &Var = L"x", TTrigonometry Trig = Radian);
+TComplex EvalComplex(const std::wstring &Expr, TComplex x, const std::wstring &Var = std::wstring(1, L'x'), TTrigonometry Trig = Radian);
+
+long double EvalNoThrow(const std::wstring &Expr, const TSymbolList &SymbolList, TTrigonometry Trig = Radian);
 
 long double FindCrossing(const TBaseFunc &Func1, long double Min1, long double Max1, const TBaseFunc &Func2, long double Min2, long double Max2);
 TArgType FindUnknowns(const std::wstring &Str);

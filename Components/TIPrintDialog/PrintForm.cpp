@@ -34,7 +34,7 @@ public:
 
 //---------------------------------------------------------------------------
 __fastcall TPrintFrm::TPrintFrm(TComponent* Owner, TIPrintDialog *APrintDialog)
-  : TForm(Owner), PrintDialog(APrintDialog)
+  : TForm(Owner), PrintDialog(APrintDialog), Updating(false)
 {
   //Prevent flicker when paper is redrawn
   ControlStyle = ControlStyle << csOpaque;
@@ -110,6 +110,9 @@ void TPrintFrm::ResizePaper()
 //---------------------------------------------------------------------------
 void TPrintFrm::DoPaintSample()
 {
+  if(Updating)
+    return;
+  Updating = true;
   double Scale = Edit4->Text.ToIntDef(100) / 100.0;
 
   //LOGPIXELSX doesn't work. Always returns 96 for screen
@@ -121,8 +124,16 @@ void TPrintFrm::DoPaintSample()
   //DevMode->dmPaperWidth doesn't always work. Don't know why
   //Instead we create a DC ask that for the size
   HDC PrinterDC = Printer()->Handle;
-  double PaperWidth = GetDeviceCaps(PrinterDC, HORZSIZE);
-  double PaperHeight = GetDeviceCaps(PrinterDC, VERTSIZE);
+//  double PaperWidth = GetDeviceCaps(PrinterDC, HORZSIZE);
+//  double PaperHeight = GetDeviceCaps(PrinterDC, VERTSIZE);
+
+  //GetDeviceCaps(PrinterDC, HORZSIZE) doesn't seem to return the actual paper width
+  double PaperPhysicalWidth = GetDeviceCaps(PrinterDC, PHYSICALWIDTH);
+  double PaperPhysicalHeight = GetDeviceCaps(PrinterDC, PHYSICALHEIGHT);
+  double PaperLogPixelsX = GetDeviceCaps(PrinterDC, LOGPIXELSX);
+  double PaperLogPixelsY = GetDeviceCaps(PrinterDC, LOGPIXELSY);
+  double PaperWidth = PaperPhysicalWidth / PaperLogPixelsX * 25.4;    //25.4 inch/mm
+  double PaperHeight = PaperPhysicalHeight / PaperLogPixelsY * 25.4;
 
   if(CheckBox1->Checked)
   {
@@ -154,6 +165,7 @@ void TPrintFrm::DoPaintSample()
 
   if(PrintDialog->OnPaintSample)
     PrintDialog->OnPaintSample(PrintDialog, Image1->Canvas, PaintRect, Image1->ClientRect);
+  Updating = false;
 }
 //---------------------------------------------------------------------------
 void __fastcall TPrintFrm::RadioGroup1Click(TObject *Sender)
@@ -244,9 +256,10 @@ void __fastcall TPrintFrm::Button3Click(TObject *Sender)
   TPrinterHandle PrinterHandle(Device);
   DocumentProperties(Handle, PrinterHandle, Device, DevMode, DevMode, DM_IN_BUFFER | DM_IN_PROMPT | DM_OUT_BUFFER);
   GlobalUnlock(reinterpret_cast<HGLOBAL>(DeviceMode));
-  Printer()->PrinterIndex = Printer()->PrinterIndex; //We need to set PrinterIndex to recreate DC for printer
+  Printer()->Orientation = Printer()->Orientation; //We need to set Printer()->Orientation to recreate DC for printer
   RadioGroup1->ItemIndex = Printer()->Orientation == poLandscape;
   ResizePaper();
 }
 //---------------------------------------------------------------------------
+
 

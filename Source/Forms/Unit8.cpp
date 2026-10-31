@@ -20,6 +20,7 @@ __fastcall TForm8::TForm8(TComponent* Owner, TData &AData)
   TranslateProperties(this);
   SetAccelerators(this);
   FlipForm(this);
+  ValueListEditor1->DefaultRowHeight = GuiScale(ValueListEditor1->DefaultRowHeight);
 }
 //---------------------------------------------------------------------------
 bool TForm8::EditModel(std::wstring &Name)
@@ -28,13 +29,13 @@ bool TForm8::EditModel(std::wstring &Name)
   AllowReplace = true;
   Edit1->Text = Name.c_str();
   TUserModel UserModel = Data.UserModels[Name];
-  for(unsigned I = 0; I < UserModel.Defaults.size(); I++)
-    ValueListEditor1->Values[ToUString(UserModel.Defaults[I].first)] = ToUString(UserModel.Defaults[I].second);
+  for(TDefaultsMap::const_iterator Iter = UserModel.Defaults.begin(); Iter != UserModel.Defaults.end(); ++Iter)
+    ValueListEditor1->Values[ToUString(Iter->first)] = ToUString(Iter->second);
 
   if(ShowModal() == mrOk)
   {
-    for(unsigned I = 0; I < UserModel.Defaults.size(); I++)
-      UserModel.Defaults[I].second = ToWString(ValueListEditor1->Values[ToUString(UserModel.Defaults[I].first)]);
+    for(TDefaultsMap::iterator Iter = UserModel.Defaults.begin(); Iter != UserModel.Defaults.end(); ++Iter)
+      Iter->second = ToDouble(ValueListEditor1->Values[ToUString(Iter->first)]);
 
     Data.UserModels.erase(Name);
     Name = ToWString(Edit1->Text);
@@ -66,7 +67,7 @@ bool TForm8::AddModel(const std::wstring &Model, std::wstring &ModelName)
   if(ShowModal() == mrOk)
   {
     for(std::vector<std::wstring>::const_iterator Iter = Unknowns.begin() + 1; Iter != Unknowns.end(); ++Iter)
-      UserModel.Defaults.push_back(std::make_pair(*Iter, ToWString(ValueListEditor1->Values[ToUString(*Iter)])));
+      UserModel.Defaults[*Iter] = ToDouble(ValueListEditor1->Values[ToUString(*Iter)]);
 
     ModelName = ToWString(Edit1->Text);
     Data.UserModels[ModelName] = UserModel;
