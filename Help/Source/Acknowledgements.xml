@@ -79,7 +79,12 @@
 							<entry>Arabic</entry>
 							<entry>Yes</entry>
 							<entry>No</entry>
-							<entry><personname>Abdellah Chelli</personname></entry>
+							<entry>
+                <simplelist>
+                  <member><personname>Abdellah Chelli</personname></member>
+                  <member><personname>ياسر البيطار</personname></member>
+                </simplelist>
+              </entry>
 						</row>
 
 						<row>
@@ -93,7 +98,12 @@
 							<entry>Chinese (Simplified)</entry>
 							<entry>Yes</entry>
 							<entry>No</entry>
-							<entry><personname>Lala Sha</personname></entry>
+							<entry>
+                <simplelist>
+                  <member><personname>Loquat</personname></member>
+                  <member><personname>Lala Sha</personname></member>
+                </simplelist>
+              </entry>
 						</row>
 
 						<row>
@@ -113,7 +123,7 @@
 						<row>
 							<entry>Czech</entry>
 							<entry>Yes</entry>
-							<entry>No</entry>
+							<entry>Yes</entry>
 							<entry>
                 <simplelist>
                   <member><personname>Pavel Simerka</personname></member>
@@ -179,15 +189,25 @@
 						<row>
 							<entry>Greek</entry>
 							<entry>Yes</entry>
-							<entry>No</entry>
-							<entry><personname>Theodoros Kannas</personname></entry>
+							<entry>Yes</entry>
+              <entry>
+                <simplelist>
+                  <member><personname>Dimitris Spingos (Δημήτρης Σπίγγος)</personname></member>
+                  <member><personname>Theodoros Kannas</personname></member>
+                </simplelist>
+              </entry>
 						</row>
 
 						<row>
 							<entry>Hungarian</entry>
 							<entry>Yes</entry>
 							<entry>No</entry>
-							<entry><personname>Gabor Magyari</personname></entry>
+              <entry>
+                <simplelist>
+                  <member><personname>Róbert Gáti</personname></member>
+                  <member><personname>Gabor Magyari</personname></member>
+                </simplelist>
+              </entry>
 						</row>
 
 						<row>
@@ -239,7 +259,12 @@
 							<entry>Polish</entry>
 							<entry>Yes</entry>
 							<entry>No</entry>
-							<entry><personname>Paweł Baczyński</personname></entry>
+							<entry>
+                <simplelist>
+                  <member><personname>Paweł Baczyński</personname></member>
+                  <member><personname>Dominik Barwacz</personname></member>
+                </simplelist>
+							</entry>
 						</row>
 
 						<row>
@@ -249,10 +274,16 @@
 							<entry>
                 <simplelist>
                   <member><personname>Jorge Costa</personname></member>
+                  <member><personname>Mara</personname></member>
+                  <member><personname>Fernanda</personname></member>
+                  <member><personname>Deivid e Monalisa</personname></member>
                   <member><personname>Andre Fduarte</personname></member>
-                  <member><personname>Haroldo Luiz Bertoldo</personname></member>
-                  <member><personname>Janete Flor de Maio Fonseca</personname></member>
-                  <member><personname>Aldemar Calazans Filho</personname></member>
+                  <member><personname>Haroldo Luiz </personname></member>
+                  <member><personname>Bertoldo</personname></member>
+                  <member><personname>Janete Flor de Maio</personname></member>
+                  <member><personname>Fonseca</personname></member>
+                  <member><personname>Wladimir A. Silva</personname></member>
+                  <member><personname>Aldemar C. Filho</personname></member>                  
                 </simplelist>
               </entry>
 						</row>
@@ -334,10 +365,17 @@
 						</row>
 
 						<row>
+							<entry>Ukrainian</entry>
+							<entry>Yes</entry>
+							<entry>No</entry>
+							<entry><personname>Mumtaz Murat Arik</personname></entry>
+						</row>
+
+						<row>
 							<entry>Vietnamese</entry>
 							<entry>Yes</entry>
 							<entry>No</entry>
-							<entry><personname>Trung</personname></entry>
+							<entry><personname>Dmytro Amelchev</personname></entry>
 						</row>
 			 		</tbody>
 				</tgroup>
@@ -345,6 +383,18 @@
 		</para>
 	</simplesect>
 
+  <simplesect>
+    <title>Donors</title>
+    <para>
+      <simplelist>
+        <member><orgname>Sebastian Albrecht, specializing in the <ulink url="http://yourvancouverrealestate.ca/vancouver-special/"><orgname>Vancouver Special</orgname></ulink></orgname></member>
+        <member><ulink url="http://partnershiptoronto.com/"><orgname>Sothebys real estate Toronto</orgname></ulink></member>
+        <member><orgname>Chantal Marr, a <ulink url="http://lsminsurance.ca/canadian-life-insurance-companies"><orgname>Canadian life insurance</orgname></ulink> expert</orgname></member>
+        <member><orgname>Elli Davis, a <ulink url="http://ellidavis.com/mls-listings"><orgname>Toronto MLS Listings</orgname></ulink> expert</orgname></member>
+      </simplelist>
+    </para>
+  </simplesect>  
+  
 	<simplesect renderas="sect2">
 		<title>Miscellaneous</title>
 		<para>

@@ -11,17 +11,11 @@
   		<imageobject role="html"><imagedata fileref="GraphIcon.png"/></imageobject>
 		</mediaobject>
 	</subtitle>
-	<xi:include href="../Source/version.xml"/>
-	<bookinfo>
-		<authorgroup>
-		</authorgroup>
-		<copyright>
-			<year>2012</year>
-			<holder>Ivan Johansen</holder>
-		</copyright>
-	</bookinfo>
+	<xi:include href="../Source/Version.xml" xpointer="version"/>
+	<xi:include href="../Source/Version.xml" xpointer="copyright"/>
 	<!-- include external files -->
 	<xi:include href="Overview.xml"/>
 	<xi:include href="GraphModule.xml"/>
+	<xi:include href="GuiModule.xml"/>
 	<xi:include href="VclModule.xml"/>
 </book>

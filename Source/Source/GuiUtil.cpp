@@ -12,12 +12,15 @@
 #include "Unit1.h"
 #include "GuiUtil.h"
 #include "PointSelect.h"
-#include <ValueEdit.hpp>
+#include <Vcl.ValEdit.hpp>
 #include <set>
 #include <algorithm>
 #pragma warn -8072 //Disable warning: Suspicous pointer arithmetic
 #include <boost/format.hpp>
 #include <MultiMon.hpp>
+#pragma warn -8022 //Remove warning in gdiplus.h
+#include "gdiplus.h"
+#pragma warn .8022 //Set warning back to default
 //---------------------------------------------------------------------------
 void DrawLine(TCanvas *Canvas, int X1, int Y1, int X2, int Y2)
 {
@@ -27,46 +30,58 @@ void DrawLine(TCanvas *Canvas, int X1, int Y1, int X2, int Y2)
 //---------------------------------------------------------------------------
 void DrawComboBoxEndPoint(TCanvas *Canvas, int Index, const TRect &Rect)
 {
+  #define SCALE(x) MulDiv(x, Rect.Height(), 16)
   //Clear drawing area
   Canvas->Brush->Color = clWhite;
   Canvas->FillRect(Rect);
   Canvas->Pen->Color = clRed;
-  Canvas->Pen->Width = 2;
+  Canvas->Pen->Width = SCALE(2);
 
   TPoint Pos(Rect.Left/2 + Rect.Right/2, Rect.Top/2 + Rect.Bottom/2);
   switch(Index)
   {
     case 1:
-      TPointSelect::DrawPoint(Canvas, Pos, 0, clRed, clWhite, 5);
+      TPointSelect::DrawPoint(Canvas, Pos, 0, clRed, clWhite, SCALE(5));
       break;
 
 		case 2:
-			TPointSelect::DrawPoint(Canvas, Pos, 0, clRed, clRed, 5);
+			TPointSelect::DrawPoint(Canvas, Pos, 0, clRed, clRed, SCALE(5));
 			break;
 
 		case 3:
-			TPointSelect::DrawPoint(Canvas, Pos, 7, clRed, clRed, 5);
+			TPointSelect::DrawPoint(Canvas, Pos, 7, clRed, clRed, SCALE(5));
 			break;
 
 		case 4:
-      Canvas->Arc(Pos.x - 11, Pos.y - 6, Pos.x + 5, Pos.y + 7, Pos.x - 3, Pos.y + 7, Pos.x - 3, Pos.y - 7);
+      Canvas->Arc(Pos.x - SCALE(11), Pos.y - SCALE(6), Pos.x + SCALE(5), Pos.y + SCALE(7), Pos.x - SCALE(3), Pos.y + SCALE(7), Pos.x - SCALE(3), Pos.y - SCALE(7));
       break;
 
     case 5:
-      Canvas->Arc(Pos.x + 11, Pos.y - 6, Pos.x - 5, Pos.y + 7, Pos.x + 3, Pos.y - 7, Pos.x + 3, Pos.y + 7);
+      Canvas->Arc(Pos.x + SCALE(11), Pos.y - SCALE(6), Pos.x - SCALE(5), Pos.y + SCALE(7), Pos.x + SCALE(3), Pos.y - SCALE(7), Pos.x + SCALE(3), Pos.y + SCALE(7));
       break;
 
     case 6:
-      DrawLine(Canvas, Pos.x + 2, Pos.y - 5, Pos.x - 4, Pos.y - 5);
-      DrawLine(Canvas, Pos.x + 2, Pos.y - 6, Pos.x + 2, Pos.y + 6);
-      DrawLine(Canvas, Pos.x + 2, Pos.y + 6, Pos.x - 4, Pos.y + 6);
+    {
+      TPoint Points[] = {
+        TPoint(Pos.x - SCALE(4), Pos.y - SCALE(5)),
+        TPoint(Pos.x + SCALE(2), Pos.y - SCALE(5)),
+        TPoint(Pos.x + SCALE(2), Pos.y + SCALE(6)),
+        TPoint(Pos.x - SCALE(4), Pos.y + SCALE(6))
+      };
+      Canvas->Polyline(Points, 3);
       break;
-
+    }
     case 7:
-      DrawLine(Canvas, Pos.x - 4, Pos.y - 5, Pos.x + 2, Pos.y - 5);
-      DrawLine(Canvas, Pos.x - 3, Pos.y - 6, Pos.x - 3, Pos.y + 6);
-      DrawLine(Canvas, Pos.x - 3, Pos.y + 6, Pos.x + 2, Pos.y + 6);
+    {
+      TPoint Points[] = {
+        TPoint(Pos.x + SCALE(2), Pos.y - SCALE(5)),
+        TPoint(Pos.x - SCALE(4), Pos.y - SCALE(5)),
+        TPoint(Pos.x - SCALE(4), Pos.y + SCALE(6)),
+        TPoint(Pos.x + SCALE(2), Pos.y + SCALE(6))
+      };
+      Canvas->Polyline(Points, 3);
       break;
+    }
   }
 
   //This is necesarry to use white as brush before the VCL can draw the focus
@@ -74,18 +89,21 @@ void DrawComboBoxEndPoint(TCanvas *Canvas, int Index, const TRect &Rect)
   TRect Rect1(0,0,0,0);
   Canvas->Brush->Color = clWhite;
   Canvas->FillRect(Rect1);
+  #undef SCALE
 }
 //---------------------------------------------------------------------------
 void ScaleComponent(TComponent *Component, unsigned Scale)
 {
-  if(TComboBox *ComboBox = dynamic_cast<TComboBox*>(Component))
-    ComboBox->ItemHeight = (ComboBox->ItemHeight * Scale) / 100;
-  else if(TColorBox *ColorBox = dynamic_cast<TColorBox*>(Component))
+//  if(TComboBox *ComboBox = dynamic_cast<TComboBox*>(Component))
+//    ComboBox->ItemHeight = (ComboBox->ItemHeight * Scale) / 100;
+  if(TColorBox *ColorBox = dynamic_cast<TColorBox*>(Component))
     ColorBox->ItemHeight = (ColorBox->ItemHeight * Scale) / 100;
   else if(TValueListEditor *Editor = dynamic_cast<TValueListEditor*>(Component))
     Editor->DefaultRowHeight = (Editor->DefaultRowHeight * Scale) / 100;
   for(int I = 0; I < Component->ComponentCount; I++)
     ScaleComponent(Component->Components[I], Scale);
+  if(TWinControl *Control = dynamic_cast<TWinControl*>(Component))
+    Control->Realign();
 }
 //---------------------------------------------------------------------------
 void FlipAnchors(TControl *Control)
@@ -124,10 +142,10 @@ void FlipMargins(TControl *Control)
 void ScaleForm(TForm *Form)
 {
   //Change font for form. All components should have ParentFont=true
-  Form->Font->Name = "MS Shell Dlg";
+  Form->Font->Assign(GuiSettings.Font);
 
   //Set FontScale to 100 to disable scaling
-  int FontScale = Property.FontScale;
+  int FontScale = Options.FontScale;
   if(FontScale != 100)
   {
     Form->ScaleBy(FontScale, 100);
@@ -234,11 +252,14 @@ void SetAccelerators(TWinControl *WinControl, std::set<wchar_t> &Accelerators)
       }
 }
 //---------------------------------------------------------------------------
-void SetAccelerators(TWinControl *Control)
+void SetAccelerators(TCustomForm *Form)
 {
+  //Change font for form. All components should have ParentFont=true
+  Form->Font->Assign(GuiSettings.Font);
+
   const wchar_t Accelerators[] = L"abcdefghijklmnopqrstuvwxyz0123456789";
   std::set<wchar_t> Temp(Accelerators, Accelerators + sizeof(Accelerators) - 1);
-  SetAccelerators(Control, Temp);
+  SetAccelerators(Form, Temp);
 }
 //---------------------------------------------------------------------------
 String GetControlText(TControl *Control)
@@ -372,20 +393,27 @@ void ShowErrorMsg(const ECustomFunctionError &Error, TCustomEdit *Edit)
 void ShowErrorMsg(const EGraphError &Error, TCustomEdit *Edit)
 {
   MessageBox(Error.Message, LoadString(RES_ERROR), MB_ICONWARNING);
-  if(Edit)
-    SetGlobalFocus(Edit);
+  SetGlobalFocus(Edit);
 }
 //---------------------------------------------------------------------------
 void ShowErrorMsg(const std::exception &Error, TCustomEdit *Edit)
 {
   if(const EGraphError *E = dynamic_cast<const EGraphError*>(&Error))
-    ShowErrorMsg(*E);
+    ShowErrorMsg(*E, Edit);
   else if(const Func32::EFuncError *E = dynamic_cast<const Func32::EFuncError*>(&Error))
-    ShowErrorMsg(*E);
+    ShowErrorMsg(*E, Edit);
   else if(const ECustomFunctionError *E = dynamic_cast<const ECustomFunctionError*>(&Error))
-    ShowErrorMsg(*E);
+    ShowErrorMsg(*E, Edit);
   else
     MessageBox(Error.what(), LoadRes(RES_ERROR), MB_ICONWARNING);
+}
+//---------------------------------------------------------------------------
+void ShowErrorMsg(const Exception &Error, TCustomEdit *Edit)
+{
+  if(dynamic_cast<const EAbort*>(&Error))
+    return; //Ignore EAbort
+  SetGlobalFocus(Edit);
+  MessageBox(Error.Message, LoadRes(RES_ERROR), MB_ICONWARNING);
 }
 //---------------------------------------------------------------------------
 void ShowStatusError(const String &Str)
@@ -399,69 +427,77 @@ class TInputQueryForm : public TForm
   TLabel *Label;
   TButton *Button1;
   TButton *Button2;
-  int &Value;
+  double &Value;
 
 public:
-  __fastcall TInputQueryForm(const String &ACaption, const String &APrompt, int &AValue)
+  __fastcall TInputQueryForm(const String &ACaption, const String &APrompt, double &AValue)
     : TForm(NULL, 0), Value(AValue)
   {
     Caption = ACaption;
     BorderStyle = bsDialog;
     Position = poMainFormCenter;
-    ClientHeight = 70;
+    ClientHeight = GuiScale(70);
 
     Label = new TLabel(this);
     Label->Caption = APrompt;
     Label->Parent = this;
-    Label->Left = 8;
-    Label->Top = 8;
+    Label->Left = GuiScale(8);
+    Label->Top = GuiScale(8);
 
     Edit = new TEdit(this);
     Edit->Text = Value;
     Edit->Parent = this;
-    Edit->Left = Label->Left + Label->Width + 5;
-    Edit->Top = 8;
-    Edit->Width = std::max(180 - Edit->Left - 10, 50);
-    Width = Edit->Left + Edit->Width + 10;
+    Edit->Left = Label->Left + Label->Width + GuiScale(5);
+    Edit->Top = GuiScale(8);
+    Edit->Width = std::max(GuiScale(180) - Edit->Left - GuiScale(10), GuiScale(50));
+    Width = Edit->Left + Edit->Width + GuiScale(10);
 
     Button1 = new TButton(this);
     Button1->Parent = this;
     Button1->Caption = _("OK");
-    Button1->Left = Width / 2 - Button1->Width - 5;
-    Button1->Top = 38;
+    Button1->Width = GuiScale(75);
+    Button1->Left = Width / 2 - Button1->Width - GuiScale(5);
+    Button1->Top = GuiScale(38);
+    Button1->Height = GuiScale(25);
     Button1->Default = true;
     Button1->OnClick = InputQueryClick;
 
     Button2 = new TButton(this);
     Button2->Parent = this;
     Button2->Caption = _("Cancel");
-    Button2->Left = 50;
-    Button2->Left = Width / 2 + 5;
-    Button2->Top = 38;
+    Button2->Left = GuiScale(50);
+    Button2->Left = Width / 2 + GuiScale(5);
+    Button2->Top = GuiScale(38);
+    Button2->Height = GuiScale(25);
+    Button2->Width = GuiScale(75);
     Button2->Cancel = true;
     Button2->ModalResult = mrCancel;
   }
 
   void __fastcall InputQueryClick(TObject *Sender)
   {
-    Value = Edit->Text.ToInt(); //Verify that a valid integer is entered
-    ModalResult = mrOk;
+    try
+    {
+      Value = Edit->Text.ToDouble();
+      ModalResult = mrOk;
+    }
+    catch(EConvertError &E)
+    {
+      MessageBox(LoadRes(RES_NOT_VALID_NUMBER, Edit->Text), LoadRes(RES_ERROR_IN_VALUE), MB_ICONSTOP);
+    }
   }
 };
 //---------------------------------------------------------------------------
-bool InputQuery(const String &Caption, const String &Prompt, int &Value)
+bool InputQuery(const String &Caption, const String &Prompt, double &Value)
 {
   std::auto_ptr<TForm> Form(new TInputQueryForm(Caption, Prompt, Value));
   return Form->ShowModal() == mrOk;
 }
 //---------------------------------------------------------------------------
-bool GetKeyState(Classes__1 Key)
+bool GetKeyState(System_Classes__1 Key)
 {
-  switch(Key)
-  {
-    case ssShift:
+  if(Key == ssShift)
       return GetKeyState(VK_SHIFT) & 0x8000;
-  }
   return false;
 }
 //---------------------------------------------------------------------------
@@ -473,13 +509,16 @@ String GetKeyName(UINT Key)
     if(Key > VK_ESCAPE && Key < 'A' /*VK_A*/) //Not sure about this range
       ScanCode |= 0x01000000;
     wchar_t KeyName[20];
-    GetKeyNameText(ScanCode, KeyName, sizeof(KeyName) / sizeof(KeyName[0]));
+    if(GetKeyNameText(ScanCode, KeyName, sizeof(KeyName) / sizeof(KeyName[0])) == 0)
+      return String();
     CharLower(&KeyName[1]);
     return String(KeyName);
   }
   return String();
 }
 //---------------------------------------------------------------------------
+namespace Vcl
+{
 namespace Menus
 {
 //Replaces the function ShortCutToText() in Menus.pas
@@ -517,18 +556,139 @@ namespace Menus
     return Str;
   }
 }
-//---------------------------------------------------------------------------
-namespace Windows
-{
-  //Missing declaration in Windows.hpp
-  const unsigned HH_DISPLAY_TOPIC      = 0;
-  extern PACKAGE HWND __fastcall HtmlHelp(HWND hWndCaller, System::WideChar * pszFile, unsigned uCommand, unsigned dwData);
-}
-void ShowHelp(const String &File, const String &HelpFile)
-{
-  //Workaround for bug in THtmlHelpViewer, which only support the .htm extension
-  String Str = (HelpFile.IsEmpty() ? Application->HelpFile : HelpFile) + "::/" + File;
-  Windows::HtmlHelp(NULL, Str.c_str(), Windows::HH_DISPLAY_TOPIC, 0);
 }
 //---------------------------------------------------------------------------
+int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
+{
+   UINT  num = 0;          // number of image encoders
+   UINT  size = 0;         // size of the image encoder array in bytes
+
+   Gdiplus::ImageCodecInfo* pImageCodecInfo = NULL;
+
+   Gdiplus::GetImageEncodersSize(&num, &size);
+   if(size == 0)
+      return -1;  // Failure
+
+   pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
+   if(pImageCodecInfo == NULL)
+      return -1;  // Failure
+
+   Gdiplus::GetImageEncoders(num, size, pImageCodecInfo);
+
+   for(UINT j = 0; j < num; ++j)
+   {
+      if( wcscmp(pImageCodecInfo[j].MimeType, format) == 0 )
+      {
+         *pClsid = pImageCodecInfo[j].Clsid;
+         free(pImageCodecInfo);
+         return j;  // Success
+      }
+   }
+
+   free(pImageCodecInfo);
+   return -1;  // Failure
+}
+//---------------------------------------------------------------------------
+void ScaleImageList(TImageList *List, TImageList *DestList)
+{
+  if(Options.FontScale != 100 || Screen->PixelsPerInch != 96)
+  {
+    int NewWidth = List->Width * Screen->PixelsPerInch * Options.FontScale / (96 * 100);
+    DestList->SetSize(NewWidth, NewWidth);
+    TScaledImageList::ScaleImageList(List, DestList);
+  }
+  else if(List != DestList)
+    DestList->Assign(List);
+}
+//---------------------------------------------------------------------------
+bool NeedScaling()
+{
+  return Options.FontScale != 100 || Screen->PixelsPerInch != 96;
+}
+//---------------------------------------------------------------------------
+unsigned GuiScale(unsigned Value)
+{
+  if(Options.FontScale != 100 || Screen->PixelsPerInch != 96)
+    return MulDiv(Value, Options.FontScale * Screen->PixelsPerInch, 9600);
+  return Value;
+}
+//---------------------------------------------------------------------------
+void SmoothResize(TPngImage *apng, int NuWidth, int NuHeight)
+{
+  if(!(apng->Header->ColorType == COLOR_RGBALPHA || apng->Header->ColorType == COLOR_RGB))
+    throw Exception("Only COLOR_RGBALPHA and COLOR_RGB formats are supported");
+  bool IsAlpha = apng->Header->ColorType == COLOR_RGBALPHA;
+  int new_colortype = IsAlpha ? COLOR_RGBALPHA : COLOR_RGB;
+  std::auto_ptr<TPngImage> bTmp(new TPngImage(new_colortype, 8, NuWidth, NuHeight));
+  double xscale = bTmp->Width / (apng->Width - 1.0);
+  double yscale = bTmp->Height / (apng->Height - 1.0);
+  for(int to_y = 0; to_y < bTmp->Height; to_y++)
+  {
+    double sfrom_y = to_y / yscale;
+    int ifrom_y = sfrom_y;
+    double weight_y[2];
+    weight_y[1] = sfrom_y - ifrom_y;
+    weight_y[0] = 1 - weight_y[1];
+    for(int to_x = 0; to_x < bTmp->Width; to_x++)
+    {
+      double sfrom_x = to_x / xscale;
+      int ifrom_x = sfrom_x;
+      double weight_x[2];
+      weight_x[1] = sfrom_x - ifrom_x;
+      weight_x[0] = 1 - weight_x[1];
+
+      double total_red   = 0.0;
+      double total_green = 0.0;
+      double total_blue  = 0.0;
+      double total_alpha  = 0.0;
+      for(int ix = 0; ix < 2; ix++)
+      {
+        for(int iy = 0; iy < 2; iy++)
+        {
+          tagRGBTRIPLE *sli = static_cast<tagRGBTRIPLE*>(apng->Scanline[ifrom_y + iy]);
+          Pngimage::TByteArray *ali = IsAlpha ? apng->AlphaScanline[ifrom_y + iy] : NULL;
+          int new_red = sli[ifrom_x + ix].rgbtRed;
+          int new_green = sli[ifrom_x + ix].rgbtGreen;
+          int new_blue = sli[ifrom_x + ix].rgbtBlue;
+          int new_alpha = IsAlpha ? (*ali)[ifrom_x + ix] : 0;
+          double weight = weight_x[ix] * weight_y[iy];
+          total_red   = total_red   + new_red   * weight;
+          total_green = total_green + new_green * weight;
+          total_blue  = total_blue  + new_blue  * weight;
+          if(IsAlpha)
+            total_alpha  = total_alpha  + new_alpha  * weight;
+        }
+      }
+      tagRGBTRIPLE *slo = static_cast<tagRGBTRIPLE*>(bTmp->Scanline[to_y]);
+      Pngimage::TByteArray *alo = IsAlpha ? bTmp->AlphaScanline[to_y] : NULL;
+      slo[to_x].rgbtRed = total_red + 0.5;
+      slo[to_x].rgbtGreen = total_green + 0.5;
+      slo[to_x].rgbtBlue = total_blue + 0.5;
+      if(IsAlpha)
+        (*alo)[to_x] = total_alpha + 0.5;
+    }
+  }
+  apng->Assign(bTmp.get());
+}
+//---------------------------------------------------------------------------
+void ConvertTransparentToAlpha(TPngImage *Image, TColor TransparentColor)
+{
+  for(int y = 0; y < Image->Height; y++)
+  {
+    pByteArray Line = Image->AlphaScanline[y];
+    for(int x = 0; x < Image->Width; x++)
+      if(Image->Pixels[x][y] == TransparentColor)
+        (*Line)[x] = 0;
+  }
+}
+//---------------------------------------------------------------------------
+void SetEditText(TEdit *Edit, const String &Str)
+{
+  TNotifyEvent OldOnChange = Edit->OnChange;
+  Edit->OnChange = NULL;
+  Edit->Text = Str;
+  Edit->OnChange = OldOnChange;
+}
+//---------------------------------------------------------------------------
+
 

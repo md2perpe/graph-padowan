@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 #include "Graph.h"
 #pragma hdrstop
+#include "Unit1.h"
 #include "Unit19.h"
 #include "Unit20.h"
 #include <ComObj.hpp>
@@ -17,8 +18,13 @@
 #include "Images.h"
 #include "PyGraph.h"
 #include <cmath>
+#ifdef _WIN64
+#include <boost/spirit/home/classic/phoenix/operators.hpp>
+#include <boost/spirit/home/classic/phoenix/primitives.hpp>
+#else
 #include <boost/spirit/phoenix/operators.hpp>
 #include <boost/spirit/phoenix/primitives.hpp>
+#endif
 #include "Swig.h"
 #include "PythonBind.h"
 #include "GuiHelper.h"
@@ -53,8 +59,15 @@ __fastcall TForm19::TForm19(TComponent* Owner, TData &AData, int AWidth, int AHe
       TAnimationConstant &AnimationConstant = AnimationInfo.ConstantList[Iter->Name];
       if(AnimationConstant.Step.empty())
       {
-        double Value = Func32::Eval(Iter->Name, Data.CustomFunctions.SymbolList, Data.Axes.Trigonometry);
-        double Min = (Value == 0) ? 10 : Value / 10;
+        double Value = 0;
+        try
+        {
+          Value = Func32::Eval(Iter->Name, Data.CustomFunctions.SymbolList, Data.Axes.Trigonometry);
+        }
+        catch(Func32::EFuncError &E)
+        {
+        }
+        double Min = (Value == 0) ? -10 : Value / 10;
         double Max = (Value == 0) ? 10 : Value * 10;
         AnimationConstant.Min = ToWString(Min);
         AnimationConstant.Max = ToWString(Max);
@@ -91,7 +104,6 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
   if(!CheckLimit(Edit5, LoadRes(RES_GREATER, Label6->Caption, 160), 160))
     return;
 
-  std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
   unsigned ImageWidth = Edit4->Text.ToInt();
   unsigned ImageHeight = Edit5->Text.ToInt();
   if(Edit4->Modified || Edit5->Modified)
@@ -100,12 +112,7 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
     AnimationInfo.Height = ImageHeight;
   }
 
-  Bitmap->Width = ImageWidth;
-  Bitmap->Height = ImageHeight;
-
   AnimationInfo.Constant = ToWString(ComboBox1->Text);
-  TDraw Draw(Bitmap->Canvas, &Data, false, "Animate thread");
-  Draw.SetArea(TRect(0, 0, ImageWidth, ImageHeight));
 
   ComboBox1Change(NULL); //Update AnimationInfo
 
@@ -114,7 +121,8 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
   double Step = std::abs(MakeFloat(Edit3, LoadRes(RES_NOT_EQUAL_ZERO, Label4->Caption), phoenix::arg1 != 0));
   if(Max < Min)
     Step = -Step;
-  AnimationInfo.FramesPerSecond = MakeFloat(Edit6, LoadRes(RES_GREATER_ZERO, Label7->Caption), 0.01);
+  #pragma warn -8056  //Disable wrong Warning:  Integer arithmetic overflow when MAXDOUBLE is used
+  AnimationInfo.FramesPerSecond = MakeFloat(Edit6, LoadRes(RES_GREATER_ZERO, Label7->Caption), 0.01, MAXDOUBLE);
 
   unsigned StepCount = std::ceil((Max - Min) / Step) + 1;
   ProgressForm1->Max = StepCount;
@@ -134,7 +142,7 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
   //Make space for 256 colors in palette
   std::vector<char> BitmapInfoData(256 * sizeof(RGBQUAD) + sizeof(BITMAPINFOHEADER));
   BITMAPINFO *BitmapInfo = reinterpret_cast<BITMAPINFO*>(&BitmapInfoData[0]);
-  FillBitmapInfoHeader(BitmapInfo->bmiHeader, Bitmap.get(), Rect, 256, 0);
+  FillBitmapInfoHeader(BitmapInfo->bmiHeader, NULL/*Bitmap.get()*/, Rect, 256, 0);
   String TempFile = GetTempFileName("Graph", "avi");
   std::wstring OriginalValue = Data.CustomFunctions.GetValue(AnimationInfo.Constant).Text;
 
@@ -181,10 +189,24 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
     for(std::set<TColor>::iterator Iter = GraphColors.begin(); Iter != GraphColors.end(); ++Iter)
       Colors.push_back(ColorToRGBQUAD(*Iter));
 
+    Python::TLockGIL Dummy;   //We need to hold the GIL to release DataObject
 		Python::TPyObjectPtr DataObject(Python::IsPythonInstalled() ? ToPyObject(Data) : NULL, false);
     int LastColorCount = -1; //Use invalid value as default to force writing of colors in the first loop
+    Form1->BeginUpdate();
+
+    TDraw Draw(NULL, &Data, "Animate thread", true);
+    Draw.SetSizeMul(Screen->PixelsPerInch / 96.0);
     for(unsigned I = 0; I < StepCount; I++)
     {
+      //We should not recreate Bitmap at every loop, but we seem to loose the clipping around the legend otherwise.
+      //Recreating the HDC after drawing the legend also seem to fix it.
+      //But the easy solution seems to be recreating the bitmap.
+      std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
+      Bitmap->Width = ImageWidth;
+      Bitmap->Height = ImageHeight;
+      Draw.SetCanvas(Bitmap->Canvas);
+      Draw.SetArea(TRect(0, 0, ImageWidth, ImageHeight));
+
       long double Value = Min + Step * I;
       Bitmap->Canvas->Brush->Style = bsSolid;
       Bitmap->Canvas->Brush->Color = Data.Axes.BackgroundColor;
@@ -199,7 +221,6 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
       }
       Draw.DrawAll();
       Draw.Wait();
-
       //As we don't know what colors will be used in all the frames, the palette is updated for each frame.
       //It seems to give problems when the palette is changed, at least with the MCI used in Graph,
       //so we only add to the palette. It also gives problems when the number of entries is
@@ -235,10 +256,12 @@ void __fastcall TForm19::Button1Click(TObject *Sender)
       {
         //Restore constant in case we want to create a new animation with another constant
         Data.CustomFunctions.Replace(AnimationInfo.Constant, OriginalValue);
+        Form1->EndUpdate();
         return;
       }
     }
   }
+  Form1->EndUpdate();
 
   //Restore constant in case we want to create a new animation with another constant
   Data.CustomFunctions.Replace(AnimationInfo.Constant, OriginalValue);
@@ -282,7 +305,4 @@ void TForm19::GetSymbolDependent(const std::wstring &SymbolName, std::vector<TGr
     GetSymbolDependent(SymbolName, List, Elem->GetChild(I));
 }
 //---------------------------------------------------------------------------
-
-
-
 

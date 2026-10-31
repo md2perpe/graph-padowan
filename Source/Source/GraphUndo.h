@@ -10,152 +10,176 @@
 #ifndef GraphUndoH
 #define GraphUndoH
 #include "Undo.h"
+#include "PyGraph.h"
 
 namespace Graph
 {
-struct TUndoAdd
+class TUndoAdd
 {
 	TGraphElemPtr GraphElem;
-
+public:
 	TUndoAdd(const TGraphElemPtr &AGraphElem)
     : GraphElem(AGraphElem) {}
   void operator()(TUndoList &UndoList) const;
 };
 
-struct TUndoChange
+class TUndoReplace
 {
   TGraphElemPtr OldElem;
 	TGraphElemPtr NewElem;
-
-	TUndoChange(const TGraphElemPtr &AOldElem, const TGraphElemPtr &ANewElem)
+public:
+	TUndoReplace(const TGraphElemPtr &AOldElem, const TGraphElemPtr &ANewElem)
 		: OldElem(AOldElem), NewElem(ANewElem)
 	{
-		OldElem->ClearCache();
+    OldElem->SetData(NULL); //Makes elem invalid from plugins
 	}
 
-	void operator()(TUndoList &UndoList) const
-	{
-		UndoList.Push(TUndoChange(NewElem, OldElem));
-		TData::Replace(NewElem, OldElem);
-	}
+	void operator()(TUndoList &UndoList) const;
 };
 
-struct TUndoDel
+class TUndoChange
+{
+  TGraphElemPtr Elem;
+	TGraphElemPtr ElemCopy;
+public:
+	TUndoChange(const TGraphElemPtr &AElem)
+		: Elem(AElem), ElemCopy(AElem->Clone())
+	{}
+	TUndoChange(const TGraphElemPtr &AElem, const TGraphElemPtr &AElemCopy)
+		: Elem(AElem), ElemCopy(AElemCopy)
+	{}
+
+	void operator()(TUndoList &UndoList) const;
+  const TGraphElemPtr& GetElem() const {return Elem;}
+};
+
+
+class TUndoDel
 {
 	int Index;
 	TGraphElemPtr Elem;
 	TGraphElemPtr Parent;
-
+public:
 	TUndoDel(const TGraphElemPtr &AElem, const TGraphElemPtr &AParent, int AIndex)
-		: Index(AIndex), Elem(AElem), Parent(AParent)  { }
-	void operator()(TUndoList &UndoList) const
-	{
-		UndoList.Push(TUndoAdd(Elem));
-		Parent->InsertChild(Elem, Index);
-	}
+		: Index(AIndex), Elem(AElem), Parent(AParent)  {Elem->SetData(NULL);}  //Makes elem invalid from plugins
+	void operator()(TUndoList &UndoList) const;
 };
 
-inline void TUndoAdd::operator()(TUndoList &UndoList) const
-{
-  UndoList.Push(TUndoDel(GraphElem, GraphElem->GetParent(), TData::GetIndex(GraphElem)));
-  TData::Delete(GraphElem);
-}
-
-
 template<class T>
-struct TUndoObject
+class TUndoObject
 {
   T &OrgObject;
 	T Object;
-  TUndoObject(T &AOrgObject, const T &AObject) : OrgObject(AOrgObject), Object(AObject) {}
+public:
+  TUndoObject(T &AOrgObject) : OrgObject(AOrgObject), Object(AOrgObject) {}
   void operator()(TUndoList &UndoList)
   {
-    UndoList.Push(TUndoObject<T>(OrgObject, OrgObject));
+    UndoList.Push(TUndoObject<T>(OrgObject));
     OrgObject = Object;
   }
 };
 
-struct TUndoAxes
+class TUndoAxes
 {
   TAxes Axes;
   TData &Data;
+public:
   TUndoAxes(TData &AData) : Data(AData), Axes(AData.Axes) {}
-  void operator()(TUndoList &UndoList)
-  {
-    UndoList.Push(TUndoAxes(Data));
-		Data.Axes = Axes;
-		Data.ClearCache();
-    Data.Update(); //In case trigonmetry has changed
-  }
+  void operator()(TUndoList &UndoList);
 };
 
-struct TUndoCustomFunctions
+class TUndoCustomFunctions
 {
   boost::shared_ptr<TCustomFunctions> CustomFunctions;
   TData &Data;
+public:
   TUndoCustomFunctions(TData &AData) //This will steal the custom functions from AData
     : Data(AData), CustomFunctions(new TCustomFunctions)
   {
     CustomFunctions->Swap(AData.CustomFunctions);
   }
-	void operator()(TUndoList &UndoList)
-  {
-    Data.CustomFunctions.Swap(*CustomFunctions);
-    UndoList.Push(*this);
-    Data.Update();
-    Data.ClearCache();
-  }
+	void operator()(TUndoList &UndoList);
 };
 
-struct TUndoMove
+class TUndoSetCustomFunction
+{
+  TData &Data;
+  std::wstring Name;
+  Func32::TArgType Args;
+  std::wstring Equation;
+public:
+  TUndoSetCustomFunction(TData &AData, const std::wstring &AName);
+	void operator()(TUndoList &UndoList);
+};
+
+class TUndoMove
 {
   TData &Data;
   TGraphElemPtr Elem;
   unsigned Index;
-
+public:
   TUndoMove(TData &AData, const TGraphElemPtr &AElem, unsigned AIndex)
     : Data(AData), Elem(AElem), Index(AIndex) {}
-	void operator()(TUndoList &UndoList)
-	{
-		const TGraphElemPtr &Parent = Elem->GetParent();
-		int OldIndex = Parent->GetChildIndex(Elem);
-		UndoList.Push(TUndoMove(Data, Elem, OldIndex));
-		Parent->RemoveChild(OldIndex);
-		Parent->InsertChild(Elem, Index);
-	}
+	void operator()(TUndoList &UndoList);
 };
 
-struct TUndoAddPoint
+class TUndoAddPoint
 {
 	TPointSeriesPtr Series;
+public:
 	TUndoAddPoint(TPointSeriesPtr ASeries) : Series(ASeries) {}
 	void operator()(TUndoList &UndoList);
 };
 
-struct TUndoDelPoint
+class TUndoDelPoint
 {
 	TPointSeriesPtr Series;
 	TPointSeriesPoint Point;
+public:
 	TUndoDelPoint(TPointSeriesPtr ASeries, const TPointSeriesPoint &APoint)
 		: Series(ASeries), Point(APoint) {}
-	void operator()(TUndoList &UndoList)
-	{
-		Series->InsertPoint(Point);
-		UndoList.Push(TUndoAddPoint(Series));
-	}
+	void operator()(TUndoList &UndoList);
 };
-
-inline void TUndoAddPoint::operator()(TUndoList &UndoList)
-{
-	UndoList.Push(TUndoDelPoint(Series, Series->GetPoint(Series->PointCount()-1)));
-	Series->DeletePoint(Series->PointCount()-1);
-}
 
 template<class T>
 TUndoObject<T> MakeUndoObject(T &OrgObject)
 {
-  return TUndoObject<T>(OrgObject, OrgObject);
+  return TUndoObject<T>(OrgObject);
 }
+
+class TUndoChangeShowInLegend
+{
+  TGraphElemPtr Elem;
+  bool ShowInLegend;
+public:
+  TUndoChangeShowInLegend(const TGraphElemPtr &AElem)
+    : Elem(AElem), ShowInLegend(AElem->GetShowInLegend()) {}
+  void operator()(TUndoList &UndoList);
+};
+
+template<typename T>
+class TUndoChangeGraphElemSetting
+{
+  typedef T (__closure *TGetFunc)();
+  typedef void (__closure *TSetFunc)(T);
+
+  TGetFunc GetFunc;
+  TSetFunc SetFunc;
+  TGraphElemPtr Elem;
+  T Value;
+public:
+  TUndoChangeGraphElemSetting(const TGraphElemPtr &AElem, const TGetFunc &AGetFunc, const TSetFunc &ASetFunc)
+    : Elem(AElem), GetFunc(AGetFunc), SetFunc(ASetFunc)
+  {
+    Value = GetFunc();
+  }
+  void operator()(TUndoList &UndoList)
+  {
+    UndoList.Push(TUndoChangeGraphElemSetting<T>(Elem, GetFunc, SetFunc));
+    SetFunc(Value);
+    Python::ExecutePluginEvent(Python::peChanged, Elem);
+  }
+};
 
 extern TUndoList UndoList;
 //---------------------------------------------------------------------------

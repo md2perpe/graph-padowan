@@ -1,17 +1,49 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-07 21:21+0100\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:20+0200\n"
 "Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
 "Language-Team: Magyari Gábor <magyari@kola.sulinet.hu>\n"
-"Language: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.2.1\n"
-"X-Poedit-Country: HUNGARY\n"
-"X-Poedit-Basepath: e:\\\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: e:\n"
+
+#. Form1..Caption
+#, fuzzy
+msgid "Plugin Manager"
+msgstr "Bővítmények"
+
+#. Form1..ListView......Caption
+#, fuzzy
+msgid "Plugin name"
+msgstr "Bővítmények"
+
+#. Form1..ListView......Caption
+msgid "Version"
+msgstr "Verzió"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "Importálás"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr ""
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "Bezárás"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -76,7 +108,7 @@ msgstr "A cimke legyen közvetlenül jobbra az y tengelytől a kép tetején."
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -138,10 +170,6 @@ msgstr "Exportálás fájlba..."
 msgid "Export the selected point series to a file."
 msgstr "A pontsor exportálása fájlba."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "Importálás"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -171,7 +199,7 @@ msgstr "Szerkesztés"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -230,7 +258,6 @@ msgstr "Internet"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -408,11 +435,11 @@ msgstr "Érintő/merőleges"
 msgid "Insert a tangent or normal for the selected function."
 msgstr "Érintő hozzáadása a kiválasztott függvényhez."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "Kiszínezés"
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "A függvény által meghatározott rész besatírozása."
 
@@ -666,16 +693,6 @@ msgstr "Támogatás"
 msgid "Donate money to the project."
 msgstr "Támogasd pénzzel a terméket"
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "A nap ötlete"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "Mutasd a nap ötletét"
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "Támogatás"
@@ -850,28 +867,6 @@ msgstr "Balra lent"
 msgid "Show the legend in the bottom left corner."
 msgstr "Mutassa az emlékeztetőt a kép bal alsó sarkában."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "Bezárás"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "Következő ötlet"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "Előző ötlet"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "Mutasd az ötleteket induláskor"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "Tudtad-e"
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "Összefüggés beszúrása"
@@ -950,7 +945,7 @@ msgstr "Szöveg, amely az Emlékeztetőbe kerül. Ha üres, allor a hozzárendel
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -958,7 +953,36 @@ msgstr "Tulajdonságok"
 msgid "Style:"
 msgstr "Stílus:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "Válszd ki az egyenlőtlenség ábrázolásának típusát. Egyenlet esetén nem használható."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "A relációt ábrázoló grafikon színének kiválasztása."
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "Vastagság:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "Vonalstílus:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+#, fuzzy
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "Válszd ki az egyenlőtlenség ábrázolásának típusát. Egyenlet esetén nem használható."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -969,24 +993,7 @@ msgstr "Stílus:"
 msgid "Color:"
 msgstr "Szín:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "Vastagság:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "Válszd ki az egyenlőtlenség ábrázolásának típusát. Egyenlet esetén nem használható."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "A relációt ábrázoló grafikon színének kiválasztása."
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "Az egyenlet grafikonjának vastagsága képpontban. Egyenlőtlenségnél nem használható."
 
@@ -1032,12 +1039,6 @@ msgstr "Írj szöveg az Emlékeztetőbe, különben a hozzárendelési szabály 
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "Grafikon tulajdonságai"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "Vonalstílus:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1352,10 +1353,6 @@ msgstr "Jelöld be, hogy minden pont koordinátái megjelenjenek."
 msgid "Show coordinates"
 msgstr "Mutasd a koordinátákat"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "A koordináták betűtípusa."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "Hol jelenjenek meg a koordináták?"
@@ -1391,6 +1388,10 @@ msgstr "Balra lent"
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1....Items.Strings
 msgid "Below Right"
 msgstr "Jobbra lent"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "A koordináták betűtípusa."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1479,6 +1480,11 @@ msgstr "Mutasd az y-hibát"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "Minden hiba azonos százalékértékű."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "Alkalmaz"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1735,10 +1741,6 @@ msgstr "Színezési tartomány a második függvényre"
 msgid "Custom functions/constants"
 msgstr "Saját függvények/állandók"
 
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "Alkalmaz"
-
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
 msgstr "Nevek"
@@ -1939,8 +1941,9 @@ msgid "The newest version as well as the source code are available at: %s"
 msgstr "A legújabb verzió és a forrása elérhető a következő címen: %s"
 
 #. Form2..Panel1..LinkLabel2..Caption
-msgid "Email: %s"
-msgstr "E-mail: %s"
+#, fuzzy
+msgid "Support: %s"
+msgstr "Támogatás"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2145,28 +2148,6 @@ msgstr "Függőleges rácsvonalak megjelenítése."
 msgid "Show grid"
 msgstr "Megjelenít"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "Mutasd a cimkét a rajzterület jobb oldalán az x tengely fölött."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "Cimke:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "A tengelyek cimkéinek szerkesztése."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "Az x tengely metszéspontja y="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "Az x tengely ennél az értéknél metszi az y tengelyt."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "Az x tengely logaritmikus beosztása."
@@ -2194,6 +2175,28 @@ msgstr "A tengelyen megjelenő egységek legyenek a pi többszörösei."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox18..Caption
 msgid "Show as a multiple of π"
 msgstr "A beosztások a π többszörösei"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "A tengelyek cimkéinek szerkesztése."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "Mutasd a cimkét a rajzterület jobb oldalán az x tengely fölött."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "Cimke:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "Az x tengely ennél az értéknél metszi az y tengelyt."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "Az x tengely metszéspontja y="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2225,18 +2228,6 @@ msgstr "Mutasd az y tengely beosztásait"
 msgid "Show horizontal grid lines."
 msgstr "A vízszintes rácsvonalak megjelenítése."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "Mutasd a cimkét a rajzterület felső részén az y tengely jobb oldalán."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "Az y tengely metszéspontja x="
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "Az y tengely ennél az értéknél metszi az x tengelyt."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "Logaritmikus beosztás az y tengelyen."
@@ -2244,6 +2235,18 @@ msgstr "Logaritmikus beosztás az y tengelyen."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "Az y tengely beosztásának megjelenítése."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "Az y tengely metszéspontja x="
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "Az y tengely ennél az értéknél metszi az x tengelyt."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "Mutasd a cimkét a rajzterület felső részén az y tengely jobb oldalán."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2293,10 +2296,6 @@ msgstr "Fokban"
 msgid "Enter a title to show above the coordinate system."
 msgstr "Írd be a koordinátarendszer címét."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "Válaszd ki a cím betűtípusát."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "Válaszd ki, hol jelenjen meg az emlékeztető."
@@ -2312,6 +2311,10 @@ msgstr "Jelöld be komlex számokkal való munkához. Figyelem! Ez jelentősen l
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "Komplex számok használata"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "Válaszd ki a cím betűtípusát."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2362,15 +2365,15 @@ msgstr "Cimke:"
 msgid "Legend font:"
 msgstr "Emlékeztető:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "Válaszd ki a tengelyek cimkéjének betűtípusát."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "Válaszd ki a tengelyeken megjelenő számok betűtípusát."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "Válaszd ki az emlékeztető betűtípusát."
 
@@ -2547,47 +2550,47 @@ msgstr "Szöveg mérete"
 msgid "Text string"
 msgstr "Szöveg"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "Szimbólum beszúrása (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 msgid "Insert object."
 msgstr "Objektum beszúrása"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "Félkövér (Ctrl-B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "Dőlt (Ctrl-I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "Aláhúzott (Ctrl-U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "Áthúzott (Ctrl-S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "Felső index (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "Alsó index (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "Balra igazítás (Ctrl-L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "Középre igazítás (Ctrl-E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "Jobbra igazítás (Ctrl-R)"
 
@@ -2974,6 +2977,10 @@ msgstr "Nincs eredmény."
 msgid "An accurate result cannot be found."
 msgstr "Nem található megfelelő eredmény."
 
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "Számítási hiba."
+
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "Belső hiba történt. Kérünk küldd el az információkat a program készítőjének."
 
@@ -3138,6 +3145,10 @@ msgstr "Érvénytelen érték. A végtelen nem használható ezen a helyen."
 msgid "Not enough memory to complete the operation."
 msgstr ""
 
+#, fuzzy
+msgid "Printing aborted!"
+msgstr "Nyomtatási hiba"
+
 msgid "Confirm delete"
 msgstr "Törlés megerősítése"
 
@@ -3228,7 +3239,8 @@ msgstr "Függvény szerkesztése"
 msgid "Edit tangent/normal"
 msgstr "Érintő/normális szerkesztése"
 
-msgid "Error processing file '%s' at line %s."
+#, fuzzy
+msgid "Error processing file at line %s."
 msgstr "Hiba a(z) '%s' fájl feldolgozásában. (%s. sor)"
 
 msgid "Edit text label"
@@ -3357,160 +3369,6 @@ msgstr ""
 msgid "Thread is not responding"
 msgstr "Nem válaszol."
 
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "A Nap Ötlete használható, nem közismert információkat ad a program kezeléséről."
-
-#, fuzzy
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr "A következő webhelyen kaphat segítésget a Graph használatához, jelezhet hibákat, javasolhat fejlesztéseket és javításokat a készítőknek: <a href=\"http://www.padowan.dk/forum\">http://www.padowan.dk/forum</a>"
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "Jobb gombbal kattintva személyre szabhatod az eszköztárat a 'Testreszabás' menüponttal."
-
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "A függvény törlése helyett rejtetté tehető, a függvénylistán látható jelölőnégyzetre kattintással"
-
-msgid "You can paste images into a text label."
-msgstr "Képek is beilleszthetőek a szöveges cimkébe."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "A szöveges cimkék bármilyen OLE objektumot tartalmazhatnak, pl. MS Egyenletszerkesztő objektumot. A beszúráshoz szerkesztés közben kattints jobb gombbal a területre, és válaszd ki az 'Objektum beszúrása' menüpontot."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "A pontsorok táblázat exportálható más programokba, pl. Microsoft Excelbe. Ehhez kattints jobb gombbal a pontsor nevére és válaszd az 'Exportálás fájlba' menüpontot."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "Függőleges vonalat (pl. x=5) ábrázolhatunk paraméteres függvényként (x(t)=5, y(t)=t) vagy összefüggésként (x=5)."
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "A Nagyítás|Arányos menüpont segítségével mérethelyessé teheted az ábrát. Ez különösen hasznos körök és más szimmetrikus alakzatok ábrázolásakor."
-
-msgid "You can find a list of all available functions in the help."
-msgstr "A Segítség menüpontban megtalálható az összes, a program által ismert függvény listája."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "Az 'if' segítségével kombinált függvényeket is létrehozhatsz. Például x<1  esetén f(x)=x, x>=1 esetén f(x)=x^2 megadható a következő módon: f(x)=if(x>1, x, x^2)."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "Más Graph fájl tartalma importálható az aktuális koordinátarendszerbe a Fájl|Importálás|Graph fájl menüpont segítségével."
-
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "Ha a Tengelyek párbeszédablakban bejelölöd a 'Legyen alapértelmezett' négyzetet, akkor az aktuális beállítások alapértelmezettek lesznek és a következő koordinátarendszerek ez alapján jönnek létre."
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "A Ctrl gomb lenyomva tartásával a kurzormozgató nyilak segítségével mozgatható a koordinátarendszer."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "A Ctrl gomb lenyomva tartásával a + és a - jel nagyításra használható."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "Az egér görgőjével nagyítható és kicsinyíthető az ábra az egérmutató helyzetéhez képest."
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "Ha nem akarsz megjeleníteni egy elemet az Emlékeztetőben, kattints jobb gombbal a megfelelő elemre függvénylistában, és szüntesd meg a 'Mutasd az emlékeztetőben' jelölését."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "Ha azt szeretnéd, hogy atengelyek a bal alsó sarokban metsszék egymást, válaszd ki a Tengelyek stílusa: Bal alsó metszés-t az Tengelyek menüpont Beállítások fülén."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "A program 5 különböző formátumba tud menteni: bmp, emf, png, jpg és pdf."
-
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "A Szerkesztés|Kép másolása menüpont segítségével vágólapra másolható a koordinátarendszer, és beilleszthető más alkalmazásokba is. Később az ábra ismét szerkeszthetővé válik, ha a másik alkalmazásban duplán rákattintunk."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "Az Intézőből dupla kattintással is megnyitható a grf fájl a Graph program segítségével."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "A megnyitott Graph programban úgy is megnyitható egy grf fájl, hogy az intézőből ráhúzzuk a program ablakára."
-
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "A Graph program megjegyzi a fő ablak méretét és helyzetét a következő indításig. Ez a lehetőség kikapcsolható a Beállítások menüpontban."
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "A Számítások|Táblázat menüponttal értéktáblázat készíthető az adott függvényhez."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "Az értéktáblázat akár részben is exportálható fájlba. Ehhez kattints jobb gombbal a kiválasztott részre és válaszd az Exportálás fájlba menüpontot. Ezután a táblázat más programokban is felhasználható."
-
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "A vágólap segítségével az értéktáblázat átmásolható más programokba, például Microsoft Excelbe."
-
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "A vágólap segítségével más programokból például Microsoft Excelből is beilleszthetjük a pontsor adatait."
-
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "Vágólap segítségével átmásolhatunk függvényeket az egyik éppen futó Graph programból egy másikba. (Szerkesztés/Másolás)"
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "A legutolsó művelet visszavonható a Szerkesztés|Visszavonás menüponttal."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "Ha mégsem akarsz visszavonni egy műveletet, azt visszaállíthatod a Szerkesztés|Ismét menüpontjával."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "A Tengelyek párbeszédablakban megadható a koordinátarendszer címe."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "Más programokból (pl. Microsoft Exclel) is lehet pontsort importálni."
-
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "Pontsor hozzáadásakor az adatokat más programokból kimásolt értékekkel is feltölthetjük. Ehhez illesszük be a kimásolt adatokat a pontsor táblázatába."
-
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "A Nagyítás|Teljes nagyítás segítségével minden ábrázolt függvény és pont megjelenik a koordinátarendszeren, ha ez lehetséges."
-
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "A Nagyítás|Kitöltés segítségével optimális nagyításban látható a grafikon."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "A Shift gomb lenyomva tartásával a koordinátarendszer az egér segítségével mozgatható."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "A Számítások|Számítás segítségével kiszámítható két függvény metszéspontja, tengelypontok és szélsőértékek is."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "A kiválasztott pontsorhoz úgy is hozzáadhatunk újabb pontot, hogy a Ctrl gomb lenyomva tartásával az ábrán oda kattintunk, ahová az új pontot akarjuk helyezni."
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "Összefüggéseket is használhatunk például egyenlőtlenségek megoldására. (f(x)=sin(x)<0.5)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "Összefüggéseket is használhatunk például egyenlet megoldására. (f(x)=sin(x)=0.5)"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "Az ábrázolt elemek (függvények, színezés, cimkék, összefüggések, stb.) olyan sorrendben kerülnek ábrázolásra, amilyen sorrendben a bel oldalon megjelenő függvénylistában vannak."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "A függvénylista elemeinek sorrendje módosítható áthúzással vagy az ALT nyomva tartása közben a LE és FEL gombokkal."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "Függvényeket és más elemeket a tengely mögé helyezhetünk, ha a bal oldalon lévő függvénylistában a \"Tengelyek\" fölé húzzuk. A satírozást és más elemeket a tengely mögé helyezhetünk, ha a hozzájuk tartozó függvényeket a tengelyek mögé helyezzük."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "Egyéni szövegcimke beszúrható úgy, hogy jobb gombbal kattintunk a a megfelelő helyre, és beírjuk/formázzuk a kívánt szöveget."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "Az Emlékeztető szabadon mozgatható az egérrel, vagy bármely sarokba elhelyezhető jobb gombos kattintással."
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "Átlátszóság helyett beállítható egyéni háttér a cimkékre. Ez különösen hasznos, ha a cimke színezés fölött helyezkedik el."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "A legtöbb helyen (pontsor, tengely, intervallum, stb.) számok helyett kifejezések is használhatók, mint pl. pi/4."
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "Létrehozható egyéni konstans a Függvények|Saját függvények menüpontban. Ezeket az állandókat később felhasználhatjuk függvények vagy pontsorok megadásakor."
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "Létrehozható saját egyedi függvény a Függvények|Saját függvények menüpontban."
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "A Mentés képként párbeszédablakban a Beállítások gomb segítségével kiválasztható, milyen felbontású legyen az elmentett kép."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "Pontsorok megjeleníthetők nyilakkal is. Ezzel a lehetőséggel akár vektorokat is ábrázolhatzunk."
-
 msgid "Insert symbol"
 msgstr "Szimbólum beszúrása"
 
@@ -3575,22 +3433,6 @@ msgstr "Megjegyzés:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "Nyomtató kiválasztása. További lehetőségek a Beállítások gomb segítségével érhetők el."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "Színes vagy szürkeárnyalatos nyomtatás."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "Kimenet"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "Szín"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "Fekete && fehér"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "Pozíció (milliméterben)"
@@ -3627,6 +3469,249 @@ msgstr "Másolatok száma:"
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "Új méret az eredetihez képest százalékban."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+#, fuzzy
+msgid "Install failed"
+msgstr "Telepítés minden felhasználónak"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:5
+#, fuzzy
+msgid "Show Console"
+msgstr "Gyorstipp"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show Python interpreter"
+msgstr "Python fordító"
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show the Python interpreter window."
+msgstr "Python fordító"
+
+#~ msgid "Tip of the day"
+#~ msgstr "A nap ötlete"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "Mutasd a nap ötletét"
+
+#~ msgid "Next tip"
+#~ msgstr "Következő ötlet"
+
+#~ msgid "Previous tip"
+#~ msgstr "Előző ötlet"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "Mutasd az ötleteket induláskor"
+
+#~ msgid "Did you know..."
+#~ msgstr "Tudtad-e"
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "A Nap Ötlete használható, nem közismert információkat ad a program kezeléséről."
+
+#, fuzzy
+#~ msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
+#~ msgstr "A következő webhelyen kaphat segítésget a Graph használatához, jelezhet hibákat, javasolhat fejlesztéseket és javításokat a készítőknek: <a href=\"http://www.padowan.dk/forum\">http://www.padowan.dk/forum</a>"
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "Jobb gombbal kattintva személyre szabhatod az eszköztárat a 'Testreszabás' menüponttal."
+
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "A függvény törlése helyett rejtetté tehető, a függvénylistán látható jelölőnégyzetre kattintással"
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "Képek is beilleszthetőek a szöveges cimkébe."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "A szöveges cimkék bármilyen OLE objektumot tartalmazhatnak, pl. MS Egyenletszerkesztő objektumot. A beszúráshoz szerkesztés közben kattints jobb gombbal a területre, és válaszd ki az 'Objektum beszúrása' menüpontot."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "A pontsorok táblázat exportálható más programokba, pl. Microsoft Excelbe. Ehhez kattints jobb gombbal a pontsor nevére és válaszd az 'Exportálás fájlba' menüpontot."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "Függőleges vonalat (pl. x=5) ábrázolhatunk paraméteres függvényként (x(t)=5, y(t)=t) vagy összefüggésként (x=5)."
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "A Nagyítás|Arányos menüpont segítségével mérethelyessé teheted az ábrát. Ez különösen hasznos körök és más szimmetrikus alakzatok ábrázolásakor."
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "A Segítség menüpontban megtalálható az összes, a program által ismert függvény listája."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "Az 'if' segítségével kombinált függvényeket is létrehozhatsz. Például x<1  esetén f(x)=x, x>=1 esetén f(x)=x^2 megadható a következő módon: f(x)=if(x>1, x, x^2)."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "Más Graph fájl tartalma importálható az aktuális koordinátarendszerbe a Fájl|Importálás|Graph fájl menüpont segítségével."
+
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "Ha a Tengelyek párbeszédablakban bejelölöd a 'Legyen alapértelmezett' négyzetet, akkor az aktuális beállítások alapértelmezettek lesznek és a következő koordinátarendszerek ez alapján jönnek létre."
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "A Ctrl gomb lenyomva tartásával a kurzormozgató nyilak segítségével mozgatható a koordinátarendszer."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "A Ctrl gomb lenyomva tartásával a + és a - jel nagyításra használható."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "Az egér görgőjével nagyítható és kicsinyíthető az ábra az egérmutató helyzetéhez képest."
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "Ha nem akarsz megjeleníteni egy elemet az Emlékeztetőben, kattints jobb gombbal a megfelelő elemre függvénylistában, és szüntesd meg a 'Mutasd az emlékeztetőben' jelölését."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "Ha azt szeretnéd, hogy atengelyek a bal alsó sarokban metsszék egymást, válaszd ki a Tengelyek stílusa: Bal alsó metszés-t az Tengelyek menüpont Beállítások fülén."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "A program 5 különböző formátumba tud menteni: bmp, emf, png, jpg és pdf."
+
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "A Szerkesztés|Kép másolása menüpont segítségével vágólapra másolható a koordinátarendszer, és beilleszthető más alkalmazásokba is. Később az ábra ismét szerkeszthetővé válik, ha a másik alkalmazásban duplán rákattintunk."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "Az Intézőből dupla kattintással is megnyitható a grf fájl a Graph program segítségével."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "A megnyitott Graph programban úgy is megnyitható egy grf fájl, hogy az intézőből ráhúzzuk a program ablakára."
+
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "A Graph program megjegyzi a fő ablak méretét és helyzetét a következő indításig. Ez a lehetőség kikapcsolható a Beállítások menüpontban."
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "A Számítások|Táblázat menüponttal értéktáblázat készíthető az adott függvényhez."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "Az értéktáblázat akár részben is exportálható fájlba. Ehhez kattints jobb gombbal a kiválasztott részre és válaszd az Exportálás fájlba menüpontot. Ezután a táblázat más programokban is felhasználható."
+
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "A vágólap segítségével az értéktáblázat átmásolható más programokba, például Microsoft Excelbe."
+
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "A vágólap segítségével más programokból például Microsoft Excelből is beilleszthetjük a pontsor adatait."
+
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "Vágólap segítségével átmásolhatunk függvényeket az egyik éppen futó Graph programból egy másikba. (Szerkesztés/Másolás)"
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "A legutolsó művelet visszavonható a Szerkesztés|Visszavonás menüponttal."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "Ha mégsem akarsz visszavonni egy műveletet, azt visszaállíthatod a Szerkesztés|Ismét menüpontjával."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "A Tengelyek párbeszédablakban megadható a koordinátarendszer címe."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "Más programokból (pl. Microsoft Exclel) is lehet pontsort importálni."
+
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "Pontsor hozzáadásakor az adatokat más programokból kimásolt értékekkel is feltölthetjük. Ehhez illesszük be a kimásolt adatokat a pontsor táblázatába."
+
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "A Nagyítás|Teljes nagyítás segítségével minden ábrázolt függvény és pont megjelenik a koordinátarendszeren, ha ez lehetséges."
+
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "A Nagyítás|Kitöltés segítségével optimális nagyításban látható a grafikon."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "A Shift gomb lenyomva tartásával a koordinátarendszer az egér segítségével mozgatható."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "A Számítások|Számítás segítségével kiszámítható két függvény metszéspontja, tengelypontok és szélsőértékek is."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "A kiválasztott pontsorhoz úgy is hozzáadhatunk újabb pontot, hogy a Ctrl gomb lenyomva tartásával az ábrán oda kattintunk, ahová az új pontot akarjuk helyezni."
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "Összefüggéseket is használhatunk például egyenlőtlenségek megoldására. (f(x)=sin(x)<0.5)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "Összefüggéseket is használhatunk például egyenlet megoldására. (f(x)=sin(x)=0.5)"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "Az ábrázolt elemek (függvények, színezés, cimkék, összefüggések, stb.) olyan sorrendben kerülnek ábrázolásra, amilyen sorrendben a bel oldalon megjelenő függvénylistában vannak."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "A függvénylista elemeinek sorrendje módosítható áthúzással vagy az ALT nyomva tartása közben a LE és FEL gombokkal."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "Függvényeket és más elemeket a tengely mögé helyezhetünk, ha a bal oldalon lévő függvénylistában a \"Tengelyek\" fölé húzzuk. A satírozást és más elemeket a tengely mögé helyezhetünk, ha a hozzájuk tartozó függvényeket a tengelyek mögé helyezzük."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "Egyéni szövegcimke beszúrható úgy, hogy jobb gombbal kattintunk a a megfelelő helyre, és beírjuk/formázzuk a kívánt szöveget."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "Az Emlékeztető szabadon mozgatható az egérrel, vagy bármely sarokba elhelyezhető jobb gombos kattintással."
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "Átlátszóság helyett beállítható egyéni háttér a cimkékre. Ez különösen hasznos, ha a cimke színezés fölött helyezkedik el."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "A legtöbb helyen (pontsor, tengely, intervallum, stb.) számok helyett kifejezések is használhatók, mint pl. pi/4."
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "Létrehozható egyéni konstans a Függvények|Saját függvények menüpontban. Ezeket az állandókat később felhasználhatjuk függvények vagy pontsorok megadásakor."
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "Létrehozható saját egyedi függvény a Függvények|Saját függvények menüpontban."
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "A Mentés képként párbeszédablakban a Beállítások gomb segítségével kiválasztható, milyen felbontású legyen az elmentett kép."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "Pontsorok megjeleníthetők nyilakkal is. Ezzel a lehetőséggel akár vektorokat is ábrázolhatzunk."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "Színes vagy szürkeárnyalatos nyomtatás."
+
+#~ msgid "Print output"
+#~ msgstr "Kimenet"
+
+#~ msgid "Color"
+#~ msgstr "Szín"
+
+#~ msgid "Black && white"
+#~ msgstr "Fekete && fehér"
+
+#~ msgid "Email: %s"
+#~ msgstr "E-mail: %s"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "Társítsd a Graph programot a *.grf fájlokhoz"

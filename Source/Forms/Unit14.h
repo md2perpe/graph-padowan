@@ -46,6 +46,7 @@
 #include <ActnPopup.hpp>
 #include <PlatformDefaultStyleActnCtrls.hpp>
 #include "ExtComboBox.h"
+#include "GridIntf.hpp"
 //---------------------------------------------------------------------------
 class TForm14 : public TForm
 {
@@ -93,7 +94,6 @@ __published:	// IDE-managed Components
   TGroupBox *GroupBox3;
   TLabel *Label8;
   TCheckBox *CheckBox2;
-  TBitBtn *BitBtn1;
   TComboBox *ComboBox1;
   TGroupBox *GroupBox5;
   TCheckBox *CheckBox3;
@@ -116,6 +116,8 @@ __published:	// IDE-managed Components
   TExtColorBox *ExtColorBox1;
   TExtColorBox *ExtColorBox2;
   TRadioGroup *RadioGroup1;
+  TButton *Button4;
+  TButton *Button5;
   void __fastcall FormShow(TObject *Sender);
   void __fastcall Popup_CutClick(TObject *Sender);
   void __fastcall Popup_CopyClick(TObject *Sender);
@@ -132,16 +134,17 @@ __published:	// IDE-managed Components
   void __fastcall Popup_InsertClick(TObject *Sender);
   void __fastcall Popup_RemoveClick(TObject *Sender);
   void __fastcall Popup_ImportClick(TObject *Sender);
-  void __fastcall BitBtn1Click(TObject *Sender);
+  void __fastcall Button5Click(TObject *Sender);
   void __fastcall Popup_ExportClick(TObject *Sender);
   void __fastcall EditKeyPress(TObject *Sender, char &Key);
   void __fastcall RadioButtonClick(TObject *Sender);
   void __fastcall EditChange(TObject *Sender);
-  void __fastcall GridGetText(TObject *Sender, long ACol, long ARow,
+  void __fastcall GridGetText(TObject *Sender, int ACol, int ARow,
           String &Value);
-  void __fastcall GridSetText(TObject *Sender, long ACol, long ARow,
-          const String &Value);
+  void __fastcall GridSetText(TObject *Sender, int ACol, int ARow,
+          String Value);
   void __fastcall RadioGroup1Click(TObject *Sender);
+  void __fastcall Button4Click(TObject *Sender);
 
 private:	// User declarations
   boost::shared_ptr<TPointSeries> Series;
@@ -153,6 +156,7 @@ private:	// User declarations
   void UpdateErrorBars();
   std::wstring& GetText(int ACol, int ARow);
   void Translate();
+  bool Apply();
 
 public:		// User declarations
   __fastcall TForm14(TComponent* Owner, TData &AData);

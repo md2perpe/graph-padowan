@@ -25,14 +25,25 @@ __fastcall TForm13::TForm13(TComponent* Owner, TData &AData)
   int OldLabelWidth = TMaxWidth(Label5)(Label6)(Label7);
   TranslateProperties(this);
   TranslateStrings(ExtColorBox1->Items);
+  SetAccelerators(this);
   ScaleForm(this); //Moving this may cause problem for the Arabic translation
   int LabelWidth = TMaxWidth(Label5)(Label6)(Label7);
-  SetAccelerators(this);
   if(LabelWidth != OldLabelWidth)
     Width = Width + LabelWidth - OldLabelWidth;
   ResizeControl(Edit5, CheckBox1->Left + CheckBox1->Width);
   PageControl1->ActivePage = TabSheet1;
   FlipForm(this);
+
+  int ImageWidth = MulDiv(64, Options.FontScale * Screen->PixelsPerInch, 9600);
+  if(ImageWidth != 120)
+  {
+    SmoothResize(dynamic_cast<TPngImage*>(Image1->Picture->Graphic), ImageWidth, ImageWidth);
+    SmoothResize(dynamic_cast<TPngImage*>(Image2->Picture->Graphic), ImageWidth, ImageWidth);
+    SmoothResize(dynamic_cast<TPngImage*>(Image3->Picture->Graphic), ImageWidth, ImageWidth);
+    SmoothResize(dynamic_cast<TPngImage*>(Image4->Picture->Graphic), ImageWidth, ImageWidth);
+    SmoothResize(dynamic_cast<TPngImage*>(Image5->Picture->Graphic), ImageWidth, ImageWidth);
+    SmoothResize(dynamic_cast<TPngImage*>(Image6->Picture->Graphic), ImageWidth, ImageWidth);
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm13::ImageClick(TObject *Sender)
@@ -94,45 +105,13 @@ void __fastcall TForm13::Button1Click(TObject *Sender)
   try
   {
 		boost::shared_ptr<TBaseFuncType> BaseFunc;
-
-    const std::vector<Func32::TDblPoint> &Points = Series->GetPointList();
-    std::vector<double> Weights;
-    if(Series->GetyErrorBarType() == ebtCustom)
-    {
-      Weights.reserve(Points.size());
-      unsigned Count = Series->PointCount();
-      for(unsigned I = 0; I < Count; I++)
-      {
-        double yError = Series->GetYError(I);
-        if(yError == 0)
-          throw Exception(LoadRes(RES_NOT_EQUAL_ZERO, LoadRes(RES_UNCERTAINTY, "Y")));
-        Weights.push_back(1/(yError*yError));
-      }
-		}
-
+    TTrendData Trend;
     if(PageControl1->TabIndex == 1)
     {
-      std::vector<std::wstring> Arguments = Func32::FindUnknowns(ToWString(Edit3->Text));
-      std::vector<long double> Values(Arguments.size(), 1);
-
+      Trend.Type = ttUserModel;
+      Trend.Model = ToWString(Edit3->Text);
       if(ListBox1->ItemIndex != -1)
-      {
-        std::wstring ModelName = ToWString(ListBox1->Items->Strings[ListBox1->ItemIndex]);
-        TUserModel &Model = Data.UserModels[ModelName];
-        for(unsigned I = 0; I < Model.Defaults.size(); I++)
-          Values[I] = ToDouble(Model.Defaults[I].second);
-      }
-
-      Arguments.insert(Arguments.begin(), L"x");
-      Func32::TCustomFunc TempFunc(ToWString(Edit3->Text), Arguments, Data.CustomFunctions.SymbolList, Data.Axes.Trigonometry);
-      Regression(Points, TempFunc, Values, Weights, 300);
-
-      boost::shared_ptr<TStdFunc> Func(new TStdFunc(TempFunc.ConvToFunc(Values, 0)));
-			Func->SetLegendText(L"f(x)=" + Func->GetFunc().MakeText(L"x", Property.RoundTo) + L"; R²=" + RoundToString(Correlation(Points, Func->GetFunc()), Data));
-      Func->From.Value = -INF;
-      Func->To.Value = +INF;
-      Func->SetSteps(TTextValue(0, L""));
-      BaseFunc = Func;
+        Trend.Defaults = Data.UserModels[ToWString(ListBox1->Items->Strings[ListBox1->ItemIndex])].Defaults;
     }
     else if(RadioButton6->Checked) //Moving average
     {
@@ -141,67 +120,48 @@ void __fastcall TForm13::Button1Click(TObject *Sender)
         MessageBox(LoadRes(RES_INT_GREATER_ZERO, StaticText2->Caption), LoadRes(RES_ERROR_IN_VALUE));
         return;
       }
-
-      unsigned N = Edit4->Text.ToInt();
-
-      //Workaround for compiler bug in bcc 5.6.4. The following two lines may not be put together.
-      boost::shared_ptr<TParFunc> Func;
-      Func.reset(new TParFunc(Func32::MovingAverage(Points, N)));
-
-      Func->From.Value = 0;
-      Func->From.Text = L"0";
-      Func->To.Value = Points.size() - N;
-      Func->To.Text = ToWString(Func->To.Value);
-      Func->SetSteps(TTextValue(1000));
-      Func->SetLegendText(LoadString(RES_MOVING_AVERAGE));
-      BaseFunc = Func;
+      Trend.Type = ttMovingAverage;
+      Trend.Period = Edit4->Text.ToInt();
     }
     else
     {
-      Func32::TTrendType Type;
+      TTrendType Type;
       if(RadioButton1->Checked)
-        Type = Func32::ttLinear;
+        Trend.Type = ttLinear;
       else if(RadioButton2->Checked)
-        Type = Func32::ttLogarithmic;
+        Trend.Type = ttLogarithmic;
       else if(RadioButton3->Checked)
-        Type = Func32::ttPolynomial;
+        Trend.Type = ttPolynomial;
       else if(RadioButton4->Checked)
-        Type = Func32::ttPower;
+        Trend.Type = ttPower;
       else if(RadioButton5->Checked)
-        Type = Func32::ttExponential;
+        Trend.Type = ttExponential;
       else
         throw Exception("No radio button selected!");
 
-      unsigned N = Edit1->Text.ToInt();
-      //WARNING: Do not initialize Func with pointer. It will crash if Trendline() fails because of bug in Bcc 5.6.4
-      boost::shared_ptr<TStdFunc> Func;
-      if(CheckBox1->Checked)
-        Func.reset(new TStdFunc(TrendLine(Type, Points, Weights, N, MakeFloat(Edit5))));
-      else
-        Func.reset(new TStdFunc(TrendLine(Type, Points, Weights, N)));
-			Func->SetLegendText(L"f(x)=" + Func->GetFunc().MakeText(L"x", Property.RoundTo) + L"; R²=" + RoundToString(Correlation(Points, Func->GetFunc()), Data));
-      Func->From.Value = -INF;
-      Func->To.Value = +INF;
-      Func->SetSteps(TTextValue(0, L""));
-      BaseFunc = Func;
+      Trend.Order = Edit1->Text.ToInt();
+      Trend.Intercept = CheckBox1->Checked ? MakeFloat(Edit5) : NAN;
     }
 
-    BaseFunc->Color = ExtColorBox1->Selected;
-    BaseFunc->Size = Edit2->Text.ToInt();
-    BaseFunc->Style = LineSelect1->LineStyle;
+    BaseFunc = CreateTrendline(Series.get(), Trend);
+    BaseFunc->SetColor(ExtColorBox1->Selected);
+    BaseFunc->SetSize(Edit2->Text.ToInt());
+    BaseFunc->SetStyle(LineSelect1->LineStyle);
     Data.Insert(BaseFunc);
     UndoList.Push(TUndoAdd(BaseFunc));
   }
   catch(Func32::EFuncError &Error)
   {
-    if(PageControl1->TabIndex == 1)
-      ShowErrorMsg(Error, Edit3);
-    else
-      ShowErrorMsg(Error);
+    ShowErrorMsg(Error, PageControl1->TabIndex == 1 ? Edit3 : NULL);
+    return;
+  }
+  catch(Exception &Error)
+  {
+    ShowErrorMsg(Error);
     return;
   }
 
-  Property.DefaultTrendline.Set(LineSelect1->LineStyle, ExtColorBox1->Selected, Edit2->Text.ToInt());
+  Options.DefaultTrendline.Set(LineSelect1->LineStyle, ExtColorBox1->Selected, Edit2->Text.ToInt());
   ModalResult = mrOk;
 }
 //---------------------------------------------------------------------------
@@ -311,9 +271,9 @@ int TForm13::InsertTrendline(const boost::shared_ptr<TPointSeries> &ASeries)
   if(NegXFound || NegYFound)
     RadioButton4->Enabled = false;
 
-  LineSelect1->LineStyle = static_cast<TPenStyle>(Property.DefaultTrendline.Style);
-  ExtColorBox1->Selected = Property.DefaultTrendline.Color;
-  UpDown1->Position = Property.DefaultTrendline.Size;
+  LineSelect1->LineStyle = static_cast<TPenStyle>(Options.DefaultTrendline.Style);
+  ExtColorBox1->Selected = Options.DefaultTrendline.Color;
+  UpDown1->Position = Options.DefaultTrendline.Size;
 
   UpDown2->Max = Count - 1;
   UpDown3->Max = Count - 1;
@@ -382,6 +342,4 @@ void __fastcall TForm13::Popup_ExportClick(TObject *Sender)
   }
 }
 //---------------------------------------------------------------------------
-
-
 

@@ -347,3 +347,7 @@ pre.programlisting {
   width: 0; /* This will make the width as small as possible to no smaller */
   padding: 5px; /* Add space between border and content */
 }
+
+.filename {
+  font-size: 120%;
+}

@@ -24,8 +24,8 @@ TTreeNode* TAddView::AddNode(TGraphElem &Elem, int ImageIndex)
   std::replace(Str.begin(), Str.end(), L'-', L'\x2212');
 
   TTreeNode *Node = Elem.GetParent() ?
-    Form1->TreeView->Items->AddChild(Form1->GetNode(Elem.GetParent()), Str.c_str()) :
-    Form1->TreeView->Items->Add(NULL, Str.c_str());
+    Form1->TreeView->Items->AddChildObject(Form1->GetNode(Elem.GetParent()), Str.c_str(), &Elem) :
+    Form1->TreeView->Items->AddObject(NULL, Str.c_str(), &Elem);
 
   Node->ImageIndex = ImageIndex;
   Node->SelectedIndex = ImageIndex;
@@ -35,6 +35,7 @@ TTreeNode* TAddView::AddNode(TGraphElem &Elem, int ImageIndex)
     case 0:  Node->StateIndex =  iiUnChecked; break;
     case 1:  Node->StateIndex =  iiChecked; break;
   }
+  Elem.SetCustomData(Node);
   return Node;
 }
 //---------------------------------------------------------------------------
@@ -42,42 +43,45 @@ int TAddView::AddFuncImage(TColor Color)
 {
   std::map<TColor,int>::iterator Iter = FuncIconMap.find(Color);
   if(Iter == FuncIconMap.end())
-    return FuncIconMap[Color] = Form1->AddImage(iiFuncNode, Color);
+    return FuncIconMap[Color] = Form1->AddFuncImage(Color);
   return Iter->second;
 }
 //---------------------------------------------------------------------------
 void TAddView::Visit(TBaseFuncType &Func)
 {
-  AddNode(Func, AddFuncImage(Func.Color));
+  AddNode(Func, AddFuncImage(Func.GetColor()));
   for(unsigned I = 0; I < Func.ChildCount(); I++)
     Func.GetChild(I)->Accept(*this);
 }
 //---------------------------------------------------------------------------
-void TAddView::Visit(TTan &Tan)
+void TAddView::Visit(TTangent &Tan)
 {
-  AddNode(Tan, Tan.TangentType == ttTangent ? iiTanNode : iiNormalNode);
+  AddNode(Tan, Tan.GetTangentType() == ttTangent ? iiTanNode : iiNormalNode);
 }
 //---------------------------------------------------------------------------
 void TAddView::Visit(TShading &Shade)
 {
-  AddNode(Shade, Form1->AddImage(Shade.Color, Shade.BrushStyle));
+  AddNode(Shade, Form1->AddImage(Shade.GetColor(), Shade.GetBrushStyle()));
 }
 //---------------------------------------------------------------------------
 void TAddView::Visit(TPointSeries &Series)
 {
   std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
-  Bitmap->Width = 16;
-  Bitmap->Height = 16;
+  Bitmap->Width = Form1->TreeView->Images->Width;
+  Bitmap->Height = Form1->TreeView->Images->Height;
   Bitmap->Canvas->Brush->Color = clWhite;
   Bitmap->Canvas->FillRect(TRect(0, 0, Bitmap->Width, Bitmap->Height));
-  TPointSelect::DrawPoint(
-    Bitmap->Canvas,
-    TPoint(8,8),
+
+  TContext Context(Bitmap->Canvas);
+  Context.SetSmoothingMode(smAntiAlias);
+  TDrawElem::DrawPoint(
+    Context,
+    TPoint(Bitmap->Width / 2, Bitmap->Height /2),
     Series.GetStyle(),
     Series.GetFrameColor(),
     Series.GetFillColor(),
-    5);
-  AddNode(Series, Form1->ImageList1->AddMasked(Bitmap.get(), clWhite));
+    (5 * Bitmap->Width) / 16);
+  AddNode(Series, Form1->AddImage(Bitmap.get(), clWhite));
 }
 //---------------------------------------------------------------------------
 void TAddView::Visit(TTextLabel &Label)
@@ -123,24 +127,31 @@ void TZoomFit::Visit(TBaseFuncType &Func)
   if(TStdFunc *StdFunc = dynamic_cast<TStdFunc*>(&Func))
   {
     Func32::ECalcError E;
-    if(std::_finite(StdFunc->From.Value))
-      if(Func.GetFunc().Calc(StdFunc->From.Value, E), E.ErrorCode == Func32::ecNoError) //Note comma operator
-        xMin = StdFunc->From.Value;
-    if(std::_finite(StdFunc->To.Value))
-      if(Func.GetFunc().Calc(StdFunc->To.Value, E), E.ErrorCode == Func32::ecNoError) //Note comma operator
-        xMax = StdFunc->To.Value;
+    if(std::_finite(StdFunc->GetFrom().Value))
+      if(Func.GetFunc().Calc(StdFunc->GetFrom().Value, E), E.ErrorCode == Func32::ecNoError) //Note comma operator
+        if(StdFunc->GetFrom().Value < xMin)
+          xMin = StdFunc->GetFrom().Value;
+    if(std::_finite(StdFunc->GetTo().Value))
+      if(Func.GetFunc().Calc(StdFunc->GetTo().Value, E), E.ErrorCode == Func32::ecNoError) //Note comma operator
+        if(StdFunc->GetTo().Value)
+          xMax = StdFunc->GetTo().Value;
   }
 
-  for(std::vector<Func32::TCoordSet<> >::const_iterator Iter = Func.sList.begin(); Iter != Func.sList.end(); ++Iter)
+  const std::vector<Func32::TCoordSet<> > &CoordList = Func.GetCoordList();
+  for(std::vector<Func32::TCoordSet<> >::const_iterator Iter = CoordList.begin(); Iter != CoordList.end(); ++Iter)
   {
-    if(Iter->x < xMin)
-      xMin = Iter->x;
-    if(Iter->x > xMax)
-      xMax = Iter->x;
-    if(Iter->y < yMin)
-      yMin = Iter->y;
-    if(Iter->y > yMax)
-      yMax = Iter->y;
+    //Ignore points outside range -10000..10000 to avoid showing huge axes ranges.
+    if(Iter->x > -10000 && Iter->x < 10000 && Iter->y > -10000 && Iter->y < 10000)
+    {
+      if(Iter->x < xMin)
+        xMin = Iter->x;
+      if(Iter->x > xMax)
+        xMax = Iter->x;
+      if(Iter->y < yMin)
+        yMin = Iter->y;
+      if(Iter->y > yMax)
+        yMax = Iter->y;
+    }
   }
 }
 //---------------------------------------------------------------------------
@@ -164,14 +175,28 @@ void TZoomFit::Visit(TPointSeries &Series)
 //---------------------------------------------------------------------------
 void TZoomFit::Visit(TRelation &Relation)
 {
-  if(!Relation.Region)
-    return;
+  const std::vector<TPoint> &Points = Relation.GetPolylinePoints();
+  int XMin = MAXINT;
+  int XMax = 0;
+  int YMin = MAXINT;
+  int YMax = 0;
 
-  TRect Rect = Relation.Region->GetBoundingRect();
-  xMin = Draw.xCoord(Rect.Left);
-  xMax = Draw.xCoord(Rect.Right);
-  yMin = Draw.yCoord(Rect.Bottom);
-  yMax = Draw.yCoord(Rect.Top);
+  for(std::vector<TPoint>::const_iterator Iter = Points.begin(); Iter != Points.end(); ++Iter)
+  {
+    if(Iter->x < XMin)
+      XMin = Iter->x;
+    if(Iter->x > XMax)
+      XMax = Iter->x;
+    if(Iter->y < YMin)
+      YMin = Iter->y;
+    if(Iter->y > YMax)
+      YMax = Iter->y;
+  }
+
+  xMin = std::min<double>(xMin, Draw.xCoord(XMin));
+  xMax = std::max<double>(xMax, Draw.xCoord(XMax));
+  yMin = std::min<double>(yMin, Draw.yCoord(YMax));
+  yMax = std::max<double>(yMax, Draw.yCoord(YMin));
 }
 //---------------------------------------------------------------------------
 /////////////////
@@ -179,12 +204,12 @@ void TZoomFit::Visit(TRelation &Relation)
 /////////////////
 void TFindColors::Visit(TBaseFuncType &Func)
 {
-  Colors.insert(Func.Color);
+  Colors.insert(Func.GetColor());
 }
 //---------------------------------------------------------------------------
 void TFindColors::Visit(TShading &Shade)
 {
-  Colors.insert(Shade.Color);
+  Colors.insert(Shade.GetColor());
 }
 //---------------------------------------------------------------------------
 void TFindColors::Visit(TPointSeries &Series)
@@ -212,7 +237,7 @@ void TFindColors::Visit(TAxesView &AxesView)
   Colors.insert(AxesView.GetAxes().BackgroundColor);
 }
 //---------------------------------------------------------------------------
-void FindColors(const TData &Data, std::set<TColor> &Colors)
+void Graph::FindColors(const TData &Data, std::set<TColor> &Colors)
 {
   TFindColors ColorFinder(Colors);
   for(unsigned I = 0; I < Data.ElemCount(); I++)

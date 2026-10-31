@@ -2,11 +2,15 @@ import os
 import sys
 import glob
 
-wine = "wine " if sys.platform.startswith('linux') else ""
-os.system(wine + "dxgettext ../Source/Forms/*.dfm ../Source/Frames/*.dfm ../Source/Source/Resource.rc /../Components/TIPrintDialog/*.dfm --nonascii")
-os.system(wine + "msgremove default.po -i Ignore.po -o Temp.po")
+PythonFiles = "../Plugins/ShowConsole.py ../Plugins/PluginManager/__init__.py"
 
-InFile = open("Temp.po", "rU")
+wine = "wine " if sys.platform.startswith('linux') else ""
+python = "python3 " if sys.platform.startswith('linux') else "py "
+os.system(wine + "dxgettext ../Source/Forms/*.dfm ../Source/Frames/*.dfm ../Source/Source/Resource.rc /../Components/TIPrintDialog/*.dfm ../Plugins/PluginManager/PluginForm.dfm --nonascii")
+os.system(wine + "msgremove default.po -i Ignore.po -o Temp.po")
+os.system(python + "-X utf8 pygettext.py -v -o Plugins.po " + PythonFiles) 
+
+InFile = open("Temp.po", "r")
 Lines = InFile.readlines()
 List = {}
 for I in range(len(Lines) - 1, 0, -1):
@@ -46,8 +50,12 @@ for Line in Lines:
 
 InFile.close()
 OutFile.close()
+
+os.system("msgcat --use-first -o Graph.pot Graph.pot Plugins.po")
+
 os.remove("default.po")
 os.remove("Temp.po")
+os.remove("Plugins.po")
 
 # Update po files unless -no-merge is specified as argument
 if not "-nomerge" in sys.argv:

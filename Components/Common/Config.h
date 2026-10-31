@@ -2,16 +2,12 @@
 #ifndef ConfigH
 #define ConfigH
 //---------------------------------------------------------------------------
-#define STRICT
-#ifdef _DEBUG
-  #define BOOST_ENABLE_ASSERT_HANDLER
-#else
+#ifndef _DEBUG
+#ifndef _WIN64
   //Nasty hack: C++ Builder does not inline functions with throw specifications
 	#define throw(...)
-
-  #define NDEBUG
-  #define BOOST_DISABLE_ASSERTS
-
+//  #define _XKEYCHECK //Disable check for keyword defines
+#endif
   //Used with COM in utilcls.h; Disables assert checks and prevent linker warnings in release build
   #define _INC_CRTDBG
   #define NO_PROMPT_ON_ASSERTE_FAILURE

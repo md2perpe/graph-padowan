@@ -23,7 +23,7 @@ std::string Trim(const std::string &Str)
   size_t Pos1 = Str.find_first_not_of(" ");
   size_t Pos2 = Str.find_last_not_of(" ");
   if(Pos1 == std::string::npos)
-    return "";
+    return std::string();
   if(!Str.empty() && (Pos1 != 0 || Pos2 != Str.size()-1))
     return Str.substr(Pos1, Pos2 - Pos1 + 1);
   return Str;
@@ -33,6 +33,8 @@ std::wstring Trim(const std::wstring &Str)
 {
   unsigned Pos1 = Str.find_first_not_of(L" ");
   unsigned Pos2 = Str.find_last_not_of(L" ");
+  if(Pos1 == std::wstring::npos)
+    return std::wstring();
   if(!Str.empty() && (Pos1 != 0 || Pos2 != Str.size()-1))
     return Str.substr(Pos1, Pos2 - Pos1 + 1);
   return Str;

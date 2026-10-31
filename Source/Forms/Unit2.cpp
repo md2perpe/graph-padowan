@@ -30,11 +30,19 @@ __fastcall TForm2::TForm2(TComponent* Owner)
   {
     TVersion FileVersion = Info.FileVersion();
     Label3->Caption = LoadRes(RES_BUILD, FileVersion.Build);
+#ifdef _DEBUG
+    Label3->Caption = Label3->Caption + " (Debug)";
+#endif
     FileVersion.Build = 0;
     Version->Caption = ToUString(LoadRes(RES_VERSION, FileVersion.Text()));
     if(Info.FileFlags() & ffDebug)
       Version->Caption = Version->Caption + " Beta";
     Copyright->Caption = Info.StringValue(L"LegalCopyright").c_str();
+#ifdef _WIN64
+    Version->Caption = Version->Caption + " [64 bit]";
+#else
+    Version->Caption = Version->Caption + " [32 bit]";
+#endif
   }
 
   const wchar_t *SupportStr = L"<a href=\"" SUPPORT_PAGE L"\">" SUPPORT_PAGE L"</a>";
@@ -77,4 +85,5 @@ void __fastcall TForm2::FormShow(TObject *Sender)
     ClientHeight = ClientHeight + LinkLabel3->Height + 10;
 }
 //---------------------------------------------------------------------------
+
 

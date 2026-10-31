@@ -164,10 +164,12 @@ template<class T> class TMatrix
         T Factor = Get(j,i)/Get(i,i);
         if(Factor)
           for(unsigned k = 0; k < ColCount; k++)
+          {
             if(k == i && k < j)
               Get(j,k) = 0;
             else
               Get(j,k) -= Factor*Get(i,k);
+          }
       }
     }
   }

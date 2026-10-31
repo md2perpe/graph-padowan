@@ -1,6 +1,8 @@
 object Form9: TForm9
   Left = 449
   Top = 279
+  AlphaBlend = True
+  AlphaBlendValue = 240
   BiDiMode = bdLeftToRight
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
@@ -32,10 +34,15 @@ object Form9: TForm9
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 0
-    Top = 0
-    Width = 183
-    Height = 198
+    AlignWithMargins = True
+    Left = 5
+    Top = 5
+    Width = 173
+    Height = 188
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
     Align = alClient
     AutoSize = False
     Caption = 'Select a function or tangent to evaluate.'
@@ -46,6 +53,10 @@ object Form9: TForm9
     Font.Style = []
     ParentFont = False
     WordWrap = True
+    ExplicitLeft = 0
+    ExplicitTop = 0
+    ExplicitWidth = 183
+    ExplicitHeight = 198
   end
   inline PolFuncFrame1: TPolFuncFrame
     Left = 0
@@ -159,37 +170,37 @@ object Form9: TForm9
       ExplicitHeight = 102
       inherited Label1: TLabel
         Width = 26
-        Height = 21
+        Height = 22
         ExplicitWidth = 26
       end
       inherited Label2: TLabel
-        Top = 38
-        Height = 21
+        Top = 39
+        Height = 22
         ExplicitTop = 39
       end
       inherited Label3: TLabel
-        Top = 68
+        Top = 70
         Width = 22
-        Height = 24
+        Height = 22
         ExplicitTop = 70
         ExplicitWidth = 22
       end
       inherited Edit3: TEdit
         Left = 34
-        Top = 68
+        Top = 70
         Width = 146
-        Height = 24
+        Height = 22
         ExplicitLeft = 34
-        ExplicitTop = 68
+        ExplicitTop = 70
         ExplicitWidth = 146
       end
       inherited Panel1: TPanel
         Left = 34
         Width = 146
-        Height = 21
+        Height = 22
         ExplicitLeft = 34
         ExplicitWidth = 146
-        ExplicitHeight = 21
+        ExplicitHeight = 22
         inherited Edit1: TMyEdit
           Width = 131
           OnChange = Edit1Change
@@ -203,13 +214,13 @@ object Form9: TForm9
       end
       inherited Panel2: TPanel
         Left = 34
-        Top = 38
+        Top = 39
         Width = 146
-        Height = 21
+        Height = 22
         ExplicitLeft = 34
-        ExplicitTop = 38
+        ExplicitTop = 39
         ExplicitWidth = 146
-        ExplicitHeight = 21
+        ExplicitHeight = 22
         inherited Edit2: TMyEdit
           Width = 131
           OnChange = Edit1Change
@@ -266,6 +277,36 @@ object Form9: TForm9
     Visible = False
     inherited Edit1: TMyEdit
       OnChange = Edit1Change
+    end
+  end
+  inline RelationFrame1: TRelationFrame
+    Left = 0
+    Top = 0
+    Width = 184
+    Height = 76
+    Anchors = [akLeft, akTop, akRight]
+    ParentBackground = False
+    TabOrder = 5
+    Visible = False
+    ExplicitWidth = 184
+    ExplicitHeight = 76
+    inherited Label1: TLabel
+      Width = 11
+      ExplicitWidth = 11
+    end
+    inherited Label2: TLabel
+      Width = 11
+      ExplicitWidth = 11
+    end
+    inherited Edit1: TMyEdit
+      Width = 149
+      OnChange = Edit1Change
+      ExplicitWidth = 149
+    end
+    inherited Edit2: TMyEdit
+      Width = 149
+      OnChange = Edit1Change
+      ExplicitWidth = 149
     end
   end
 end

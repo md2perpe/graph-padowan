@@ -54,7 +54,7 @@ object Form12: TForm12
   end
   object Edit1: TMyEdit
     Left = 24
-    Top = 16
+    Top = 18
     Width = 265
     Height = 21
     Hint = 'Value where the tangent/normal will interact with the function.'
@@ -169,7 +169,7 @@ object Form12: TForm12
     end
     object ExtColorBox1: TExtColorBox
       Left = 72
-      Top = 48
+      Top = 50
       Width = 81
       Height = 22
       Hint = 'Select the color of the graph.'
@@ -263,7 +263,7 @@ object Form12: TForm12
     end
     object ComboBox1: TExtComboBox
       Left = 40
-      Top = 16
+      Top = 18
       Width = 65
       Height = 22
       Hint = 
@@ -284,7 +284,7 @@ object Form12: TForm12
     end
     object ComboBox2: TExtComboBox
       Left = 208
-      Top = 16
+      Top = 18
       Width = 65
       Height = 22
       Hint = 

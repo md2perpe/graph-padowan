@@ -14,10 +14,9 @@
 #include "Unit3.h"
 #include "Unit4.h"
 #include "Unit5.h"
-#include "Unit6.h"                 
+#include "Unit6.h"
 #include "Unit7.h"
 #include "Unit9.h"
-#include "Unit10.h"
 #include "Unit11.h"
 #include "Unit12.h"
 #include "Unit13.h"
@@ -39,7 +38,9 @@
 #include "Clipboard.h"
 #include "VersionInfo.h"
 #include "GuiHelper.h"
+#ifndef _WIN64
 #include "OleServerImpl.h"
+#endif
 #include "PrintForm.h" //Needed to access TPrintFrm for translation
 #include <Menus.hpp>
 #include <fstream>
@@ -48,7 +49,6 @@
 #include "IThread.h"
 #include "Debug.h"
 #include <iostream>
-#include "StackTrace.h"
 #include "ConfigFile.h"
 #include "ConfigRegistry.h"
 #include <TypInfo.hpp>
@@ -57,6 +57,8 @@
 #include "ICompCommon.h"
 #include "Images.h"
 #include <HtmlHelpViewer.hpp>
+#include <IdHTTP.hpp>
+#include <System.StrUtils.hpp>
 //---------------------------------------------------------------------------
 #pragma link "TRecent"
 #pragma link "Cross"
@@ -65,22 +67,28 @@
 #pragma link "IRichEdit"
 #pragma link "IPolygon"
 #pragma link "IColorSelect"
-#pragma link "IPageSetup"
 #pragma link "OpenPreviewDialog"
 #pragma link "IPrintDialog"
 #pragma link "SaveDialogEx"
-
+#ifndef _WIN64
 #pragma link "Wininet.lib" //Used for InternetGetConnectedState()
-#pragma link "PDFlib.lib"
+#endif
+#pragma link "ScaledImageList"
 #pragma resource "*.dfm"
+
+#ifdef _WIN64
+#define OleServerRunning() false
+#endif
 TForm1 *Form1;
-const TCursor crMoveHand1 = 1;
-const TCursor crMoveHand2 = 2;
-::TMutex GlobalMutex(L"Graph running"); //Global Mutex object indicating Graph is running (Checked by installation program)
+const TCursor crMoveHand1 = static_cast<TCursor>(1);
+const TCursor crMoveHand2 = static_cast<TCursor>(2);
+Thread::TMutex GlobalMutex(L"Graph running"); //Global Mutex object indicating Graph is running (Checked by installation program)
+const unsigned iiBullet = 57; //Index to bullet in ImageList2
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: IsResizing(0), TForm(Owner), Updating(0), StatusIcon(-1), CursorState(csIdle),
-    FixedImages(ImageList1->Count), Draw(Image1->Canvas, &Data, false, "DrawThread"), AbortPrinting(false)
+    Draw(Image1->Canvas, &Data, "DrawThread", true),
+    AbortPrinting(false), ConsoleHeight(150), FunctionListModified(false), UndoFlag(false)
 {
 	if(0)
   	(new std::ctype<char>)->is((short)0,' '); //Woraround for linker problem
@@ -95,22 +103,20 @@ __fastcall TForm1::TForm1(TComponent* Owner)
   }
 
   SetCompTranslateFunc(gettext);
-	SetApplicationExceptionHandler(true);
 	InitDebug();
-#else
-	SetApplicationExceptionHandler(false);
 #endif
 
+  Draw.SetOnComplete(&UpdateEval);
 	Font->Name = "MS Shell Dlg";
 	Data.SetAbortUpdateEvent(&Draw.AbortUpdate);
-	Icon->LoadFromResourceName((THandle)MainInstance, L"ICON1");
-
+ 	Icon->LoadFromResourceName((THandle)MainInstance, L"MAINICON");
+#ifndef _WIN64
 	//Set "AllowOLE" to 1 in the Registry to use OLE with instances not started with "-Embedding"
 	if(!FindCmdLineSwitch(L"EMBEDDING") && !GetRegValue(REGISTRY_KEY, L"AllowOLE", HKEY_CURRENT_USER, 0))
 		//Prevent OLE instantiation if not started for use with OLE
 		_Module.RevokeClassObjects();
-
-	SetThreadName("Main");
+#endif
+	TThread::NameThreadForDebugging(AnsiString("Main"));
 	DefaultInstance->OnDebugLine = DebugLine;
 
 	Initialize();
@@ -135,8 +141,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	Application->HintHidePause = 10000;
 
 	BOOST_ASSERT(TreeView->Items->Count == 0);
+
 	LoadSettings();
-	ActionToolBar1->ActionClient->Items->SmallIcons = Property.FontScale < 150;
 
 	//Don't create Form9 before settings are loaded. Scaling and other settings are needed in the constructor.
 	Form9.reset(new TForm9(this));
@@ -165,8 +171,16 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	//We need to use something in HTMLHelpViewer.pas to make sure it is linked in
 	ViewerName = "HTML Help Viewer";
 
-	BOOST_ASSERT(MoveHand1);
-	BOOST_ASSERT(MoveHand2);
+  StatusBar1->Panels->Items[1]->Width = GuiScale(StatusBar1->Panels->Items[1]->Width);
+
+//	BOOST_ASSERT(MoveHand1);
+//	BOOST_ASSERT(MoveHand2);
+  Func32::Init();
+  Data.Axes.TitleFont->OnChange = AxesFontChanged;
+  Data.Axes.NumberFont->OnChange = AxesFontChanged;
+  Data.Axes.LabelFont->OnChange = AxesFontChanged;
+  Data.Axes.LegendFont->OnChange = AxesFontChanged;
+  Draw.SetSizeMul(Screen->PixelsPerInch / 96.0);
 }
 //---------------------------------------------------------------------------
 void TForm1::HandleCommandLine()
@@ -176,7 +190,7 @@ void TForm1::HandleCommandLine()
 	{
 		if(!ParamCount() || ParamStr(1)[1] == '/' || ParamStr(1)[1] == '-' || !LoadFromFile(ParamStr(1)))
 			LoadDefault();
-    Redraw();
+    Data.SetNeedDrawing();
 
     if(ParamCount() > 1)
     {
@@ -230,17 +244,17 @@ void __fastcall TForm1::FormShow(TObject *Sender)
 
   HandleCommandLine();
 
-	if(Property.CheckForUpdate)
+	if(Options.CheckForUpdate)
   {
     ShowStatusError(LoadRes(520), clGreen, 0);
-		CallFromThread(&CheckForUpdate, true, &CancelStatusError);
+		Thread::CallFromThread(&CheckForUpdate, true, &CancelStatusError);
   }
   PostMessage(Handle, WM_USER, 0, 0);
 
   TreeView->SetFocus();
   if(Form22)
     Form22->ManualDock(Panel6);
-  Panel6->Height = Panel6->VisibleDockClientCount ? 150 : 0;
+  Panel6->Height = Panel6->VisibleDockClientCount ? ConsoleHeight : 0;
   Splitter2->Visible = false;
 
   //Stupid workaround for bug that hides size grip
@@ -360,7 +374,8 @@ void TForm1::Translate()
 //---------------------------------------------------------------------------
 __fastcall TForm1::~TForm1()
 {
-	Python::UnloadPlugin();
+  //Calling Py_Finalize() might crash Graph.
+	//Python::UnloadPlugin();
   //WARNING: DefaultActionBars is not destroyed by the VCL
   //Delete it to prevent Code Guard from reporting a lot of memory leaks
 //  delete ActionManager->DefaultActionBars;
@@ -379,9 +394,14 @@ void TForm1::Redraw(void)
   Image1->Canvas->Brush->Style = bsSolid;
   //Set background color
   Image1->Canvas->Brush->Color = Data.Axes.BackgroundColor;
-  //Clear area
+  //Remove clipping region and clear area
+  SelectClipRgn(Image1->Canvas->Handle, NULL);
   Image1->Canvas->FillRect(Rect(0,0,Image1->Width,Image1->Height));
+  Data.SetNeedDrawing(false);
   Draw.DrawAll();
+#ifndef _WIN64
+  SendOleAdvise(acDataChanged);
+#endif
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
@@ -417,7 +437,7 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
             {
 							Series->InsertDblPoint(Draw.xyCoord(X, Y));
 							UndoList.Push(TUndoAddPoint(Series));
-              Data.SetModified();
+              Python::ExecutePluginEvent(Python::peChanged, Elem);
 							Redraw(); //We need to redraw everything; Smooth lines may have changed
 					    UpdateMenu();
             }
@@ -425,7 +445,30 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
           else
           {
             boost::shared_ptr<TTextLabel> Label = Data.FindLabel(X, Y);
-            if(Label)
+            if(Draw.InsideLegend(X, Y))
+            {
+              Draw.AbortUpdate();
+              SetCursorState(csMoveLegend);
+              TRect Rect = Draw.GetLegendRect();
+
+              Image2->SetBounds(Rect.Left, Rect.Top, Rect.Width(), Rect.Height());
+              Image2->Picture->Bitmap->SetSize(Rect.Width(), Rect.Height());
+              Graph::TContext Context(Image2->Canvas);
+              Context.SetSmoothingMode(static_cast<TSmoothingMode>(PlotSettings.SmoothingMode));
+
+              TRect ImageRect(0, 0, Rect.Width(), Rect.Height());
+              Image2->Canvas->Brush->Color = Data.Axes.BackgroundColor;
+              Image2->Canvas->FillRect(ImageRect);
+              Draw.DrawLegend(Context, ImageRect);
+              Image2->Transparent = false;
+              Image2->Visible = true;
+              ImagePos = TPoint(Image2->Left, Image2->Top);
+              LegendPlacement = Data.Axes.LegendPlacement;
+
+              Data.Axes.ShowLegend = false;
+              Redraw();
+            }
+            else if(Label)
             {
               Draw.AbortUpdate();
               SetCursorState(csMoveLabel);
@@ -443,25 +486,6 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
               break;
             }
 
-            if(Draw.InsideLegend(X, Y))
-            {
-              Draw.AbortUpdate();
-              SetCursorState(csMoveLegend);
-              TRect Rect = Draw.GetLegendRect();
-
-              Image2->SetBounds(Rect.Left, Rect.Top, Rect.Width(), Rect.Height());
-              Image2->Picture->Bitmap->Width = Rect.Width();
-              Image2->Picture->Bitmap->Height = Rect.Height();
-              Image2->Canvas->CopyMode = cmSrcCopy;
-              Image2->Canvas->CopyRect(Image2->ClientRect, Image1->Canvas, Rect);
-              Image2->Transparent = false;
-              Image2->Visible = true;
-              ImagePos = TPoint(Image2->Left, Image2->Top);
-              LegendPlacement = Data.Axes.LegendPlacement;
-
-              Data.Axes.ShowLegend = false;
-              Redraw();
-            }
 
             if(EvalAction->Checked)
               SetCross(X, Y);
@@ -472,6 +496,9 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
             }
           }
           break;
+
+          default:
+            break;
       }
       break;
 
@@ -488,8 +515,11 @@ void __fastcall TForm1::Image1MouseDown(TObject *Sender, TMouseButton Button,
       break;
 
     case mbMiddle:
-      //Move coordinate system to the center without changing the scale
-			Zoom(0, 0, 0.5, 0.5, false);
+      UndoList.Push(TUndoAxes(Data));
+      MovePos = Func32::TDblPoint(Draw.xCoord(X), Draw.yCoord(Y));
+      SetCursorState(csMoving);
+      if(TControl *Control = dynamic_cast<TControl*>(Sender))
+        SetCaptureControl(Control);
       break;
   }
 }
@@ -591,6 +621,9 @@ void __fastcall TForm1::Image1MouseMove(TObject *Sender, TShiftState Shift,
     case csMoveLegend:
       MoveAndSnapLegend(X - LastMousePos.x, Y - LastMousePos.y, !Shift.Contains(ssCtrl));
       break;
+
+    case csMove:
+      break;
   }
 
   LastMousePos.x = X;
@@ -639,69 +672,77 @@ void __fastcall TForm1::Image1MouseUp(TObject *Sender, TMouseButton Button,
   if(Shift.Contains(ssDouble))
     return;
 
-  if(Button == mbLeft)
-    switch(CursorState)
-    {
-      case csMoving:
-        SetCursorState(csMove);
-        break;
-
-      case csMoveLabel:
+  switch(Button)
+  {
+    case mbLeft:
+      switch(CursorState)
       {
-        Image2->Visible = false;
-        MovingLabel->ChangeVisible(); //Works because we can only move a visible label
+        case csMoving:
+          SetCursorState(csMove);
+          Python::ExecutePluginEvent(Python::peZoom);
+          break;
 
-        //Only if label was actually moved
-        if(Image2->Left != MovingLabel->GetRect().Left || Image2->Top != MovingLabel->GetRect().Top)
+        case csMoveLabel:
         {
-          int X = Image2->Left;
-          int Y = Image2->Top;
-          if(MovingLabelPlacement == lpUserTopRight || MovingLabelPlacement == lpUserBottomRight)
-            X += Image2->Width;
-          if(MovingLabelPlacement == lpUserBottomLeft || MovingLabelPlacement == lpUserBottomRight)
-						Y += Image2->Height;
+          Image2->Visible = false;
+          MovingLabel->ChangeVisible(); //Works because we can only move a visible label
 
-          boost::shared_ptr<TTextLabel> NewLabel(new TTextLabel(
-            MovingLabel->GetText(),
-            MovingLabelPlacement,
-            TTextValue(Draw.xCoord(X)),
-            TTextValue(Draw.yCoord(Y)),
-            MovingLabel->GetBackgroundColor(),
-            MovingLabel->GetRotation(),
-            MovingLabel->GetOleLink()
-          ));
-          UndoList.Push(TUndoChange(MovingLabel, NewLabel));
-          Data.Replace(MovingLabel, NewLabel);
-          NewLabel->Update();
-          NewLabel->UpdateRect(Image2->Left, Image2->Top); //Needed so we don't have to wait for label to be redrawn
-          MovingLabel.reset();
-          Data.SetModified();
+          //Only if label was actually moved
+          if(Image2->Left != MovingLabel->GetRect().Left || Image2->Top != MovingLabel->GetRect().Top)
+          {
+            int X = Image2->Left;
+            int Y = Image2->Top;
+            if(MovingLabelPlacement == lpUserTopRight || MovingLabelPlacement == lpUserBottomRight)
+              X += Image2->Width;
+            if(MovingLabelPlacement == lpUserBottomLeft || MovingLabelPlacement == lpUserBottomRight)
+              Y += Image2->Height;
+
+            UndoList.Push(TUndoChange(MovingLabel));
+            MovingLabel->SetPlacement(MovingLabelPlacement);
+            MovingLabel->SetPos(std::make_pair(TTextValue(Draw.xCoord(X)), TTextValue(Draw.yCoord(Y))));
+            MovingLabel->UpdateRect(Image2->Left, Image2->Top); //Needed so we don't have to wait for label to be redrawn
+            Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(MovingLabel));
+            MovingLabel.reset();
+          }
+
+          UpdateMenu();
+          Redraw();
+          SetCursorState(csIdle);
+          break;
         }
 
-        UpdateMenu();
-        Redraw();
-        SetCursorState(csIdle);
-        break;
+        case csMoveLegend:
+          Image2->Visible = false;
+          Data.Axes.ShowLegend = true;
+          UndoList.Push(TUndoAxes(Data));
+          Data.Axes.LegendPlacement = LegendPlacement;
+          Data.Axes.LegendPos = Draw.xyCoord(Image2->Left, Image2->Top);
+          Data.SetModified();
+          Redraw();
+          SetCursorState(csIdle);
+          break;
+
+        case csZoomWindow:
+          SetCursorState(csIdle);
+          if(X != xZoom && Y != yZoom)
+            //Zoom to user selected window;don't change coordinates
+            ZoomWindow(Draw.xCoord(Shape1->Left), Draw.xCoord(Shape1->Left+Shape1->Width), Draw.yCoord(Shape1->Top+Shape1->Height), Draw.yCoord(Shape1->Top));
+          break;
+
+        case csMove:
+        case csIdle:
+          break;
       }
+      break;
 
-      case csMoveLegend:
-        Image2->Visible = false;
-        Data.Axes.ShowLegend = true;
-        UndoList.Push(TUndoAxes(Data));
-				Data.Axes.LegendPlacement = LegendPlacement;
-        Data.Axes.LegendPos = Draw.xyCoord(Image2->Left, Image2->Top);
-        Data.SetModified();
-        Redraw();
-        SetCursorState(csIdle);
-        break;
+    case mbMiddle:
+      SetCursorState(csIdle);
+      SetCaptureControl(NULL);
+      break;
 
-      case csZoomWindow:
-        SetCursorState(csIdle);
-        if(X != xZoom && Y != yZoom)
-          //Zoom to user selected window;don't change coordinates
-          ZoomWindow(Draw.xCoord(Shape1->Left), Draw.xCoord(Shape1->Left+Shape1->Width), Draw.yCoord(Shape1->Top+Shape1->Height), Draw.yCoord(Shape1->Top));
-        break;
-    }
+    case mbRight:
+      break;
+  }
 }
 //---------------------------------------------------------------------------
 bool TForm1::AskSave(void)
@@ -709,7 +750,8 @@ bool TForm1::AskSave(void)
   bool Result = true;
   if(Data.IsModified())
   {
-    String Str = Data.GetFileName().empty() ? LoadRes(RES_SAVE_CHANGES) : LoadRes(RES_SAVE_CHANGES_IN, ExtractFileName(Data.GetFileName().c_str()));
+    String Str = Data.GetFileName().empty() ? LoadRes(RES_SAVE_CHANGES) :
+      LoadRes(RES_SAVE_CHANGES_IN, ExtractFileName(ToUString(Data.GetFileName())));
     switch(MessageBox(Str, NAME, MB_YESNOCANCEL | MB_ICONEXCLAMATION))
     {
       case IDYES:
@@ -740,13 +782,52 @@ void __fastcall TForm1::FormCloseQuery(TObject *Sender, bool &CanClose)
     CanClose = AskSave();
     SaveOption = OLECLOSE_NOSAVE; //Don't save again
   }
-
+#ifndef _WIN64
   if(OleServerRunning() && CanClose)
   {
     OleServerImpl->AddRef();
 		OleServerImpl->Close(SaveOption);
     OleServerImpl->Release();
   }
+#endif
+}
+//---------------------------------------------------------------------------
+void TForm1::ScaleImages()
+{
+  int OldIconWidth = TreeViewImageList->Width;
+  int FontScale = PixelsPerInch * Options.FontScale;
+  int IconWidth = MulDiv(16, FontScale, 96 * 100);  //Width of GUI icons
+
+  if(TreeViewImageList->Width != IconWidth)
+  {
+    TreeViewImageList->SetSize(IconWidth, IconWidth);
+    TScaledImageList::ScaleImageList(ImageList1, TreeViewImageList);
+  }
+  ScaledImageList3->SetSize(IconWidth, IconWidth);
+
+  int OldIconWidth1 = ScaledImageList1->Width;
+  int OldIconWidth2 = ScaledImageList2->Width;
+
+  int IconWidth1 = MulDiv(GuiSettings.MenuIconSize, FontScale, 96 * 100); //Width of icons in the menu
+  int IconWidth2 = MulDiv(GuiSettings.ToolBarIconSize, FontScale, 96 * 100); //Width of icons on the toolbar
+
+  ScaledImageList1->SetSize(IconWidth1, IconWidth1);
+  ScaledImageList2->SetSize(IconWidth2, IconWidth2);
+
+  ActionToolBar1->VertMargin = MulDiv(2, FontScale, 96 * 100);
+  ActionToolBar1->Spacing = MulDiv(5, FontScale, 96 * 100);
+
+  TreeView->Indent = MulDiv(18, FontScale, 9600);
+  ActionMainMenuBar1->Spacing = IconWidth1 / 2;
+  StatusBar1->Font->Height = MulDiv(-11, FontScale, 96 * 100);
+  StatusBar1->Height = MulDiv(19, FontScale, 96 * 100);
+  TreeView->Font->Height = MulDiv(-11, FontScale, 96 * 100);
+  Screen->MenuFont->Height = MulDiv(-12, FontScale, 96 * 100);
+  if(Visible)
+    ActionMainMenuBar1->ScaleBy(IconWidth1, OldIconWidth1);
+  if(IconWidth2 < OldIconWidth2)
+    ActionToolBar1->ScaleBy(IconWidth2, OldIconWidth2);
+  Realign();
 }
 //---------------------------------------------------------------------------
 void TForm1::LoadSettings(void)
@@ -755,7 +836,7 @@ void TForm1::LoadSettings(void)
 
   if(Registry.KeyExists(REGISTRY_KEY L"\\Property"))
     Registry.OpenKey(REGISTRY_KEY L"\\Property");
-  Property.Read(Registry);
+  Options.Read(Registry);
 
   //We must scale after FontScale has been read and before the form size has been set
 	ScaleForm(this);
@@ -764,33 +845,35 @@ void TForm1::LoadSettings(void)
   Recent1->MaxFiles = Registry.Read("Recents", 4);
 	Application->ShowHint = Registry.Read("ShowHint", true);
 	TreeView->ToolTips = Application->ShowHint;
-  Width = Registry.Read("Width", Width); //Note: Calls FormConstrainedResize()
+  Width = Registry.Read("Width", MulDiv(900, Screen->PixelsPerInch, 96)/*Width*/); //Note: Calls FormConstrainedResize()
   StdWidth = Width;
 
-  Height = Registry.Read("Height", Height); //Note: Calls FormConstrainedResize()
+  Height = Registry.Read("Height", MulDiv(600, Screen->PixelsPerInch, 96)/*Height*/); //Note: Calls FormConstrainedResize()
   StdHeight = Height;
 
-  Panel3->Width = Registry.Read("SplitterPos", Panel3->Width);
+  Panel3->Width = Registry.Read("SplitterPos", MulDiv(160, Screen->PixelsPerInch, 96));
   Panel1->Width = Panel3->Width;
+  ConsoleHeight = Registry.Read("ConsoleHeight", 150);
 
   WindowState = Registry.Read("Maximized", false) ? wsMaximized : wsNormal;
   IPrintDialog1->LeftMargin = Registry.Read("LeftMargin", IPrintDialog1->LeftMargin);
   IPrintDialog1->TopMargin = Registry.Read("TopMargin", IPrintDialog1->TopMargin);
-  IPrintDialog1->PrintOutput = Registry.Read("ForceBlackOnPrint", false) ? poBlackWhite : poColor;
   IPrintDialog1->CenterOnPage = Registry.Read("CenterOnPage", true);
   IPrintDialog1->Scale = Registry.Read("PrinterScale", 100);
   IPrintDialog1->Orientation = Registry.Read("Orientation", poPortrait);
 	UndoList.SetMaxUndo(Registry.Read("MaxUndo", 50));
 
+  if(Registry.ValueExists(L"Language"))
+    Options.Language = Registry.Read(L"Language", L"English");
+  else
+    Options.Language = GetRegValue(REGISTRY_KEY, L"Language", HKEY_LOCAL_MACHINE, L"English");
+
+  ScaleImages();
+  ChangeLanguage(ToUString(Options.Language), Options.Language != L"English");
   Python::InitPlugins();
 
   if(Registry.ValueExists(L"ToolBar"))
     CreateToolBar(Registry.Read(L"ToolBar", L"").c_str());
-
-  if(Registry.ValueExists(L"Language"))
-    ChangeLanguage(Registry.Read(L"Language", L"English").c_str());
-  else
-    ChangeLanguage(GetRegValue(REGISTRY_KEY, L"Language", HKEY_LOCAL_MACHINE, L"English").c_str());
 
   StartToolBar = GetToolBar(); //Save shown toolbar
 
@@ -815,15 +898,14 @@ void TForm1::SaveSettings(void)
 
     Registry.Write("LeftMargin", IPrintDialog1->LeftMargin);
     Registry.Write("TopMargin", IPrintDialog1->TopMargin);
-    Registry.Write("ForceBlackOnPrint", IPrintDialog1->PrintOutput == poBlackWhite);
     Registry.Write("CenterOnPage", IPrintDialog1->CenterOnPage);
     Registry.Write("PrinterScale", IPrintDialog1->Scale);
-    Registry.Write("Orientation", IPrintDialog1->Orientation);
+    Registry.Write("Orientation", static_cast<int>(IPrintDialog1->Orientation));
 
     Registry.Write("DockCalcForm", Panel4->DockClientCount);
     Registry.Write(L"UserModels", Data.ExportUserModels());
 
-    if(Property.SavePos)
+    if(Options.SavePos)
     {
       Registry.Write("Maximized", WindowState == wsMaximized);
       if(WindowState == wsNormal)
@@ -834,6 +916,7 @@ void TForm1::SaveSettings(void)
       Registry.Write("Width", StdWidth);
       Registry.Write("Height", StdHeight);
       Registry.Write("SplitterPos", TreeView->Width);
+      Registry.Write("ConsoleHeight", ConsoleHeight);
 		}
 
     Registry.Write("MaxUndo", UndoList.GetMaxUndo());
@@ -843,7 +926,7 @@ void TForm1::SaveSettings(void)
       Registry.Write(L"ToolBar", ToolBar.c_str());
 
     if(Registry.CreateKey(REGISTRY_KEY "\\Property"))
-      Property.Write(Registry);
+      Options.Write(Registry);
   }
 }
 //---------------------------------------------------------------------------
@@ -853,105 +936,29 @@ void TForm1::UpdateMenu()
   if(Application->Terminated)
     return;
 
-  boost::shared_ptr<TGraphElem> Elem = GetGraphElem(TreeView->Selected);
-
-  if(Elem)
-  {
-    EditAction->Enabled = true;
-    DeleteAction->Enabled = true;
-  }
-	else
-  {
-    EditAction->Enabled = false;
-    DeleteAction->Enabled = false;
-  }
-
-  if(dynamic_cast<TBaseFuncType*>(Elem.get()) && !dynamic_cast<TTan*>(Elem.get()))
-  {
-    InsertTangentAction->Enabled = true;
-    InsertShadeAction->Enabled = true;
-    InsertDifAction->Enabled = true;
-    TableAction->Enabled = true;
-    Tree_InsTan->Visible = true;
-    Tree_InsDiff->Visible = true;
-    Tree_InsShade->Visible = true;
-  }
-  else
-  {
-    InsertTangentAction->Enabled = false;
-    InsertShadeAction->Enabled = false;
-    InsertDifAction->Enabled = false;
-    TableAction->Enabled = false;
-    Tree_InsTan->Visible = false;
-    Tree_InsDiff->Visible = false;
-    Tree_InsShade->Visible = false;
-  }
-
-  if(dynamic_cast<TPointSeries*>(Elem.get()))
+  if(dynamic_cast<TPointSeries*>(Selected.get()))
 	{
-    InsertTrendlineAction->Enabled = true;
     Tree_InsTrend->Visible = true;
     Tree_Export->Visible = true;
   }
   else
   {
-    InsertTrendlineAction->Enabled = false;
     Tree_InsTrend->Visible = false;
     Tree_Export->Visible = false;
   }
 
-  if(TreeView->Selected && TreeView->Selected->Level == 0 && dynamic_cast<TAxesView*>(Elem.get()) == NULL)
+  if(Selected)
   {
-    CutAction->Enabled = true;
-    CopyAction->Enabled = true;
-  }
-  else
-  {
-    CutAction->Enabled = false;
-    CopyAction->Enabled = false;
+    Tree_ShowInLegend->Checked = Selected->GetShowInLegend();
   }
 
-  if(Elem)
-  {
-    Tree_ShowInLegend->Checked = Elem->GetShowInLegend();
-  }
-
-	if(dynamic_cast<TTextLabel*>(Elem.get()) || dynamic_cast<TAxesView*>(Elem.get()))
+	if(dynamic_cast<TTextLabel*>(Selected.get()) || dynamic_cast<TAxesView*>(Selected.get()))
     Tree_ShowInLegend->Visible = false;
   else
     Tree_ShowInLegend->Visible = true;
 
-  Tree_Placement->Visible = dynamic_cast<TTextLabel*>(Elem.get());
+  Tree_Placement->Visible = dynamic_cast<TTextLabel*>(Selected.get());
   Tree_Rotation->Visible = Tree_Placement->Visible;
-
-  if(dynamic_cast<TAxesView*>(Elem.get()))
-  {
-    DeleteAction->Enabled = false;
-  }
-  else
-  {
-    DeleteAction->Enabled = true;
-  }
-
-  //Enable animation if there are any constants defined
-  AnimateAction->Enabled = false;
-  for(TCustomFunctions::TConstIterator Iter = Data.CustomFunctions.Begin(); Iter != Data.CustomFunctions.End(); ++Iter)
-    if(Iter->Arguments.empty())
-    {
-      AnimateAction->Enabled = true;
-      break;
-    }
-
-  UndoAction->Enabled = UndoList.CanUndo();
-  RedoAction->Enabled = UndoList.CanRedo();
-	PasteAction->Enabled = GraphClipboard.HasData();
-  ZoomFitAction->Enabled = dynamic_cast<TBaseFuncType*>(Elem.get()) || dynamic_cast<TPointSeries*>(Elem.get()) || dynamic_cast<TRelation*>(Elem.get());
-//  ZoomFitAllAction->Enabled = ZoomFitAction->Enabled;
-  ZoomSquareAction->Enabled = Data.Axes.xAxis.LogScl == Data.Axes.yAxis.LogScl;
-
-#ifdef LIMITED_EDITION
-  InsertDifAction->Enabled = false;
-#endif
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
@@ -965,7 +972,8 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
     else
       AbortPrinting = true;
   }
-	Python::ExecutePluginEvent(Python::peClose);
+	if(Python::ExecutePluginEvent(Python::peClose))
+    Action = caNone;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormConstrainedResize(TObject *Sender,
@@ -979,7 +987,7 @@ void __fastcall TForm1::FormConstrainedResize(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 //This function sets the min, max and scl values
-bool TForm1::ZoomWindow(double xMin, double xMax, double yMin, double yMax, bool Update, bool SaveUndo)
+bool TForm1::ZoomWindow(long double xMin, long double xMax, long double yMin, long double yMax, bool Update, bool SaveUndo)
 {
   //Check for out of range
   if(xMax-xMin < 1E-10 || yMax-yMin < 1E-10)
@@ -1008,9 +1016,8 @@ bool TForm1::ZoomWindow(double xMin, double xMax, double yMin, double yMax, bool
   Data.Axes.yAxis.Max = yMax;
 
 //  Data.Axes.HandleZoomSquare(Draw.GetScaledYAxis());
-  
+
   Data.ClearCache();
-  Python::ExecutePluginEvent(Python::peZoom);
   if(Update)
   {
     Data.SetModified();
@@ -1065,7 +1072,7 @@ void __fastcall TForm1::StatusBar1DrawPanel(TStatusBar *StatusBar,
          (!SysLocale.MiddleEast && Panel->Index == 2))
     if(StatusIcon != -1)
       //Draw icon number StatusIcon from the image list on the statusbar
-      ImageList1->Draw(StatusBar->Canvas, Rect.Left+2, Rect.Top, StatusIcon, true);
+      ScaledImageList3->Draw(StatusBar->Canvas, Rect.Left+2, Rect.Top, StatusIcon, true);
 }
 //---------------------------------------------------------------------------
 //This shows a message in the stausbar
@@ -1120,7 +1127,7 @@ void __fastcall TForm1::ApplicationEventsShowHint(String &HintStr,
 {
   //Maximum length in pixels of hint text before line wrap
   if(HintInfo.HintControl != TreeView)
-    HintInfo.HintMaxWidth = 300;
+    HintInfo.HintMaxWidth = GuiScale(300);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::WMEnterSizeMove(TMessage &Message)
@@ -1136,7 +1143,9 @@ void __fastcall TForm1::WMExitSizeMove(TMessage &Message)
   {
     Draw.AbortUpdate();
     Data.ClearCache();
+#ifndef _WIN64
     SendOleAdvise(acDataChanged);
+#endif
 		Redraw(); //Activates thread; must be done after OLE update
     Reseized = false;
   }
@@ -1178,12 +1187,13 @@ void __fastcall TForm1::Panel2Resize(TObject *Sender)
     {
       Draw.AbortUpdate();
       Data.ClearCache();
-      Redraw();
+      Data.SetNeedDrawing();
       UpdateEval();
     }
-
+#ifndef _WIN64
     if(OleServerRunning())
       OleServerImpl->SetSize(Image1->Width, Image1->Height);
+#endif
   }
 }
 //---------------------------------------------------------------------------
@@ -1243,14 +1253,39 @@ void __fastcall TForm1::FormMouseWheelDown(TObject *Sender,
 void __fastcall TForm1::Splitter1DblClick(TObject *Sender)
 {
   int MaxWidth = Splitter1->MinSize;
-  for(int I = 0; I < TreeView->Items->Count; I++)
+
+  SCROLLINFO ScrollInfo = {sizeof(ScrollInfo), SIF_RANGE};
+  SCROLLBARINFO ScrollBarInfo = {sizeof(ScrollBarInfo)};
+
+  // To find the whole (scrollable) width of the tree control,
+  // we determine the range of the scrollbar.
+  // Unfortunately when a scrollbar isn't needed (and is invisible),
+  // its range isn't zero (but rather 0 to 100),
+  // so we need to specifically ignore it then.
+  // Only if the scrollbar is displayed
+  if(GetScrollInfo(TreeView->Handle, SB_HORZ, &ScrollInfo) &&
+     GetScrollBarInfo(TreeView->Handle, OBJID_HSCROLL, &ScrollBarInfo) &&
+    (ScrollBarInfo.rgstate[0] & STATE_SYSTEM_INVISIBLE) == 0)
   {
-    TTreeNode *Node = TreeView->Items->Item[I];
-    int StrWidth = Node->DisplayRect(true).Right;
-    if(StrWidth > MaxWidth)
-      MaxWidth = StrWidth;
+    MaxWidth = ScrollInfo.nMax - ScrollInfo.nMin + 6;
   }
-  MaxWidth += 5;
+  else
+  {
+    for(int I = 0; I < TreeView->Items->Count; I++)
+    {
+      TTreeNode *Node = TreeView->Items->Item[I];
+      int StrWidth = Node->DisplayRect(true).Right;
+      if(StrWidth > MaxWidth)
+        MaxWidth = StrWidth;
+    }
+    MaxWidth += 5;
+  }
+
+  //If the vertical scroll bar is visible, add the width of this scroll bar
+  if(GetScrollBarInfo(TreeView->Handle, OBJID_VSCROLL, &ScrollBarInfo) &&
+    (ScrollBarInfo.rgstate[0] & STATE_SYSTEM_INVISIBLE) == 0)
+    MaxWidth += GetSystemMetrics(SM_CXVSCROLL);
+
   if(MaxWidth > Width / 2)
     MaxWidth = Width / 2;
   Panel3->Width = MaxWidth;
@@ -1258,17 +1293,19 @@ void __fastcall TForm1::Splitter1DblClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::TreeViewChange(TObject *Sender, TTreeNode *Node)
 {
+  static TGraphElemPtr LastSelected; //Used to avoid executing events unnecessary
   UpdateMenu();
   TGraphElemPtr Elem = GetGraphElem(Node);
   //Necessary because Form9 may not have been loaded yet
   if(Form9)
     Form9->FuncChanged(Elem);
-  if(Elem != Selected)
+  if(Elem != LastSelected)
     Python::ExecutePluginEvent(Python::peSelect, Elem);
   Selected = Elem;
+  LastSelected = Elem;
 }
 //---------------------------------------------------------------------------
-void TForm1::ChangeLanguage(const String &Lang)
+void TForm1::ChangeLanguage(const String &Lang, bool Force)
 {
   if(Lang.IsEmpty())
     return;
@@ -1282,7 +1319,7 @@ void TForm1::ChangeLanguage(const String &Lang)
   SysLocale.MiddleEast = Mode;
   Application->BiDiMode = Mode;
 
-  if(Lang != ToUString(Property.Language))
+  if(Force || Lang != ToUString(Options.Language))
     Translate();
 
   //Necesarry to update all hot keys
@@ -1293,61 +1330,68 @@ void TForm1::ChangeLanguage(const String &Lang)
   for(int I = 0; I < ActionMainMenuBar1->ActionClient->Items->Count; I++)
     ActionMainMenuBar1->ActionClient->Items->ActionClients[I]->Control->Caption = ActionMainMenuBar1->ActionClient->Items->ActionClients[I]->Caption;
 
-  Property.Language = ToWString(Lang);
+  Options.Language = ToWString(Lang);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-  switch(Key)
-  {
-    case VK_F5:
-      Draw.AbortUpdate();
-      Data.ClearCache();
-      Data.Update();
-      UpdateTreeView();
-      SendOleAdvise(acDataChanged);
-      Redraw(); //Activates thread; must be done after OLE update
-      break;
-
-    case VK_F9:
-      Draw.AbortUpdate();
-      Data.Axes.xAxis.ShowNegativeArrow = !Data.Axes.xAxis.ShowNegativeArrow;
-      Data.Axes.yAxis.ShowNegativeArrow = !Data.Axes.yAxis.ShowNegativeArrow;
-      Data.Axes.xAxis.NumberPlacement = Data.Axes.xAxis.NumberPlacement == npCenter ? npBefore : npCenter;
-      Data.Axes.yAxis.NumberPlacement = Data.Axes.yAxis.NumberPlacement == npCenter ? npBefore : npCenter;
-      Redraw(); //Activates thread; must be done after OLE update
-      break;
-
-    case VK_F11:
-      Python::ShowPythonConsole(true);
-      break;
-
-    case VK_SHIFT:
-      if(CursorState == csIdle)
-        SetCursorState(csMove);
-      break;
-
-    case VK_OEM_MINUS: //Handle Ctrl+Shift+-  (Normal shortcut handling doesn't seem to work)
-//      if(Shift == TShiftState() << ssCtrl << ssShift)
-//        ZoomOutAction->Execute();
-      break;
-  }
-
-  if(Shift.Contains(ssCtrl) && !Shift.Contains(ssAlt))
-  {
-    if(Shift.Contains(ssShift))
+  if(Shift == TShiftState())
+    switch(Key)
     {
-      const char* Languages[] = {"Czech", "Dutch", "Greek", "Finnish", "Chinese (Traditional)", "Chinese (Simplified)", "Mongolian", "Swedish", "Arabic", "Hebrew"};
-      if(Key >= '0' && Key <='9')
-        ChangeLanguage(Languages[Key - '1']);
+      case VK_F5:
+        Draw.AbortUpdate();
+        Data.ClearCache();
+        Data.Update();
+        UpdateTreeView();
+        Redraw(); //Activates thread; must be done after OLE update
+        break;
+
+      case VK_F9:
+        Draw.AbortUpdate();
+        Data.Axes.xAxis.ShowNegativeArrow = !Data.Axes.xAxis.ShowNegativeArrow;
+        Data.Axes.yAxis.ShowNegativeArrow = !Data.Axes.yAxis.ShowNegativeArrow;
+        Data.Axes.xAxis.NumberPlacement = Data.Axes.xAxis.NumberPlacement == npCenter ? npBefore : npCenter;
+        Data.Axes.yAxis.NumberPlacement = Data.Axes.yAxis.NumberPlacement == npCenter ? npBefore : npCenter;
+        Redraw(); //Activates thread; must be done after OLE update
+        break;
+
+      case VK_F11:
+        if(Form22)
+          Form22->Show();
+        break;
     }
-    else if(Key >= '0' && Key <='9')
+
+  else if(Shift == TShiftState() << ssShift)
+    switch(Key)
     {
-      const char* Languages[] = {"Russian", "English", "Danish", "German", "Spanish", "Portuguese", "Italian", "Slovenian", "French", "Hungarian"};
-      ChangeLanguage(Languages[Key - '0']);
+      case VK_SHIFT:
+        if(CursorState == csIdle)
+          SetCursorState(csMove);
+        break;
     }
-  }
+  else if(Shift == TShiftState() << ssCtrl << ssAlt)
+    switch(Key)
+    {
+      case VK_F12: //Simulate crash (division by zero
+      {
+        double x=0;
+        double y=5/x;
+        break;
+      }
+      case VK_F16:
+        throw EAbort("");
+      case VK_F17: //Test uncaught exception
+        throw Exception("Test Exception");
+      case VK_F18:  //Test Access Violation
+      {
+        int *Ptr = NULL;
+        *Ptr = 5;
+        break;
+      }
+      case VK_F19:
+        throw std::runtime_error("Test std::exception");
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormKeyPress(TObject *Sender, char &Key)
@@ -1396,9 +1440,22 @@ void __fastcall TForm1::TreeViewMouseMove(TObject *Sender,
 	}
 }
 //---------------------------------------------------------------------------
-void TForm1::UpdateTreeView(const boost::shared_ptr<TGraphElem> &Selected)
+void TForm1::SetSelected(const TGraphElemPtr &Elem)
 {
-  TreeView->OnChange = NULL; //Prevent a lot of change notifications
+  Selected = Elem;
+  if(!FunctionListModified)
+    TreeView->Selected = GetNode(Elem);
+}
+//---------------------------------------------------------------------------
+void TForm1::UpdateTreeView(const boost::shared_ptr<TGraphElem> &ASelected)
+{
+  FunctionListModified = true;
+  Selected = ASelected;
+}
+//---------------------------------------------------------------------------
+void TForm1::RecreateTreeView()
+{
+  TreeView->OnChange = NULL;  //Prevent a lot of change notifications
   TreeView->Repaint();
   //Prevent the scrollbar from jumping
   SendMessage(TreeView->Parent->Handle, WM_SETREDRAW, false, 0);
@@ -1407,17 +1464,19 @@ void TForm1::UpdateTreeView(const boost::shared_ptr<TGraphElem> &Selected)
   int Index = TreeView->Selected ? TreeView->Selected->AbsoluteIndex : -1;
   TreeView->Items->Clear();
 
-  while(ImageList1->Count > FixedImages)
-    ImageList1->Delete(ImageList1->Count-1);
+  while(TreeViewImageList->Count > ImageList1->Count)
+    TreeViewImageList->Delete(TreeViewImageList->Count-1);
 
-  TAddView AddView;
+  Graph::TAddView AddView;
   for(unsigned I = 0; I < Data.ElemCount(); I++)
-    Data.GetElem(I)->Accept(AddView);
+  {
+    TGraphElemPtr Elem = Data.GetElem(I);
+    if(Elem->GetShowInFunctionList())
+      Elem->Accept(AddView);
+    else
+      Elem->SetCustomData(NULL);
+  }
   TreeView->OnChange = TreeViewChange; //Enable change notification again
-  if(Selected)
-    TreeView->Selected = GetNode(Selected);
-  else if(Index != -1 && TreeView->Items->Count)
-    TreeView->Selected = TreeView->Items->Item[Index < TreeView->Items->Count ? Index : TreeView->Items->Count-1];
 
   TreeView->FullExpand();
 
@@ -1430,12 +1489,21 @@ void TForm1::UpdateTreeView(const boost::shared_ptr<TGraphElem> &Selected)
   //If the item is wider than the tree view, TVM_ENSUREVISIBLE will center the tree view.
   //PostMessage WM_HSCROLL will move the scroll bar back.
   PostMessage(TreeView->Handle, WM_HSCROLL, SB_TOP, 0);
+
+  FunctionListModified = false;
+  Python::ExecutePluginEvent(Python::peFunctionListUpdated);
+
+  if(Selected)
+    TreeView->Selected = GetNode(Selected);
+  else if(Index != -1 && TreeView->Items->Count)
+    TreeView->Selected = TreeView->Items->Item[Index < TreeView->Items->Count ? Index : TreeView->Items->Count-1];
 }
 //---------------------------------------------------------------------------
-void TForm1::ChangeVisible(boost::shared_ptr<TGraphElem> GraphElem)
+void TForm1::ChangeVisible(TGraphElemPtr GraphElem)
 {
   if(GraphElem)
   {
+    UndoList.Push(TUndoChangeGraphElemSetting<int>(GraphElem, &GraphElem->GetVisible, &GraphElem->SetVisible));
     GraphElem->ChangeVisible();
     switch(GraphElem->GetVisible())
     {
@@ -1443,7 +1511,8 @@ void TForm1::ChangeVisible(boost::shared_ptr<TGraphElem> GraphElem)
       case 0:  TreeView->Selected->StateIndex =  iiUnChecked; break;
       case 1:  TreeView->Selected->StateIndex =  iiChecked; break;
     }
-    Data.SetModified();
+    Python::ExecutePluginEvent(Python::peChanged, GraphElem);
+    UpdateMenu();
     Redraw();
   }
 }
@@ -1486,20 +1555,30 @@ void __fastcall TForm1::FormResize(TObject *Sender)
 {
   if(Panel3->Width > ClientWidth - Splitter1->MinSize)
     Panel3->Width = ClientWidth - Splitter1->MinSize;
-  ActionToolBar1->Align = alTop;
+
+  //We need to set Align when form is maximized to update height of the toolbar in case it has changed.
+  if(WindowState == wsMaximized)
+    ActionToolBar1->Align = ActionToolBar1->Align;
+
+  if(Panel6->VisibleDockClientCount && Splitter2->Top < Splitter2->MinSize)
+    Panel6->Height = Panel5->Height - Splitter2->MinSize;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::BeginUpdate()
 {
-  Updating++;
-  if(Panel2->Cursor == crDefault)
-    Screen->Cursor = crAppStart;
+  //Start timer to delay the cursor update to avoid blinking.
+  if(Updating++ == 0)
+    Timer3->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::EndUpdate()
 {
   if(--Updating == 0)
+  {
+    Timer3->Enabled = false;
     Screen->Cursor = crDefault;
+    ShowStatusMessage("");
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ApplicationEventsActivate(TObject *Sender)
@@ -1655,39 +1734,48 @@ void __fastcall TForm1::Panel2MouseLeave(TObject *Sender)
     StatusBar1->Panels->Items[1]->Text = "";
 }
 //---------------------------------------------------------------------------
-class TImageListEx : public TImageList
+//Create a function icon with the specified color and add it to the image list
+int TForm1::AddFuncImage(TColor Color)
 {
-public:
-  using TImageList::GetImages;
-};
+  //The sine is plottet as 4 bezier curves
+  //See http://stackoverflow.com/questions/13932704/how-to-draw-sine-waves-with-svg-js
+  int Size = TreeViewImageList->Width;
+  TPoint Data[] = {
+    TPoint(0,Size/2),
+    TPoint(Size*0.08153, Size*(0.5-1.5*0.08153)), TPoint(Size*0.15915, Size*(0.5-1.5*0.15915)), TPoint(Size/4, Size*(0.5-1.5*0.15915)),
+    TPoint(Size*(0.25+0.08153), Size*(0.5-1.5*0.15915)), TPoint(Size*(0.25+0.15915), Size*(0.5-1.5*0.08153)), TPoint(Size/2, Size/2),
+    TPoint(Size*(0.5+0.08153), Size*(0.5+1.5*0.08153)), TPoint(Size*(0.5+0.15915), Size*(0.5+1.5*0.15915)), TPoint(Size*0.75, Size*(0.5+1.5*0.15915)),
+    TPoint(Size*(0.75+0.08153), Size*(0.5+1.5*0.15915)), TPoint(Size*(0.75+0.15915), Size*(0.5+1.5*0.08153)), TPoint(Size, Size/2)
+  };
 
-//Makes a copy of the image with index Index in ImageList1 and replaces clRed with Color
-int TForm1::AddImage(int Index, TColor Color)
-{
-  std::auto_ptr<Graphics::TBitmap> Bitmap1(new Graphics::TBitmap);
-  std::auto_ptr<Graphics::TBitmap> Bitmap2(new Graphics::TBitmap);
-  ImageList1->BkColor = clWhite;
-  ImageList1->GetBitmap(Index, Bitmap1.get());
-  ImageList1->BkColor = Graphics::clNone;
-  Bitmap2->Canvas->Brush->Color = Color;
-  Bitmap2->Width = Bitmap1->Width;
-  Bitmap2->Height = Bitmap1->Height;
-  TRect Rect(0, 0, Bitmap1->Width, Bitmap1->Height);
-  Bitmap2->Canvas->BrushCopy(Rect, Bitmap1.get(), Rect, clRed);
-  return ImageList1->AddMasked(Bitmap2.get(), clWhite);
+  std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
+  Bitmap->SetSize(Size, Size);
+  Bitmap->Canvas->Brush->Color = clWhite;
+  Bitmap->Canvas->FillRect(TRect(0, 0, Bitmap->Width, Bitmap->Height));
+
+  Graph::TContext Context(Bitmap->Canvas);
+  Context.SetSmoothingMode(smAntiAlias);
+  Context.SetPen(psSolid, Color, std::ceil(Size/8.0));
+  Context.DrawPolyBezier(Data, 13);
+  return TreeViewImageList->AddMasked(Bitmap.get(), clWhite);
 }
 //---------------------------------------------------------------------------
 int TForm1::AddImage(TColor Color, TBrushStyle Style)
 {
   std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
-  Bitmap->Width = 16;
-  Bitmap->Height = 16;
+  Bitmap->Width = TreeViewImageList->Width;
+  Bitmap->Height = TreeViewImageList->Height;
   Bitmap->Canvas->Brush->Color = Color;
   Bitmap->Canvas->Brush->Style = Style;
   SetBkColor(Bitmap->Canvas->Handle, clWhite);
   SetBkMode(Bitmap->Canvas->Handle, OPAQUE);
   Bitmap->Canvas->FillRect(TRect(0, 0, Bitmap->Width, Bitmap->Height));
-  return ImageList1->AddMasked(Bitmap.get(), clWhite);
+  return TreeViewImageList->AddMasked(Bitmap.get(), clWhite);
+}
+//---------------------------------------------------------------------------
+int TForm1::AddImage(TBitmap *Bitmap, TColor BackgroundColor)
+{
+  return TreeViewImageList->AddMasked(Bitmap, BackgroundColor);
 }
 //---------------------------------------------------------------------------
 bool __fastcall TForm1::Recent1LoadFile(TRecent *Sender, String FileName)
@@ -1709,28 +1797,6 @@ bool __fastcall TForm1::Recent1LoadFile(TRecent *Sender, String FileName)
     return true;
   }
   return false;
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::xPageSetupDialogPaintText(
-      TIPageSetupDialog *Sender, TCanvas *PageCanvas,
-      const TRect &UpdateRect, const TRect &PaperSize)
-{
-  int x=(UpdateRect.Right+UpdateRect.Left)/2;
-  int y=(UpdateRect.Bottom+UpdateRect.Top)/2;
-  PageCanvas->Pen->Width=2;
-  PageCanvas->Pen->Color=clBlue;
-  PageCanvas->MoveTo(x,UpdateRect.Top);
-  PageCanvas->LineTo(x,UpdateRect.Bottom);
-  PageCanvas->MoveTo(UpdateRect.Left,y);
-  PageCanvas->LineTo(UpdateRect.Right,y);
-
-  PageCanvas->Pen->Width=2;
-  PageCanvas->MoveTo(UpdateRect.Right-7,y-7);
-  PageCanvas->LineTo(UpdateRect.Right,y);
-  PageCanvas->LineTo(UpdateRect.Right-7,y+7);
-  PageCanvas->MoveTo(x-7,UpdateRect.Top+7);
-  PageCanvas->LineTo(x,UpdateRect.Top);
-  PageCanvas->LineTo(x+7,UpdateRect.Top+7);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::NewActionExecute(TObject *Sender)
@@ -1802,7 +1868,7 @@ void __fastcall TForm1::SaveAsActionExecute(TObject *Sender)
 void __fastcall TForm1::SaveAsImageActionExecute(TObject *Sender)
 {
   //Remove file extention
-  SaveDialogEx1->FileName = ChangeFileExt(Data.GetFileName().c_str(), "");
+  SaveDialogEx1->FileName = ChangeFileExt(ToUString(Data.GetFileName()), "");
   SaveDialogEx1->DefaultExt = "emf";
   SaveDialogEx1->Filter =
     "Windows Enhanced Metafile [*.emf]|*.emf|"
@@ -1810,7 +1876,7 @@ void __fastcall TForm1::SaveAsImageActionExecute(TObject *Sender)
     "Scalable Vector Graphics [*.svg]|*.svg|"
     "Windows Bitmap [*.bmp]|*.bmp|"
     "Portable Network Graphics [*.png]|*.png|"
-    "Joint Photographic Experts Group [*.jpg,*.jpeg]|*.jpg;*.jpeg|"
+    "Joint Photographic Experts Group [*.jpeg,*.jpg]|*.jpeg;*.jpg|"
     "Portable Document Format [*.pdf]|*.pdf";
   SaveDialogEx1->FilterIndex = GetRegValue(REGISTRY_KEY "\\SaveAsImage", L"FilterIndex", HKEY_CURRENT_USER, 1);
 
@@ -1871,15 +1937,21 @@ void __fastcall TForm1::PrintActionExecute(TObject *Sender)
     double xSizeMul = xPrinterResolution / xScreenResolution;
     double ySizeMul = yPrinterResolution / yScreenResolution;
 
-    bool ForceBlack = IPrintDialog1->PrintOutput == poBlackWhite;
     unsigned Copies = IPrintDialog1->Copies;
     TRect Area = IPrintDialog1->DrawingArea;
 
     Draw.AbortUpdate();
     TData PrintData(Data);
-    TDraw PrintDraw(Printer()->Canvas, &PrintData, ForceBlack, "Printing DrawThread");
+
+    //We need to update size of all text labels
+    //This is only used for printing, and this is not a good way to find the size; To make it work I scaled by 1.1
+    for(unsigned I = 0; I < PrintData.ElemCount(); I++)
+      if(TTextLabel *Label = dynamic_cast<TTextLabel*>(PrintData.GetElem(I).get()))
+        Label->Scale(xSizeMul, ySizeMul);
+
+    TDraw PrintDraw(Printer()->Canvas, &PrintData, "Printing DrawThread", false);
     PrintDraw.SetArea(Area);  //Set drawing area
-    PrintDraw.SetSizeMul(xSizeMul, ySizeMul);
+    PrintDraw.SetSizeMul(xSizeMul);
 
     AbortPrinting = false;
     for(unsigned I = 0; I < Copies && !AbortPrinting; I++)
@@ -1897,6 +1969,7 @@ void __fastcall TForm1::PrintActionExecute(TObject *Sender)
       }
     }
 
+    PrintDraw.Wait();
     if(AbortPrinting)
       Printer()->Abort();
     else
@@ -1970,7 +2043,7 @@ void __fastcall TForm1::PasteActionExecute(TObject *Sender)
 {
   Draw.AbortUpdate();
 	GraphClipboard.Paste(Data);
-  Data.SetModified();
+  Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
   UpdateTreeView(Data.Back());
   UpdateMenu();
   UpdateEval();
@@ -1979,20 +2052,31 @@ void __fastcall TForm1::PasteActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::CopyImageActionExecute(TObject *Sender)
 {
-  IDataObject *Dummy = NULL;
-  OleCheck(OleInitialize(NULL));
-  if(!OleServerRunning())
-    OleCheck(TOleServerImpl::_CreatorClass::CreateInstance(NULL, IID_IDataObject, &(void*&)Dummy));
+  try
+  {
+#ifndef _WIN64
+    IDataObject *Dummy = NULL;
+    OleCheck(OleInitialize(NULL));
+    if(!OleServerRunning())
+      OleCheck(TOleServerImpl::_CreatorClass::CreateInstance(NULL, IID_IDataObject, &(void*&)Dummy));
 
-  if(FAILED(OleSetClipboard(OleServerImpl)))
+    if(FAILED(OleSetClipboard(OleServerImpl)))
+      CopyAsImageToClipboard(); //Only copy bitmap and metafile
+    else
+      OleCheck(OleFlushClipboard());
+
+    if(Dummy)
+      OleCheck(Dummy->Release());
+
+    OleUninitialize();
+#else
     CopyAsImageToClipboard(); //Only copy bitmap and metafile
-  else
-    OleCheck(OleFlushClipboard());
-
-  if(Dummy)
-    OleCheck(Dummy->Release());
-
-  OleUninitialize();
+#endif
+  }
+  catch(Exception &E)
+  {
+    ShowErrorMsg(E);
+  }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::AxesActionExecute(TObject *Sender)
@@ -2020,6 +2104,8 @@ void __fastcall TForm1::OptionsActionExecute(TObject *Sender)
     Python::ExecutePluginEvent(Python::peOptionsChanged);
     Redraw();
     UpdateMenu();
+    ScaleImages();
+    UpdateTreeView();
   }
 }
 //---------------------------------------------------------------------------
@@ -2030,7 +2116,6 @@ void __fastcall TForm1::InsertFunctionActionExecute(TObject *Sender)
     Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
     UpdateTreeView(Data.Back());
     TreeView->SetFocus();
-    Data.SetModified();
     Redraw();
   }
 }
@@ -2043,21 +2128,19 @@ void __fastcall TForm1::InsertTangentActionExecute(TObject *Sender)
     {
       Python::ExecutePluginEvent(Python::peNewElem, Func->GetChild(Func->ChildCount()-1));
       UpdateTreeView(Func->GetChild(Func->ChildCount()-1));
-      Data.SetModified();
       Redraw();
       UpdateMenu();
     }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::InsertShadeActionExecute(TObject *Sender)
+void __fastcall TForm1::InsertShadingActionExecute(TObject *Sender)
 {
-  boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(GetGraphElem(TreeView->Selected));
+  boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(Selected);
   if(Func)
     if(CreateForm<TForm16>(Data)->InsertShade(Func) == mrOk)
     {
       Python::ExecutePluginEvent(Python::peNewElem, Func->GetChild(Func->ChildCount()-1));
       UpdateTreeView(Func->GetChild(Func->ChildCount()-1));
-      Data.SetModified();
       Redraw();
     }
 }
@@ -2068,7 +2151,6 @@ void __fastcall TForm1::InsertPointsActionExecute(TObject *Sender)
   {
     Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
     UpdateTreeView(Data.Back());
-    Data.SetModified();
     Redraw();
     UpdateMenu();
   }
@@ -2076,13 +2158,12 @@ void __fastcall TForm1::InsertPointsActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::InsertTrendlineActionExecute(TObject *Sender)
 {
-  boost::shared_ptr<TPointSeries> Series = boost::dynamic_pointer_cast<TPointSeries>(GetGraphElem(TreeView->Selected));
+  boost::shared_ptr<TPointSeries> Series = boost::dynamic_pointer_cast<TPointSeries>(Selected);
   if(Series)
     if(CreateForm<TForm13>(Data)->InsertTrendline(Series) == mrOk)
     {
       Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
       UpdateTreeView(Data.Back());
-      Data.SetModified();
       Redraw();
       UpdateMenu();
     }
@@ -2096,7 +2177,7 @@ void __fastcall TForm1::EditActionExecute(TObject *Sender)
     return;
 
   TModalResult Result = mrNone;
-  if(boost::shared_ptr<TTan> Tan = boost::dynamic_pointer_cast<TTan>(Item))
+  if(boost::shared_ptr<TTangent> Tan = boost::dynamic_pointer_cast<TTangent>(Item))
     Result = CreateForm<TForm12>(Data)->EditTan(Tan);
   else if(boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(Item))
     Result = CreateForm<TForm5>(Data)->EditFunc(Func);
@@ -2113,8 +2194,6 @@ void __fastcall TForm1::EditActionExecute(TObject *Sender)
 
   if(Result == mrOk)
   {
-    Data.SetModified();
-    Python::ExecutePluginEvent(Python::peChanged, Item);
     UpdateTreeView();
     Redraw();
   }
@@ -2122,6 +2201,7 @@ void __fastcall TForm1::EditActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void TForm1::DeleteGraphElem(const boost::shared_ptr<TGraphElem> &GraphElem)
 {
+  Draw.AbortUpdate();
   Python::ExecutePluginEvent(Python::peDelete, GraphElem);
 
   UndoList.BeginMultiUndo();
@@ -2134,7 +2214,7 @@ void TForm1::DeleteGraphElem(const boost::shared_ptr<TGraphElem> &GraphElem)
       unsigned ChildCount = Elem->ChildCount();
       for(unsigned J = 0; J < ChildCount; J++)
         if(boost::shared_ptr<TShading> Shade = boost::dynamic_pointer_cast<TShading>(Elem->GetChild(J)))
-          if(Shade->Func2 == GraphElem)
+          if(Shade->GetFunc2() == GraphElem)
           {
             UndoList.Push(TUndoDel(Shade, Shade->GetParent(), J));
             Data.Delete(Shade);
@@ -2149,7 +2229,6 @@ void TForm1::DeleteGraphElem(const boost::shared_ptr<TGraphElem> &GraphElem)
   Data.Delete(GraphElem);
   UpdateTreeView();
   UpdateMenu();
-  Data.SetModified();
   Redraw();
 }
 //---------------------------------------------------------------------------
@@ -2162,12 +2241,11 @@ void __fastcall TForm1::DeleteActionExecute(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::InsertDifActionExecute(TObject *Sender)
 {
-  if(boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(GetGraphElem(TreeView->Selected)))
+  if(boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(Selected))
     if(CreateForm<TForm7>(Data)->InsertDif(Func) == mrOk)
     {
       Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
       UpdateTreeView(Data.Back());
-      Data.SetModified();
       Redraw();
     }
 }
@@ -2261,12 +2339,12 @@ void __fastcall TForm1::EvalActionExecute(TObject *Sender)
     Form9->Visible = false;
 
   if(MoveAction->Checked)
-    MoveAction->Execute();
+	MoveAction->Execute();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::TableActionExecute(TObject *Sender)
 {
-  if(TBaseFuncType *Func = dynamic_cast<TBaseFuncType*>(GetGraphElem(TreeView->Selected).get()))
+  if(TBaseFuncType *Func = dynamic_cast<TBaseFuncType*>(Selected.get()))
     CreateForm<TForm15>()->ShowTable(Func);
 }
 //---------------------------------------------------------------------------
@@ -2295,7 +2373,7 @@ void TForm1::CheckForUpdate(bool StartupCheck)
   unsigned long Flags;
   InternetGetConnectedState(&Flags, 0);
   if((Flags & INTERNET_CONNECTION_MODEM) && StartupCheck)
-    return; //If user has a modem, he will be asked if he will connect to the Internet if we continue
+	return; //If user has a modem, he will be asked if he will connect to the Internet if we continue
 
   try
   {
@@ -2303,14 +2381,14 @@ void TForm1::CheckForUpdate(bool StartupCheck)
 		std::auto_ptr<TMemoryStream> Stream(new TMemoryStream);
 		std::auto_ptr<TIdHTTP> IdHTTP(new TIdHTTP(NULL));
 
-		IdHTTP->Request->UserAgent = (L"Mozilla/3.0 (compatible; Graph " + Info.StringValue(L"ProductVersion") + L')').c_str();
+		IdHTTP->Request->UserAgent = (L"Mozilla/3.0 (compatible; Graph " + Info.StringValue(L"FileVersion") + L')').c_str();
 		IdHTTP->HandleRedirects = true;
 
 		std::wstring Url = GetRegValue(REGISTRY_KEY, L"InfFile", HKEY_CURRENT_USER, INF_FILE);
 		Url += L"?Version=" + Info.StringValue(L"ProductVersion");
 		if(Info.FileFlags() & ffDebug)
 			Url += L"&Build=" + ToWString(Info.FileVersion().Build);
-		Url += L"&Language=" + Property.Language;
+		Url += L"&Language=" + Options.Language;
 		IdHTTP->Get(Url.c_str(), Stream.get());
 
 		Stream->Position = 0;
@@ -2322,7 +2400,7 @@ void TForm1::CheckForUpdate(bool StartupCheck)
     int Minor = IniFile->ReadInteger("Graph", "Minor", 0);
     int Release = IniFile->ReadInteger("Graph", "Release", 0);
     int Build = IniFile->ReadInteger("Graph", "Build", 0);
-    String DownloadPage = IniFile->ReadString("Graph", "DownloadPage", "http:\/\/www.padowan.dk");
+    String DownloadPage = IniFile->ReadString("Graph", "DownloadPage", "http://www.padowan.dk");
 
     //Check if a newer version is available, or if this is a debug version one with the same version
     if(Info.InfoAvailable())
@@ -2504,7 +2582,10 @@ void __fastcall TForm1::ToolBar_CustomizeClick(TObject *Sender)
   Form->ToolbarsTab->TabVisible = false;
   Form->OptionsTab->TabVisible = false;
   Form->SeparatorBtn->Visible = false;
+  Form->CatList->ItemIndex = Form->CatList->Items->Count - 1;
+  Form->CatList->OnClick(Form->CatList);
   SetAccelerators(Form);
+  ScaleForm(Form);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ToolBar_ResetClick(TObject *Sender)
@@ -2552,7 +2633,8 @@ void __fastcall TForm1::ZoomFitAllActionExecute(TObject *Sender)
 void __fastcall TForm1::Panel4DockDrop(TObject *Sender,
       TDragDockObject *Source, int X, int Y)
 {
-  Panel1->Height = Form9->GetFrameHeight() ? Form9->GetFrameHeight()+10 : 100;
+  Panel1->Height = Form9->GetFrameHeight() ? Form9->GetFrameHeight() + DockCaptionHeight : 100;
+//  Panel1->Height = Form9->Height;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Panel4UnDock(TObject *Sender, TControl *Client,
@@ -2566,7 +2648,7 @@ void __fastcall TForm1::Panel4DockOver(TObject *Sender,
       bool &Accept)
 {
   // Modify the DockRect to preview dock area.
-  int FormHeight = Form9->GetFrameHeight() ? Form9->GetFrameHeight()+10 : 100;
+  int FormHeight = Form9->GetFrameHeight() ? Form9->GetFrameHeight() + DockCaptionHeight : 100;
   TPoint TopLeft = Panel1->ClientToScreen(TPoint(0, -FormHeight));
   TPoint BottomRight = Panel1->ClientToScreen(TPoint(Panel1->Width, Panel1->Height));
   Source->DockRect = TRect(TopLeft, BottomRight);
@@ -2581,17 +2663,17 @@ void __fastcall TForm1::ZoomFitActionExecute(TObject *Sender)
   TZoomFit ZoomFit(Data, Draw);
   Elem->Accept(ZoomFit);
 
-  double xMin = ZoomFit.xMin;
-  double xMax = ZoomFit.xMax;
-  double yMin = ZoomFit.yMin;
-  double yMax = ZoomFit.yMax;
+  long double xMin = ZoomFit.xMin;
+  long double xMax = ZoomFit.xMax;
+  long double yMin = ZoomFit.yMin;
+  long double yMax = ZoomFit.yMax;
 
-  if(_finite(xMin) && _finite(xMax) && _finite(yMin) && _finite(yMax))
+  if(_finitel(xMin) && _finitel(xMax) && _finitel(yMin) && _finitel(yMax))
   {
-    double xMin2 = Data.Axes.xAxis.LogScl ? xMin * std::pow(xMin / xMax, 0.1) : xMin - (xMax - xMin) / 10;
-    double xMax2 = Data.Axes.xAxis.LogScl ? xMax * std::pow(xMax / xMin, 0.1) : xMax + (xMax - xMin) / 10;
-    double yMin2 = Data.Axes.yAxis.LogScl ? yMin * std::pow(yMin / yMax, 0.1) : yMin - (yMax - yMin) / 10;
-    double yMax2 = Data.Axes.yAxis.LogScl ? yMax * std::pow(yMax / yMin, 0.1) : yMax + (yMax - yMin) / 10;
+    long double xMin2 = Data.Axes.xAxis.LogScl ? xMin * std::pow(xMin / xMax, 0.1L) : xMin - (xMax - xMin) / 10;
+    long double xMax2 = Data.Axes.xAxis.LogScl ? xMax * std::pow(xMax / xMin, 0.1L) : xMax + (xMax - xMin) / 10;
+    long double yMin2 = Data.Axes.yAxis.LogScl ? yMin * std::pow(yMin / yMax, 0.1L) : yMin - (yMax - yMin) / 10;
+    long double yMax2 = Data.Axes.yAxis.LogScl ? yMax * std::pow(yMax / yMin, 0.1L) : yMax + (yMax - yMin) / 10;
 
     ZoomWindow(xMin2, xMax2, yMin2, yMax2);
   }
@@ -2627,19 +2709,20 @@ void __fastcall TForm1::Tree_ShowInLegendClick(TObject *Sender)
 {
   if(TreeView->Selected)
   {
-    boost::shared_ptr<TGraphElem> GraphElem = GetGraphElem(TreeView->Selected);
+    TGraphElemPtr GraphElem = GetGraphElem(TreeView->Selected);
+    UndoList.Push(TUndoChangeShowInLegend(GraphElem));
     GraphElem->SetShowInLegend(Tree_ShowInLegend->Checked);
-    Data.SetModified();
+    Python::ExecutePluginEvent(Python::peChanged, GraphElem);
     Redraw();
   }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::InsertLabelActionExecute(TObject *Sender)
 {
-  std::auto_ptr<TForm6> Form6(new TForm6(Application, Property.DefaultLabelFont, NAME, Data.GetFileName().c_str()));
+  std::auto_ptr<TForm6> Form6(new TForm6(Application, Options.DefaultLabelFont, NAME, Data.GetFileName().c_str()));
   if(Form6->ShowModal() == mrOk && !Form6->IsEmpty())
   {
-    Property.DefaultLabelFont = Form6->GetFont();
+    Options.DefaultLabelFont = Form6->GetFont();
     boost::shared_ptr<TTextLabel> Label(new TTextLabel(
       Form6->GetText().c_str(),
       lpUserTopLeft,
@@ -2656,7 +2739,6 @@ void __fastcall TForm1::InsertLabelActionExecute(TObject *Sender)
     Python::ExecutePluginEvent(Python::peNewElem, Data.Back());
     UpdateTreeView(Data.Back());
     UpdateMenu();
-    Data.SetModified();
   }
 }
 //---------------------------------------------------------------------------
@@ -2725,7 +2807,7 @@ void TForm1::EditLabel(const boost::shared_ptr<TTextLabel> &Label)
 {
   if(Label)
   {
-    std::auto_ptr<TForm6> Form6(new TForm6(Application, Property.DefaultLabelFont, NAME, Data.GetFileName().c_str()));
+    std::auto_ptr<TForm6> Form6(new TForm6(Application, Options.DefaultLabelFont, NAME, Data.GetFileName().c_str()));
     Form6->SetText(Label->GetText().c_str());
     Form6->SetBackgroundColor(Label->GetBackgroundColor());
     Form6->Caption = LoadRes(528);
@@ -2734,29 +2816,28 @@ void TForm1::EditLabel(const boost::shared_ptr<TTextLabel> &Label)
       //If text is empty, remove label
       if(Form6->IsEmpty())
       {
-        UndoList.Push(TUndoDel(Label, Label->GetParent(), Data.GetIndex(Label)));
-        Data.Delete(Label);
+        DeleteGraphElem(Label);
       }
       else
       {
-        Property.DefaultLabelFont = Form6->GetFont();
+        Options.DefaultLabelFont = Form6->GetFont();
         boost::shared_ptr<TTextLabel> NewLabel(new TTextLabel(
           Form6->GetText().c_str(),
           Label->GetPlacement(),
-          Label->GetXPos(),
-          Label->GetYPos(),
+          Label->GetPos().first,
+          Label->GetPos().second,
           Form6->GetBackgroundColor(),
           Label->GetRotation(),
           Form6->GetOleLink()
         ));
+        Label->Swap(*NewLabel);
         UndoList.Push(TUndoChange(Label, NewLabel));
-        Data.Replace(Label, NewLabel);
-        NewLabel->Update();
+        Label->Update();
+        Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(Label));
+        UpdateTreeView();
+        UpdateMenu();
+        Redraw();
       }
-      UpdateTreeView();
-      Data.SetModified();
-      UpdateMenu();
-      Redraw();
     }
   }
 }
@@ -2770,7 +2851,6 @@ void __fastcall TForm1::Label_DeleteClick(TObject *Sender)
   {
     UndoList.Push(TUndoDel(Label, Label->GetParent(), Data.GetIndex(Label)));
     Data.Delete(Label);
-    Data.SetModified();
     UpdateTreeView();
     Redraw();
     UpdateMenu();
@@ -2780,18 +2860,6 @@ void __fastcall TForm1::Label_DeleteClick(TObject *Sender)
 void __fastcall TForm1::DonateActionExecute(TObject *Sender)
 {
   ShellExecute(Handle, NULL, DONATE_PAGE, NULL, NULL, SW_SHOWMAXIMIZED);
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::TipActionExecute(TObject *Sender)
-{
-  ShowForm<TForm10>();
-}
-//---------------------------------------------------------------------------
-//Called when message loop is up and running
-void __fastcall TForm1::WMUser(TMessage &Message)
-{
-  if(Property.ShowTipsAtStartup && !OleServerRunning())
-    ShowForm<TForm10>();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
@@ -2847,10 +2915,12 @@ void __fastcall TForm1::TreeViewKeyDown(TObject *Sender, WORD &Key,
 
         TGraphElemPtr Elem = GetGraphElem(Node);
         TGraphElemPtr Parent = Elem->GetParent();
-        UndoList.Push(TUndoMove(Data, Elem, Node->Index));
-        Parent->RemoveChild(Node->Index);
-        Parent->InsertChild(Elem, PrevNode->Index);
-        Data.SetModified();
+
+        int OldIndex = Parent->GetChildIndex(Elem);
+        int NewIndex = Parent->GetChildIndex(GetGraphElem(PrevNode));
+        UndoList.Push(TUndoMove(Data, Elem, OldIndex));
+        Parent->RemoveChild(OldIndex);
+        Parent->InsertChild(Elem, NewIndex);
         Python::ExecutePluginEvent(Python::peMoved, Elem);
         UpdateTreeView(Elem);
         Redraw();
@@ -2867,10 +2937,12 @@ void __fastcall TForm1::TreeViewKeyDown(TObject *Sender, WORD &Key,
 
         TGraphElemPtr Elem = GetGraphElem(Node);
         TGraphElemPtr Parent = Elem->GetParent();
-        UndoList.Push(TUndoMove(Data, Elem, Node->Index));
-        Parent->RemoveChild(Node->Index);
-        Parent->InsertChild(Elem, NextNode->Index);
-        Data.SetModified();
+
+        int OldIndex = Parent->GetChildIndex(Elem);
+        int NewIndex = Parent->GetChildIndex(GetGraphElem(NextNode));
+        UndoList.Push(TUndoMove(Data, Elem, OldIndex));
+        Parent->RemoveChild(OldIndex);
+        Parent->InsertChild(Elem, NewIndex);
         Python::ExecutePluginEvent(Python::peMoved, Elem);
         UpdateTreeView(Elem);
         Redraw();
@@ -2910,7 +2982,7 @@ bool TForm1::LoadFromFile(const String &FileName, bool AddToRecent, bool ShowErr
     return false;
   }
 
-  UpdateTreeView();
+  RecreateTreeView();
   Caption = String(NAME) + L" - " + FileName;
   if(AddToRecent)
     Recent1->FileUsed(FileName);
@@ -2922,7 +2994,7 @@ bool TForm1::LoadFromFile(const String &FileName, bool AddToRecent, bool ShowErr
   return true;
 }
 //---------------------------------------------------------------------------
-bool __fastcall TForm1::OpenPreviewDialog1PreviewFile(
+void __fastcall TForm1::OpenPreviewDialog1PreviewFile(
       TOpenPreviewDialog *Dialog, const String &FileName,
       TCanvas *Canvas, const TRect &Rect)
 {
@@ -2954,7 +3026,7 @@ bool __fastcall TForm1::OpenPreviewDialog1PreviewFile(
   Canvas->FillRect(Rect);
 
   if(!PreviewDraw)
-    return true;
+    return;
 
   try
   {
@@ -2962,6 +3034,11 @@ bool __fastcall TForm1::OpenPreviewDialog1PreviewFile(
   }
   catch(std::exception &E)
   { //Ignore errors
+    PreviewDraw->AbortUpdate();
+    Canvas->Brush->Style = bsSolid;
+    Canvas->Brush->Color = clWhite;
+    Canvas->FillRect(Rect);
+    return;
   }
 
   PreviewData.Axes.ShowLegend = false; //Always disable legend for preview
@@ -2976,7 +3053,6 @@ bool __fastcall TForm1::OpenPreviewDialog1PreviewFile(
   PreviewDraw->SetCanvas(Canvas);
   PreviewDraw->SetSize(Rect.Width(), Rect.Height());
   PreviewDraw->DrawAll();
-  return true;
 }
 //---------------------------------------------------------------------------
 void TForm1::LoadDefault()
@@ -3007,7 +3083,7 @@ void TForm1::LoadDefault()
 //---------------------------------------------------------------------------
 void __fastcall TForm1::OpenPreviewDialog1Show(TObject *Sender)
 {
-  PreviewDraw.reset(new TDraw(NULL, &PreviewData, false, "Preview DrawThread"));
+  PreviewDraw.reset(new TDraw(NULL, &PreviewData, "Preview DrawThread", true));
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::OpenPreviewDialog1Close(TObject *Sender)
@@ -3024,7 +3100,7 @@ void __fastcall TForm1::Tree_ExportClick(TObject *Sender)
   {
     SaveDialog->Filter = LoadRes(RES_EXPORT_DATA_FILTER);
     if(SaveDialog->Execute())
-      if(!ExportPointSeries(Series, SaveDialog->FileName.c_str(), SaveDialog->FilterIndex == 1 ? ';' : '\t', Property.DecimalSeparator))
+      if(!ExportPointSeries(Series, SaveDialog->FileName.c_str(), SaveDialog->FilterIndex == 1 ? ';' : '\t', Options.DecimalSeparator))
         MessageBox(LoadRes(RES_FILE_ACCESS, SaveDialog->FileName), LoadRes(RES_WRITE_FAILED), MB_ICONSTOP);
   }
 }
@@ -3068,9 +3144,7 @@ boost::shared_ptr<TGraphElem> TForm1::GetGraphElem(TTreeNode *Node)
   if(Node == NULL)
     return Empty;
 
-  if(Node->Level == 1) //Tangent or shade
-    return Data.GetElem(Node->Parent->Index)->GetChild(Node->Index);
-  return Data.GetElem(Node->Index);
+  return static_cast<TGraphElem*>(Node->Data)->shared_from_this();
 }
 //---------------------------------------------------------------------------
 TTreeNode* TForm1::GetRootNode(unsigned Index)
@@ -3089,10 +3163,7 @@ TTreeNode* TForm1::GetNode(const TGraphElemPtr &Elem)
   const TGraphElemPtr &Parent = Elem->GetParent();
   if(!Parent)
     return NULL;
-  TTreeNode *ParentNode = GetNode(Parent);
-  if(ParentNode == NULL)
-    return GetRootNode(Parent->GetChildIndex(Elem));
-  return ParentNode->Item[Parent->GetChildIndex(Elem)];
+  return static_cast<TTreeNode*>(Elem->GetCustomData());
 }
 //---------------------------------------------------------------------------
 //Copy metafile and bitmap to clipboard; Only used when not possible to register
@@ -3106,10 +3177,11 @@ void TForm1::CopyAsImageToClipboard()
   Metafile->Width = Image1->Width;
   Metafile->Height = Image1->Height;
   std::auto_ptr<TMetafileCanvas> MetaCanvas(new TMetafileCanvas(Metafile.get(), 0));
-  TDraw DrawMeta(MetaCanvas.get(), &Data, false, "Metafile DrawThread");
+  TDraw DrawMeta(MetaCanvas.get(), &Data, "Metafile DrawThread", false);
 
   //Set width and height
   DrawMeta.SetSize(Image1->Width, Image1->Height);
+  DrawMeta.SetSizeMul(Screen->PixelsPerInch / 96.0);
   DrawMeta.DrawAll();
   DrawMeta.Wait();
   MetaCanvas.reset();
@@ -3141,15 +3213,17 @@ void __fastcall TForm1::TreeViewDragOver(TObject *Sender, TObject *Source,
 void __fastcall TForm1::TreeViewDragDrop(TObject *Sender, TObject *Source,
       int X, int Y)
 {
-  if(TreeView->Selected)
+  TTreeNode *Node = TreeView->GetNodeAt(X, Y);
+  if(TreeView->Selected && Node != TreeView->Selected)
   {
-    TTreeNode *Node = TreeView->GetNodeAt(X, Y);
     boost::shared_ptr<TGraphElem> Elem = GetGraphElem(TreeView->Selected);
     Draw.AbortUpdate();
-    UndoList.Push(TUndoMove(Data, Elem, Data.GetIndex(Elem)));
-    Data.Delete(Elem);
-    Data.Insert(Elem, Node->Index);
-    Data.SetModified();
+    const TGraphElemPtr &Parent = Elem->GetParent();
+    int OldIndex = Parent->GetChildIndex(Elem);
+    int NewIndex = Parent->GetChildIndex(GetGraphElem(Node));
+    UndoList.Push(TUndoMove(Data, Elem, OldIndex));
+    Parent->RemoveChild(OldIndex);
+    Parent->InsertChild(Elem, NewIndex);
     UpdateTreeView(Elem);
     Python::ExecutePluginEvent(Python::peMoved, Elem);
     Redraw();
@@ -3160,7 +3234,7 @@ void __fastcall TForm1::LegendPlacementClick(TObject *Sender)
 {
   if(TMenuItem *MenuItem = dynamic_cast<TMenuItem*>(Sender))
   {
-    MenuItem->Checked = true;
+    UndoList.Push(TUndoAxes(Data));
     Data.Axes.LegendPlacement = static_cast<TLegendPlacement>(MenuItem->MenuIndex + 1);
     Data.SetModified();
     Redraw();
@@ -3177,13 +3251,12 @@ void __fastcall TForm1::Legend_ShowClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::PopupMenu4Popup(TObject *Sender)
 {
+  //Warning: RadioItem does not work when Images are assigned
   Legend_Show->Checked = Data.Axes.ShowLegend;
-
-  if(Data.Axes.LegendPlacement > lpCustom && Data.Axes.LegendPlacement <= Legend_Placement->Count)
-    Legend_Placement->Items[Data.Axes.LegendPlacement - 1]->Checked = true;
-  else //Remove all check marks
-    for(int I = 0; I < Legend_Placement->Count; I++)
-      Legend_Placement->Items[I]->Checked = false;
+  int Index = Data.Axes.LegendPlacement > lpCustom &&
+    Data.Axes.LegendPlacement <= Legend_Placement->Count ? Data.Axes.LegendPlacement - 1 : -1;
+  for(int I = 0; I < Legend_Placement->Count; I++)
+    Legend_Placement->Items[I]->ImageIndex = (I == Index) ? iiBullet : -1;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SupportActionExecute(TObject *Sender)
@@ -3262,21 +3335,13 @@ void __fastcall TForm1::PlacementClick(TObject *Sender)
     }
     else
     {
-      boost::shared_ptr<TTextLabel> NewLabel(new TTextLabel(
-        TextLabel->GetText(),
-        static_cast<TLabelPlacement>(MenuItem->MenuIndex + 1),
-        TTextValue(0.0),
-        TTextValue(0.0),
-        TextLabel->GetBackgroundColor(),
-        TextLabel->GetRotation(),
-        TextLabel->GetOleLink()
-      ));
-      UndoList.Push(TUndoChange(TextLabel, NewLabel));
-      Data.Replace(TextLabel, NewLabel);
-      NewLabel->Update();
+      UndoList.Push(TUndoChange(TextLabel));
+      TextLabel->SetPlacement(static_cast<TLabelPlacement>(MenuItem->MenuIndex + 1));
+      TextLabel->SetPos(std::make_pair(0.0, 0.0));
+      TextLabel->Update();
+      Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(TextLabel));
     }
 
-    Data.SetModified();
     UpdateMenu();
     Redraw();
   }
@@ -3289,11 +3354,15 @@ void __fastcall TForm1::PopupMenu3Popup(TObject *Sender)
   {
     int Index = (TextLabel->GetPlacement() == lpUserTopLeft || TextLabel->GetPlacement() >= lpUserTopRight) ? 4 : TextLabel->GetPlacement() - 1;
     for(int I = 0; I < Label_Placement->Count; I++)
-      Label_Placement->Items[I]->ImageIndex = (I == Index) ? 60/*iiBullet*/ : -1;
+      Label_Placement->Items[I]->ImageIndex = (I == Index) ? iiBullet : -1;
 
-    Index = TextLabel->GetRotation() % 90 == 0 ? TextLabel->GetRotation() / 90 : 4;
+    double Rotation = TextLabel->GetRotation();
+    if(TextLabel->GetRotation() == static_cast<int>(Rotation))
+      Index = static_cast<int>(Rotation) % 90 == 0 ? static_cast<int>(Rotation) / 90 : 4;
+    else
+      Index = 4;
     for(int I = 0; I < Label_Rotation->Count; I++)
-      Label_Rotation->Items[I]->ImageIndex = (I == Index) ? 60/*iiBullet*/ : -1;
+      Label_Rotation->Items[I]->ImageIndex = (I == Index) ? iiBullet : -1;
   }
 }
 //---------------------------------------------------------------------------
@@ -3304,18 +3373,16 @@ void __fastcall TForm1::PopupMenu1Popup(TObject *Sender)
   {
     int Index = (TextLabel->GetPlacement() == lpUserTopLeft || TextLabel->GetPlacement() >= lpUserTopRight) ? 4 : TextLabel->GetPlacement() - 1;
     for(int I = 0; I < Tree_Placement->Count; I++)
-      Tree_Placement->Items[I]->ImageIndex = (I == Index) ? 60/*iiBullet*/ : -1;
+      Tree_Placement->Items[I]->ImageIndex = (I == Index) ? iiBullet : -1;
 
-    Index = TextLabel->GetRotation() % 90 == 0 ? TextLabel->GetRotation() / 90 : 4;
+    double Rotation = TextLabel->GetRotation();
+    if(TextLabel->GetRotation() == static_cast<int>(Rotation))
+      Index = static_cast<int>(Rotation) % 90 == 0 ? static_cast<int>(Rotation) / 90 : 4;
+    else
+      Index = 4;
     for(int I = 0; I < Tree_Rotation->Count; I++)
-      Tree_Rotation->Items[I]->ImageIndex = (I == Index) ? 60/*iiBullet*/ : -1;
+      Tree_Rotation->Items[I]->ImageIndex = (I == Index) ? iiBullet : -1;
   }
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::ApplicationEventsException(TObject *Sender,
-      Exception *E)
-{
-  LogUncaughtException(Sender, E);
 }
 //---------------------------------------------------------------------------
 void TForm1::MoveAndSnapLegend(int dx, int dy, bool Snap)
@@ -3480,29 +3547,22 @@ void __fastcall TForm1::RotationClick(TObject *Sender)
     if(!TextLabel)
       return;
 
-    int Rotation = TextLabel->GetRotation();
+    double Rotation = TextLabel->GetRotation();
     if(MenuItem->MenuIndex == 4)
     {
       if(!InputQuery(LoadStr(RES_ROTATION), LoadStr(RES_DEGREES) + ":", Rotation))
         return;
+      Rotation = std::fmod(Rotation, 360);
+      if(Rotation < 0)
+        Rotation += 360;
     }
     else
       Rotation = MenuItem->MenuIndex * 90;
 
-    boost::shared_ptr<TTextLabel> NewLabel(new TTextLabel(
-      TextLabel->GetText(),
-      TextLabel->GetPlacement(),
-      TextLabel->GetXPos(),
-      TextLabel->GetYPos(),
-      TextLabel->GetBackgroundColor(),
-      Rotation,
-      TextLabel->GetOleLink()
-    ));
-    UndoList.Push(TUndoChange(TextLabel, NewLabel));
-    Data.Replace(TextLabel, NewLabel);
-    NewLabel->Update();
-
-    Data.SetModified();
+    UndoList.Push(TUndoChange(TextLabel));
+    TextLabel->SetRotation(Rotation);
+    TextLabel->Update();
+    Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(TextLabel));
     UpdateMenu();
     Redraw();
   }
@@ -3518,6 +3578,17 @@ void __fastcall TForm1::AnimateActionExecute(TObject *Sender)
   CreateForm<TForm19>(Data, Image1->Width, Image1->Height)->ShowModal();
 }
 //---------------------------------------------------------------------------
+void CallScriptNewElem(const TGraphElemPtr &Elem)
+{
+  unsigned Count = Elem->ChildCount();
+  for(unsigned I = 0; I < Count; I++)
+  {
+    TGraphElemPtr Child = Elem->GetChild(I);
+    Python::ExecutePluginEvent(Python::peNewElem, Child);
+    CallScriptNewElem(Child);
+  }
+}
+//---------------------------------------------------------------------------
 void __fastcall TForm1::ImportGraphFileActionExecute(TObject *Sender)
 {
   OpenPreviewDialog1->Filter = LoadRes(RES_GRAPH_FILTER);
@@ -3531,6 +3602,7 @@ void __fastcall TForm1::ImportGraphFileActionExecute(TObject *Sender)
       for(unsigned I = Count; I < Data.ElemCount(); I++)
         UndoList.Push(TUndoAdd(Data.GetElem(I)));
       UndoList.EndMultiUndo();
+      CallScriptNewElem(Data.GetTopElem());
       UpdateTreeView();
       UpdateMenu();
       Redraw();
@@ -3565,6 +3637,7 @@ void __fastcall TForm1::Legend_FontClick(TObject *Sender)
   FontDialog->Font->Assign(Data.Axes.LegendFont);
   if(FontDialog->Execute())
   {
+    UndoList.Push(TUndoAxes(Data));
     Data.Axes.LegendFont->Assign(FontDialog->Font);
     Data.SetModified();
     Redraw();
@@ -3583,7 +3656,7 @@ void __fastcall TForm1::Panel6DockDrop(TObject *Sender,
 {
   if(Form22->Visible)
   {
-    Panel6->Height = 150;
+    Panel6->Height = ConsoleHeight;
     Splitter2->Visible = true;
   }
 }
@@ -3593,7 +3666,7 @@ void __fastcall TForm1::Panel6DockOver(TObject *Sender,
       bool &Accept)
 {
   // Modify the DockRect to preview dock area.
-  int FormHeight = 150 - StatusBar1->Height;
+  int FormHeight = ConsoleHeight;// - StatusBar1->Height;
   TPoint TopLeft = Panel6->ClientToScreen(TPoint(0, -FormHeight));
   TPoint BottomRight = Panel6->ClientToScreen(TPoint(Panel6->Width, Panel6->Height));
   Source->DockRect = TRect(TopLeft, BottomRight);
@@ -3684,26 +3757,6 @@ void TForm1::SetStatusIcon(int AStatusIcon)
   StatusBar1->Repaint();
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Image1Click(TObject *Sender)
-{
-  switch(CursorState)
-  {
-    case csMoving:
-    case csMove:
-      if(std::abs((int)MouseDownPos.x - (int)LastMousePos.x) < Mouse->DragThreshold && std::abs((int)MouseDownPos.y - (int)LastMousePos.y) < Mouse->DragThreshold)
-      {
-        UndoList.Push(TUndoAxes(Data));
-        Zoom(Image1->ScreenToClient(Mouse->CursorPos), 0.5, false);
-      }
-      break;
-  }
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::FormShortCut(TWMKey &Msg, bool &Handled)
-{
-  TShortCut ShortCut = TextToShortCut("Ctrl+Shift+-");
-}
-//---------------------------------------------------------------------------
 void __fastcall TForm1::TreeViewMouseLeave(TObject *Sender)
 {
   if(StatusBar1->AutoHint)
@@ -3717,9 +3770,153 @@ void __fastcall TForm1::SaveDialogEx1Close(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ScriptDocActionExecute(TObject *Sender)
 {
-  ShowHelp("", ExtractFilePath(Application->ExeName) + "Help\\PluginDoc.chm");
+  ShowHelp("", GetBaseDir() + "\\Help\\PluginDoc.chm");
 }
 //---------------------------------------------------------------------------
-
-
+void __fastcall TForm1::ApplicationEventsModalBegin(TObject *Sender)
+{
+  //Something seems to sometimes change the FPU Control Word so we reset it back to the default
+  //once in a while. It only happens on very few computers.
+  //See http://forum.padowan.dk/viewtopic.php?pid=2438#p2438
+  SET_DEFAULT_FPU_MASK();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ConsoleFormShown(TObject*)
+{
+	Splitter2->Visible = Panel6->VisibleDockClientCount > 0;
+	Panel6->Height = Panel6->VisibleDockClientCount ? ConsoleHeight : 0;}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Splitter2Moved(TObject *Sender)
+{
+  if(Panel6->VisibleDockClientCount)
+    ConsoleHeight = Panel6->Height;
+}
+//---------------------------------------------------------------------------
+void TForm1::RecreateToolBar()
+{
+  CreateToolBar(StartToolBar);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::UndoActionUpdate(TObject *Sender)
+{
+  UndoAction->Enabled = UndoList.CanUndo();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::RedoActionUpdate(TObject *Sender)
+{
+  RedoAction->Enabled = UndoList.CanRedo();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::AxesFontChanged(TObject *Sender)
+{
+  //We should push the axes to the undo stack, but it must be done before the change and there is no event for that.
+  if(Sender == Data.Axes.TitleFont)
+    Data.ClearCache();
+  Data.SetModified();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Timer3Timer(TObject *Sender)
+{
+  Timer3->Enabled = false;
+  if(Panel2->Cursor == crDefault)
+    Screen->Cursor = crAppStart;
+  ShowStatusMessage(LoadRes(RES_UPDATE));
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::CustomizeDlgShow(TObject *Sender)
+{
+  //The customize dialog uses ScaledImageList1->Handle; Make sure images are up to date.
+  ScaledImageList1->EnsureUpdate();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::InsertDifActionUpdate(TObject *Sender)
+{
+  InsertDifAction->Enabled = dynamic_cast<TBaseFuncType*>(Selected.get()) && !dynamic_cast<TTangent*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::InsertShadingActionUpdate(TObject *Sender)
+{
+  InsertShadingAction->Enabled = dynamic_cast<TBaseFuncType*>(Selected.get()) && !dynamic_cast<TTangent*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::InsertTrendlineActionUpdate(TObject *Sender)
+{
+  InsertTrendlineAction->Enabled = dynamic_cast<TPointSeries*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::InsertTangentActionUpdate(TObject *Sender)
+{
+  InsertTangentAction->Enabled = dynamic_cast<TBaseFuncType*>(Selected.get()) && !dynamic_cast<TTangent*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::TableActionUpdate(TObject *Sender)
+{
+  TableAction->Enabled = dynamic_cast<TBaseFuncType*>(Selected.get()) && !dynamic_cast<TTangent*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::CopyActionUpdate(TObject *Sender)
+{
+    CopyAction->Enabled = TreeView->Selected && TreeView->Selected->Level == 0 && dynamic_cast<TAxesView*>(Selected.get()) == NULL;
+    CutAction->Enabled = CopyAction->Enabled;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::EditActionUpdate(TObject *Sender)
+{
+  EditAction->Enabled = Selected;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::DeleteActionUpdate(TObject *Sender)
+{
+  DeleteAction->Enabled = dynamic_cast<TAxesView*>(Selected.get()) == NULL;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::PasteActionUpdate(TObject *Sender)
+{
+	PasteAction->Enabled = GraphClipboard.HasData();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ZoomSquareActionUpdate(TObject *Sender)
+{
+  ZoomSquareAction->Enabled = Data.Axes.xAxis.LogScl == Data.Axes.yAxis.LogScl;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ZoomFitActionUpdate(TObject *Sender)
+{
+  ZoomFitAction->Enabled = dynamic_cast<TBaseFuncType*>(Selected.get()) || dynamic_cast<TPointSeries*>(Selected.get()) || dynamic_cast<TRelation*>(Selected.get());
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::AnimateActionUpdate(TObject *Sender)
+{
+  //Enable animation if there are any constants defined
+  AnimateAction->Enabled = false;
+  for(TCustomFunctions::TConstIterator Iter = Data.CustomFunctions.Begin(); Iter != Data.CustomFunctions.End(); ++Iter)
+    if(Iter->Arguments.empty())
+    {
+      AnimateAction->Enabled = true;
+      break;
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ApplicationEventsShortCut(TWMKey &Msg, bool &Handled)
+{
+  //We use TApplicationEvent::OnShortCut instead of TForm1::OnShortCut because the later is called twixe for stupid reasons!
+  //Instead if just check if Form1 is active
+  if(IsWindowEnabled(Handle))
+  {
+    TShiftState ShiftState = KeyDataToShiftState(Msg.KeyData);
+    Handled = Python::ExecutePluginFunc<bool>("HandleShortCut", Msg.CharCode, ShiftState.ToInt());
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ApplicationEventsMessage(tagMSG &Msg, bool &Handled)
+{
+  //Check if we need to update the tree view every time a message is handled.
+  //We need it updated before the user tries to do something with it.
+  UndoFlag = false;
+  if(Data.NeedDrawing())
+    Redraw();
+  if(FunctionListModified)
+    RecreateTreeView();
+}
+//---------------------------------------------------------------------------
 

@@ -30,15 +30,11 @@ object Form3: TForm3
     Top = 8
     Width = 404
     Height = 213
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'x-axis'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GridPanel1: TGridPanelEx
         Left = 0
         Top = 0
@@ -122,18 +118,6 @@ object Form3: TForm3
             Row = 3
           end
           item
-            Column = 2
-            ColumnSpan = 2
-            Control = Panel1
-            Row = 0
-          end
-          item
-            Column = 2
-            ColumnSpan = 2
-            Control = Panel2
-            Row = 1
-          end
-          item
             Column = 0
             ColumnSpan = 4
             Control = CheckBox1
@@ -150,6 +134,18 @@ object Form3: TForm3
             ColumnSpan = 2
             Control = CheckBox17
             Row = 5
+          end
+          item
+            Column = 2
+            ColumnSpan = 2
+            Control = GridPanelEx3
+            Row = 0
+          end
+          item
+            Column = 2
+            ColumnSpan = 2
+            Control = GridPanelEx4
+            Row = 1
           end>
         Padding.Left = 3
         Padding.Right = 2
@@ -271,7 +267,7 @@ object Form3: TForm3
         object CheckBox4: TCheckBoxEx
           Left = 173
           Top = 64
-          Width = 61
+          Width = 63
           Height = 32
           Hint = 'Determine the tick unit automatically.'
           Align = alLeft
@@ -280,9 +276,9 @@ object Form3: TForm3
           OnClick = CheckBoxClick
         end
         object CheckBox6: TCheckBoxEx
-          Left = 239
+          Left = 241
           Top = 64
-          Width = 71
+          Width = 73
           Height = 32
           Hint = 'Show tick marks on the x-axis.'
           Align = alLeft
@@ -292,7 +288,7 @@ object Form3: TForm3
         object CheckBox5: TCheckBoxEx
           Left = 173
           Top = 96
-          Width = 61
+          Width = 63
           Height = 32
           Hint = 'Set the grid unit to the same as the tick unit.'
           Align = alLeft
@@ -301,95 +297,19 @@ object Form3: TForm3
           OnClick = CheckBoxClick
         end
         object CheckBox7: TCheckBoxEx
-          Left = 239
+          Left = 241
           Top = 96
-          Width = 66
+          Width = 68
           Height = 32
           Hint = 'Show vertical grid lines.'
           Align = alLeft
           Caption = 'Show grid'
           TabOrder = 11
         end
-        object Panel1: TPanel
-          Left = 173
-          Top = 0
-          Width = 219
-          Height = 32
-          Align = alLeft
-          BevelOuter = bvNone
-          TabOrder = 6
-          object CheckBox3: TCheckBoxEx
-            Left = 0
-            Top = 0
-            Width = 48
-            Height = 32
-            Hint = 
-              'Show the label at the right side of the graphing area, above the' +
-              ' x-axis.'
-            Align = alLeft
-            Caption = 'Label:'
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-            OnClick = CheckBoxClick
-          end
-          object Edit5: TMyEdit
-            AlignWithMargins = True
-            Left = 48
-            Top = 5
-            Width = 171
-            Height = 21
-            Hint = 'Edit the label for the axis here.'
-            Margins.Left = 0
-            Margins.Top = 5
-            Margins.Right = 0
-            Margins.Bottom = 6
-            Align = alClient
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 1
-          end
-        end
-        object Panel2: TPanel
-          Left = 173
-          Top = 32
-          Width = 219
-          Height = 32
-          Margins.Left = 0
-          Margins.Top = 5
-          Margins.Right = 0
-          Margins.Bottom = 0
-          Align = alClient
-          BevelOuter = bvNone
-          TabOrder = 7
-          object Label4: TLabel
-            Left = 0
-            Top = 0
-            Width = 102
-            Height = 13
-            Align = alLeft
-            Caption = 'The x-axis cross at y='
-            FocusControl = Edit6
-            Layout = tlCenter
-          end
-          object Edit6: TMyEdit
-            AlignWithMargins = True
-            Left = 105
-            Top = 5
-            Width = 114
-            Height = 21
-            Hint = 'The x-axis will intersect with the y-axis at this value.'
-            Margins.Top = 5
-            Margins.Right = 0
-            Margins.Bottom = 6
-            Align = alClient
-            TabOrder = 0
-          end
-        end
         object CheckBox1: TCheckBoxEx
           Left = 6
           Top = 128
-          Width = 101
+          Width = 103
           Height = 28
           Hint = 'Use logarithmic scale on the x-axis.'
           Align = alLeft
@@ -402,7 +322,7 @@ object Form3: TForm3
         object CheckBox2: TCheckBoxEx
           Left = 6
           Top = 156
-          Width = 89
+          Width = 91
           Height = 28
           Hint = 'Show units on the x-axis.'
           Align = alLeft
@@ -415,7 +335,7 @@ object Form3: TForm3
         object CheckBox17: TCheckBoxEx
           Left = 173
           Top = 156
-          Width = 135
+          Width = 137
           Height = 28
           Hint = 'Show units on the selected axis as a fraction multiplied by pi.'
           Align = alLeft
@@ -428,14 +348,137 @@ object Form3: TForm3
           ParentFont = False
           TabOrder = 12
         end
+        object GridPanelEx3: TGridPanelEx
+          Left = 173
+          Top = 0
+          Width = 219
+          Height = 32
+          Anchors = []
+          BevelOuter = bvNone
+          ColumnCollection = <
+            item
+              SizeStyle = ssAuto
+              Value = 50.000000000000000000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 1
+              Control = Edit5
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = CheckBox3
+              Row = 0
+            end>
+          ParentColor = True
+          RowCollection = <
+            item
+              Value = 100.000000000000000000
+            end
+            item
+              SizeStyle = ssAuto
+            end>
+          TabOrder = 6
+          DesignSize = (
+            219
+            32)
+          object Edit5: TMyEdit
+            Left = 50
+            Top = 5
+            Width = 169
+            Height = 21
+            Hint = 'Edit the label for the axis here.'
+            Margins.Left = 0
+            Margins.Top = 5
+            Margins.Right = 0
+            Margins.Bottom = 6
+            Anchors = [akTop, akBottom]
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object CheckBox3: TCheckBoxEx
+            Left = 0
+            Top = 0
+            Width = 50
+            Height = 32
+            Hint = 
+              'Show the label at the right side of the graphing area, above the' +
+              ' x-axis.'
+            Align = alLeft
+            Caption = 'Label:'
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            OnClick = CheckBoxClick
+          end
+        end
+        object GridPanelEx4: TGridPanelEx
+          Left = 173
+          Top = 32
+          Width = 219
+          Height = 32
+          Anchors = []
+          BevelOuter = bvNone
+          ColumnCollection = <
+            item
+              SizeStyle = ssAuto
+              Value = 50.000000000000000000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 1
+              Control = Edit6
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = Label4
+              Row = 0
+            end>
+          ParentColor = True
+          RowCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          TabOrder = 7
+          DesignSize = (
+            219
+            32)
+          object Edit6: TMyEdit
+            Left = 102
+            Top = 5
+            Width = 117
+            Height = 21
+            Hint = 'The x-axis will intersect with the y-axis at this value.'
+            Margins.Top = 5
+            Margins.Bottom = 6
+            Anchors = [akTop, akBottom]
+            TabOrder = 0
+          end
+          object Label4: TLabel
+            Left = 0
+            Top = 0
+            Width = 102
+            Height = 32
+            Align = alLeft
+            Caption = 'The x-axis cross at y='
+            FocusControl = Edit6
+            Layout = tlCenter
+            ExplicitHeight = 13
+          end
+        end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'y-axis'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GridPanel2: TGridPanelEx
         Left = 0
         Top = 0
@@ -520,18 +563,6 @@ object Form3: TForm3
             Row = 3
           end
           item
-            Column = 2
-            ColumnSpan = 2
-            Control = Panel3
-            Row = 0
-          end
-          item
-            Column = 2
-            ColumnSpan = 2
-            Control = Panel4
-            Row = 1
-          end
-          item
             Column = 0
             ColumnSpan = 4
             Control = CheckBox8
@@ -548,6 +579,18 @@ object Form3: TForm3
             ColumnSpan = 2
             Control = CheckBox18
             Row = 5
+          end
+          item
+            Column = 2
+            ColumnSpan = 2
+            Control = GridPanelEx1
+            Row = 1
+          end
+          item
+            Column = 2
+            ColumnSpan = 2
+            Control = GridPanelEx2
+            Row = 0
           end>
         Padding.Left = 3
         Padding.Right = 2
@@ -669,7 +712,7 @@ object Form3: TForm3
         object CheckBox11: TCheckBoxEx
           Left = 173
           Top = 64
-          Width = 61
+          Width = 63
           Height = 32
           Hint = 'Determine the tick unit automatically.'
           Align = alLeft
@@ -678,9 +721,9 @@ object Form3: TForm3
           OnClick = CheckBoxClick
         end
         object CheckBox13: TCheckBoxEx
-          Left = 239
+          Left = 241
           Top = 64
-          Width = 71
+          Width = 73
           Height = 32
           Hint = 'Show tick marks on the y-axis.'
           Align = alLeft
@@ -690,7 +733,7 @@ object Form3: TForm3
         object CheckBox12: TCheckBoxEx
           Left = 173
           Top = 96
-          Width = 61
+          Width = 63
           Height = 32
           Hint = 'Set the grid unit to the same as the tick unit.'
           Align = alLeft
@@ -699,9 +742,9 @@ object Form3: TForm3
           OnClick = CheckBoxClick
         end
         object CheckBox14: TCheckBoxEx
-          Left = 239
+          Left = 241
           Top = 96
-          Width = 66
+          Width = 68
           Height = 32
           Hint = 'Show horizontal grid lines.'
           Align = alLeft
@@ -710,82 +753,10 @@ object Form3: TForm3
           ShowHint = True
           TabOrder = 11
         end
-        object Panel3: TPanel
-          Left = 173
-          Top = 0
-          Width = 219
-          Height = 32
-          Anchors = []
-          BevelOuter = bvNone
-          TabOrder = 6
-          object CheckBox10: TCheckBoxEx
-            Left = 0
-            Top = 0
-            Width = 48
-            Height = 32
-            Hint = 
-              'Show the label at the top of the graphing area, to the right of ' +
-              'the y-axis.'
-            Align = alLeft
-            Caption = 'Label:'
-            TabOrder = 0
-            OnClick = CheckBoxClick
-          end
-          object Edit11: TMyEdit
-            AlignWithMargins = True
-            Left = 48
-            Top = 5
-            Width = 171
-            Height = 21
-            Hint = 'Edit the label for the axis here.'
-            Margins.Left = 0
-            Margins.Top = 5
-            Margins.Right = 0
-            Margins.Bottom = 6
-            Align = alClient
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 1
-          end
-        end
-        object Panel4: TPanel
-          Left = 173
-          Top = 32
-          Width = 219
-          Height = 32
-          Anchors = []
-          BevelOuter = bvNone
-          TabOrder = 7
-          object Label8: TLabel
-            Left = 0
-            Top = 0
-            Width = 102
-            Height = 13
-            Align = alLeft
-            Caption = 'The y-axis cross at x='
-            FocusControl = Edit12
-            Layout = tlCenter
-          end
-          object Edit12: TMyEdit
-            AlignWithMargins = True
-            Left = 105
-            Top = 5
-            Width = 114
-            Height = 21
-            Hint = 'The y-axis will intersect with the x-axis at this value.'
-            Margins.Top = 5
-            Margins.Right = 0
-            Margins.Bottom = 6
-            Align = alClient
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 0
-          end
-        end
         object CheckBox8: TCheckBoxEx
           Left = 6
           Top = 128
-          Width = 101
+          Width = 103
           Height = 28
           Hint = 'Use logarithmic scale for the y-axis.'
           Align = alLeft
@@ -798,7 +769,7 @@ object Form3: TForm3
         object CheckBox9: TCheckBoxEx
           Left = 6
           Top = 156
-          Width = 89
+          Width = 91
           Height = 28
           Hint = 'Show units on the y-axis.'
           Align = alLeft
@@ -811,7 +782,7 @@ object Form3: TForm3
         object CheckBox18: TCheckBoxEx
           Left = 173
           Top = 156
-          Width = 135
+          Width = 137
           Height = 28
           Hint = 'Show units on the selected axis as a fraction multiplied by pi.'
           Align = alLeft
@@ -824,15 +795,134 @@ object Form3: TForm3
           ParentFont = False
           TabOrder = 12
         end
+        object GridPanelEx1: TGridPanelEx
+          Left = 173
+          Top = 32
+          Width = 219
+          Height = 32
+          BevelOuter = bvNone
+          ColumnCollection = <
+            item
+              SizeStyle = ssAuto
+              Value = 100.000000000000000000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 0
+              Control = Label8
+              Row = 0
+            end
+            item
+              Column = 1
+              Control = Edit12
+              Row = 0
+            end>
+          ParentColor = True
+          RowCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          ShowCaption = False
+          TabOrder = 7
+          DesignSize = (
+            219
+            32)
+          object Label8: TLabel
+            Left = 0
+            Top = 0
+            Width = 102
+            Height = 32
+            Align = alLeft
+            Caption = 'The y-axis cross at x='
+            FocusControl = Edit12
+            Layout = tlCenter
+            ExplicitHeight = 13
+          end
+          object Edit12: TMyEdit
+            Left = 102
+            Top = 5
+            Width = 117
+            Height = 21
+            Hint = 'The y-axis will intersect with the x-axis at this value.'
+            Margins.Top = 5
+            Margins.Bottom = 6
+            Anchors = [akTop, akBottom]
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+          end
+        end
+        object GridPanelEx2: TGridPanelEx
+          Left = 173
+          Top = 0
+          Width = 219
+          Height = 32
+          Anchors = []
+          BevelOuter = bvNone
+          ColumnCollection = <
+            item
+              SizeStyle = ssAuto
+              Value = 100.000000000000000000
+            end
+            item
+              Value = 100.000000000000000000
+            end>
+          ControlCollection = <
+            item
+              Column = 1
+              Control = Edit11
+              Row = 0
+            end
+            item
+              Column = 0
+              Control = CheckBox10
+              Row = 0
+            end>
+          ParentColor = True
+          RowCollection = <
+            item
+              Value = 100.000000000000000000
+            end>
+          ShowCaption = False
+          TabOrder = 6
+          DesignSize = (
+            219
+            32)
+          object Edit11: TMyEdit
+            Left = 50
+            Top = 5
+            Width = 169
+            Height = 21
+            Hint = 'Edit the label for the axis here.'
+            Margins.Top = 5
+            Margins.Bottom = 6
+            Anchors = [akTop, akBottom]
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object CheckBox10: TCheckBoxEx
+            Left = 0
+            Top = 0
+            Width = 50
+            Height = 32
+            Hint = 
+              'Show the label at the top of the graphing area, to the right of ' +
+              'the y-axis.'
+            Align = alClient
+            Caption = 'Label:'
+            TabOrder = 0
+            OnClick = CheckBoxClick
+          end
+        end
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Settings'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         396
         185)
@@ -847,7 +937,7 @@ object Form3: TForm3
       object CheckBox15: TCheckBoxEx
         Left = 8
         Top = 40
-        Width = 81
+        Width = 83
         Height = 17
         Hint = 'Select to show a legend in the coordinate system.'
         Caption = 'Show legend'
@@ -870,7 +960,6 @@ object Form3: TForm3
           'Crossed'
           'Boxed')
         TabOrder = 5
-        OnClick = RadioGroup1Click
       end
       object RadioGroup2: TRadioGroup
         Left = 283
@@ -892,33 +981,12 @@ object Form3: TForm3
       end
       object Edit13: TMyEdit
         Left = 40
-        Top = 8
+        Top = 10
         Width = 332
         Height = 21
         Hint = 'Enter a title to show above the coordinate system.'
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
-      end
-      object BitBtn1: TBitBtn
-        Left = 371
-        Top = 8
-        Width = 21
-        Height = 21
-        Hint = 'Select the font for the title.'
-        Anchors = [akTop, akRight]
-        DoubleBuffered = True
-        Glyph.Data = {
-          F6000000424DF600000000000000760000002800000010000000100000000100
-          04000000000080000000230B0000230B00001000000010000000A64D4D00FF4D
-          4D00D1D8DB00FFFFFF0000000000000000000000000000000000000000000000
-          0000000000000000000000000000000000000000000000000000333333333333
-          3333333000000000000333333333333333333330000033300003333330033333
-          0033333333003333003311111330000000333311333300330033333113333003
-          0033333311111100003333333113311000333333331131130033333333311113
-          3333333333331113333333333333311333333333333333333333}
-        ParentDoubleBuffered = False
-        TabOrder = 1
-        OnClick = BitBtn1Click
       end
       object RadioGroup3: TRadioGroup
         Left = 8
@@ -937,7 +1005,7 @@ object Form3: TForm3
       object CheckBox19: TCheckBoxEx
         Left = 152
         Top = 40
-        Width = 170
+        Width = 172
         Height = 17
         Hint = 
           'Check this to use complex numbers for calculations. Notice that ' +
@@ -945,6 +1013,18 @@ object Form3: TForm3
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Calculate with complex numbers'
         TabOrder = 3
+      end
+      object Button7: TButton
+        Left = 371
+        Top = 9
+        Width = 21
+        Height = 21
+        Hint = 'Select the font for the title.'
+        ImageAlignment = iaCenter
+        ImageIndex = 5
+        Images = Form1.ScaledImageList3
+        TabOrder = 1
+        OnClick = Button7Click
       end
     end
     object TabSheet4: TTabSheet
@@ -1038,7 +1118,7 @@ object Form3: TForm3
           Width = 61
           Height = 13
           Caption = 'Number font:'
-          FocusControl = BitBtn3
+          FocusControl = Button5
         end
         object Label21: TLabel
           Left = 8
@@ -1046,7 +1126,7 @@ object Form3: TForm3
           Width = 50
           Height = 13
           Caption = 'Label font:'
-          FocusControl = BitBtn2
+          FocusControl = Button4
         end
         object Label10: TLabel
           Left = 8
@@ -1054,67 +1134,43 @@ object Form3: TForm3
           Width = 60
           Height = 13
           Caption = 'Legend font:'
-          FocusControl = BitBtn4
+          FocusControl = Button6
         end
-        object BitBtn2: TBitBtn
-          Left = 116
+        object Button4: TButton
+          Left = 115
           Top = 14
           Width = 21
           Height = 21
           Hint = 'Select the font used to show the labels on the axes.'
-          DoubleBuffered = True
-          Glyph.Data = {
-            F6000000424DF600000000000000760000002800000010000000100000000100
-            04000000000080000000130B0000130B00001000000010000000A64D4D00FF4D
-            4D00D1D8DB000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000222222222222
-            2222222000000000000222222222222222222220000022200002222220022222
-            0022222222002222002211111220000000222211222200220022222112222002
-            0022222211111100002222222112211000222222221121120022222222211112
-            2222222222221112222222222222211222222222222222222222}
-          ParentDoubleBuffered = False
+          ImageAlignment = iaCenter
+          ImageIndex = 5
+          Images = Form1.ScaledImageList3
           TabOrder = 0
-          OnClick = BitBtn2Click
+          OnClick = Button4Click
         end
-        object BitBtn3: TBitBtn
-          Left = 116
+        object Button5: TButton
+          Left = 115
           Top = 46
           Width = 21
           Height = 21
           Hint = 'Select the font used to show the numbers on the axes.'
-          DoubleBuffered = True
-          Glyph.Data = {
-            F6000000424DF600000000000000760000002800000010000000100000000100
-            04000000000080000000130B0000130B00001000000010000000A64D4D00FF4D
-            4D00D1D8DB000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000222222222222
-            2222222000000000000222222222222222222220000022200002222220022222
-            0022222222002222002211111220000000222211222200220022222112222002
-            0022222211111100002222222112211000222222221121120022222222211112
-            2222222222221112222222222222211222222222222222222222}
-          ParentDoubleBuffered = False
+          ImageAlignment = iaCenter
+          ImageIndex = 5
+          Images = Form1.ScaledImageList3
           TabOrder = 1
-          OnClick = BitBtn3Click
+          OnClick = Button5Click
         end
-        object BitBtn4: TBitBtn
-          Left = 116
+        object Button6: TButton
+          Left = 115
           Top = 78
           Width = 21
           Height = 21
           Hint = 'Select the font used to show the legend text.'
-          DoubleBuffered = True
-          Glyph.Data = {
-            F6000000424DF600000000000000760000002800000010000000100000000100
-            04000000000080000000130B0000130B00001000000010000000A64D4D00FF4D
-            4D00D1D8DB000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000222222222222
-            2222222000000000000222222222222222222220000022200002222220022222
-            0022222222002222002211111220000000222211222200220022222112222002
-            0022222211111100002222222112211000222222221121120022222222211112
-            2222222222221112222222222222211222222222222222222222}
-          ParentDoubleBuffered = False
+          ImageAlignment = iaCenter
+          ImageIndex = 5
+          Images = Form1.ScaledImageList3
           TabOrder = 2
-          OnClick = BitBtn4Click
+          OnClick = Button6Click
         end
       end
     end
@@ -1143,7 +1199,7 @@ object Form3: TForm3
   object CheckBox16: TCheckBoxEx
     Left = 8
     Top = 239
-    Width = 93
+    Width = 95
     Height = 17
     Hint = 'Select this to use these settings as defaults in the future.'
     Anchors = [akLeft, akBottom]

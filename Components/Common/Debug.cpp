@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <oledlg.h>
+#include <xutility>
 //---------------------------------------------------------------------------
 const TNameValue OleUIResultList[] =
 {
@@ -103,7 +104,7 @@ class TDebugStreamBuf : public std::basic_stringbuf<T>
 {
   void Update()
   {
-    std::basic_string<T> Str = str();
+    std::basic_string<T> Str = std::basic_stringbuf<T>::str();
     size_t LastIndex = 0;
     size_t Index;
     while((Index = Str.find('\n', LastIndex)) != std::string::npos)
@@ -113,7 +114,7 @@ class TDebugStreamBuf : public std::basic_stringbuf<T>
         OutputDebugStr(SubStr);
       LastIndex = Index+1;
     }
-    str(Str.substr(LastIndex));
+    std::basic_stringbuf<T>::str(Str.substr(LastIndex));
   }
 
   int sync()
@@ -148,5 +149,22 @@ AnsiString FlagsToStr(const TNameValue List[], unsigned Value)
       Str += List[I].Name + String('|');
   return Str.IsEmpty() ? String(0) : Str;
 }
+//---------------------------------------------------------------------------
+#ifdef _DEBUG
+#ifdef _WIN64
+void std::_Debug_message(const char *Str, const char *File, unsigned int Line)
+{
+	std::clog << Str << " at " << File << ": " << Line << std::endl;
+	assert(0);
+}
+//---------------------------------------------------------------------------
+#else
+void std::_Debug_message(const char *Str, const char *Str2)
+{
+	std::clog << Str << Str2 << std::endl;
+	assert(0);
+}
+#endif
+#endif
 //---------------------------------------------------------------------------
 

@@ -2,24 +2,55 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Abdellah Chelli <abdellahchelli@gmail.com>, 2011.
+# ChelliA1 <sneetsher@gmail.com>, 2019.
+# Abdellah Chelli <sneetsher@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-12 17:39+0100\n"
-"Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
-"Language-Team: IL\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-03-31 22:27+0200\n"
+"Last-Translator: Abdellah Chelli <sneetsher@gmail.com>\n"
+"Language-Team: Graph\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.7.0\n"
-"X-Poedit-Language: Arabic\n"
-"X-Poedit-Country: ALGERIA\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Bookmarks: 806,-1,-1,-1,-1,-1,751,-1,-1,-1\n"
 "BiDiMode: 1\n"
+
+#. Form1..Caption
+msgid "Plugin Manager"
+msgstr "مدير الملحقات"
+
+#. Form1..ListView......Caption
+msgid "Plugin name"
+msgstr "اسم الملحق"
+
+#. Form1..ListView......Caption
+msgid "Version"
+msgstr "الإصدار"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "استيراد"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr "إزالة"
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "إغلاق"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -84,7 +115,7 @@ msgstr "وضع التسمية مباشرة على يمين المحور y في �
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -146,10 +177,6 @@ msgstr "تصدير إلى ملف ..."
 msgid "Export the selected point series to a file."
 msgstr "تصدير السلسلة النقطية المحددة إلى ملف."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "استيراد"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -179,7 +206,7 @@ msgstr "تحرير"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -238,7 +265,6 @@ msgstr "أنترنيت"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -416,11 +442,11 @@ msgstr "إدراج مماس/عمود ..."
 msgid "Insert a tangent or normal for the selected function."
 msgstr "إدراج مماس أو عمود للدالة المحددة."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "إدراج تظليل ..."
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "إضافة تظليل للدالة المحددة."
 
@@ -434,7 +460,7 @@ msgstr "إدراج سلسلة نقطية جديدة."
 
 #. Form1..ActionManager..InsertTrendlineAction..Caption
 msgid "Insert trendline..."
-msgstr " إدراج خط إتجاه ..."
+msgstr "إدراج خط إتجاه ..."
 
 #. Form1..ActionManager..InsertTrendlineAction..Hint
 msgid "Insert a curve of best fit for the selected point series."
@@ -674,16 +700,6 @@ msgstr "تبرع"
 msgid "Donate money to the project."
 msgstr "تبرع بالمال من أجل المشروع."
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "نصيحة اليوم"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "عرض نصيحة مفيدة لهذا اليوم."
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "دعم"
@@ -858,28 +874,6 @@ msgstr "أسفل اليسار"
 msgid "Show the legend in the bottom left corner."
 msgstr "عرض مفتاح الرسم في الزاوية السفلية اليسرى."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "إغلاق"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "النصيحة التالية"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "النصيحة السابقة"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "عرض نصائح مفيدة عند بدء التشغيل."
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "هل تعلم ..."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "إدراج علاقة"
@@ -958,7 +952,7 @@ msgstr "أكتب نص وصفي يعرض داخل مفتاح الرسم و قائ
 msgid "Properties"
 msgstr "الخصائص"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -966,7 +960,35 @@ msgstr "الخصائص"
 msgid "Style:"
 msgstr "النمط:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "اختر النمط المستخدم لرسم المتراجحة. لا يستخدم للمعادلات."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "اختر لونا لرسم العلاقة."
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "العرض:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "نمط الخط:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "اختر نمط الخط المستخدم لرسم المعادلات و حد المتراجحات."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -977,24 +999,7 @@ msgstr "النمط:"
 msgid "Color:"
 msgstr "اللون:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "العرض:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "اختر النمط المستخدم لرسم المتراجحة. لا يستخدم للمعادلات."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "اختر لونا لرسم العلاقة."
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "العرض بالبكسل لخط الرسم لحلول المعادلة أو لحدود حلول المتراجحة."
 
@@ -1040,12 +1045,6 @@ msgstr "أكتب نص وصفي يعرض داخل مفتاح الرسم.  إذا 
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "خصائص الرسم"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "نمط الخط:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1135,7 +1134,7 @@ msgstr "اختر علامة التي تعرض في نهاية المجال. تس
 
 #. Form13..Caption
 msgid "Insert trendline"
-msgstr " إدراج خط اتجاه"
+msgstr "إدراج خط اتجاه"
 
 #. Form13..GroupBox1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Caption
@@ -1360,10 +1359,6 @@ msgstr "تعيين لعرض الإحداثيات عند كل نقطة."
 msgid "Show coordinates"
 msgstr "عرض الإحداثيات"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "اختر خطا لكتابة الإحداثيات."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "اختر أين يجب عرض الإحداثيات."
@@ -1399,6 +1394,10 @@ msgstr "أسفل اليسار"
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1....Items.Strings
 msgid "Below Right"
 msgstr "أسفل اليمين"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "اختر خطا لكتابة الإحداثيات."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1487,6 +1486,11 @@ msgstr "عرض حدود y"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "كل حدود الخطأ لها نفس النسبة المئوية للإحداثية y."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "تطبيق"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1691,7 +1695,7 @@ msgstr "تعيين لزيادة قيمة النهاية حتى التقاطع."
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox2..Caption
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox4..Caption
 msgid "Increase to intersection"
-msgstr "زيادة حتى التقاطع."
+msgstr "زيادة حتى التقاطع"
 
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox1..Hint
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox3..Hint
@@ -1701,7 +1705,7 @@ msgstr "تعيين لإنقاص قيمة  البداية حتى التقاطع."
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox1..Caption
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox3..Caption
 msgid "Decrease to intersection"
-msgstr "إنقاص حتى التقاطع."
+msgstr "إنقاص حتى التقاطع"
 
 #. Form16..PageControl1..TabSheet2..GroupBox3..ShadeSelect1..Hint
 msgid "Select the style used for the shading."
@@ -1742,10 +1746,6 @@ msgstr "مجال التظليل للدالة الثانية"
 #. Form17..Caption
 msgid "Custom functions/constants"
 msgstr "دوال و ثوابت مخصصة"
-
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "تطبيق"
 
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
@@ -1947,8 +1947,8 @@ msgid "The newest version as well as the source code are available at: %s"
 msgstr "كل من الإصدار الجديد و مصدر البرنامج متاحة في : %s"
 
 #. Form2..Panel1..LinkLabel2..Caption
-msgid "Email: %s"
-msgstr "البريد الإلكتروني: %s"
+msgid "Support: %s"
+msgstr "دعم: %s"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2011,7 +2011,7 @@ msgstr "حركة عكسية آلية"
 
 #. Form20..PopupMenu1..Reverse1....Hint
 msgid "Play backwards when the end of the animation is reached. This is most useful in combination with the \"Repeat\" command."
-msgstr "تشغيل الرسوم المتحركة عكسيا عندما تصل إلى نهايتها. هذة الخاصية ذي فائدة حينما تستخدم مع الأمر \"تكرار\""
+msgstr "تشغيل الرسوم المتحركة عكسيا عندما تصل إلى نهايتها. هذة الخاصية ذي فائدة حينما تستخدم مع الأمر \"تكرار”."
 
 #. Form20..PopupMenu1..Save1..Hint
 msgid "Save the animation to a file."
@@ -2155,28 +2155,6 @@ msgstr "إظهار الخطوط الشبكة العمودية."
 msgid "Show grid"
 msgstr "إظهار الشبكة"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "إظهار التسمية في الجانب الأيمن من معلم الرسم، فوق المحور x."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "العنوان:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "تحرير عنوان المحور."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "المحور x يقطع المحور y عند y="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "المحور x سيتقاطع مع المحور y عند هذه القيمة."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "استخدام المقياس اللوغاريتمي في المحور x."
@@ -2204,6 +2182,28 @@ msgstr "إظهار التدريجات على المحور المحدد كنسب 
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox18..Caption
 msgid "Show as a multiple of π"
 msgstr "إظهار كمضاعفات لـ π"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "تحرير عنوان المحور."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "إظهار التسمية في الجانب الأيمن من معلم الرسم، فوق المحور x."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "العنوان:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "المحور x سيتقاطع مع المحور y عند هذه القيمة."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "المحور x يقطع المحور y عند y="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2235,18 +2235,6 @@ msgstr "إظهار التدريجات على المحور y."
 msgid "Show horizontal grid lines."
 msgstr "إظهار خطوط الشبكة العمودية."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "إظهار التسمية في أعلى معلم الرسم، يمين المحور y."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "المحور y يقطع المحور x عند x="
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "المحور y سيتقاطع مع المحور x عند هذه القيمة."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "استخدام المقياس اللوغاريتمي في المحور y."
@@ -2254,6 +2242,18 @@ msgstr "استخدام المقياس اللوغاريتمي في المحور y
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "إظهار الإحداثيات على المحور y."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "المحور y يقطع المحور x عند x="
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "المحور y سيتقاطع مع المحور x عند هذه القيمة."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "إظهار التسمية في أعلى معلم الرسم، يمين المحور y."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2303,17 +2303,13 @@ msgstr "درجة"
 msgid "Enter a title to show above the coordinate system."
 msgstr "أدخل عنوانا لعرضه أعلى المعلم."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "اختر خط العنوان."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "اختر أين يوضع مفتاح الرسم."
 
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Caption
 msgid "Legend placement"
-msgstr "موضع مفتاح الرسم."
+msgstr "موضع مفتاح الرسم"
 
 #. Form3..PageControl1..TabSheet3..CheckBox19....Hint
 msgid "Check this to use complex numbers for calculations. Notice that this will slow graphing down."
@@ -2322,6 +2318,10 @@ msgstr "استخدام الأعداد المركبة للحسابات. قد يؤ
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "حساب باستخدام الأعداد المركبة"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "اختر خط العنوان."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2372,15 +2372,15 @@ msgstr "خط العناوين:"
 msgid "Legend font:"
 msgstr "خط مفتاح الرسم:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "اختر الخط المستخدم لعرض عناوين المحاور."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "اختر الخط المستخدم لعرض الأعداد على المحاور."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "اختر الخط المستخدم لعرض نص مفتاح الرسم."
 
@@ -2557,47 +2557,47 @@ msgstr "حجم النص."
 msgid "Text string"
 msgstr "النص"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "إدراج رمز (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 msgid "Insert object."
 msgstr "إدراج كائن."
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "عريض (Ctrl+B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "مائل (Ctrl+I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "تسطير (Ctrl+U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "تشطيب (Ctrl+S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "رمز علوي (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "رمز سفلي (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "محاذاة إلى اليسار (Ctrl+L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "توسيط (Ctrl+E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "محاذاة إلى اليمين (Ctrl+R)"
 
@@ -2769,7 +2769,7 @@ msgstr "قيمة الدالة مقدرة من أجل قيمة x المعينة."
 
 #. StdFuncFrame..Edit3....Hint
 msgid "This is the first derivative of the function evaluated for the entered value."
-msgstr " قيمة المشتق الأول للدالة المقدرة من أجل قيمة x المعينة."
+msgstr "قيمة المشتق الأول للدالة المقدرة من أجل قيمة x المعينة."
 
 #. StdFuncFrame..Edit4....Hint
 msgid "This is the second derivative of the function evaluated for the entered value."
@@ -2961,7 +2961,7 @@ msgid "Not enough points for calculation."
 msgstr "نقاط غير كافية لإجراء الحسابات."
 
 msgid "Illegal name \"%s\" for user defined function or constant."
-msgstr " \"‪%s‬\" اسم غير مقبول للدالة أو  الثابت."
+msgstr "‫\"‪%s‬\" اسم غير مقبول للدالة أو  الثابت."
 
 msgid "Cannot differentiate recursive function."
 msgstr "لا يمكن إشتقاق دالة تراجعية."
@@ -2983,6 +2983,10 @@ msgstr "لا توجد نتائج."
 
 msgid "An accurate result cannot be found."
 msgstr "لا يمكن العثور على نتيجة دقيقة."
+
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "فشل التقييم."
 
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "خطأ داخلي. أرجوا أن تعلم المبرمج بمعلومات وافية قدر ما تستطيع."
@@ -3147,7 +3151,10 @@ msgid "Invalid use of infinity. Infinity cannot be used here."
 msgstr "استخدام خاطئ للانهاية. لا يمكن استخدام لانهاية هنا."
 
 msgid "Not enough memory to complete the operation."
-msgstr ""
+msgstr "ذاكرة غير كافية لإكمال العملية."
+
+msgid "Printing aborted!"
+msgstr "ألغيت الطباعة!"
 
 msgid "Confirm delete"
 msgstr "تأكيد الحذف"
@@ -3239,8 +3246,8 @@ msgstr "تحرير الدالة"
 msgid "Edit tangent/normal"
 msgstr "تحرير المماس/العمود"
 
-msgid "Error processing file '%s' at line %s."
-msgstr "خطأ أثناء معالجة الملف '‪%s‬' في السطر ‪%s‬ ."
+msgid "Error processing file at line %s."
+msgstr "خطأ عند معالجة الملف في السطر ‪%s‬ ."
 
 msgid "Edit text label"
 msgstr "تحرير النص"
@@ -3279,7 +3286,7 @@ msgid "You need to select a function."
 msgstr "يجب أن تحدد دالة."
 
 msgid "New version of Graph available"
-msgstr "إصدار جديد من Graph متوفر."
+msgstr "إصدار جديد من Graph متوفر"
 
 msgid ""
 "Graph %s is now available for download from www.padowan.dk\n"
@@ -3366,161 +3373,7 @@ msgstr ""
 "لذلك يجب حفظ البيانات خاصتك تحت اسم جديد وإعادة تشغيل التطبيق."
 
 msgid "Thread is not responding"
-msgstr "Thread لا يستجيب."
-
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "هذه نصيحة  اليوم التي تستطيع إعطاءك معلومات كثيرة حول البرنامج ، والتي لا يعرفها أغلب المستخدمين."
-
-#, fuzzy
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr "يمكنك الحصول على المساعدة لاستخدام غْراف، والتقرير بالعلل واقتراح تحسينات مستقبلية في منتدى الويب: <a href=\"http://www.padowan.dk/forum\">http://www.padowan.dk/forum</a>"
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "يمكنك تخصيص لوحة الأدوات بنقرة يمنى عليها و اختر 'تخصيص لوحة الأدوات'."
-
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "بدل حذف دالة ، يمكنك جعلها غير مرئية بإزلة علامة التحديد الخاصة بها في قائمة الدوال."
-
-msgid "You can paste images into a text label."
-msgstr "يمكنك لصق صور إلى نص."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "النص يمكن أن يحتوي على أي نوع من كائنات OLE، مثلا Equation Microsoft. بنقرة يمنى في موضع التحرير للنص ثم 'إدراج كائن'."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "يمكنك تصدير نقاط من سلسلة نقطية إلى ملف و الذي تستطيع برامج أخرى قراءته، مثلا Microsoft Excel . عند تحرير السلسلة النقطية حدد النقاط، نقرة يمنى تم اختر 'تصدير إلى ملف'."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "يمكن رسم خط عمودي عند x=5 كدالة وسيطية x(t)=5، y(t)=t أو كعلاقة x=5."
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "يمكنك استعمال 'عرض|مربع' لجعل المحاور تبدوا متقايسة. و هذا ذو أهمية عند رسم الدوائر و الدوال المشابهة."
-
-msgid "You can find a list of all available functions in the help."
-msgstr "يمكنك إيجاد قائمة بكل الداول المتوفرة في قائمة المساعدة."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "يمكنك تركيب دالتين في واحدة بواسطة 'if'. مثلا الدالة f(x)=x من أجل x<1 و f(x)=x^2 من اجل x>=1 يمكن كتابتها ‪f(x)=if(x<1, x, x^2)‬."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "يمكنك استيراد محتويات ملف غْراف Graph آخر إلى المعلم الحالي باستخدام 'ملف|استيراد|ملف غْراف Graph'."
-
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "إذا اخترت 'حفظ كإعدادات افتراضية' في نافذة الحوار للمحاور، الإعدادات الحالية ستستخدم كإعدادات افتراضية  عند إنشاء معلم إحداثيات جديد."
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "بينما تبقى ضاغطا على المفتاح Ctrl، يمكنك استخدام مفاتيح الأسهم لتحريك المعلم."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "بينما تبقى ضاغطا على المفتاح Ctrl، يمكنك استخدام المفتاحين + و - لتكبير و تصغير المعلم."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "يمكنك استعمال عجلة الفأرة لتكبير و تصغير عند موضع مؤشر الفأرة."
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "إذا كنت لا تريد إظهار عنصر في مفتاح الرسم، نقرة يمنى على العنصر في قائمة الدوال ثم ألغ اختيار 'إظهار في مفتاح الرسم'."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "إذا كنت تريد المحاور أن تعرض على يسار و أسفل الصورة، يمكنك اختيار نمط المحاور 'جانبية' في نافذة إعدادات المحاور."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "يمكن لـغْراف Graph أن يحفظ صورة للمعلم في خمسة أنواع من الصور: bmp، emf، png، jpg و pdf."
-
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "يمكنك استخدام 'تحرير|نسخ صورة' لنسخ صورة للمعلم و لصقها إلى برنامج آخر، مثلا Microsoft Word. في ما بعد يمكنك تحرير الصورة في غْراف بنقرة مزدوجة عليها في البرنامج الآخر."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "يمكنك فتح ملف (grf) محفوظ في نافذة جديدة للبرنامج بنقرة مزدوجة عليه في المستعرض (Explorer)."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "يمكنك أ ن تسحب ملف (grf) من المستعرض (explorer) إلى نافذة غْراف Graph لفتحه."
-
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "يحفظ غْراف حجم النافذة الرئيسية عند الإغلاق. يمكن إيقاف هذه الخاصية من نافذة الخيارات."
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "يمكنك 'حساب|جدول' من إنشاء جدول بقيم الدالة على طول المجال."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "يمكنك تصدير جزء أو كامل جدول التقييم إلى ملف بنقرة يمنى ثم 'تصدير إلى ملف'.و يمكن بعد ذلك فتح الملف بواسطة برامج أخرى كـ Microsoft Excel."
-
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "يمكن نسخ بيانات جدول التقييم إلى برنامج آخر كـ Microsoft Excel."
-
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "يمكن نسخ نقاط البيانات في السلاسل النقطية من و إلى برامج أخرى كـ Microsoft Excel."
-
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "العناصر كالدوال و السلاسل النقطية و غيرهما... يمكن نسخها من نسخة مشغلة من البرنامج إلى أخرى باستخدام 'تحرير|نسخ'."
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "يمكنك دائما التراجع عن الخطوات الأخيرة باستعمال 'تحرير|تراجع'."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "إذا استخدمت 'تحرير|تراجع' عن طريق الخطأ، فيمكنك استخدام 'تحرير|إعادة' لإستعادة ما تراجعت عنه."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "في نافذة الحوار للمحاور يمكنك إضافة عنوان للمعلم."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "يمكنك استيراد سلسلة نقطية من ملفات برامج أخرى، كـ Microsoft Excel."
-
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "عند إدراج سلسلة نقطية ، يمكنك نسخ البيانات من البرامج كـ Microsoft Excel، و لصقها إلى الشبكة في غْراف Graph."
-
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "يمكنك استخدام 'عرض|ملائمة الكل'  لتغيير المعلم بحيث تظهر كل الدوال و السلاسل النقطية."
-
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "يمكنك استخدام 'عرض|ملائم'  لتغيير المعلم بحيث يعرض الدالة أو السلسلة النقطية المحددة."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "مع إبقاء المفتاح Shift مضغوطا يمكنك سحب المعلم في أي إتجاه تريد باستخدام الفأرة."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "يمكنك استخدام 'حساب|تقييم' لإيجاد نقاط التقاطع بين الدوال، و مع المحاور ونقاط الذروة."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "عندما تكون سلسلة نقطية محددة، يمكنك إضافة نقاط إليها بالنقر على الصورة بينما تبقي المفتاح Ctrl مضغوطا."
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "يمكنك استعمال علاقة لرسم أي متراجحة، مثلا ‪sin(x^2) < cos(y^2)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "يمكنك استعمال علاقة لرسم أي معادلة، مثلا ‪x*sin x = y*cos y"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "العناصر (دالة، تظليل، نص، علاقة، و غيرها) ترسم بنفس الترتيب الذي تظهر به في قائمة الدوال إلى اليسار."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "يمكنك تغيير ترتيب العنصر المحدد في قائمة الدوال إما بسحبه بواسطة الفأرة أو بواسطة مفاتيح الأسهم أعلى/أسفل مع إبقاء المفتاح ALT مضغوطا."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "يمكنك عرض دوال و عناصر أخرى خلف المحاور بتحريك العنصر فوق المحاور في قائمة الدوال على اليسار. لتحريك تظليل أو مماس يجب عليك تحريك الدالة الملحقان بها."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "يمكن وصل نص بالمحاور بنقرة يمنى عليه اختيار موضع من القائمة المنسدلة."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "يمكن تحريك مفتاح الرسم بحرية أو إلصاقه بإحدى الزوايا بنقر يمنى عليه و اختيارموضع من القائمة المنسدلة."
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "كبديل للشفافية، يمكنك اختيار لون مخصص لخلفية النص. خصوصا إذا كان النص واقعا فوق تظليل."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "في أغلب الحالات كالسلاسل النقطية، إعدادات المحاور، مجالات الدالة، و غيرها. يمنك اسعمال عبارات كـ pi/4 بدل الأعداد."
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "يمكنك إنشاء ثوابت مخصصة و الخاصة بك بواسطة 'دالة|دوال مخصصة' لاستخدامها في دوال، سلاسل نقطية، و غيرها. كمثال: g=9.80665،  R=8.31"
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "يمكنك إنشاء دوال مخصصة و الخاصة بك بواسطة 'دالة|دوال مخصصة' لاستخدامها في رسم دوال ، علاقات، و غيرها. كمثال: ‪sinc(x)=if(x=0, 0, sin(x)/x)"
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "عند الحفظ كصورة، هنالك زر 'خيارات' الذي يمكنك من تعيين دقة الصورة. و يعتبر هذا مهما إذا أردت الحصول على صورة ذي دقة عالية."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "يمكن إختيار علامات سلسلة نقطية على شكل سهم، سلسلة نقطية ذات علامات في شكل سهم مع خطوط بين النقاط يمكن استخدامها لرسم الأشعة (الموجهات)."
+msgstr "‫Thread لا يستجيب"
 
 msgid "Insert symbol"
 msgstr "إدراج رمز"
@@ -3586,22 +3439,6 @@ msgstr "التعليق:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "اختر طابعة لاستخدامها، و يمكنك استخدام زر 'الخصائص' لتعديل الإعدادات المتقدمة للطابعة."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "اختر طباعة بالألوان (أو تدرج رمادي إذا كانت الطابعة ليست طابعة ملونة) أو تحويل كل الألوان إلى الأسود."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "ألوان الطباعة"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "كل الألوان"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "أبيض و أسود"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "الموضع (ميليمتر)"
@@ -3638,6 +3475,246 @@ msgstr "اختر عدد النسخ لطباعتها."
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "أدخل النسبة مقارنة بالحجم الأصلي."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr "يستخدم مدير الملحقات لتثبيت أو إزلة ملحقات Graph من ملف py منفرد أو من حزمة في ملف zip."
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr "كتابة فوق الملحق؟"
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr "تم تثبيت الملحق \"%s\" من قبل. هل تريد الكتابة فوقه؟"
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr "ليس \"%s\" ملحق Graph صالح فهو يفتقد ‪__init__.py‬ في الجذر."
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "Install failed"
+msgstr "فشل التثبيت"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr "سيبقى الملحق مشتغلا حتى يغلق Graph. هل تريد بالفعل إزالة الملحق \"%s\"؟"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr "إزالة الملحق؟"
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr "فشلت إزالة الملحق \"%s\". زبما لا تملك التصاريح اللازمة لحذف الملف."
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr "توريد و إزالة ملحقات Graph."
+
+#: ../Plugins/ShowConsole.py:5
+msgid "Show Console"
+msgstr "عرض لوحة التحكم"
+
+#: ../Plugins/ShowConsole.py:7
+#, fuzzy
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr "هذا ملحق بسيط جدا ينشئ عنصر قائمة لعرض و إخفاء نافذة مفسر بايثون."
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show Python interpreter"
+msgstr "عرض مفسر بايثون"
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show the Python interpreter window."
+msgstr "عرض نافذة مفسر بايثون."
+
+#~ msgid "Tip of the day"
+#~ msgstr "نصيحة اليوم"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "عرض نصيحة مفيدة لهذا اليوم."
+
+#~ msgid "Next tip"
+#~ msgstr "النصيحة التالية"
+
+#~ msgid "Previous tip"
+#~ msgstr "النصيحة السابقة"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "عرض نصائح مفيدة عند بدء التشغيل."
+
+#~ msgid "Did you know..."
+#~ msgstr "هل تعلم ..."
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "هذه نصيحة  اليوم التي تستطيع إعطاءك معلومات كثيرة حول البرنامج ، والتي لا يعرفها أغلب المستخدمين."
+
+#, fuzzy
+#~ msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
+#~ msgstr "يمكنك الحصول على المساعدة لاستخدام غْراف، والتقرير بالعلل واقتراح تحسينات مستقبلية في منتدى الويب: <a href=\"http://www.padowan.dk/forum\">http://www.padowan.dk/forum</a>"
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "يمكنك تخصيص لوحة الأدوات بنقرة يمنى عليها و اختر 'تخصيص لوحة الأدوات'."
+
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "بدل حذف دالة ، يمكنك جعلها غير مرئية بإزلة علامة التحديد الخاصة بها في قائمة الدوال."
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "يمكنك لصق صور إلى نص."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "النص يمكن أن يحتوي على أي نوع من كائنات OLE، مثلا Equation Microsoft. بنقرة يمنى في موضع التحرير للنص ثم 'إدراج كائن'."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "يمكنك تصدير نقاط من سلسلة نقطية إلى ملف و الذي تستطيع برامج أخرى قراءته، مثلا Microsoft Excel . عند تحرير السلسلة النقطية حدد النقاط، نقرة يمنى تم اختر 'تصدير إلى ملف'."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "يمكن رسم خط عمودي عند x=5 كدالة وسيطية x(t)=5، y(t)=t أو كعلاقة x=5."
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "يمكنك استعمال 'عرض|مربع' لجعل المحاور تبدوا متقايسة. و هذا ذو أهمية عند رسم الدوائر و الدوال المشابهة."
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "يمكنك إيجاد قائمة بكل الداول المتوفرة في قائمة المساعدة."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "يمكنك تركيب دالتين في واحدة بواسطة 'if'. مثلا الدالة f(x)=x من أجل x<1 و f(x)=x^2 من اجل x>=1 يمكن كتابتها ‪f(x)=if(x<1, x, x^2)‬."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "يمكنك استيراد محتويات ملف غْراف Graph آخر إلى المعلم الحالي باستخدام 'ملف|استيراد|ملف غْراف Graph'."
+
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "إذا اخترت 'حفظ كإعدادات افتراضية' في نافذة الحوار للمحاور، الإعدادات الحالية ستستخدم كإعدادات افتراضية  عند إنشاء معلم إحداثيات جديد."
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "بينما تبقى ضاغطا على المفتاح Ctrl، يمكنك استخدام مفاتيح الأسهم لتحريك المعلم."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "بينما تبقى ضاغطا على المفتاح Ctrl، يمكنك استخدام المفتاحين + و - لتكبير و تصغير المعلم."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "يمكنك استعمال عجلة الفأرة لتكبير و تصغير عند موضع مؤشر الفأرة."
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "إذا كنت لا تريد إظهار عنصر في مفتاح الرسم، نقرة يمنى على العنصر في قائمة الدوال ثم ألغ اختيار 'إظهار في مفتاح الرسم'."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "إذا كنت تريد المحاور أن تعرض على يسار و أسفل الصورة، يمكنك اختيار نمط المحاور 'جانبية' في نافذة إعدادات المحاور."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "يمكن لـغْراف Graph أن يحفظ صورة للمعلم في خمسة أنواع من الصور: bmp، emf، png، jpg و pdf."
+
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "يمكنك استخدام 'تحرير|نسخ صورة' لنسخ صورة للمعلم و لصقها إلى برنامج آخر، مثلا Microsoft Word. في ما بعد يمكنك تحرير الصورة في غْراف بنقرة مزدوجة عليها في البرنامج الآخر."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "يمكنك فتح ملف (grf) محفوظ في نافذة جديدة للبرنامج بنقرة مزدوجة عليه في المستعرض (Explorer)."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "يمكنك أ ن تسحب ملف (grf) من المستعرض (explorer) إلى نافذة غْراف Graph لفتحه."
+
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "يحفظ غْراف حجم النافذة الرئيسية عند الإغلاق. يمكن إيقاف هذه الخاصية من نافذة الخيارات."
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "يمكنك 'حساب|جدول' من إنشاء جدول بقيم الدالة على طول المجال."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "يمكنك تصدير جزء أو كامل جدول التقييم إلى ملف بنقرة يمنى ثم 'تصدير إلى ملف'.و يمكن بعد ذلك فتح الملف بواسطة برامج أخرى كـ Microsoft Excel."
+
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "يمكن نسخ بيانات جدول التقييم إلى برنامج آخر كـ Microsoft Excel."
+
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "يمكن نسخ نقاط البيانات في السلاسل النقطية من و إلى برامج أخرى كـ Microsoft Excel."
+
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "العناصر كالدوال و السلاسل النقطية و غيرهما... يمكن نسخها من نسخة مشغلة من البرنامج إلى أخرى باستخدام 'تحرير|نسخ'."
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "يمكنك دائما التراجع عن الخطوات الأخيرة باستعمال 'تحرير|تراجع'."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "إذا استخدمت 'تحرير|تراجع' عن طريق الخطأ، فيمكنك استخدام 'تحرير|إعادة' لإستعادة ما تراجعت عنه."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "في نافذة الحوار للمحاور يمكنك إضافة عنوان للمعلم."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "يمكنك استيراد سلسلة نقطية من ملفات برامج أخرى، كـ Microsoft Excel."
+
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "عند إدراج سلسلة نقطية ، يمكنك نسخ البيانات من البرامج كـ Microsoft Excel، و لصقها إلى الشبكة في غْراف Graph."
+
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "يمكنك استخدام 'عرض|ملائمة الكل'  لتغيير المعلم بحيث تظهر كل الدوال و السلاسل النقطية."
+
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "يمكنك استخدام 'عرض|ملائم'  لتغيير المعلم بحيث يعرض الدالة أو السلسلة النقطية المحددة."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "مع إبقاء المفتاح Shift مضغوطا يمكنك سحب المعلم في أي إتجاه تريد باستخدام الفأرة."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "يمكنك استخدام 'حساب|تقييم' لإيجاد نقاط التقاطع بين الدوال، و مع المحاور ونقاط الذروة."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "عندما تكون سلسلة نقطية محددة، يمكنك إضافة نقاط إليها بالنقر على الصورة بينما تبقي المفتاح Ctrl مضغوطا."
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "يمكنك استعمال علاقة لرسم أي متراجحة، مثلا ‪sin(x^2) < cos(y^2)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "يمكنك استعمال علاقة لرسم أي معادلة، مثلا ‪x*sin x = y*cos y"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "العناصر (دالة، تظليل، نص، علاقة، و غيرها) ترسم بنفس الترتيب الذي تظهر به في قائمة الدوال إلى اليسار."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "يمكنك تغيير ترتيب العنصر المحدد في قائمة الدوال إما بسحبه بواسطة الفأرة أو بواسطة مفاتيح الأسهم أعلى/أسفل مع إبقاء المفتاح ALT مضغوطا."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "يمكنك عرض دوال و عناصر أخرى خلف المحاور بتحريك العنصر فوق المحاور في قائمة الدوال على اليسار. لتحريك تظليل أو مماس يجب عليك تحريك الدالة الملحقان بها."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "يمكن وصل نص بالمحاور بنقرة يمنى عليه اختيار موضع من القائمة المنسدلة."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "يمكن تحريك مفتاح الرسم بحرية أو إلصاقه بإحدى الزوايا بنقر يمنى عليه و اختيارموضع من القائمة المنسدلة."
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "كبديل للشفافية، يمكنك اختيار لون مخصص لخلفية النص. خصوصا إذا كان النص واقعا فوق تظليل."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "في أغلب الحالات كالسلاسل النقطية، إعدادات المحاور، مجالات الدالة، و غيرها. يمنك اسعمال عبارات كـ pi/4 بدل الأعداد."
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "يمكنك إنشاء ثوابت مخصصة و الخاصة بك بواسطة 'دالة|دوال مخصصة' لاستخدامها في دوال، سلاسل نقطية، و غيرها. كمثال: g=9.80665،  R=8.31"
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "يمكنك إنشاء دوال مخصصة و الخاصة بك بواسطة 'دالة|دوال مخصصة' لاستخدامها في رسم دوال ، علاقات، و غيرها. كمثال: ‪sinc(x)=if(x=0, 0, sin(x)/x)"
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "عند الحفظ كصورة، هنالك زر 'خيارات' الذي يمكنك من تعيين دقة الصورة. و يعتبر هذا مهما إذا أردت الحصول على صورة ذي دقة عالية."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "يمكن إختيار علامات سلسلة نقطية على شكل سهم، سلسلة نقطية ذات علامات في شكل سهم مع خطوط بين النقاط يمكن استخدامها لرسم الأشعة (الموجهات)."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "اختر طباعة بالألوان (أو تدرج رمادي إذا كانت الطابعة ليست طابعة ملونة) أو تحويل كل الألوان إلى الأسود."
+
+#~ msgid "Print output"
+#~ msgstr "ألوان الطباعة"
+
+#~ msgid "Color"
+#~ msgstr "كل الألوان"
+
+#~ msgid "Black && white"
+#~ msgstr "أبيض و أسود"
+
+#~ msgid "Email: %s"
+#~ msgstr "البريد الإلكتروني: %s"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "جعل غْراف Graph البرنامج الافتراضي لفتح الملفات  (*.grf)."

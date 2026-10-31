@@ -74,13 +74,13 @@ object Form5: TForm5
     Left = 16
     Top = 48
     Width = 322
-    Height = 73
+    Height = 75
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Function equation'
     TabOrder = 1
     DesignSize = (
       322
-      73)
+      75)
     object Label2: TLabel
       Left = 8
       Top = 20
@@ -101,7 +101,7 @@ object Form5: TForm5
     end
     object Edit1: TMyEdit
       Left = 32
-      Top = 16
+      Top = 18
       Width = 282
       Height = 21
       Anchors = [akLeft, akTop, akRight]
@@ -111,7 +111,7 @@ object Form5: TForm5
     end
     object Edit2: TMyEdit
       Left = 32
-      Top = 44
+      Top = 46
       Width = 282
       Height = 21
       Anchors = [akLeft, akTop, akRight]
@@ -122,7 +122,7 @@ object Form5: TForm5
   end
   object GroupBox2: TGroupBox
     Left = 16
-    Top = 128
+    Top = 130
     Width = 322
     Height = 49
     Anchors = [akLeft, akTop, akRight]
@@ -183,7 +183,7 @@ object Form5: TForm5
   end
   object GroupBox4: TGroupBox
     Left = 16
-    Top = 296
+    Top = 298
     Width = 322
     Height = 84
     Anchors = [akLeft, akTop, akRight]
@@ -287,7 +287,7 @@ object Form5: TForm5
         Height = 21
         Hint = 'Choose which line style to use for drawing the graph.'
         TabOrder = 0
-        Anchors = [akLeft]
+        Anchors = [akLeft, akTop, akBottom]
         ItemHeight = 15
       end
       object Label13: TLabel
@@ -338,7 +338,7 @@ object Form5: TForm5
         Width = 81
         Height = 22
         Hint = 'Select the color of the graph.'
-        Anchors = [akLeft]
+        Anchors = [akLeft, akTop, akBottom]
         TabOrder = 2
         AutoDroppedWidth = True
         Selected = clScrollBar
@@ -356,7 +356,7 @@ object Form5: TForm5
         Layout = tlCenter
         ExplicitHeight = 13
       end
-      object Panel1: TPanel
+      object Panel1: TFocusPanel
         Left = 224
         Top = 33
         Width = 88
@@ -364,12 +364,13 @@ object Form5: TForm5
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
+        CenterChildren = True
         DesignSize = (
           88
           34)
         object Edit6: TEdit
           Left = 0
-          Top = 8
+          Top = 6
           Width = 49
           Height = 21
           Hint = 'Width of graph in pixels.'
@@ -378,7 +379,7 @@ object Form5: TForm5
         end
         object UpDown1: TUpDown
           Left = 49
-          Top = 8
+          Top = 6
           Width = 15
           Height = 21
           Anchors = [akTop, akRight]
@@ -403,7 +404,7 @@ object Form5: TForm5
   end
   object GroupBox3: TGroupBox
     Left = 16
-    Top = 240
+    Top = 242
     Width = 321
     Height = 49
     Anchors = [akLeft, akTop, akRight]
@@ -434,7 +435,7 @@ object Form5: TForm5
   end
   object GroupBox5: TGroupBox
     Left = 16
-    Top = 184
+    Top = 186
     Width = 321
     Height = 49
     Anchors = [akLeft, akTop, akRight]

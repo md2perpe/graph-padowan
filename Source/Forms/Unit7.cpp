@@ -32,9 +32,9 @@ __fastcall TForm7::TForm7(TComponent* Owner, TData &AData)
   LineSelect1->Left = Left;
   ExtColorBox1->Left = Left;
 
-  LineSelect1->ItemIndex = Property.DefaultDif.Style;
-  ExtColorBox1->Selected = Property.DefaultDif.Color;
-  UpDown1->Position = Property.DefaultDif.Size;
+  LineSelect1->ItemIndex = Options.DefaultDif.Style;
+  ExtColorBox1->Selected = Options.DefaultDif.Color;
+  UpDown1->Position = Options.DefaultDif.Size;
   FlipForm(this);
 }
 //---------------------------------------------------------------------------
@@ -46,28 +46,18 @@ void __fastcall TForm7::Button1Click(TObject *Sender)
   {
     boost::shared_ptr<TBaseFuncType> Dif(Func->MakeDifFunc());
 
-    Dif->From.Text = ToWString(Edit1->Text);
-    Dif->To.Text = ToWString(Edit2->Text);
+    Dif->SetFrom(TTextValue(Edit1->Text.IsEmpty() ? -INF : MakeFloat(Edit1), ToWString(Edit1->Text)));
+    Dif->SetTo(TTextValue(Edit2->Text.IsEmpty() ? INF : MakeFloat(Edit2), ToWString(Edit2->Text)));
 
-    if(Edit1->Text.IsEmpty())
-      Dif->From.Value = -INF;
-    else
-      Dif->From.Value = MakeFloat(Edit1);
-
-    if(Edit2->Text.IsEmpty())
-      Dif->To.Value = INF;
-    else
-      Dif->To.Value = MakeFloat(Edit2);
-
-    Dif->Size = ToIntDef(Edit4->Text, 1);
-    Dif->Style = LineSelect1->LineStyle;
-    Dif->Color = ExtColorBox1->Selected;
+    Dif->SetSize(ToIntDef(Edit4->Text, 1));
+    Dif->SetStyle(LineSelect1->LineStyle);
+    Dif->SetColor(ExtColorBox1->Selected);
     Dif->SetLegendText(ToWString(Edit3->Text));
     Dif->SetSteps(Func->GetSteps());
 
     Data.Insert(Dif);
     UndoList.Push(TUndoAdd(Dif));
-    Property.DefaultDif.Set(LineSelect1->ItemIndex, ExtColorBox1->Selected, ToIntDef(Edit4->Text, 1));
+    Options.DefaultDif.Set(LineSelect1->ItemIndex, ExtColorBox1->Selected, ToIntDef(Edit4->Text, 1));
     ModalResult = mrOk;
   }
   catch(Func32::EFuncError &E)
@@ -79,8 +69,8 @@ void __fastcall TForm7::Button1Click(TObject *Sender)
 int TForm7::InsertDif(const boost::shared_ptr<TBaseFuncType> &F)
 {
   Func = F;
-  Edit1->Text = Func->From.Text.c_str();
-  Edit2->Text = Func->To.Text.c_str();
+  Edit1->Text = Func->GetFrom().Text.c_str();
+  Edit2->Text = Func->GetTo().Text.c_str();
   return ShowModal();
 }
 //---------------------------------------------------------------------------
@@ -89,6 +79,4 @@ void __fastcall TForm7::Button3Click(TObject *Sender)
   Application->HelpContext(HelpContext);
 }
 //---------------------------------------------------------------------------
-
-
 

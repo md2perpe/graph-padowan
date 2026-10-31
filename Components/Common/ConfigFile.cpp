@@ -12,9 +12,15 @@
 #include <fstream>
 #include "ConfigFile.h"
 #include <sstream>
+#include <boost/version.hpp>
+#ifdef _WIN64
+#include <locale>
+#else
 #include <libs/filesystem/src/utf8_codecvt_facet.hpp>
 #pragma warn -8068 //Disable warning in utf8_codecvt_facet.cpp
 #include <libs/filesystem/src/utf8_codecvt_facet.cpp>
+#endif
+
 //---------------------------------------------------------------------------
 ////////////////////////
 // TConfigFileSection //
@@ -118,10 +124,14 @@ void TConfigFile::LoadFromAnsiString(const std::string &Str)
 //---------------------------------------------------------------------------
 bool TConfigFile::LoadFromUtf8File(const std::wstring &FileName)
 {
-  std::locale utf8_locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet());
   std::wifstream Stream(FileName.c_str());
   if(Stream)
   {
+#ifdef _WIN64
+    std::locale utf8_locale("en_US.UTF-8");
+#else
+    std::locale utf8_locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet());
+#endif
     Stream.imbue(utf8_locale);
     LoadFromStream(Stream);
     return true;
@@ -162,11 +172,14 @@ void TConfigFile::LoadFromStream(std::wistream &Stream)
 //---------------------------------------------------------------------------
 bool TConfigFile::SaveToUtf8File(const std::wstring &FileName) const
 {
-  std::locale utf8_locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet());
-
   std::wofstream File(FileName.c_str());
   if(!File)
     return false;
+#ifdef _WIN64
+    std::locale utf8_locale("en_US.UTF-8");
+#else
+    std::locale utf8_locale(std::locale(), new boost::filesystem::detail::utf8_codecvt_facet());
+#endif
   File.imbue(utf8_locale);
   SaveToStream(File);
   return true;
@@ -202,7 +215,8 @@ void TConfigFile::SetComment(const std::wstring &Str)
 //---------------------------------------------------------------------------
 void TConfigFile::LoadFromString(const std::wstring &Str)
 {
-  LoadFromStream(std::wstringstream(Str));
+  std::wstringstream Stream(Str);
+  LoadFromStream(Stream);
 }
 //---------------------------------------------------------------------------
 std::wstring TConfigFile::GetAsString() const

@@ -5,7 +5,7 @@
 ]>
 <chapter id="Errors">
 	<title>Error messages</title>
-	<indexterm><primary>Errors</primary></indexterm>
+	<indexterm><primary>errors</primary></indexterm>
 	<simplesect>
 		<variablelist>
 			<varlistentry id="Error01">

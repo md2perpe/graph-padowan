@@ -34,14 +34,14 @@ namespace Iprintdialog
 //---------------------------------------------------------------------------
 __fastcall TIPrintDialog::TIPrintDialog(TComponent* Owner)
   : TComponent(Owner), FOnShow(NULL), FOnClose(NULL), FOnPaintSample(NULL),
-    FLeftMargin(25), FTopMargin(75), FScale(100), FCenterOnPage(false), FPrintOutput(poColor),
+    FLeftMargin(25), FTopMargin(75), FScale(100), FCenterOnPage(false),
     FImageWidth(100), FImageHeight(100), PrintFrm(NULL), FCopies(1), FOrientation(poPortrait)
 {
 }
 //---------------------------------------------------------------------------
 bool TIPrintDialog::Execute()
 {
-  Printer()->PrinterIndex; //This will throw EPrinter if no default printer exists
+  int Index = Printer()->PrinterIndex; //This will throw EPrinter if no default printer exists
 
   PrintFrm = new TPrintFrm(NULL, this);
   PrintFrm->Edit1->Text = String(FLeftMargin) / 100.0;
@@ -50,7 +50,6 @@ bool TIPrintDialog::Execute()
   PrintFrm->UpDown4->Position = FScale;
   PrintFrm->CheckBox1->Checked = FCenterOnPage;
   PrintFrm->RadioGroup1->ItemIndex = FOrientation == poLandscape;
-  PrintFrm->RadioGroup2->ItemIndex = FPrintOutput == poBlackWhite;
   Printer()->Orientation = FOrientation;
 
   if(PrintFrm->ShowModal() == mrOk)
@@ -60,7 +59,6 @@ bool TIPrintDialog::Execute()
     FCopies = PrintFrm->Edit3->Text.ToIntDef(1);
     FScale = PrintFrm->Edit4->Text.ToIntDef(100);
     FCenterOnPage = PrintFrm->CheckBox1->Checked;
-    FPrintOutput = PrintFrm->RadioGroup2->ItemIndex ? poBlackWhite : poColor;
     FOrientation = PrintFrm->RadioGroup1->ItemIndex ? poLandscape  : poPortrait;
 
     delete PrintFrm;
@@ -75,7 +73,7 @@ bool TIPrintDialog::Execute()
 //---------------------------------------------------------------------------
 TRect TIPrintDialog::GetDrawingArea()
 {
-  //Calculate margins in inches;
+  //Calculate margins in mm;
   double LeftMargin   = FLeftMargin /100.0;
   double TopMargin    = FTopMargin / 100.0;
 

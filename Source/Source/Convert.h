@@ -10,9 +10,11 @@
 #ifndef ConvertH
 #define ConvertH
 #include <boost/function.hpp>
-#include <math.hpp>
+#include <System.Math.hpp>
 //---------------------------------------------------------------------------
-double MakeFloat(TCustomEdit *Edit, const String &ErrorStr=String(), double Min=-MaxDouble, double Max=MaxDouble);
+double MakeFloat(TCustomEdit *Edit);
+double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, double Min, double Max);
+double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, double Min);
 double MakeFloat(TCustomEdit *Edit, const String &ErrorStr, const boost::function1<bool, double> &Interval);
 int MakeInt(TCustomEdit *Edit, const String &Caption);
 String ComplexToString(const Func32::TComplex &C);
@@ -28,7 +30,7 @@ void StrToFont(const std::wstring &Str, TFont *Font);
 bool CheckLimit(TWinControl *Control, String Str, int Min=-MaxInt, int Max=MaxInt);
 std::pair<int, int> FloatToFract(double f, double Epsilon = 0.01);
 inline std::wstring RoundToString(long double Number, unsigned Decimals) {return RoundToStr(Number, Decimals).c_str();}
-inline std::wstring RoundToString(long double Number, const TData &Data) {return RoundToStr(Number, Property.RoundTo).c_str();}
+inline std::wstring RoundToString(long double Number, const TData &Data) {return RoundToStr(Number, Options.RoundTo).c_str();}
 std::wstring RtfToPlainText(const std::string &Str);
 
 inline int ToIntDef(const std::wstring &Str, int Default) {return StrToIntDef(Str.c_str(), Default);}
@@ -39,6 +41,8 @@ double ToDouble(const std::wstring &Str);
 
 std::string ToString(int Value);
 std::string ToString(unsigned Value);
+std::string ToString(uint64_t Value);
+std::string ToString(double Value);
 std::string ToString(long double Value);
 std::string ToString(const std::wstring &Str);
 std::string ToString(const String &Str);
@@ -47,6 +51,8 @@ std::string ToString(const wchar_t *Str);
 std::wstring ToWString(int Value);
 std::wstring ToWString(unsigned Value);
 std::wstring ToWString(long double Value);
+std::wstring ToWString(uint64_t Value);
+std::wstring ToWString(double Value);
 std::wstring ToWString(const std::string &Str);
 std::wstring ToWString(const String &Str);
 std::wstring ToWString(const char *Str);

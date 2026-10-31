@@ -1,4 +1,4 @@
-/* Copyright 2007 Ivan Johansen
+﻿/* Copyright 2007 Ivan Johansen
  *
  * Func32 is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,6 +104,7 @@ const struct TCompareSymbols : symbols<TElem>
 	TCompareSymbols()
 	{ add("=",  cmEqual)
 			 ("<>", cmNotEqual)
+       (L"≠", cmNotEqual)
 			 ("<",  cmLess)
 			 (">",  cmGreater)
 			 ("<=", cmLessEqual)
@@ -342,8 +343,36 @@ public:
 	}
 };
 
+//Parser that accepts the first character in a symbol
+struct TFirstSymbolChar : public char_parser<TFirstSymbolChar>
+{
+  typedef TFirstSymbolChar self_t;
+  template <typename CharT>
+  bool test(CharT ch) const
+  {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_';
+  }
+};
+const TFirstSymbolChar FirstSymbolChar = TFirstSymbolChar();
+
+//Parser that accepts any character in a symbol following the first.
+struct TSymbolChar : public char_parser<TSymbolChar>
+{
+  typedef TSymbolChar self_t;
+  template <typename CharT>
+  bool test(CharT ch) const
+  {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+      ch == '_' || (ch >= '0' && ch <= '9');
+  }
+};
+const TSymbolChar SymbolChar = TSymbolChar();
+
+rule<wide_phrase_scanner_t> Literal = FirstSymbolChar >> *SymbolChar;
+rule<wide_phrase_scanner_t> MinusSign = L'-' | ch_p(L'\x2212'); //0x2212 = Unicode symbol Minus
+
 //Valid symbols in addition to 0..9, a..z and A..Z.
-static const std::wstring ValidChars = L"+-*/^=_.,()[]{} \x2212\x03C0";
+static const std::wstring ValidChars = L"+-*/^=≠<>_.,()[]{} \x2212\x03C0";
 //---------------------------------------------------------------------------
 /** Parse the string and store the result. The function is strong exception safe.
  *  \param Str: The string to parse
@@ -352,6 +381,20 @@ static const std::wstring ValidChars = L"+-*/^=_.,()[]{} \x2212\x03C0";
  *  \throw EParseError on parsing errors
  */
 void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &Args, const TSymbolList *SymbolList)
+{
+  EParseError E;
+  Parse(Str, Args, SymbolList, E);
+  if(E.ErrorCode != ecNoError)
+    throw E;
+}
+//---------------------------------------------------------------------------
+/** Parse the string and store the result. The function is strong exception safe.
+ *  \param Str: The string to parse
+ *  \param Args: Argument names to the function
+ *  \param SymbolList: List of global symbols
+ *  \param E: Error information. Filled in case of an error
+ */
+void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &Args, const TSymbolList *SymbolList, EParseError &E)
 {
 	TSymbols FuncSymbols = DefaultFuncSymbols;
 	TSymbols NoCaseSymbols = DefaultNoCaseSymbols;
@@ -377,14 +420,11 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 	rule<wide_phrase_scanner_t, TContext::context_t> Term, Expression, Factor, Constant,
 		Function, Parentheses, Power, FactorSeq, Sum, Neg, Relation, SpecialFunc;
 	rule<wide_phrase_scanner_t, TContext2::context_t> Bracket;
-	rule<wide_phrase_scanner_t> Literal, MinusSign, DummyExpression;
 
 	//DummyExpression accepts everything until it finds a comma. It is used to jump
 	//over the first expression in a special function like sum.
-	DummyExpression = *(comment_nest_p('(', ')') | comment_nest_p('[', ']') | ~ch_p(','));
-
-	Literal = alpha_p >> *alnum_p;
-	MinusSign = '-' | ch_p(L'\x2212'); //0x2212 = Unicode symbol Minus
+	rule<wide_phrase_scanner_t> DummyExpression =
+    *(comment_nest_p('(', ')') | comment_nest_p('[', ']') | ~ch_p(','));
 
 	//A constant may not be followed by a alpha-numeric character
 	//A constant may not be followed a a parenthesis
@@ -394,7 +434,7 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 							| NoCaseSymbols[TAssign(Constant.List)]
 							]
 							| Symbols[TAssign(Constant.List)]
-							) >> eps_p - (alnum_p | '_')] >> !(+ch_p('('))[TDoError(ecParAfterConst)]
+							) >> lexeme_d[eps_p - SymbolChar]] >> !(+ch_p('('))[TDoError(ecParAfterConst)]
       | ch_p(L'\x03C0')[TDoOperator(Constant.List, CodePi)];
 
 	Bracket =	ch_p('(')[Bracket.EndBracket = ')'] |
@@ -404,7 +444,7 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 	//A function name may not be followd by character og digit, because they should be part of the name.
 	//If an alphanumeric character is found afterwards, the pushed function is popped
 	Function =
-			lexeme_d[as_lower_d[FuncSymbols[PushFront(Function.List)][Function.Arg = 1] >> eps_p - (alnum_p | '_')]] >>
+			lexeme_d[as_lower_d[FuncSymbols[PushFront(Function.List)][Function.Arg = 1] >> eps_p - SymbolChar]] >>
 					(   Bracket[Function.EndBracket = arg1] >>
 							Expression[TPushBack(Function.List)] >>
 							*(',' >> AssertExpression_p(Expression)[TPushBack(Function.List)])[++Function.Arg] >>
@@ -416,7 +456,7 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 			SpecialFuncSymbols[PushFront(SpecialFunc.List)] >>
 			Bracket[SpecialFunc.EndBracket = arg1] >>
 					(
-							((DummyExpression >> ',' >> Literal[SpecialFunc.Symbols = TempVariables][TSpecialAddVar(SpecialFunc.List, TempVariables)]) >> nothing_p)
+							((DummyExpression >> ',' >> Literal[SpecialFunc.Symbols = var(TempVariables)][TSpecialAddVar(SpecialFunc.List, TempVariables)]) >> nothing_p)
 					|   AssertExpression_p(Expression)[TPushBack(SpecialFunc.List)][var(TempVariables) = SpecialFunc.Symbols] >>
 							',' >> Literal >> ',' >>
 							AssertExpression_p(Expression[TPushBack(SpecialFunc.List)] >> ',') >>
@@ -436,9 +476,9 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 
 	Expression =
 			Relation[Expression.List = arg1] >>
-				 *(   lexeme_d[as_lower_d["and"] >> eps_p - (alnum_p | '_')] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeAnd)])
-					|   lexeme_d[as_lower_d["or"] >> eps_p - (alnum_p | '_')] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeOr)])
-					|   lexeme_d[as_lower_d["xor"] >> eps_p - (alnum_p | '_')] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeXor)])
+				 *(   lexeme_d[as_lower_d["and"] >> eps_p - SymbolChar] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeAnd)])
+					|   lexeme_d[as_lower_d["or"] >> eps_p - SymbolChar] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeOr)])
+					|   lexeme_d[as_lower_d["xor"] >> eps_p - SymbolChar] >> AssertExpression_p(Relation[TDoOperator(Expression.List, CodeXor)])
 					) >> !Literal[TDoError(ecUnknownVar)];
 
   Sum =
@@ -492,7 +532,10 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 	const wchar_t *Begin = &Str[0];
 	const wchar_t *End = &Str[0] + Str.find_last_not_of(L" ") + 1;
 	if(Begin == End)
-		throw EParseError(ecEmptyString);
+  {
+		E = EParseError(ecEmptyString);
+    return;
+  }
 
 	try
 	{
@@ -508,64 +551,62 @@ void TFuncData::Parse(const std::wstring &Str, const std::vector<std::wstring> &
 			{
 				const wchar_t *Ch;
 				for(Ch = Info.stop; std::isalnum(*Ch) || *Ch == L'_'; ++Ch);
-				throw EParseError(ecUnknownVar, Info.stop - Begin, std::wstring(Info.stop, Ch));
+				E = EParseError(ecUnknownVar, Info.stop - Begin, std::wstring(Info.stop, Ch));
 			}
-			if(*Info.stop == ',')
-				throw EParseError(ecCommaError, Info.stop - Begin);
-			if(*Info.stop == 0)
-				throw EParseError(ecUnexpectedEnd, Info.stop - Begin);
-			if(!std::isalnum(*Info.stop) && ValidChars.find_first_of(*Info.stop) == std::wstring::npos)
-				throw EParseError(ecUnknownChar, Info.stop - Begin, std::wstring(1, *Info.stop));
-			if(std::wstring(L"+-/*^\x2212").find_first_of(*Info.stop) != std::string::npos)
-				throw EParseError(ecOperatorError, Info.stop - Begin, std::wstring(1, *Info.stop));
-			if(*Info.stop == ')')
-				throw EParseError(ecInvalidEndPar, Info.stop - Begin);
-			if(*Info.stop == '.' || std::isdigit(*Info.stop))
-				throw EParseError(ecInvalidNumber, Info.stop - Begin);
-			if(*Info.stop == '<' || *Info.stop == '>' || *Info.stop == '=')
-				throw EParseError(ecInvalidCompare, Info.stop - Begin);
-			throw EParseError(ecParseError, Info.stop - Begin);
+			else if(*Info.stop == ',')
+				E = EParseError(ecCommaError, Info.stop - Begin);
+			else if(*Info.stop == 0)
+				E = EParseError(ecUnexpectedEnd, Info.stop - Begin);
+			else if(!std::isalnum(*Info.stop) && ValidChars.find_first_of(*Info.stop) == std::wstring::npos)
+				E = EParseError(ecUnknownChar, Info.stop - Begin, std::wstring(1, *Info.stop));
+			else if(std::wstring(L"+-/*^\x2212").find_first_of(*Info.stop) != std::string::npos)
+				E = EParseError(ecOperatorError, Info.stop - Begin, std::wstring(1, *Info.stop));
+			else if(*Info.stop == ')')
+				E = EParseError(ecInvalidEndPar, Info.stop - Begin);
+			else if(*Info.stop == '.' || std::isdigit(*Info.stop))
+				E = EParseError(ecInvalidNumber, Info.stop - Begin);
+			else if(*Info.stop == '<' || *Info.stop == '>' || *Info.stop == '=')
+				E = EParseError(ecInvalidCompare, Info.stop - Begin);
+			else
+        E = EParseError(ecParseError, Info.stop - Begin);
+      return;
 		}
 
   //      DEBUG_LOG(std::clog << MakeText(Temp2.begin()) << std::endl);
     Data.swap(Temp2);
   }
-  //Should not be necesarry. Bug in BCB6? Error on "sin �" is not caught without
-	catch(parser_error<const EParseError, const wchar_t*> &E)
+  //Should not be necesarry. Bug in BCB6? Error on "sin ¤" is not caught without
+	catch(parser_error<const EParseError, const wchar_t*> &Err)
   {
-    HandleParseError(E.descriptor, E.where, E.where - Begin);
+    E = HandleParseError(Err.descriptor, Err.where, Err.where - Begin);
   }
-  catch(parser_error<EParseError, const wchar_t*> &E)
+  catch(parser_error<EParseError, const wchar_t*> &Err)
   {
-		HandleParseError(E.descriptor, E.where, E.where - Begin);
+		E = HandleParseError(Err.descriptor, Err.where, Err.where - Begin);
   }
-  catch(EFuncError &E)
+  catch(EFuncError &Err)
   {
-    throw;
-  }
-  catch(...)
-  {
-    throw EFuncError(ecInternalError);
+     E = EParseError(Err.ErrorCode, -1, Err.Str);
   }
 }
 //---------------------------------------------------------------------------
-void TFuncData::HandleParseError(const EParseError &E, const wchar_t* Where, unsigned Pos)
+EParseError TFuncData::HandleParseError(const EParseError &E, const wchar_t* Where, unsigned Pos)
 {
 	if(E.ErrorCode != ecArgCountError && std::isalpha(*Where))
 	{
 		const wchar_t *Ch;
 		for(Ch = Where; std::isalnum(*Ch); ++Ch);
-		throw EParseError(ecUnknownVar, Pos, std::wstring(Where, Ch));
+		return EParseError(ecUnknownVar, Pos, std::wstring(Where, Ch));
 	}
 
 //Convert to a comma error if the error was detected at a comma (eg. "(0,8)")
 	if(*Where == ',')
-		throw EParseError(ecCommaError, Pos);
+		return EParseError(ecCommaError, Pos);
 
 	if(!std::isalnum(*Where) && ValidChars.find_first_of(*Where) == std::wstring::npos && *Where != L'\0')
-		throw EParseError(ecUnknownChar, Pos, std::wstring(1, *Where));
+		return EParseError(ecUnknownChar, Pos, std::wstring(1, *Where));
 
-	throw EParseError(E.ErrorCode, Pos, E.Str);
+	return EParseError(E.ErrorCode, Pos, E.Str);
 }
 //---------------------------------------------------------------------------
 } //namespace Func32

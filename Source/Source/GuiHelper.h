@@ -11,6 +11,8 @@
 #define GuiHelperH
 #include <set>
 //---------------------------------------------------------------------------
+namespace Graph
+{
 class TAddView : public TGraphElemVisitor
 {
   std::map<TColor, int> FuncIconMap;
@@ -18,7 +20,7 @@ class TAddView : public TGraphElemVisitor
   int AddFuncImage(TColor Color);
 public:
   void Visit(TBaseFuncType &Func);
-  void Visit(TTan &Tan);
+  void Visit(TTangent &Tan);
   void Visit(TShading &Shade);
   void Visit(TPointSeries &Series);
   void Visit(TTextLabel &Label);
@@ -30,12 +32,12 @@ struct TZoomFit : public TGraphElemVisitor
 {
   const TData &Data;
   const TDraw &Draw;
-  double xMin, xMax, yMin, yMax;
+  long double xMin, xMax, yMin, yMax;
   bool IsChanged() const;
 
   TZoomFit(const TData &AData, const TDraw &ADraw);
   void Visit(TBaseFuncType &Func);
-  void Visit(TTan &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));} //Forward
+  void Visit(TTangent &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));} //Forward
   void Visit(TShading &Shade) {} //Not used
   void Visit(TPointSeries &Series);
   void Visit(TTextLabel &Label) {}  //Not used
@@ -48,7 +50,7 @@ struct TFindColors : public TGraphElemVisitor
   std::set<TColor> &Colors;
   TFindColors(std::set<TColor> &AColors) : Colors(AColors) {}
   void Visit(TBaseFuncType &Func);
-  void Visit(TTan &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));} //Forward
+  void Visit(TTangent &Tan) {Visit(static_cast<TBaseFuncType&>(Tan));} //Forward
   void Visit(TShading &Shade);
   void Visit(TPointSeries &Series);
   void Visit(TTextLabel &Label);
@@ -57,4 +59,6 @@ struct TFindColors : public TGraphElemVisitor
 };
 
 void FindColors(const TData &Data, std::set<TColor> &Colors);
+} //namespace Graph
+//---------------------------------------------------------------------------
 #endif

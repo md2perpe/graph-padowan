@@ -7,6 +7,7 @@
 	<indexterm><primary>questions</primary></indexterm>
 	<indexterm><primary>tips</primary></indexterm>
 	<indexterm><primary>tricks</primary></indexterm>
+	<indexterm><primary><markup>Windows</markup></primary></indexterm>
 	<para>
 		<qandaset>
 			<?dbfo label-width="$LabelWidth"?>
@@ -18,14 +19,13 @@
 				</question>
 				<answer>
 					<para>
-						Graph requires Microsoft Windows 2000 or newer.
+						Graph requires <markup>Microsoft Windows Vista</markup> or newer.
 						It has been tested under
 						<markup><simplelist type="inline">
 						  <?dbchoice choice="and"?>
-							<member><application>Windows 2000</application></member>
-							<member><application>Windows XP</application></member>
-							<member><application>Windows Vista</application></member>
 							<member><application>Windows 7</application></member>
+							<member><application>Windows 8</application></member>
+							<member><application>Windows 10</application></member>
 						</simplelist></markup>.
 					</para>
 				</answer>
@@ -47,12 +47,13 @@
 			<qandaentry>
 				<question>
 					<para>
-						Will Graph run on a Macintosh?
+						Will Graph run on a Mac?
 					</para>
 				</question>
 				<answer>
 					<para>
-						As with the above, you cannot run Graph directly on a Mac. But it should be possible with some kind of Windows emulator.
+						As with the above, you cannot run Graph directly on a Mac. 
+            However a bundle of Graph with Wine is available from the <ulink url="http://www.padowan.dk/mac/">website</ulink>.
 					</para>
 				</answer>
 			</qandaentry>
@@ -209,6 +210,25 @@
 			<qandaentry>
 				<question>
 					<para>
+						Why do circles look like ellipses?
+					</para>
+				</question>
+				<answer>
+					<para>
+						That is probably because the axes are not equally scaled.
+						You can either change the size of the window until the axes scales equally or select
+						<menuchoice>
+							<guimenu>Zoom</guimenu>
+							<guimenuitem>Square</guimenuitem>
+						</menuchoice>
+						in the menu to change the y-axis to scale equal to the x-axis.
+					</para>
+				</answer>
+			</qandaentry>
+
+			<qandaentry>
+				<question>
+					<para>
 						How do I calculate the area between two functions?
 					</para>
 				</question>
@@ -300,19 +320,6 @@
 				<answer>
 					<para>
 						You can choose to save as PDF in the <xref linkend="SaveImageDialog" /> dialog.
-					</para>
-				</answer>
-			</qandaentry>
-
-			<qandaentry>
-				<question>
-					<para>
-						Why will the program not start under Windows 95?
-					</para>
-				</question>
-				<answer>
-					<para>
-						Graph no longer supports Windows 95. The last version to run under Windows 95 was Graph 4.2.
 					</para>
 				</answer>
 			</qandaentry>

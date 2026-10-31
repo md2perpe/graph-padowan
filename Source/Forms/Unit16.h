@@ -21,6 +21,7 @@
 #include <ComCtrls.hpp>
 #include "ExtColorBox.h"
 #include "MyEdit.h"
+#include <Vcl.Imaging.pngimage.hpp>
 //---------------------------------------------------------------------------
 class TForm16 : public TForm
 {

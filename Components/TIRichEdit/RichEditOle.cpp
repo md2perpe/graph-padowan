@@ -8,12 +8,8 @@
 #pragma hdrstop
 #include "RichEditOle.h"
 #include "Debug.h"
-#ifdef _DEBUG
-#undef _ASSERTE
-#endif
-#include <Atl/atlbase.h>
+#include "utilcls.h"
 #pragma package(smart_init)
-#pragma link "Debug"
 //---------------------------------------------------------------------------
 TRichEditOle::TRichEditOle(TCustomRichEdit* ARichEdit)
   : RichEditOle(NULL), RichEdit(ARichEdit), RichEditCallback(ARichEdit)
@@ -233,8 +229,7 @@ bool TRichEditOle::InsertObject()
     return false;
 
 	//Make sure client site is valid
-	CComPtr<IOleClientSite>  ClientSite;
-  ClientSite.Attach(GetClientSite());
+	TComInterface<IOleClientSite>  ClientSite(GetClientSite());
 	if(!ClientSite)
     throw EOleError("IOleClientSite interface is not valid.");
 

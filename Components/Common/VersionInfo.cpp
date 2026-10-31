@@ -67,9 +67,10 @@ void TVersionInfo::LoadVersionInfo()
   if(GetFileVersionInfo(FFileName.c_str(), 0, Data.size(), &Data[0]))
   {
     //Get pointer to file info structure
-    VS_FIXEDFILEINFO *FileInfo;//Pointer to file info structure
-    if(VerQueryValueA(&Data[0],"\\", &(void*)FileInfo, &puLen))
+    void *Ptr;
+    if(VerQueryValueA(&Data[0],"\\", &Ptr, &puLen))
     {
+      VS_FIXEDFILEINFO *FileInfo = static_cast<VS_FIXEDFILEINFO*>(Ptr);//Pointer to file info structure
       FFileVersion.VersionMS = FileInfo->dwFileVersionMS;
       FFileVersion.VersionLS = FileInfo->dwFileVersionLS;
       FProductVersion.VersionMS = FileInfo->dwProductVersionMS;
@@ -97,8 +98,6 @@ void TVersionInfo::LoadVersionInfo()
 //---------------------------------------------------------------------------
 std::wstring TVersionInfo::StringValue(const std::wstring &Ident) const
 {
-  unsigned int puLen;//Length of file info structure
-  VS_FIXEDFILEINFO *FileInfo;//Pointer to file info structure
   DWORD Dummy;
 
   //Get size of Resource data
@@ -119,16 +118,20 @@ std::wstring TVersionInfo::StringValue(const std::wstring &Ident) const
     WORD charset;
   }m_translation;
 
-  if(!VerQueryValue(&Data[0], L"VarFileInfo\\Translation", &(void*)FileInfo, &puLen))
+  unsigned puLen;//Length of file info structure
+  void *Ptr;
+  if(!VerQueryValue(&Data[0], L"VarFileInfo\\Translation", &Ptr, &puLen))
     return L"";
+
+  VS_FIXEDFILEINFO *FileInfo = static_cast<VS_FIXEDFILEINFO*>(Ptr);//Pointer to file info structure
 
   m_translation = *(TRANSLATION*)FileInfo;
   // *** Now we are ready to Build Queries ***
   String Query = L"StringFileInfo\\" + IntToHex(m_translation.langID, 4) + IntToHex(m_translation.charset, 4) + "\\" + Ident.c_str();
-  if(!VerQueryValue(&Data[0], Query.c_str(), &(void*)FileInfo, &puLen))
+  if(!VerQueryValue(&Data[0], Query.c_str(), &Ptr, &puLen))
     return L"";
 
-  std::wstring Str = reinterpret_cast<wchar_t*>(FileInfo);
+  std::wstring Str = static_cast<wchar_t*>(Ptr);
   return Str;
 }
 //---------------------------------------------------------------------------
@@ -236,12 +239,12 @@ int TVersionInfo::GetLanguage() const
   {
     WORD langID;
     WORD charset;
-  }m_translation;
+  };
 
-  VS_FIXEDFILEINFO *FileInfo;//Pointer to file info structure
-  VerQueryValueA(&Data.front(), "VarFileInfo\\Translation", &(void*)FileInfo, &puLen);
-  m_translation = *(TRANSLATION*)FileInfo;
-  return m_translation.langID;
+  void *Ptr;
+  VerQueryValueA(&Data.front(), "VarFileInfo\\Translation", &Ptr, &puLen);
+  TRANSLATION *m_translation = static_cast<TRANSLATION*>(Ptr);
+  return m_translation->langID;
 }
 //---------------------------------------------------------------------------
 std::wstring TVersionInfo::GetLanguageName() const

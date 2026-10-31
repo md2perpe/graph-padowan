@@ -11,12 +11,9 @@
 #include <Grids.hpp>
 #include <vector>
 #include "VclObject.h"
+#include "Gridintf.hpp"
 //---------------------------------------------------------------------------
-typedef void __fastcall (__closure *TEditorKeyPressEvent)(TInplaceEdit *InplaceEdit, Char &Key);
-typedef void __fastcall (__closure *TGetTextEvent)(System::TObject* Sender, long ACol, long ARow, String &Value);
-typedef void __fastcall (__closure *TSetTextEvent)(System::TObject* Sender, long ACol, long ARow, const String &Value);
-
-class TGrid : public TDrawGrid
+class TGrid : public TBaseGrid
 {
   friend class TMyInplaceEdit;
   void __fastcall InplaceEditMouseMove(TObject *Sender,TShiftState Shift,int X,int Y);
@@ -32,9 +29,6 @@ class TGrid : public TDrawGrid
   TPopupMenu *FPopupMenu;
   bool FAutoAddRows;
   bool FExportFixedRows;
-  TEditorKeyPressEvent FOnEditorKeyPress;
-  TGetTextEvent FOnGetText;
-  TSetTextEvent FOnSetText;
   TPopupMenu *FEditorPopupMenu;
   int EditUpdate; //>0 indicates update triggered from change in Inplace Editor
 
@@ -74,8 +68,8 @@ class TGrid : public TDrawGrid
   String ExportText(wchar_t Delimiter, wchar_t DecimalSeparator);
   void __fastcall SetEditorPopupMenu(TPopupMenu *Menu);
   TGridRect GetCompleteGridRect();
-	String DoGetText(unsigned ACol, unsigned ARow);
-  void DoSetText(unsigned ACol, unsigned ARow, const String &Value);
+	String __fastcall DoGetText(int ACol, int ARow);
+  void __fastcall DoSetText(int ACol, int ARow, String Value);
   DYNAMIC void __fastcall ChangeScale(int M, int D);
   TStrings* __fastcall GetTitleCaptions() {return FTitleCaptions;}
   void __fastcall SetTitleCaptions(TStrings *Strings);
@@ -94,24 +88,22 @@ END_MESSAGE_MAP(TDrawGrid)
 
 public:
   __fastcall TGrid(TComponent* Owner);
-  void SelectAll();
-  void ClearAll();
-  void ClearSelection();
-  void CopyToClipboard(wchar_t DecimalSeparator);
-  void CutToClipboard(wchar_t DecimalSeparator);
-  void PasteFromClipboard(wchar_t DecimalSeparator, wchar_t Separator=0);
-  bool CanCopy();
-	bool ImportFromFile(const String &FileName, wchar_t DecimalSeparator, wchar_t Separator=0);
-	void Import(std::istream &Stream, wchar_t DecimalSeparator, wchar_t Separator=0);
-  bool ExportToFile(const String &FileName, wchar_t Delimiter, wchar_t DecimalSeparator, bool Utf8=false);
-  void AutoSizeCol(int ColIndex);
-  void LastCell();
-  void NextCell();
-  void InsertRows(int Index, int Count);
-  void RemoveRows(int Index, int Count);
-  void SetCursorPos(int Pos);
-
-  __property String Cells[unsigned ACol][unsigned ARow] = {read=DoGetText, write=DoSetText};
+  void __fastcall SelectAll();
+  void __fastcall ClearAll();
+  void __fastcall ClearSelection();
+  void __fastcall CopyToClipboard(wchar_t DecimalSeparator);
+  void __fastcall CutToClipboard(wchar_t DecimalSeparator);
+  void __fastcall PasteFromClipboard(wchar_t DecimalSeparator, wchar_t Separator=0);
+  bool __fastcall CanCopy();
+	bool __fastcall ImportFromFile(String FileName, wchar_t DecimalSeparator, wchar_t Separator=0);
+	void __fastcall Import(std::istream &Stream, wchar_t DecimalSeparator, wchar_t Separator=0);
+  bool __fastcall ExportToFile(String FileName, wchar_t Delimiter, wchar_t DecimalSeparator, bool Utf8=false);
+  void __fastcall AutoSizeCol(int ColIndex);
+  void __fastcall LastCell();
+  void __fastcall NextCell();
+  void __fastcall InsertRows(int Index, int Count);
+  void __fastcall RemoveRows(int Index, int Count);
+  void __fastcall SetCursorPos(int Pos);
 
 __published:
   __property bool SelectCols = {read=FSelectCols, write=FSelectCols, default=true};
@@ -124,10 +116,6 @@ __published:
   __property bool ExportFixedRows = {read=FExportFixedRows, write=FExportFixedRows, default=true};
   __property TPopupMenu* EditorPopupMenu = {read=FEditorPopupMenu, write=SetEditorPopupMenu, default=NULL};
   __property TStrings* TitleCaptions = {read=GetTitleCaptions, write=SetTitleCaptions};
-
-  __property TEditorKeyPressEvent OnEditorKeyPress = {read=FOnEditorKeyPress, write=FOnEditorKeyPress, default=NULL};
-  __property TGetTextEvent OnGetText = {read=FOnGetText, write=FOnGetText, default=NULL};
-  __property TSetTextEvent OnSetText = {read=FOnSetText, write=FOnSetText, default=NULL};
 };
 
 class TMyInplaceEdit : public TInplaceEdit

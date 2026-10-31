@@ -16,6 +16,7 @@
 #pragma link "MyEdit"
 #pragma link "CheckBoxEx"
 #pragma link "GridPanelEx"
+#pragma link "FocusPanel"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TForm3::TForm3(TComponent* Owner, TData &AData)
@@ -23,6 +24,10 @@ __fastcall TForm3::TForm3(TComponent* Owner, TData &AData)
 {
   Translate();
   ScaleForm(this);
+
+  Button7->Height = Edit13->Height + 2;
+  Button7->Width = Edit13->Height + 2;
+  Button7->Top = Edit13->Top - 1;
 
   const TAxes &Axes = Data.Axes;
   Edit1->Text = RoundToStr(Axes.xAxis.Min, 8);
@@ -71,8 +76,6 @@ __fastcall TForm3::TForm3(TComponent* Owner, TData &AData)
   NumberFont = Axes.NumberFont;
   LegendFont = Axes.LegendFont;
 
-  Panel1->Align = alClient;
-  Panel2->Align = alClient;
   FlipForm(this);
   UpdateEnabledControls();
 }
@@ -89,17 +92,18 @@ void TForm3::Translate()
 //---------------------------------------------------------------------------
 void __fastcall TForm3::Button1Click(TObject *Sender)
 {
-  TAxis xAxis;
-  TAxis yAxis;
+  //Make a copy of the original axes in case there are settings we do not overwrite
+  TAxis xAxis = Data.Axes.xAxis;
+  TAxis yAxis = Data.Axes.yAxis;
 
   xAxis.Min = MakeFloat(Edit1);
   xAxis.Max = MakeFloat(Edit2);
   yAxis.Min = MakeFloat(Edit7);
   yAxis.Max = MakeFloat(Edit8);
-  xAxis.TickUnit = MakeFloat(Edit3);
-  yAxis.TickUnit = MakeFloat(Edit9);
-  xAxis.GridUnit = MakeFloat(Edit4);
-  yAxis.GridUnit = MakeFloat(Edit10);
+  xAxis.TickUnit = CheckBox4->Checked ? 10 : MakeFloat(Edit3);
+  yAxis.TickUnit = CheckBox11->Checked ? 10 : MakeFloat(Edit9);
+  xAxis.GridUnit = CheckBox5->Checked ? 10 : MakeFloat(Edit4);
+  yAxis.GridUnit = CheckBox12->Checked ? 10 : MakeFloat(Edit10);
   xAxis.AxisCross = MakeFloat(Edit6);
   yAxis.AxisCross = MakeFloat(Edit12);
   RangeCheck(xAxis.Min < xAxis.Max, Edit2, LoadRes(500));
@@ -118,7 +122,7 @@ void __fastcall TForm3::Button1Click(TObject *Sender)
   {
     RangeCheck(xAxis.Min>0, Edit1, LoadRes(506));
 
-    if(RadioGroup1->ItemIndex != 1)
+    if(RadioGroup1->ItemIndex == 0)
       yAxis.AxisCross = 1;
     else
       RangeCheck(yAxis.AxisCross>0, Edit12, LoadRes(507));
@@ -129,7 +133,7 @@ void __fastcall TForm3::Button1Click(TObject *Sender)
   {
     RangeCheck(yAxis.Min>0, Edit7, LoadRes(508));
 
-    if(RadioGroup1->ItemIndex != 1)
+    if(RadioGroup1->ItemIndex == 0)
       xAxis.AxisCross = 1;
     else
       RangeCheck(xAxis.AxisCross>0, Edit6, LoadRes(509));
@@ -219,7 +223,8 @@ void TForm3::RangeCheck(bool Condition, TWinControl *WinControl, const String &S
 			if(TTabSheet *TabSheet = dynamic_cast<TTabSheet*>(Parent))
 			{
 				PageControl1->ActivePage = TabSheet;
-				WinControl->SetFocus();
+        if(WinControl->Enabled)
+  				WinControl->SetFocus();
 			}
 		MessageBox(Str, LoadRes(RES_ERROR_IN_VALUE));
     throw EAbort("");
@@ -231,21 +236,21 @@ void __fastcall TForm3::Button3Click(TObject *Sender)
   Application->HelpContext(HelpContext);
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm3::BitBtn1Click(TObject *Sender)
+void __fastcall TForm3::Button7Click(TObject *Sender)
 {
   FontDialog1->Font->Assign(TitleFont);
   if(FontDialog1->Execute())
     TitleFont->Assign(FontDialog1->Font);
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm3::BitBtn2Click(TObject *Sender)
+void __fastcall TForm3::Button4Click(TObject *Sender)
 {
   FontDialog1->Font->Assign(LabelFont);
   if(FontDialog1->Execute())
     LabelFont->Assign(FontDialog1->Font);
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm3::BitBtn3Click(TObject *Sender)
+void __fastcall TForm3::Button5Click(TObject *Sender)
 {
   FontDialog1->Font->Assign(NumberFont);
   if(FontDialog1->Execute())
@@ -262,9 +267,6 @@ void TForm3::UpdateEnabledControls()
   Edit10->Enabled = !CheckBox12->Checked;
   Edit11->Enabled = CheckBox10->Checked;
 
-  Edit6->Enabled = RadioGroup1->ItemIndex == 1;
-  Edit12->Enabled = RadioGroup1->ItemIndex == 1;
-
   CheckBox17->Enabled = CheckBox2->Checked;
   CheckBox18->Enabled = CheckBox9->Checked;
 }
@@ -274,7 +276,7 @@ void __fastcall TForm3::CheckBoxClick(TObject *Sender)
   UpdateEnabledControls();
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm3::BitBtn4Click(TObject *Sender)
+void __fastcall TForm3::Button6Click(TObject *Sender)
 {
   FontDialog1->Font->Assign(LegendFont);
   if(FontDialog1->Execute())
@@ -285,11 +287,6 @@ void __fastcall TForm3::FormShow(TObject *Sender)
 {
   PageControl1->ActivePageIndex = 0;
   Edit1->SetFocus();
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm3::RadioGroup1Click(TObject *Sender)
-{
-  UpdateEnabledControls();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm3::CheckBox1Click(TObject *Sender)
@@ -331,5 +328,6 @@ void __fastcall TForm3::CheckBox15Click(TObject *Sender)
   RadioGroup3->Enabled = CheckBox15->Checked;
 }
 //---------------------------------------------------------------------------
+
 
 

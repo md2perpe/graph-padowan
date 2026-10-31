@@ -50,6 +50,7 @@ public:
   ~TUndoList();
   void Undo();
   void Redo();
+  void Pop(); //Pop the top item without undo; Used to cancel a call to Push()
   bool CanUndo() const;
   bool CanRedo() const;
   void Clear();
@@ -63,6 +64,15 @@ public:
   void Push(const TFunctor &Functor)
   {
     PushItem(boost::shared_ptr<TUndoItemBase>(new TUndoItem<TFunctor>(Functor)), usIdle);
+  }
+
+  template<class TFunctor> const TFunctor* Peek()
+  {
+    if(UndoStack.empty())
+      return NULL;
+    if(TUndoItem<TFunctor> *Item = dynamic_cast<TUndoItem<TFunctor>*>(UndoStack.back().get()))
+      return &Item->Functor;
+    return NULL;
   }
 };
 //---------------------------------------------------------------------------

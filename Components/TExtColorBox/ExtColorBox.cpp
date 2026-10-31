@@ -126,7 +126,7 @@ void __fastcall TExtColorBox::SetSelected(TColor Value)
 
   int Index = -1;
   for(int I = 0; I < Items->Count; I++)
-    if(reinterpret_cast<TColor>(Items->Objects[I]) == Value)
+    if(reinterpret_cast<int>(Items->Objects[I]) == Value)
     {
       Index = I;
       break;
@@ -139,11 +139,13 @@ void __fastcall TExtColorBox::SetSelected(TColor Value)
   }
   else
     ItemIndex = Index;
+  if(Parent)
+    Parent->Realign();
 }
 //---------------------------------------------------------------------------
 TColor __fastcall TExtColorBox::GetSelected()
 {
-  return ItemIndex == -1 ? NoColorSelected : reinterpret_cast<TColor>(Items->Objects[ItemIndex]);
+  return ItemIndex == -1 ? NoColorSelected : static_cast<TColor>(reinterpret_cast<int>(Items->Objects[ItemIndex]));
 }
 //---------------------------------------------------------------------------
 void __fastcall TExtColorBox::DrawItem(int Index, const Types::TRect &Rect, TOwnerDrawState State)
@@ -155,7 +157,7 @@ void __fastcall TExtColorBox::DrawItem(int Index, const Types::TRect &Rect, TOwn
     LRect.Right = LRect.Height() + LRect.Left;
 
   InflateRect(&LRect, -1, -1);
-  TColor Color = reinterpret_cast<TColor>(Items->Objects[Index]);
+  TColor Color = static_cast<TColor>(reinterpret_cast<int>(Items->Objects[Index]));
   if(Color == clDefault)
     Color = clWhite;
   Canvas->Brush->Color = Color;

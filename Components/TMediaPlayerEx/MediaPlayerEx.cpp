@@ -138,7 +138,7 @@ void __fastcall TMediaPlayerEx::SetDisplay(TWinControl *Control)
   {
     MCI_DGV_WINDOW_PARMS AWindowParm;
     DWORD Flags = MCI_WAIT | MCI_DGV_WINDOW_HWND;
-    AWindowParm.hWnd = (Control != NULL) ? Control->Handle : reinterpret_cast<HANDLE>(MCI_DGV_WINDOW_DEFAULT);
+    AWindowParm.hWnd = (Control != NULL) ? Control->Handle : reinterpret_cast<HWND>(MCI_DGV_WINDOW_DEFAULT);
     MciCheck(mciSendCommand(DeviceID, MCI_WINDOW, Flags, reinterpret_cast<DWORD>(&AWindowParm)));
   }
 }
@@ -263,7 +263,7 @@ void TMediaPlayerEx::Play(bool Wait)
   if(Notify)
     Flags |= MCI_NOTIFY;
   if(Wait)
-    Flags != MCI_WAIT;
+    Flags |= MCI_WAIT;
   if(Repeat)
     Flags |= MCI_DGV_PLAY_REPEAT;
   if(Reverse)

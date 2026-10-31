@@ -46,6 +46,29 @@ long double Eval(const std::wstring &Expr, const TSymbolList &SymbolList, TTrigo
   return Func(0);
 }
 //---------------------------------------------------------------------------
+/** Evaluates a function expression using real numbers. This will not throw on errors but
+ *  return NaN instead.
+ *  \param Expr: Expression to evaluate; Is not allowed to contain any variables
+ *  \param SymbolList: List of custom functions/constants
+ *  \param Trig: Indicates weither trignometric functions are calculated in radians or degrees
+ *  \return The result of the evaluated expression. NaN on failur.
+ */
+long double EvalNoThrow(const std::wstring &Expr, const TSymbolList &SymbolList, TTrigonometry Trig)
+{
+  TFuncData FuncData;
+  EParseError E;
+  TArgType Args;
+  FuncData.Parse(Expr, Args, &SymbolList, E);
+  if(E.ErrorCode != ecNoError)
+  	return std::numeric_limits<long double>::quiet_NaN();
+
+  ECalcError E2;
+  long double Result = FuncData.Calc<long double>(NULL, Trig, E2);
+  if(E2.ErrorCode != ecNoError)
+  	return std::numeric_limits<long double>::quiet_NaN();
+  return Result;
+}
+//---------------------------------------------------------------------------
 /** Evaluates a function expression using real numbers.
  *  \param Expr: Expression to evaluate
  *  \param x:    This is the value of the variable if such is found
@@ -292,6 +315,13 @@ std::wstring ToLower(const std::wstring &Str)
   return Result;
 }
 //---------------------------------------------------------------------------
+std::string ToString(int Value)
+{
+  std::ostringstream Stream;
+  Stream << Value;
+  return Stream.str();
+}
+//---------------------------------------------------------------------------
 bool IsValidName(const std::wstring &Name)
 {
   if(Name.empty())
@@ -320,6 +350,15 @@ bool IsValidName(const std::wstring &Name)
 //---------------------------------------------------------------------------
 bool IsEqual(long double a, long double b)
 {
+  if(a == b)
+    return true;
+
+  //Speacial handling if one of the numbers are exact zero, we check if the other one is very close to zero
+  if(a == 0)
+    return IsZero(b);
+  if(b == 0)
+    return IsZero(a);
+
 	if(boost::math::isnan(a) && boost::math::isnan(b))
 		return true;
 
@@ -330,13 +369,40 @@ bool IsEqual(long double a, long double b)
 	frexp(a, &a_exp);
 	frexp(b, &b_exp);
 	frexp(a - b, &exp);
-	return IsZero(a-b) || (a_exp == b_exp && std::abs(exp - a_exp) > 40);
+	return IsZero(a - b) || (a_exp == b_exp && std::abs(exp - a_exp) > 40);
 }
 //---------------------------------------------------------------------------
-void LogDebugString(const char *Str, const char *Str2)
+/** Function returning a description of the error.
+ */
+const char* EFuncError::what() const throw()
 {
-	std::clog << Str << Str2 << std::endl;
-	BOOST_ASSERT(0);
+  ErrorStr = "Func32::EFuncError(" + ToString(ErrorCode);
+  if(!Str.empty())
+    ErrorStr += std::string(", ") + std::string(Str.begin(), Str.end());
+  ErrorStr += ")";
+  return ErrorStr.c_str();
+}
+//---------------------------------------------------------------------------
+/** Function returning a description of the error.
+ */
+const char* EParseError::what() const throw()
+{
+  ErrorStr = "Func32::EParseError(" + ToString(ErrorCode) + ", " + ToString(ErrorPos);
+  if(!Str.empty())
+    ErrorStr += std::string(", ") + std::string(Str.begin(), Str.end());
+  ErrorStr += ")";
+  return ErrorStr.c_str();
+}
+//---------------------------------------------------------------------------
+/** Function returning a description of the error.
+ */
+const char* ECalcError::what() const throw()
+{
+  ErrorStr = "Func32::ECalcError(" + ToString(ErrorCode);
+  if(!Str.empty())
+    ErrorStr += std::string(", ") + std::string(Str.begin(), Str.end());
+  ErrorStr += ")";
+  return ErrorStr.c_str();
 }
 //---------------------------------------------------------------------------
 } //namespace Func32

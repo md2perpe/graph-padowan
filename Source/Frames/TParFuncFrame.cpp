@@ -12,6 +12,7 @@
 #include <float.h>
 #include "Unit1.h"
 #include "TParFuncFrame.h"
+#include <cmath>
 //---------------------------------------------------------------------------
 #pragma link "MyEdit"
 #pragma link "UpDownEx"
@@ -30,16 +31,15 @@ void TParFuncFrame::Eval(const TGraphElem *Elem)
     Clear();
 
     ErrorPrefix = "t: ";
-    long double t = Form1->Data.Calc(ToWString(Edit1->Text));
-    long double x = 0;
-    long double y = 0;
+    bool UseReal = Options.ComplexFormat == cfReal;
+    std::wstring xStr = ToWString(Edit1->Text);
+    Func32::TComplex t = UseReal ? Func32::TComplex(Form1->Data.Calc(xStr)) : Form1->Data.CalcComplex(xStr);
+    Func32::TComplex x, y;
 
     try
     {
-      Func32::TComplex xTemp = Func->GetFunc().CalcX(Func32::TComplex(t));
-      x = real(xTemp);
-      if(!imag(xTemp))
-        Edit2->Text = RoundToStr(x);
+      x = UseReal ? Func32::TComplex(Func->GetFunc().CalcX(real(t))) : Func->GetFunc().CalcX(t);
+      Edit2->Text = ComplexToString(x);
     }
     catch(Func32::ECalcError&)
     {
@@ -47,27 +47,25 @@ void TParFuncFrame::Eval(const TGraphElem *Elem)
 
     try
     {
-      Func32::TComplex yTemp = Func->GetFunc().CalcY(Func32::TComplex(t));
-      y = real(yTemp);
-      if(!imag(yTemp))
-        Edit3->Text = RoundToStr(y);
+      y = UseReal ? Func32::TComplex(Func->GetFunc().CalcY(real(t))) : Func->GetFunc().CalcY(t);
+      Edit3->Text = ComplexToString(y);
     }
     catch(Func32::ECalcError&)
     {
     }
 
-    if(!Edit2->Text.IsEmpty() && !Edit3->Text.IsEmpty())
-      Form1->SetCrossPos(x, y);
+    if(!Edit2->Text.IsEmpty() && !Edit3->Text.IsEmpty() &&
+	  std::abs(x.imag()) < MIN_ZERO && std::abs(y.imag()) < MIN_ZERO)
+      Form1->SetCrossPos(real(x), real(y));
 
     Func32::TParamFunc Dif = Func->GetFunc().MakeDif();
-    long double xDif = 0;
-    long double yDif = 0;
+    Func32::TComplex xDif = 0, yDif = 0;
 
     try
     {
-      xDif = Dif.CalcX(t);
+      xDif = UseReal ? Func32::TComplex(Dif.CalcX(real(t))) : Dif.CalcX(t);
       if(!Edit2->Text.IsEmpty())
-        Edit4->Text = RoundToStr(xDif);
+        Edit4->Text = ComplexToString(xDif);
     }
     catch(Func32::ECalcError&)
     {
@@ -75,17 +73,17 @@ void TParFuncFrame::Eval(const TGraphElem *Elem)
 
     try
     {
-      yDif = Dif.CalcY(t);
+      yDif = UseReal ? Func32::TComplex(Dif.CalcY(real(t))) : Dif.CalcY(t);
       if(!Edit3->Text.IsEmpty())
-        Edit5->Text = RoundToStr(yDif);
+        Edit5->Text = ComplexToString(yDif);
     }
     catch(Func32::ECalcError&)
     {
     }
 
     if(!Edit4->Text.IsEmpty() && !Edit5->Text.IsEmpty())
-      if(xDif)
-        Edit6->Text = RoundToStr(yDif/xDif);
+      if(xDif != Func32::TComplex(0,0))
+        Edit6->Text = ComplexToString(yDif/xDif);
   }
 }
 //---------------------------------------------------------------------------
@@ -118,7 +116,7 @@ void TParFuncFrame::SetPoint(const TGraphElem *Elem, int X, int Y)
     if(_isnan(t))
       Edit1->Text = "";
     else
-      Edit1->Text = RoundToStr(t, ComboBox1->ItemIndex == 0 ? Property.RoundTo : std::max(8, Property.RoundTo));
+      Edit1->Text = RoundToStr(t, ComboBox1->ItemIndex == 0 ? Options.RoundTo : std::max(8, Options.RoundTo));
   }
 }
 //---------------------------------------------------------------------------

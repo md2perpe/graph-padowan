@@ -2,7 +2,18 @@ import os
 import shutil
 import sys
 
+def ReplaceStrings(FileName, Dict):
+    if Dict:
+        File = open(FileName)
+        Str = File.read()
+        for Key in Dict:
+            Str = Str.replace(Key, Dict[Key])
+        File.close()
+        File = open(FileName, "w")
+        File.write(Str)
+
 ToolsDir = "..\\..\\Tools\\"
+ReplaceDict = {"WIKI": "http://docwiki.embarcadero.com/Libraries/XE6/en"}
 
 print "Copying image files..."
 os.system("XCopy ..\\Images\\Common\\GraphIcon.png ..\\Temp\\Images\\ /I /Q /Y > NUL")
@@ -18,6 +29,7 @@ os.system("xsltproc.exe --output ..\\xsl\\titlepage.xsl " + ToolsDir + "xsl\\tem
 os.system("xmllint --nonet --xinclude --output ..\\Temp\PluginDoc.tmp PluginDoc.xml")
 
 InFile = "..\\Temp\\PluginDoc.tmp"
+ReplaceStrings(InFile, ReplaceDict)
 
 print "Creating PDF file..."
 
@@ -29,7 +41,7 @@ os.system(ToolsDir + "fop\\fop.bat -q -c %s -fo ..\\Temp\\PluginDoc.fo -pdf ..\\
 
 print "Creating CHM file..."
 StyleSheet = "..\\xsl\\htmlhelp.xsl"
-os.system('xsltproc.exe --nonet --xinclude --stringparam htmlhelp.chm ..\\PluginDoc.chm --stringparam htmlhelp.title "Script Engine Documentation" --stringparam htmlhelp.use.hhk 1 --output ..\\Temp\\PluginDoc %s %s'  % (StyleSheet, InFile))
+os.system('xsltproc.exe --nonet --xinclude --stringparam htmlhelp.chm ..\\PluginDoc.chm --stringparam htmlhelp.title "Script Engine Documentation" --stringparam htmlhelp.use.hhk 1 --stringparam htmlhelp.default.topic "Overview.html" --output ..\\Temp\\PluginDoc %s %s'  % (StyleSheet, InFile))
 os.system("hhc.exe ..\\Temp\\htmlhelp.hhp > NUL")
 
 print "Creating HTML chunks..."

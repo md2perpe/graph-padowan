@@ -2,22 +2,54 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Graph\n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-07 21:22+0100\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:21+0200\n"
 "Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
 "Language-Team: Graph Korean Translation Team <xgate32@hotmail.com>\n"
-"Language: \n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: dxgettext 1.2.1\n"
-"X-Poedit-Language: Korean\n"
-"X-Poedit-Country: KOREA, REPUBLIC OF\n"
-"X-Poedit-Basepath: C:\\Program Files\\Graph\\Locale\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: C:/Program Files/Graph/Locale\n"
+
+#. Form1..Caption
+#, fuzzy
+msgid "Plugin Manager"
+msgstr "플러그인"
+
+#. Form1..ListView......Caption
+#, fuzzy
+msgid "Plugin name"
+msgstr "플러그인"
+
+#. Form1..ListView......Caption
+#, fuzzy
+msgid "Version"
+msgstr "버젼 %s"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "불러오기"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr ""
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "닫기"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -82,7 +114,7 @@ msgstr "이미지 위의 y-축 오른편에 제목 배치."
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -145,10 +177,6 @@ msgstr "파일로 내보내기..."
 msgid "Export the selected point series to a file."
 msgstr "선택된 포인트 시리즈를 파일로 내보내기."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "불러오기"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -178,7 +206,7 @@ msgstr "편집"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -237,7 +265,6 @@ msgstr "인터넷"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -424,11 +451,11 @@ msgstr "접선/법선 삽입..."
 msgid "Insert a tangent or normal for the selected function."
 msgstr "선택된 함수에 대한 접속 또는 법선 삽입."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "무늬채우기 삽입..."
 
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "선택된 함수에 무늬채우기 추가."
 
@@ -694,16 +721,6 @@ msgstr "기부"
 msgid "Donate money to the project."
 msgstr "프로젝트에 돈 기부하기."
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "오늘의 유용한 정보"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "오늘의 유용한 정보 보기"
-
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
 msgstr "지원"
@@ -879,28 +896,6 @@ msgstr "아래 왼쪽"
 msgid "Show the legend in the bottom left corner."
 msgstr "하단 왼편 구석에 범례 보이기."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "닫기"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "다음 팁"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "이전 팁"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "시작시 팁 보이기"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "알고 계신가요..."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "관계 삽입"
@@ -979,7 +974,7 @@ msgstr "범례와 함수 목록에 보이는 설명문 쓰기. 공백이면 방�
 msgid "Properties"
 msgstr "속성"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -987,7 +982,36 @@ msgstr "속성"
 msgid "Style:"
 msgstr "종류:"
 
-#. Form11..GroupBox2..Label9..Caption
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "부등식을 작성하는데 사용되는 종류를 선택. 방정식에서는 사용 안됨."
+
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "관계식 그래프 색상 선택"
+
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "두께:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "선 종류:"
+
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+#, fuzzy
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "부등식을 작성하는데 사용되는 종류를 선택. 방정식에서는 사용 안됨."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -998,24 +1022,7 @@ msgstr "종류:"
 msgid "Color:"
 msgstr "색상:"
 
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "두께:"
-
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "부등식을 작성하는데 사용되는 종류를 선택. 방정식에서는 사용 안됨."
-
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "관계식 그래프 색상 선택"
-
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "방정식 선의 혹은 부등식의 경계선 두께(픽셀)."
 
@@ -1062,12 +1069,6 @@ msgstr "범례에 보이는 설명문 쓰기. 공백이면 방정식이 사용�
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "그래프 속성"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "선 종류:"
 
 #. Form12..GroupBox2..Edit3..Hint
 #. Form13..GroupBox1..Edit2..Hint
@@ -1384,10 +1385,6 @@ msgstr "각각의 점에 보여줄 좌표 확인."
 msgid "Show coordinates"
 msgstr "좌표 보이기"
 
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "좌표계에 사용할 글꼴 선택."
-
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1..Hint
 msgid "Select where the coordinates should be shown."
 msgstr "좌표를 어디에 보여줄 것인지 선택."
@@ -1427,6 +1424,10 @@ msgstr "함수 아래"
 #, fuzzy
 msgid "Below Right"
 msgstr "위 오른쪽"
+
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "좌표계에 사용할 글꼴 선택."
 
 #. Form14..PageControl1..TabSheet1..RadioGroup1....Hint
 msgid "Choose between cartesian (x,y) coordinates and polar (θ,r) coordinates."
@@ -1518,6 +1519,11 @@ msgstr "y-바 보기"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "모든 오차 막대는 y-좌표의 동일한 퍼센트입니다."
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "적용"
 
 #. Form14..PopupMenu1..Popup_Cut..Hint
 #. Form17..PopupMenu1..Popup_Cut..Hint
@@ -1777,10 +1783,6 @@ msgstr "두번째 함수를 위한 무늬채우기 범위"
 msgid "Custom functions/constants"
 msgstr "사용자 정의 함수/상수"
 
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "적용"
-
 #. Form17..Grid1....TitleCaptions.Strings
 msgid "Names"
 msgstr "이름"
@@ -1984,8 +1986,8 @@ msgstr "소스 코드뿐 아니라 최신 버젼은 사용가능함:"
 
 #. Form2..Panel1..LinkLabel2..Caption
 #, fuzzy
-msgid "Email: %s"
-msgstr "전자우편:"
+msgid "Support: %s"
+msgstr "지원"
 
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
@@ -2195,29 +2197,6 @@ msgstr "수직 격자 선 보이기."
 msgid "Show grid"
 msgstr "격자 보이기"
 
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-#, fuzzy
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "메인창의 오른편에 제목 보이기, x-축 위."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "제목:"
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "축 제목 수정."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "세로축 교차 y="
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "x-축은 이 값에서 y-축과 교차한다."
-
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
 msgstr "x-축에 로그 눈금 사용."
@@ -2246,6 +2225,29 @@ msgstr "선택된 축에 pi의 배수, 분수로 단위를 보여줍니다."
 #, fuzzy
 msgid "Show as a multiple of π"
 msgstr "pi 배수로 보기"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "축 제목 수정."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+#, fuzzy
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "메인창의 오른편에 제목 보이기, x-축 위."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "제목:"
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "x-축은 이 값에서 y-축과 교차한다."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "세로축 교차 y="
 
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
@@ -2277,19 +2279,6 @@ msgstr "y-축에 주 단위 표시 보이기."
 msgid "Show horizontal grid lines."
 msgstr "수평 격자 줄 보이기."
 
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-#, fuzzy
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "y-축의 오른쪽, 메인 창의 위쪽에 제목 보이기."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "가로축 교차 x="
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "y-축은 이 값에서 x-축에 교차한다."
-
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox8..Hint
 msgid "Use logarithmic scale for the y-axis."
 msgstr "y-축에 로그 눈금 사용."
@@ -2297,6 +2286,19 @@ msgstr "y-축에 로그 눈금 사용."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "y-축에 단위 보이기."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "가로축 교차 x="
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "y-축은 이 값에서 x-축에 교차한다."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+#, fuzzy
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "y-축의 오른쪽, 메인 창의 위쪽에 제목 보이기."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2346,10 +2348,6 @@ msgstr "각도"
 msgid "Enter a title to show above the coordinate system."
 msgstr "좌표계에 보일 제목을 입력하세요."
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "제목 글꼴 선택."
-
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
 msgstr "범례가 위치할 곳을 선택."
@@ -2365,6 +2363,10 @@ msgstr "계산을 위해 복소수 사용을 확인. 이것은 그래프 작성�
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "복소수로 계산"
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "제목 글꼴 선택."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2415,15 +2417,15 @@ msgstr "제목 글꼴:"
 msgid "Legend font:"
 msgstr "범례 글꼴"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "축에 제목을 보이기 위해 사용되는 글꼴 선택."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "축에 숫자를 보이기 위해 사용되는 글꼴 선택."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "범례를 보이기 위해 사용되는 글꼴 선택."
 
@@ -2600,48 +2602,48 @@ msgstr "텍스트 크기"
 msgid "Text string"
 msgstr "텍스트 문자열"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "심볼 삽입 (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 #, fuzzy
 msgid "Insert object."
 msgstr "객체 삽입"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "진하게 (Ctrl+B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "기울임 (Ctrl+I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "밑줄 (Ctrl+U)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "취소선 (Ctrl+S)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "위 첨자 (Ctrl++)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "아래 첨자 (Ctrl+=)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "왼쪽 정렬 (Ctrl+L)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "가운데 정렬 (Ctrl+E)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "오른쪽 정렬 (Ctrl+R)"
 
@@ -3039,6 +3041,10 @@ msgstr ""
 msgid "An accurate result cannot be found."
 msgstr "계산이 오버플로 되었습니다."
 
+#, fuzzy
+msgid "Memory allocation failed."
+msgstr "추적 실패함."
+
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "내부 에러. 가능한 한 많은 정보를 프로그래머에게 알려주세요."
 
@@ -3207,6 +3213,10 @@ msgstr ""
 msgid "Not enough memory to complete the operation."
 msgstr ""
 
+#, fuzzy
+msgid "Printing aborted!"
+msgstr "프린팅 에러"
+
 msgid "Confirm delete"
 msgstr "삭제 확인"
 
@@ -3297,7 +3307,8 @@ msgstr "함수 편집"
 msgid "Edit tangent/normal"
 msgstr "접선/법선 편집"
 
-msgid "Error processing file '%s' at line %s."
+#, fuzzy
+msgid "Error processing file at line %s."
 msgstr "파일 '%s'를 처리중에  %s 번 줄에서 에러."
 
 msgid "Edit text label"
@@ -3430,168 +3441,6 @@ msgstr ""
 msgid "Thread is not responding"
 msgstr ""
 
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "이 오늘의 유용한 팁은 대부분의 사용자가 알지 못하는 프로그램에 대한 많은 정보를 제공합니다."
-
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr ""
-
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "도구막대를 오른쪽 클릭하여 '도구막대 사용자 정의'를 선택해서 고칠 수 있습니다."
-
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "함수를 삭제하는 대신 함수 목록에서 항목에 대한 표시를 지워 안보이게 할 수 있다."
-
-msgid "You can paste images into a text label."
-msgstr "텍스트 제목으로 이미지 붙여넣기."
-
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "텍스트 제목은 Microsoft Equation같은 OLE 객체를 포함할 수 있습니다. 제목을 편집할 때 편집영역에서 오른쪽 클릭하여 '객체 삽입'을 선택합니다."
-
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "포인트 시리즈에서 Microsoft Excel과 같은 다른 프로그램으로 읽을 수 있는 파일로 점들을 내보내기 할 수 있습니다. 포인트 시리지를 편집할 때 점들을 선택하고, 오른쪽 클릭해서 '파일로 내보내기'를 선택하세요."
-
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "x=5에서의 수직선은 모수함수 x(t)=5, y(t)=t 또는 관계 x=5 처럼 그려집니다."
-
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "축 모양을 같은 크기로 만들려면 확대/축소|정사각형을 사용해야 합니다. 원과 같은 함수를 그릴 때 특히 유용합니다."
-
-msgid "You can find a list of all available functions in the help."
-msgstr "도움말에서 모든 사용가능한 함수 목록을 발견하실 수 있습니다."
-
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "두개의 함수를 'if'를 이용해 하나로 결합시킬 수 있습니다. 예)  x<1 조건에서의 f(x)=x와 x>=1 조건에서의 f(x)=x^2 는 f(x)=if(x<1, x, x^2)로 쓸 수 있습니다."
-
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "'파일|불러오기|Graph 파일'을 이용하여 현재 좌표계에 다른 Graph 파일의 내용을 불러올 수 있습니다."
-
-#, fuzzy
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "축 대화창에서 '기본값으로 저장'을 체크하면 새파일을 생성할 때 현재의 설정이 기본값으로 사용됩니다."
-
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "Ctrk키를 누르고, 방향키로 계를 이동시킬 수 있습니다."
-
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "Ctrl키를 누르고 +, -키로 확대 축소할 수 있습니다."
-
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "마우스의 스크롤 버튼을 사용하여 마우스 커서의 위치에서 확대/축소할 수 있습니다"
-
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "범례에 항목이 보이는 것을 원하지 않으면, 함수 목록의 항목에 오른쪽 틀릭한 후 '범례 보이기'를 해제하면 됩니다."
-
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "축을 이미지의 왼쪽 아래에 보이려면, 축 대화창의 설정탭에서 축 종류를 사각형을 선택하면 됩니다."
-
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "Graph는 보이는 좌표계를 다섯가지 다른 이미지 형식으로 저장할 수 있습니다: bmp, emf, png, jpg, pdf."
-
-#, fuzzy
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "'편집|이미지 복사'를 사용하여 클립보드로 좌표계를 복사하여 다른 프로그램에 붙여넣기 하실 수 있습니다."
-
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "탐색기에서 저장된 grf-파일을 더블클릭하여 프로그램의 새로운 예제로 열 수 있습니다."
-
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "파일을 열기위해 탐색기에서 열려진 Graph창으로 grf-파일을 드래그 할 수 있습니다."
-
-#, fuzzy
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "Graph는 실행 중에 메인 창의 크기와 위치를 기억합니다. 옵션창에서 제거할 수 있습니다."
-
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "계산|테이블은 함수를 위한 검토값인 테이블을 생성하는데 사용됩니다."
-
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "계산 테이블의 일부 또는 전체는 오른쪽 클릭후 '파일로 내보내기'를 선택하여 파일로 내보낼 수 있습니다. 그후 Microsoft Excel과 같은 다른 프로그램에서  열 수 있습니다."
-
-#, fuzzy
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "검토 테이블에서의 데이터는 Microsoft Excel과 같은 다른 프로그램에 클립보드를 사용하여 복사할 수 있습니다."
-
-#, fuzzy
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "포인트 시리즈의 데이터 점들은 클립보드를 통해 Microsoft Excel같은 다른 프로그램에 복사될 수 있습니다."
-
-#, fuzzy
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "함수는 프로그램에서 편집|복사를 사용하여 클립보드를 통해 다른 곳에 복사될 수 있습니다."
-
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "편집|되돌리기를 사용해 마지막 명령을 되돌릴 수 있습니다."
-
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "실수로 편집|되돌리기를 사용했다면, 완료하지 못한 것을 다시하기 위해 편집|다시하기를 사용할 수 있습니다."
-
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "축 대화창에서 좌표계에 대한 제목을 추가할 수 있습니다."
-
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "마이크로소프트 엑셀과 같은 다른 프로그램에 의해 저장되어진 파일로부터 포인트 시리즈를 불어오기 할 수 있습니다. "
-
-#, fuzzy
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "포인트 시리즈를 삽입할 때 Microsoft Excel과 같은 프로그램에서 데이터를 복사하여, Graph의 격자에 데이터를 붙여넣기 할 수 있습니다."
-
-#, fuzzy
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "모든 점이 보이게 좌표계를 변경하려면 '확대/축소|모든 점'을 사용할 수 있습니다."
-
-#, fuzzy
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "선택된 함수나 포인트 시리즈를 보이기 위해 좌표계를 변경하려면 확대/축소|맞춤을 사용할 수 있습니다."
-
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "Shift키를 누른 상태에서 마우스로 좌표계를 드래그 할 수 있습니다."
-
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "계산|검토를 사용하여 함수간에 교점, 극점, 교차선을 찾을 수 있습니다."
-
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "포인트 시리즈가 선택되었을 때 Ctrl키를 누른 상태에서 이미지를 클릭하면 점을 추가할 수 있습니다."
-
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "어떠한 부등식을 표시하기 위해 관계를 사용할 수 있습니다. 예) sin(x^2) < cos(y^2)"
-
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "어떠한 방정식을 표시하기 위해 관계를 사용할 수 있습니다. 예) x*sin x = y*cos y"
-
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "요소(함수, 무늬채우기, 제목, 관계 등.)는 함수 목록에서 왼쪽에 나타나는 같은 순서로 그려집니다."
-
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "함수 목록에서 선택되어진 요소는 마우스로 드래그하거나 ALT키를 누른 상태에서 방향키 ↑/↓로 이동할 수 있습니다."
-
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "왼쪽의 함수 목록에서 축 위에 있는 요소을 옮겨 축 뒤로 함수와 다른 요소를 볼 수 있습니다. 무늬와 접선을 옮기려면 연결된 함수를 이동해야 합니다."
-
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "사용자 텍스트 제목은 제목을 오른쪽 클릭하여 축에 붙일 수 있으며 전후관계 메뉴에서 위치를 선택할 수 있습니다."
-
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "범례는 마우스로 자유롭게 이동시키거나, 범례를 오른쪽 클릭하여 구석의 하나로 연결할 수 있습니다. 전후관계 메뉴에서 위치를 선택하세요."
-
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "투명하게 하는 대안은 제목을 위한 사용자 배경색상을 선택하는 겁니다. 이것은 무늬채우기 위에 제목을 사용할 때 유용합니다."
-
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "포인트 시리즈, 축 설정, 함수 범위등과 같은 대부분의 경우 숫자 대신  pi/4와 같은 표현식을 사용할 수 있습니다."
-
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "함수, 포인트 시리즈 등에 사용할 자신만의 사용자 상수를 함수|사용자 함수에서 만들 수 있습니다. 예) g=9.80665, R=8.31"
-
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "함수, 관계등을 그리는 데 사용되는 자신의 사용자 함수를 함수/사용자 함수에서  생성할 수 있습니다. 예) sinc(x)=if(x=0, 0, sin(x)/x)"
-
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "이미지로 저장 다이얼로그에는 이미지 해상도를 정의할 수 있는 옵션 버튼이 있습니다. 고해상도 이미지를 원할 때 유용합니다."
-
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "포인트 시리즈는 표시처럼 화살표를 가질 수 있습니다. 표시처럼 화살표를 포함한 포인트 시리즈와 점들간의 선들은 벡터를 보이기 위해 사용됩니다."
-
 msgid "Insert symbol"
 msgstr "심볼 삽입"
 
@@ -3658,22 +3507,6 @@ msgstr "설명:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "사용할 프린터 선택. 속성버튼은 프린터에 대한 고급 설정을 변경할 때 사용됩니다."
 
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "인쇄할 색상 선택(당신의 프린터가 컬러 프린터가 아닌 경우 그레이스케일) 또는 모든 색상을 검정색으로 전환."
-
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "프린트 출력"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "색상"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "흑백"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "위치 (밀리미터)"
@@ -3711,6 +3544,254 @@ msgstr "인쇄 매수 선택. "
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "원본 크기의 퍼센트 입력."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "Install failed"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr ""
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:5
+#, fuzzy
+msgid "Show Console"
+msgstr "툴팁 보이기"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr ""
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show Python interpreter"
+msgstr "Python 해석기"
+
+#: ../Plugins/ShowConsole.py:13
+#, fuzzy
+msgid "Show the Python interpreter window."
+msgstr "Python 해석기"
+
+#~ msgid "Tip of the day"
+#~ msgstr "오늘의 유용한 정보"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "오늘의 유용한 정보 보기"
+
+#~ msgid "Next tip"
+#~ msgstr "다음 팁"
+
+#~ msgid "Previous tip"
+#~ msgstr "이전 팁"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "시작시 팁 보이기"
+
+#~ msgid "Did you know..."
+#~ msgstr "알고 계신가요..."
+
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "이 오늘의 유용한 팁은 대부분의 사용자가 알지 못하는 프로그램에 대한 많은 정보를 제공합니다."
+
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "도구막대를 오른쪽 클릭하여 '도구막대 사용자 정의'를 선택해서 고칠 수 있습니다."
+
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "함수를 삭제하는 대신 함수 목록에서 항목에 대한 표시를 지워 안보이게 할 수 있다."
+
+#~ msgid "You can paste images into a text label."
+#~ msgstr "텍스트 제목으로 이미지 붙여넣기."
+
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "텍스트 제목은 Microsoft Equation같은 OLE 객체를 포함할 수 있습니다. 제목을 편집할 때 편집영역에서 오른쪽 클릭하여 '객체 삽입'을 선택합니다."
+
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "포인트 시리즈에서 Microsoft Excel과 같은 다른 프로그램으로 읽을 수 있는 파일로 점들을 내보내기 할 수 있습니다. 포인트 시리지를 편집할 때 점들을 선택하고, 오른쪽 클릭해서 '파일로 내보내기'를 선택하세요."
+
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "x=5에서의 수직선은 모수함수 x(t)=5, y(t)=t 또는 관계 x=5 처럼 그려집니다."
+
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "축 모양을 같은 크기로 만들려면 확대/축소|정사각형을 사용해야 합니다. 원과 같은 함수를 그릴 때 특히 유용합니다."
+
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "도움말에서 모든 사용가능한 함수 목록을 발견하실 수 있습니다."
+
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "두개의 함수를 'if'를 이용해 하나로 결합시킬 수 있습니다. 예)  x<1 조건에서의 f(x)=x와 x>=1 조건에서의 f(x)=x^2 는 f(x)=if(x<1, x, x^2)로 쓸 수 있습니다."
+
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "'파일|불러오기|Graph 파일'을 이용하여 현재 좌표계에 다른 Graph 파일의 내용을 불러올 수 있습니다."
+
+#, fuzzy
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "축 대화창에서 '기본값으로 저장'을 체크하면 새파일을 생성할 때 현재의 설정이 기본값으로 사용됩니다."
+
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "Ctrk키를 누르고, 방향키로 계를 이동시킬 수 있습니다."
+
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "Ctrl키를 누르고 +, -키로 확대 축소할 수 있습니다."
+
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "마우스의 스크롤 버튼을 사용하여 마우스 커서의 위치에서 확대/축소할 수 있습니다"
+
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "범례에 항목이 보이는 것을 원하지 않으면, 함수 목록의 항목에 오른쪽 틀릭한 후 '범례 보이기'를 해제하면 됩니다."
+
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "축을 이미지의 왼쪽 아래에 보이려면, 축 대화창의 설정탭에서 축 종류를 사각형을 선택하면 됩니다."
+
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "Graph는 보이는 좌표계를 다섯가지 다른 이미지 형식으로 저장할 수 있습니다: bmp, emf, png, jpg, pdf."
+
+#, fuzzy
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "'편집|이미지 복사'를 사용하여 클립보드로 좌표계를 복사하여 다른 프로그램에 붙여넣기 하실 수 있습니다."
+
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "탐색기에서 저장된 grf-파일을 더블클릭하여 프로그램의 새로운 예제로 열 수 있습니다."
+
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "파일을 열기위해 탐색기에서 열려진 Graph창으로 grf-파일을 드래그 할 수 있습니다."
+
+#, fuzzy
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "Graph는 실행 중에 메인 창의 크기와 위치를 기억합니다. 옵션창에서 제거할 수 있습니다."
+
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "계산|테이블은 함수를 위한 검토값인 테이블을 생성하는데 사용됩니다."
+
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "계산 테이블의 일부 또는 전체는 오른쪽 클릭후 '파일로 내보내기'를 선택하여 파일로 내보낼 수 있습니다. 그후 Microsoft Excel과 같은 다른 프로그램에서  열 수 있습니다."
+
+#, fuzzy
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "검토 테이블에서의 데이터는 Microsoft Excel과 같은 다른 프로그램에 클립보드를 사용하여 복사할 수 있습니다."
+
+#, fuzzy
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "포인트 시리즈의 데이터 점들은 클립보드를 통해 Microsoft Excel같은 다른 프로그램에 복사될 수 있습니다."
+
+#, fuzzy
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "함수는 프로그램에서 편집|복사를 사용하여 클립보드를 통해 다른 곳에 복사될 수 있습니다."
+
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "편집|되돌리기를 사용해 마지막 명령을 되돌릴 수 있습니다."
+
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "실수로 편집|되돌리기를 사용했다면, 완료하지 못한 것을 다시하기 위해 편집|다시하기를 사용할 수 있습니다."
+
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "축 대화창에서 좌표계에 대한 제목을 추가할 수 있습니다."
+
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "마이크로소프트 엑셀과 같은 다른 프로그램에 의해 저장되어진 파일로부터 포인트 시리즈를 불어오기 할 수 있습니다. "
+
+#, fuzzy
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "포인트 시리즈를 삽입할 때 Microsoft Excel과 같은 프로그램에서 데이터를 복사하여, Graph의 격자에 데이터를 붙여넣기 할 수 있습니다."
+
+#, fuzzy
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "모든 점이 보이게 좌표계를 변경하려면 '확대/축소|모든 점'을 사용할 수 있습니다."
+
+#, fuzzy
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "선택된 함수나 포인트 시리즈를 보이기 위해 좌표계를 변경하려면 확대/축소|맞춤을 사용할 수 있습니다."
+
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "Shift키를 누른 상태에서 마우스로 좌표계를 드래그 할 수 있습니다."
+
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "계산|검토를 사용하여 함수간에 교점, 극점, 교차선을 찾을 수 있습니다."
+
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "포인트 시리즈가 선택되었을 때 Ctrl키를 누른 상태에서 이미지를 클릭하면 점을 추가할 수 있습니다."
+
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "어떠한 부등식을 표시하기 위해 관계를 사용할 수 있습니다. 예) sin(x^2) < cos(y^2)"
+
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "어떠한 방정식을 표시하기 위해 관계를 사용할 수 있습니다. 예) x*sin x = y*cos y"
+
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "요소(함수, 무늬채우기, 제목, 관계 등.)는 함수 목록에서 왼쪽에 나타나는 같은 순서로 그려집니다."
+
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "함수 목록에서 선택되어진 요소는 마우스로 드래그하거나 ALT키를 누른 상태에서 방향키 ↑/↓로 이동할 수 있습니다."
+
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "왼쪽의 함수 목록에서 축 위에 있는 요소을 옮겨 축 뒤로 함수와 다른 요소를 볼 수 있습니다. 무늬와 접선을 옮기려면 연결된 함수를 이동해야 합니다."
+
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "사용자 텍스트 제목은 제목을 오른쪽 클릭하여 축에 붙일 수 있으며 전후관계 메뉴에서 위치를 선택할 수 있습니다."
+
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "범례는 마우스로 자유롭게 이동시키거나, 범례를 오른쪽 클릭하여 구석의 하나로 연결할 수 있습니다. 전후관계 메뉴에서 위치를 선택하세요."
+
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "투명하게 하는 대안은 제목을 위한 사용자 배경색상을 선택하는 겁니다. 이것은 무늬채우기 위에 제목을 사용할 때 유용합니다."
+
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "포인트 시리즈, 축 설정, 함수 범위등과 같은 대부분의 경우 숫자 대신  pi/4와 같은 표현식을 사용할 수 있습니다."
+
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "함수, 포인트 시리즈 등에 사용할 자신만의 사용자 상수를 함수|사용자 함수에서 만들 수 있습니다. 예) g=9.80665, R=8.31"
+
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "함수, 관계등을 그리는 데 사용되는 자신의 사용자 함수를 함수/사용자 함수에서  생성할 수 있습니다. 예) sinc(x)=if(x=0, 0, sin(x)/x)"
+
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "이미지로 저장 다이얼로그에는 이미지 해상도를 정의할 수 있는 옵션 버튼이 있습니다. 고해상도 이미지를 원할 때 유용합니다."
+
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "포인트 시리즈는 표시처럼 화살표를 가질 수 있습니다. 표시처럼 화살표를 포함한 포인트 시리즈와 점들간의 선들은 벡터를 보이기 위해 사용됩니다."
+
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "인쇄할 색상 선택(당신의 프린터가 컬러 프린터가 아닌 경우 그레이스케일) 또는 모든 색상을 검정색으로 전환."
+
+#~ msgid "Print output"
+#~ msgstr "프린트 출력"
+
+#~ msgid "Color"
+#~ msgstr "색상"
+
+#~ msgid "Black && white"
+#~ msgstr "흑백"
+
+#, fuzzy
+#~ msgid "Email: %s"
+#~ msgstr "전자우편:"
 
 #~ msgid "Associate *.grf files with Graph."
 #~ msgstr "Graph로 *.grf 파일 연결."

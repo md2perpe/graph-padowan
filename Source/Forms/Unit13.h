@@ -26,6 +26,7 @@
 #include <Dialogs.hpp>
 #include <Menus.hpp>
 #include "CheckBoxEx.h"
+#include <Vcl.Imaging.pngimage.hpp>
 //---------------------------------------------------------------------------
 class TForm13 : public TForm
 {

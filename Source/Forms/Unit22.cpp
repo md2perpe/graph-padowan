@@ -12,7 +12,7 @@ TForm22 *Form22 = NULL;
 //---------------------------------------------------------------------------
 __fastcall TForm22::TForm22(TComponent* Owner)
   : TForm(Owner), LastIndex(0), FAllowChange(false), CacheIndex(0), TextCache(1), PromptIndex(0),
-    IndentLevel(0)
+    IndentLevel(0), InputPromptActive(false)
 {
   WritePrompt();
   Canvas->Font->Assign(IRichEdit1->Font);
@@ -86,9 +86,21 @@ void __fastcall TForm22::IRichEdit1KeyDown(TObject *Sender, WORD &Key,
 	}
 
 	if((Shift == (TShiftState() << ssCtrl) && Key == 'C'))
+  {
 		if(IRichEdit1->SelLength == 0)
-			KeyboardInterrupt();
-
+    {
+      if(InputPromptActive)
+      {
+        PromptIndex = IRichEdit1->SelStart;
+        WriteText("\n");
+        Command = "";
+        InputResult = "";
+        InputPromptActive = false;
+      }
+      else
+			  KeyboardInterrupt();
+    }
+  }
 
 	switch(Key)
 	{
@@ -166,18 +178,27 @@ void TForm22::HandleNewLine()
   }
   CacheIndex = TextCache.size() - 1;
 
+  if(InputPromptActive)
+  {
+    InputResult = Command;
+    InputPromptActive = false;
+    Command = "";
+    return;
+  }
+
 	try
 	{
-		if(Python::ExecutePythonCommand(Command))
+    String Str = Command;
+    Command = ""; //Clear Command before executing in case we call input() to read from stdin
+		if(Python::ExecutePythonCommand(Str))
 		{
 			WritePrompt();
-			Command = "";
 			IndentLevel = 0;
 		}
 		else
 		{
 			WritePrompt("... ");
-			Command += "\n";
+			Command = Str + "\n";
 			if(!Str.IsEmpty() && Str[Str.Length()] == ':')
 				IndentLevel++;
 		}
@@ -195,7 +216,7 @@ void TForm22::HandleNewLine()
 void __fastcall TForm22::FormShow(TObject *Sender)
 {
   IRichEdit1->SelStart = MAXINT;
-  StartTimer(1, AfterFormShown);
+  StartTimer(1, Form1->ConsoleFormShown);
 }
 //---------------------------------------------------------------------------
 void TForm22::WritePrompt(const String &Str)
@@ -248,11 +269,6 @@ void TForm22::SetUserString(const String &Str)
 	IRichEdit1->SelText = Str;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm22::AfterFormShown(TObject*)
-{
-	Form1->Splitter2->Visible = Form1->Panel6->VisibleDockClientCount > 0;
-	Form1->Panel6->Height = Form1->Panel6->VisibleDockClientCount ? 150 : 0;}
-//---------------------------------------------------------------------------
 void __fastcall TForm22::WMEnable(TMessage &Message)
 {
   //Ensure that this form is always enabled, even when a modal dialog is shown
@@ -276,6 +292,17 @@ void __fastcall TForm22::IRichEdit1Exit(TObject *Sender)
   Form1->MoveRightAction->ShortCut = ShortCut(VK_RIGHT, TShiftState() << ssCtrl);
   Form1->MoveLeftAction->SecondaryShortCuts->Add("Ctrl+Shift+Left");
   Form1->MoveRightAction->SecondaryShortCuts->Add("Ctrl+Shift+Right");
+}
+//---------------------------------------------------------------------------
+//Returns a custom string entered by the user in the console terminated with \n
+//If the returned string is empty, the user pressed Ctr+C
+String TForm22::InputQuery()
+{
+  InputPromptActive = true;
+  WritePrompt("");
+  while(InputPromptActive && !Application->Terminated)
+    Application->HandleMessage();
+  return Application->Terminated ? String() : InputResult;
 }
 //---------------------------------------------------------------------------
 

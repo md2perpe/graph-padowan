@@ -9,6 +9,8 @@
 //---------------------------------------------------------------------------
 #include "Config.h"
 #pragma hdrstop
+#undef _RTLDLL    //Where is this defined; It tricks standard library into thingking it is dynamic linking
+#include <ios>
 #include "Tokenizer.h"
 //---------------------------------------------------------------------------
 void TTokenizer::Extract(TTokenString &S)

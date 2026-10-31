@@ -31,6 +31,7 @@
 #include "TStdFuncFrame.h"
 #include "TTanFrame.h"
 #include "TEvalFrame.h"
+#include "TRelationFrame.h"
 //---------------------------------------------------------------------------
 enum TEvalType {etEval, etArea, etArc};
 class TForm9 : public TForm
@@ -42,6 +43,7 @@ __published:	// IDE-managed Components
   TPolFuncFrame *PolFuncFrame1;
   TAreaFrame *AreaFrame1;
   TTanFrame *TanFrame1;
+  TRelationFrame *RelationFrame1;
   void __fastcall FormHide(TObject *Sender);
   void __fastcall Edit1Change(TObject *Sender);
   void __fastcall FormShortCut(TWMKey &Msg, bool &Handled);

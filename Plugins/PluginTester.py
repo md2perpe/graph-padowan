@@ -1,9 +1,10 @@
 import Graph
+import os
 
 ShowEvents = False
-LogFile = "Events.log"
+LogFile = os.path.dirname(__file__) + "\\Events.log"
 
-File = open(LogFile, "w") if LogFile else None
+File = open(LogFile, "w", encoding="utf8") if LogFile else None
 class EventLogger:
     def __init__(self, s):
         self.s = s
@@ -13,20 +14,9 @@ class EventLogger:
             print(Str)
         if File:
             File.write(Str + "\n")
+            File.flush()
 
-Graph.OnNew.append(EventLogger("OnNew"))
-Graph.OnLoad.append(EventLogger("OnLoad"))
-Graph.OnSelect.append(EventLogger("OnSelect"))
-Graph.OnClose.append(EventLogger("OnClose"))
-Graph.OnEdit.append(EventLogger("OnEdit"))
-Graph.OnAnimate.append(EventLogger("OnAnimate"))
-Graph.OnDelete.append(EventLogger("OnDelete"))
-Graph.OnAxesChanged.append(EventLogger("OnAxesChanged"))
-Graph.OnZoom.append(EventLogger("OnZoom"))
-Graph.OnOptionsChanged.append(EventLogger("OnOptionsChanged"))
-Graph.OnCustomFunctions.append(EventLogger("OnCustomFunctions"))
-Graph.OnNewElem.append(EventLogger("OnNewElem"))
-Graph.OnChanged.append(EventLogger("OnChanged"))
-Graph.OnMoved.append(EventLogger("OnMoved"))
+for EventName in filter(lambda x: x[:2]=="On", dir(Graph)):
+  Graph.__dict__[EventName].insert(0, EventLogger(EventName))
 File.write("PluginTester loaded!\n")
 

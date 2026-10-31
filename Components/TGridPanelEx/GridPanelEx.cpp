@@ -8,6 +8,8 @@
 #define private public
 #define protected public
 #include <vcl.h>
+#undef private
+#undef protected
 #pragma hdrstop
 #include <Math.hpp>
 #include <vector>
@@ -177,13 +179,21 @@ void TGridPanelEx::ArrangeControlInCell(TControl *AControl, TRect CellRect, TAli
     TRect NewBounds;
     TAnchors AnchorSubset = AControl->Anchors * (TAnchors() << akLeft << akRight);
     int MaxWidth = Max(AControl->Margins->ControlWidth, AControl->Margins->ExplicitWidth);
-    if(AnchorSubset == TAnchors() << akLeft)
+    if(AnchorSubset == TAnchors())
+    {
       NewBounds.Left = CellRect.Left;
-    else if(AnchorSubset == TAnchors() << akRight)
-      NewBounds.Left = Max(CellRect.Left, (int)(CellRect.Right - MaxWidth));
+      NewBounds.Right = CellRect.Right;
+    }
     else
-      NewBounds.Left = Max(CellRect.Left, (int)(CellRect.Left + ((CellRect.Right - CellRect.Left) - AControl->Margins->ControlWidth) / 2));
-    NewBounds.Right = NewBounds.Left + Min(CellRect.Width(), MaxWidth);
+    {
+      if(AnchorSubset == TAnchors() << akLeft)
+        NewBounds.Left = CellRect.Left;
+      else if(AnchorSubset == TAnchors() << akRight)
+        NewBounds.Left = Max(CellRect.Left, (int)(CellRect.Right - MaxWidth));
+      else
+        NewBounds.Left = Max(CellRect.Left, (int)(CellRect.Left + ((CellRect.Right - CellRect.Left) - AControl->Margins->ControlWidth) / 2));
+      NewBounds.Right = NewBounds.Left + Min(CellRect.Width(), MaxWidth);
+    }
     AnchorSubset = AControl->Anchors * (TAnchors() << akTop << akBottom);
     if(AnchorSubset == TAnchors() << akTop)
       NewBounds.Top = CellRect.Top;
@@ -235,10 +245,12 @@ void TGridPanelEx::ArrangeControls(TRect &Rect)
         TRect SpanRect = CellRect;
         if(ControlItem->ColumnSpan > 1)
           for(int K = I + 1; K < Min(I + ControlItem->ColumnSpan, FColumnCollection->Count); K++)
+          {
             if(RightToLeft)
               SpanRect.Left -= FColumnCollection->Items[K]->Size;
             else
               SpanRect.Right += FColumnCollection->Items[K]->Size;
+          }
         if(ControlItem->RowSpan > 1)
           for(int K = J + 1; K < Min(J + ControlItem->RowSpan, FRowCollection->Count); K++)
             SpanRect.Bottom += FRowCollection->Items[K]->Size;

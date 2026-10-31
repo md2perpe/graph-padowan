@@ -150,7 +150,7 @@ void __fastcall TIColorBox::ShowFocus()
 {
   //Draw a rectangle with the background color
   //BORDER pixels from the color box
-  Canvas->Brush->Color=TCustomControl::Color;
+  Canvas->Brush->Color = this->TCustomControl::Color;
   Canvas->FrameRect(Rect(0,0,Width,Height));
   //If component has focus
   if(Active)

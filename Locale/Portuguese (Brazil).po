@@ -2,19 +2,52 @@
 # Copyright (C) 2004 Ivan Johansen
 # This file is distributed under the same license as the Graph package.
 # Ivan Johansen <graph@padowan.dk>, 2004.
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"POT-Creation-Date: 2012-11-12 22:11\n"
-"PO-Revision-Date: 2012-11-12 17:42+0100\n"
-"Last-Translator: Michael Bach Ipsen <rosenthall@hotmail.com>\n"
-"Language-Team: \n"
-"Language: \n"
+"Project-Id-Version: Grafic Interface of Graph 4.5\n"
+"POT-Creation-Date: 2019-05-05 19:52\n"
+"PO-Revision-Date: 2019-04-21 16:24+0200\n"
+"Last-Translator: Aldemar Calazans Filho <aldemarcalazans@gmail.com>\n"
+"Language-Team: Jorge Costa (& team), Wladimir Albuquerque Silva & Aldemar Calazans Filho <jorge@jlcosta.pro.br;wladyjr@gmail.com;aldemarcalazans@gmail.com>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Bookmarks: 153,425,630,724,783,834,-1,-1,-1,-1\n"
+"X-Poedit-Bookmarks: -1,-1,630,724,-1,834,-1,-1,-1,401\n"
+"X-Generator: Poedit 2.0.6\n"
+"Help-file: Graph-Portuguese.chm\n"
+
+#. Form1..Caption
+msgid "Plugin Manager"
+msgstr "Gerenciador de Plugins"
+
+#. Form1..ListView......Caption
+msgid "Plugin name"
+msgstr "Nome do plugin"
+
+#. Form1..ListView......Caption
+msgid "Version"
+msgstr "Versão"
+
+#. Form1..Panel1..Label1..Caption
+msgid "Path:"
+msgstr ""
+
+#. Form1..Panel1..ImportButton..Caption
+#. Form1..ActionManager..............Caption
+msgid "Import"
+msgstr "Importar"
+
+#. Form1..Panel1..UninstallButton..Caption
+msgid "Uninstall"
+msgstr "Desinstalar"
+
+#. Form1..Panel1..CloseButton3..Caption
+#. Form15..Button1..Caption
+#. Form19..Button2..Caption
+msgid "Close"
+msgstr "Fechar"
 
 #. Form1..Recent1..Hint
 msgid "Open file: %s"
@@ -45,7 +78,7 @@ msgstr "Acima do eixo-x"
 #. Form1..PopupMenu1..Tree_Placement..Tree_Above....Hint
 #. Form1..PopupMenu3..Label_Placement..Label_Above....Hint
 msgid "Place the label directly above the x-axis on the right side of the image."
-msgstr "Posiciona o rótulo imediatamente acima do eixo-x à direita da imagem."
+msgstr "Posiciona o rótulo imediatamente acima do eixo-x e à direita da imagem."
 
 #. Form1..PopupMenu1..Tree_Placement..Tree_Below..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Below..Caption
@@ -56,7 +89,7 @@ msgstr "Abaixo do eixo-x"
 #. Form1..PopupMenu1..Tree_Placement..Tree_Below....Hint
 #. Form1..PopupMenu3..Label_Placement..Label_Below....Hint
 msgid "Place the label directly below the x-axis on the right side of the image."
-msgstr "Posiciona o rótulo imediatamente abaixo do eixo-x à direita da imagem."
+msgstr "Posiciona o rótulo imediatamente abaixo do eixo-x e à direita da imagem."
 
 #. Form1..PopupMenu1..Tree_Placement..Tree_Left..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Left..Caption
@@ -84,7 +117,7 @@ msgstr "Posiciona o rótulo à direita do eixo-y e no topo da imagem."
 #. Form1..PopupMenu1..Tree_Rotation..Tree_Rotation_Custom..Caption
 #. Form1..PopupMenu3..Label_Placement..Label_Placement_Custom..Caption
 #. Form1..PopupMenu3..Label_Rotation..Label_Rotation_Custom..Caption
-#. Form11..GroupBox2..ExtColorBox1..CustomName
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..CustomName
 #. Form12..GroupBox2..ExtColorBox1..CustomName
 #. Form13..GroupBox1..ExtColorBox1..CustomName
 #. Form14..PageControl1..TabSheet1..GroupBox1..ExtColorBox1..CustomName
@@ -146,10 +179,6 @@ msgstr "Exportar para arquivo..."
 msgid "Export the selected point series to a file."
 msgstr "Exporta a série de pontos selecionada para um arquivo."
 
-#. Form1..ActionManager..............Caption
-msgid "Import"
-msgstr "Importar"
-
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..NewAction..Category
 #. Form1..ActionManager..OpenAction..Category
@@ -179,7 +208,7 @@ msgstr "Editar"
 #. Form1..ActionManager..........Caption
 #. Form1..ActionManager..InsertFunctionAction..Category
 #. Form1..ActionManager..InsertTangentAction..Category
-#. Form1..ActionManager..InsertShadeAction..Category
+#. Form1..ActionManager..InsertShadingAction..Category
 #. Form1..ActionManager..InsertPointsAction..Category
 #. Form1..ActionManager..InsertTrendlineAction..Category
 #. Form1..ActionManager..EditAction..Category
@@ -238,7 +267,6 @@ msgstr "Internet"
 #. Form1..ActionManager..AboutAction..Category
 #. Form1..ActionManager..FaqAction..Category
 #. Form1..ActionManager..DonateAction..Category
-#. Form1..ActionManager..TipAction..Category
 #. Form1..ActionManager..SupportAction..Category
 #. Form1..ActionManager..ScriptDocAction..Category
 #. Form11..Button3..Caption
@@ -305,7 +333,7 @@ msgstr "Salvar como imagem..."
 
 #. Form1..ActionManager..SaveAsImageAction..Hint
 msgid "Save the shown coordinate system as an image."
-msgstr "Salva o sistema de coordenadas mostrado como uma imagem."
+msgstr "Salva o sistema de coordenadas como uma imagem."
 
 #. Form1..ActionManager..PrintAction..Caption
 msgid "Print..."
@@ -313,7 +341,7 @@ msgstr "Imprimir..."
 
 #. Form1..ActionManager..PrintAction..Hint
 msgid "Print shown coordinate system."
-msgstr "Imprime o sistema de coordenadas mostrado."
+msgstr "Imprime o sistema de coordenadas."
 
 #. Form1..ActionManager..ExitAction..Caption
 msgid "Exit"
@@ -390,7 +418,7 @@ msgstr "Copiar imagem OLE"
 # Veja também o Help do Graph, onde o mesmo confirma que o comando "Copy image" é um comando para copiar objetos OLE.
 #. Form1..ActionManager..CopyImageAction..Hint
 msgid "Copy the shown coordinate system to the clipboard."
-msgstr "Copia o sistema de coordenadas exibido para a área de transferência, na forma de um objeto OLE."
+msgstr "Copia o sistema de coordenadas para a área de transferência, na forma de um objeto OLE."
 
 #. Form1..ActionManager..AxesAction..Caption
 msgid "Axes..."
@@ -426,12 +454,12 @@ msgstr "Inserir tangente/normal..."
 msgid "Insert a tangent or normal for the selected function."
 msgstr "Insere uma tangente ou normal para a função selecionada."
 
-#. Form1..ActionManager..InsertShadeAction..Caption
+#. Form1..ActionManager..InsertShadingAction..Caption
 msgid "Insert shading..."
 msgstr "Inserir sombreamento..."
 
 # "à função selecionada" me parece mais elegante que "para a função selecionada"
-#. Form1..ActionManager..InsertShadeAction..Hint
+#. Form1..ActionManager..InsertShadingAction..Hint
 msgid "Add shading to the selected function."
 msgstr "Adiciona sombreamento à função selecionada."
 
@@ -498,7 +526,7 @@ msgstr "Ampliar"
 # Verifiquei também que, mais à frente, vocês traduziram step como incremento (que aqui seria também uma tradução muito boa)
 #. Form1..ActionManager..ZoomInAction..Hint
 msgid "Zoom in. Hold down Shift to zoom with larger steps."
-msgstr "Amplia (zoom In). Mantenha pressionada a tecla Shift para ampliar em passos maiores."
+msgstr "Ampliar (zoom in). Mantenha pressionada a tecla Shift para ampliar a passos mais largos."
 
 #. Form1..ActionManager..ZoomOutAction..Caption
 msgid "Out"
@@ -507,7 +535,7 @@ msgstr "Reduzir"
 # vide comentário anterior
 #. Form1..ActionManager..ZoomOutAction..Hint
 msgid "Zoom out. Hold down Shift to zoom with larger steps."
-msgstr "Reduz (zoom out). Mantenha pressionada a tecla Shift para reduzir em passos maiores."
+msgstr "Reduzir (zoom out). Mantenha pressionada a tecla Shift para reduzir a passos mais largos."
 
 # me parece que o ideal é usarmos o termo "janela" aqui: não somente esta é uma palavra já conhecido das pessoas, como também evitamos uma repetição de termos: a expressão "área selecionada" já se encontra na dica da ferramenta
 #. Form1..ActionManager..ZoomWindowAction..Caption
@@ -528,7 +556,7 @@ msgstr "Quadrado"
 # Comentários: o verbo "scale" não possue um correspondente exato na língua portuguesa, sendo necessário o uso de uma expressão A palavra "relação", expressando a razão entre a largura e altura da figura é pouco usual (ainda que tecnicamente correta); o ideal é substituí-la por "dimensões" ou "proporções"
 #. Form1..ActionManager..ZoomSquareAction....Hint
 msgid "Zoom to scale the axes equally. This will show a plotted circle in its correct relation instead of an ellipse."
-msgstr "Ajusta o zoom de forma a igualar as escalas dos eixos. Isso irá mostrar um círculo traçado em suas dimensões corretas , ao invés de uma elipse."
+msgstr "Ajusta o zoom de forma a igualar as escalas dos eixos. Isso irá mostrar um círculo em suas proporções corretas, ao invés de mostrá-lo como uma elipse."
 
 #. Form1..ActionManager..ZoomStandardAction..Caption
 msgid "Standard"
@@ -554,7 +582,7 @@ msgstr "Mover para cima"
 # àrea de plotagem passou a ser usado aqui, com vistas à padronização (vocês usaram este termo, mais à frente)
 #. Form1..ActionManager..MoveUpAction....Hint
 msgid "Move the graphing area up along the coordinate system. Hold down Shift to move in larger steps."
-msgstr "Move a área de plotagem para cima ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover em passos maiores."
+msgstr "Move a área de plotagem para cima, ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover a passos mais largos."
 
 #. Form1..ActionManager..MoveDownAction..Caption
 msgid "Move down"
@@ -563,7 +591,7 @@ msgstr "Mover para baixo"
 # vide comentário anterior
 #. Form1..ActionManager..MoveDownAction....Hint
 msgid "Move the graphing area down along the coordinate system. Hold down Shift to move in larger steps."
-msgstr "Move a área de plotagem para baixo ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover em passos maiores."
+msgstr "Move a área de plotagem para baixo, ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover a passos mais largos."
 
 #. Form1..ActionManager..MoveLeftAction..Caption
 msgid "Move left"
@@ -572,7 +600,7 @@ msgstr "Mover para esquerda"
 # idem
 #. Form1..ActionManager..MoveLeftAction....Hint
 msgid "Move the graphing area to the left along the coordinate system. Hold down Shift to move in larger steps."
-msgstr "Move a área de plotagem para a esquerda ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover em passos maiores."
+msgstr "Move a área de plotagem para a esquerda, ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover a passos mais largos."
 
 #. Form1..ActionManager..MoveRightAction..Caption
 msgid "Move right"
@@ -581,7 +609,7 @@ msgstr "Mover para direita"
 # idem
 #. Form1..ActionManager..MoveRightAction....Hint
 msgid "Move the graphing area to the right along the coordinate system. Hold down Shift to move in larger steps."
-msgstr "Move a área de plotagem para a direita ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover em passos maiores."
+msgstr "Move a área de plotagem para a direita, ao longo do sistema de coordenadas. Mantenha pressionada a tecla Shift para mover a passos mais largos."
 
 #. Form1..ActionManager..MoveAction..Caption
 msgid "Move system"
@@ -620,13 +648,13 @@ msgstr "Calcula a integral definida em um dado intervalo."
 #. Form1..ActionManager..EvalAction..Caption
 #. Form9..Caption
 msgid "Evaluate"
-msgstr "Calcular"
+msgstr "Valor"
 
 # "trace" aqui tem o sentido de rastrear, localizar.
 # Quando se utiliza esta função no Graph, é gerado um ponto resultante do cruzamento de duas linha (como se fosse uma mira de arma), que rastreia a curva em busca de determinado pontos específicos escolhidos pelo usuário, como interseções, etc.)
 #. Form1..ActionManager..EvalAction..Hint
 msgid "Evaluate or trace the selected function."
-msgstr "Calcula ou rastreia a função selecionada."
+msgstr "Calcula o valor numérico ou rastreia a função selecionada."
 
 #. Form1..ActionManager..TableAction..Caption
 msgid "Table"
@@ -652,7 +680,7 @@ msgstr "Lista de funções"
 # "built-in" significa embutidas, incorporadas, integradas. Embora o termo nativas não esteja incorreto, acho que seria mais adequado utilizarmos "incorporadas" ou "integradas"
 #. Form1..ActionManager..ListAction..Hint
 msgid "Show a list of built-in functions that can be used for graphing."
-msgstr "Mostra uma lista de funções integradas ao programa que podem ser usadas para traçar gráficos."
+msgstr "Mostra uma lista de funções pré-definidas do programa, as quais podem ser utilizadas para traçar gráficos."
 
 #. Form1..ActionManager..HomePageAction..Caption
 msgid "Graph web site"
@@ -660,11 +688,11 @@ msgstr "Site do Graph"
 
 #. Form1..ActionManager..HomePageAction..Hint
 msgid "Open the default browser and show the Graph web site."
-msgstr "Abre o navegador de Internet padrão e mostra o site do Graph."
+msgstr "Abre o navegador de Internet padrão e exibe o site do Graph."
 
 #. Form1..ActionManager..UpdateAction..Caption
 msgid "Check for update"
-msgstr "Checar por atualizações"
+msgstr "Verificar por atualizações"
 
 # A tradução estava muito diferente, em termos de estilo, então resolvi sugerir esta aqui
 #. Form1..ActionManager..UpdateAction..Hint
@@ -740,16 +768,6 @@ msgstr "Doar"
 msgid "Donate money to the project."
 msgstr "Dôe dinheiro ao projeto."
 
-#. Form1..ActionManager..TipAction..Caption
-#. Form10..Caption
-#. Form10..Panel1..LinkLabel1..Caption
-msgid "Tip of the day"
-msgstr "Dica do dia"
-
-#. Form1..ActionManager..TipAction..Hint
-msgid "Show tip of the day"
-msgstr "Mostra a dica do dia."
-
 # "suporte " é comumente traduzido, em todos os sits ligados a área de informática, como "suporte". Basta dar uma olhada nos sites onde se baixam drivers, versões novas de aplicativos, etc, e em todos eles SEM EXCEÇÃO, a palavra que aparece lá é "suporte". Então, me parece imprescindível se trocar o termo aqui.
 #. Form1..ActionManager..SupportAction..Caption
 msgid "Support"
@@ -767,7 +785,7 @@ msgstr "Ampliar no eixo-x."
 # acho que fica mais claro invertermos a ordem das palvras, e colocarmos "somente" depois, semelhante à tradução literal
 #. Form1..ActionManager..ZoomXInAction....Hint
 msgid "Zoom in on the x-axis only. Hold down Shift to zoom with larger steps."
-msgstr "Amplia no eixo-x somente. Mantenha a tecla Shift pressionada para ampliar em passos maiores."
+msgstr "Amplia no eixo-x somente. Mantenha a tecla Shift pressionada para ampliar a passos mais largos."
 
 #. Form1..ActionManager..ZoomXOutAction..Caption
 msgid "Zoom x-axis out"
@@ -776,7 +794,7 @@ msgstr "Reduzir no eixo-x."
 # idem
 #. Form1..ActionManager..ZoomXOutAction....Hint
 msgid "Zoom out on the x-axis only. Hold down Shift to zoom with larger steps."
-msgstr "Reduz no eixo-x somente. Mantenha a tecla Shift pressionada para reduzir em passos maiores."
+msgstr "Reduz no eixo-x somente. Mantenha a tecla Shift pressionada para reduzir a passos mais largos."
 
 #. Form1..ActionManager..ZoomYInAction..Caption
 msgid "Zoom y-axis in"
@@ -785,7 +803,7 @@ msgstr "Ampliar no eixo-y."
 # idem
 #. Form1..ActionManager..ZoomYInAction....Hint
 msgid "Zoom in on the y-axis only. Hold down Shift to zoom with larger steps."
-msgstr "Amplia no eixo-y somente. Mantenha a tecla Shift pressionada para ampliar em passos maiores."
+msgstr "Amplia no eixo-y somente. Mantenha a tecla Shift pressionada para ampliar a passos mais largos."
 
 #. Form1..ActionManager..ZoomYOutAction..Caption
 msgid "Zoom y-axis out"
@@ -794,7 +812,7 @@ msgstr "Reduzir no eixo-y."
 # idem
 #. Form1..ActionManager..ZoomYOutAction....Hint
 msgid "Zoom out on the y-axis only. Hold down Shift to zoom with larger steps."
-msgstr "Reduz no eixo-y somente. Mantenha a tecla Shift pressionada para reduzir em passos maiores."
+msgstr "Reduz no eixo-y somente. Mantenha a tecla Shift pressionada para reduzir a passos mais largos."
 
 #. Form1..ActionManager..InsertRelationAction..Caption
 msgid "Insert relation..."
@@ -854,7 +872,7 @@ msgstr "Documentação do mecanismo de script"
 # Comentários: me parece correta a tradução aqui, preservando "script" e "plugin" como jargões intraduzíveis, significando no caso um programa simples em linguagem de alto nível e extensões às capacidade originais de algum aplicativo.
 #. Form1..ActionManager..ScriptDocAction..Hint
 msgid "Show documentation for scripting engine and plugin system."
-msgstr "Mostra a documentação para o mecanismo de script e o sistema de plugin"
+msgstr "Mostra a documentação para o mecanismo de script e o sistema de plugins"
 
 # "set" pode significar estabelecer.
 # "'reset" poderia ser traduzido, então, como restabelecer
@@ -950,28 +968,6 @@ msgstr "Em baixo à esquerda"
 msgid "Show the legend in the bottom left corner."
 msgstr "Mostra a legenda no canto inferior esquerdo."
 
-#. Form10..Button1..Caption
-#. Form15..Button1..Caption
-#. Form19..Button2..Caption
-msgid "Close"
-msgstr "Fechar"
-
-#. Form10..Button2..Caption
-msgid "Next tip"
-msgstr "Próxima dica"
-
-#. Form10..Button3..Caption
-msgid "Previous tip"
-msgstr "Dica anterior"
-
-#. Form10..CheckBox1..Caption
-msgid "Show tips at startup"
-msgstr "Mostrar dicas ao iniciar"
-
-#. Form10..Panel1..Label1..Caption
-msgid "Did you know..."
-msgstr "Você sabia que..."
-
 #. Form11..Caption
 msgid "Insert relation"
 msgstr "Inserir relação"
@@ -1053,7 +1049,7 @@ msgstr "Escreva um texto descritivo a ser mostrado na legenda e na lista de fun�
 msgid "Properties"
 msgstr "Propriedades"
 
-#. Form11..GroupBox2..Label7..Caption
+#. Form11..GroupBox2..GridPanelEx1..Label7..Caption
 #. Form13..GroupBox1..Label7..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label1..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox2..Label5..Caption
@@ -1061,7 +1057,51 @@ msgstr "Propriedades"
 msgid "Style:"
 msgstr "Estilo:"
 
-#. Form11..GroupBox2..Label9..Caption
+# acho que aqui fica melhor não usar o imperativo(selecione), mas sim, o tempo verbal que vocês comumente tem usado,no presente (seleciona).
+# * * *
+# Embora a tradução de "for" seja para, a frase em questão é mais comumente escrita como "em equações".
+# Ex: não utilizar este medicamente EM CASO DE DENGUE". Então, sugeri uma modificação de estilo aqui. No entanto, nada impede de usarmos "para equações"
+# * * *
+# "to draw" foi traduzido aqui como traçar, pois o termo é mais comum em matemática do que desenhar. Como o verbo está no gerúndio, significando o ato de traçar uma curva, utilizei a expressão "no traçado"
+#. Form11..GroupBox2..GridPanelEx1..ShadeSelect1....Hint
+msgid "Select the style used for drawing the inequality. Not used for equations."
+msgstr "Seleciona o estilo usado no traçado da inequação. Não utilizado em equações."
+
+# vide anterior
+#. Form11..GroupBox2..GridPanelEx1..ExtColorBox1..Hint
+msgid "Select the color for drawing the relation."
+msgstr "Seleciona a cor para o traçado da relação."
+
+# Espessura é o termo usado no Microsoft Word, para esta função, e seria o termo preferido nesta tradução.
+# Porém, verifiquei que existem janelas do programa (exemplo: inserir relação) que não comportam uma palavra tão grande assim.
+# Tive então de mudar a tradução novamente para "largura".
+#. Form11..GroupBox2..GridPanelEx1..Label3..Caption
+#. Form12..GroupBox2..Label8..Caption
+#. Form13..GroupBox1..Label5..Caption
+#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
+#. Form7..GroupBox4..Label8..Caption
+msgid "Width:"
+msgstr "Largura:"
+
+#. Form11..GroupBox2..GridPanelEx1..Label4..Caption
+#. Form12..GroupBox2..Label7..Caption
+#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
+#. Form7..GroupBox4..Label7..Caption
+msgid "Line style:"
+msgstr "Estilo da linha:"
+
+# acho que aqui fica melhor não usar o imperativo(selecione), mas sim, o tempo verbal que vocês comumente tem usado,no presente (seleciona).
+# * * *
+# Embora a tradução de "for" seja para, a frase em questão é mais comumente escrita como "em equações".
+# Ex: não utilizar este medicamente EM CASO DE DENGUE". Então, sugeri uma modificação de estilo aqui. No entanto, nada impede de usarmos "para equações"
+# * * *
+# "to draw" foi traduzido aqui como traçar, pois o termo é mais comum em matemática do que desenhar. Como o verbo está no gerúndio, significando o ato de traçar uma curva, utilizei a expressão "no traçado"
+#. Form11..GroupBox2..GridPanelEx1..LineSelect1....Hint
+msgid "Select line style used to draw equations and the border of inequalities."
+msgstr "Seleciona o estilo de linha usado no traçado de equações e bordas de inequações."
+
+#. Form11..GroupBox2..GridPanelEx1..Label9..Caption
 #. Form12..GroupBox2..Label9..Caption
 #. Form13..GroupBox1..Label6..Caption
 #. Form14..PageControl1..TabSheet1..GroupBox1..Label2..Caption
@@ -1072,36 +1112,9 @@ msgstr "Estilo:"
 msgid "Color:"
 msgstr "Cor:"
 
-# Espessura é o termo usado no Microsoft Word, para esta função, e seria o termo preferido nesta tradução.
-# Porém, verifiquei que existem janelas do programa (exemplo: inserir relação) que não comportam uma palavra tão grande assim.
-# Tive então de mudar a tradução novamente para "largura".
-#. Form11..GroupBox2..Label3..Caption
-#. Form12..GroupBox2..Label8..Caption
-#. Form13..GroupBox1..Label5..Caption
-#. Form14..PageControl1..TabSheet1..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label8..Caption
-#. Form7..GroupBox4..Label8..Caption
-msgid "Width:"
-msgstr "Largura:"
-
-# acho que aqui fica melhor não usar o imperativo(selecione), mas sim, o tempo verbal que vocês comumente tem usado,no presente (seleciona).
-# * * *
-# Embora a tradução de "for" seja para, a frase em questão é mais comumente escrita como "em equações".
-# Ex: não utilizar este medicamente EM CASO DE DENGUE". Então, sugeri uma modificação de estilo aqui. No entanto, nada impede de usarmos "para equações"
-# * * *
-# "to draw" foi traduzido aqui como traçar, pois o termo é mais comum em matemática do que desenhar. Como o verbo está no gerúndio, significando o ato de traçar uma curva, utilizei a expressão "no traçado"
-#. Form11..GroupBox2..ShadeSelect1....Hint
-msgid "Select the style used for drawing the inequality. Not used for equations."
-msgstr "Seleciona o estilo usado no traçado da inequação. Não utilizado em equações."
-
-# vide anterior
-#. Form11..GroupBox2..ExtColorBox1..Hint
-msgid "Select the color for drawing the relation."
-msgstr "Seleciona a cor para o traçado da relação."
-
 # "do", e não "o contorno"
 #  as vírgulas não são necessárias
-#. Form11..GroupBox2..Panel1..Edit4....Hint
+#. Form11..GroupBox2..GridPanelEx1..Panel1..Edit4....Hint
 msgid "Width in pixels of the equation line or the borderline of the inequality."
 msgstr "Largura em pixels da linha da equação ou do contorno da inequação."
 
@@ -1156,12 +1169,6 @@ msgstr "Escreva um texto descritivo a ser mostrado na legenda. Se deixado em bra
 #. Form7..GroupBox4..Caption
 msgid "Graph properties"
 msgstr "Propriedades do gráfico"
-
-#. Form12..GroupBox2..Label7..Caption
-#. Form5..GroupBox4..GridPanelEx1..Label7..Caption
-#. Form7..GroupBox4..Label7..Caption
-msgid "Line style:"
-msgstr "Estilo da linha:"
 
 # espessura ao invés de largura
 #. Form12..GroupBox2..Edit3..Hint
@@ -1264,7 +1271,7 @@ msgstr "Seleciona o marcador a ser mostrado no início do intervalo. Utilizado s
 #. Form12..GroupBox5..ComboBox2....Hint
 #. Form5..GroupBox5..ComboBox3....Hint
 msgid "Select marker to show at the end of the interval. Only used if an argument range is specified."
-msgstr "Seleciona o marcador a ser mostrado no fim do intervalo. Somente será utilizado se um intervalo de variação para o argumento for especificado."
+msgstr "Seleciona o marcador a ser mostrado no fim do intervalo. Utilizado somente se um intervalo de variação para o argumento for especificado."
 
 # Tradução literal: Inserir linha de tendência.
 # *   *   *
@@ -1436,7 +1443,7 @@ msgstr "Inserir série de pontos"
 # o tempo do verbo está errado, e "left" foi traduzido como direito. também não foi traduzido "list"
 #. Form14..Edit1....Hint
 msgid "The name of the point series, which is shown in the list to the left of the coordinate system."
-msgstr "O nome da série de pontos, o qual é exibido na lista à esquerda do sistema de coordenadas."
+msgstr "O nome da série de pontos, mostrado na lista à esquerda do sistema de coordenadas."
 
 # "series" é série, no singular
 #. Form14..Edit1..Text
@@ -1513,16 +1520,16 @@ msgstr "Seleciona que tipo de linha traçar entre os marcadores."
 # "Spline", se não me engano, é um tipo de algoritmo matemático e, nesse caso, seria intraduzível. Dequalquer forma, acho que a palavra deve ser inserida (e não omitida) na tradução
 #. Form14..PageControl1..TabSheet1..GroupBox2..ComboBox2....Items.Strings
 msgid "1D cubic spline"
-msgstr "Cúbico 1D spline"
+msgstr "Spline Cúbico 1D"
 
 # idem
 #. Form14..PageControl1..TabSheet1..GroupBox2..ComboBox2....Items.Strings
 msgid "2D cubic spline"
-msgstr "Cúbico 2D spline"
+msgstr "Spline Cúbico 2D"
 
 #. Form14..PageControl1..TabSheet1..GroupBox2..ComboBox2....Items.Strings
 msgid "Half cosine"
-msgstr "Meio coseno"
+msgstr "Meio cosseno"
 
 # imperativo substituído pelo presente
 #. Form14..PageControl1..TabSheet1..GroupBox2..ExtColorBox2..Hint
@@ -1541,16 +1548,11 @@ msgstr "Posição:"
 # "check" aqui tem o sentido de "marcar o quadrado" (e não de conferir, que é o sentido original). Então, me parece melhor utilizarmso aqui "marcar" ou "selecionar"
 #. Form14..PageControl1..TabSheet1..GroupBox3..CheckBox2..Hint
 msgid "Check to show the coordinate at each point."
-msgstr "Marque para mostrar a coordenada em cada ponto."
+msgstr "Selecione para exibir a coordenada em cada ponto."
 
 #. Form14..PageControl1..TabSheet1..GroupBox3..CheckBox2..Caption
 msgid "Show coordinates"
 msgstr "Mostrar coordenadas"
-
-# imperativo trocado pelo presente
-#. Form14..PageControl1..TabSheet1..GroupBox3..BitBtn1..Hint
-msgid "Select the font for the coordinates."
-msgstr "Seleciona a fonte para as coordenadas."
 
 # trocado imperativo pelo presente.
 # "should" é melhor traduzido como "deve ser"
@@ -1589,6 +1591,11 @@ msgstr "Abaixo e à esquerda"
 #. Form14..PageControl1..TabSheet1..GroupBox3..ComboBox1....Items.Strings
 msgid "Below Right"
 msgstr "Abaixo e à direita"
+
+# imperativo trocado pelo presente
+#. Form14..PageControl1..TabSheet1..GroupBox3..Button5..Hint
+msgid "Select the font for the coordinates."
+msgstr "Seleciona a fonte para as coordenadas."
 
 # polar estava no singular
 # coloquei o verbo no presente
@@ -1654,7 +1661,7 @@ msgstr "Todas as barras de erro são iguais a um percentual de suas respectivas 
 #. Form14..PageControl1..TabSheet2..GroupBox5..RadioButton2..Caption
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Caption
 msgid "Relative:"
-msgstr "Relativa:"
+msgstr "Relativo:"
 
 # substitui pel atradução literal
 #. Form14..PageControl1..TabSheet2..GroupBox5..RadioButton3..Hint
@@ -1691,6 +1698,11 @@ msgstr "Mostra as barras-y"
 #. Form14..PageControl1..TabSheet2..GroupBox6..RadioButton5..Hint
 msgid "All error bars are the same percentage of the y-coordinate."
 msgstr "Todas as barras de erro são iguais a um percentual de suas respectivas coordenadas-y"
+
+#. Form14..Button4..Caption
+#. Form17..Button3..Caption
+msgid "Apply"
+msgstr "Aplicar"
 
 # fiz a tradução literal
 #. Form14..PopupMenu1..Popup_Cut..Hint
@@ -1914,7 +1926,7 @@ msgstr "Coordenada onde o sombreamento termina."
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox2..Hint
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox4..Hint
 msgid "Check to increase the end coordinate until intersection."
-msgstr "Marque para aumentar o valor da coordenada final até a interseção. "
+msgstr "Selecione para aumentar a coordenada final até a interseção. "
 
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox2..Caption
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox4..Caption
@@ -1925,7 +1937,7 @@ msgstr "Aumentar até interseção."
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox1..Hint
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox3..Hint
 msgid "Check to decrease the start coordinate until intersection."
-msgstr "Marque para diminuir a coordenada inicial até a interseção. "
+msgstr "Selecione para diminuir a coordenada inicial até a interseção. "
 
 #. Form16..PageControl1..TabSheet2..GroupBox1..CheckBox1..Caption
 #. Form16..PageControl1..TabSheet3..GroupBox2..CheckBox3..Caption
@@ -1983,10 +1995,6 @@ msgstr "Intervalo de sombreamento da 2ª função"
 #. Form17..Caption
 msgid "Custom functions/constants"
 msgstr "Funções/constantes personalizadas"
-
-#. Form17..Button3..Caption
-msgid "Apply"
-msgstr "Aplicar"
 
 # O texto do Ivan está com uma ligeira falha: ou se coloca "Nome" e "Definição" (ambos no singular), ou então "'Nomes" e "Definições" (ambos no plural")
 #. Form17..Grid1....TitleCaptions.Strings
@@ -2119,7 +2127,7 @@ msgstr "Legal"
 #. Form18..CheckBox1..Hint
 #. Form3..CheckBox16..Hint
 msgid "Select this to use these settings as defaults in the future."
-msgstr "Selecione esta opção para usar estas configurações como padrão no futuro."
+msgstr "Selecione esta opção para usar essas configurações como padrão, no futuro."
 
 #. Form18..CheckBox1..Caption
 #. Form3..CheckBox16..Caption
@@ -2223,14 +2231,19 @@ msgstr "Este é um software livre, e você está convidado a distribuí-lo sob o
 msgid "The newest version as well as the source code are available at: %s"
 msgstr "A versão mais recente, assim como o código fonte se encontram disponíveis em: %s"
 
+# "suporte " é comumente traduzido, em todos os sits ligados a área de informática, como "suporte". Basta dar uma olhada nos sites onde se baixam drivers, versões novas de aplicativos, etc, e em todos eles SEM EXCEÇÃO, a palavra que aparece lá é "suporte". Então, me parece imprescindível se trocar o termo aqui.
 #. Form2..Panel1..LinkLabel2..Caption
-msgid "Email: %s"
-msgstr "Email: %s"
+msgid "Support: %s"
+msgstr "Suporte: %s"
 
 # Incluí meu nome aqui, e depois você precisa incluir o do André!
 #. Form2..Panel1..LinkLabel3..Caption
 msgid "<Language> translation by <Translator>"
-msgstr "Tradução para o português (Brasil) pela equipe de professores e alunos da Faculdade de Filosofia de Passos (Passos-MG): Prof. Jorge Luís Costa, Profa. Mara Corea Senna, Deivid Rodrigues, Fernanda Fernandes Lyra Gomes e Monalisa H. Vaz.\vRevisão: Aldemar Calazans Filho (menus/dicas)"
+msgstr ""
+"Traduzido para o Português do Brasil por:\n"
+"• Interface Gráfica - Equipe de profs. e alunos da Faculdade de Filosofia de Passos/MG: Jorge Luís Costa (Prof.), Mara Corea Senna (Profa.), Deivid Rodrigues, Fernanda F. Lyra Gomes e Monalisa H. Vaz\n"
+"• Arquivo da Ajuda - Wladimir Albuquerque Silva - Recife/PE\n"
+"• Revisão dos textos: Aldemar Calazans Filho - Rio de Janeiro/RJ"
 
 # o termo "animation" está aqui no singular
 #. Form20..Caption
@@ -2304,7 +2317,7 @@ msgstr "Reproduz de trás para frente quando o fim da animação é alcançado. 
 
 #. Form20..PopupMenu1..Save1..Hint
 msgid "Save the animation to a file."
-msgstr "Salva a animação em um arquivo."
+msgstr "Salva a animação como um arquivo."
 
 # vide anteriores
 #. Form20..PopupMenu1..Saveimageas1..Caption
@@ -2314,7 +2327,7 @@ msgstr "Salvar quadro..."
 # idem
 #. Form20..PopupMenu1..Saveimageas1..Hint
 msgid "Save the shown frame to an image file."
-msgstr "Salvar o quadro mostrado num arquivo de imagem."
+msgstr "Salva o quadro mostrado como um arquivo de imagem."
 
 # idem
 #. Form20..PopupMenu1..Saveimagesequence1..Caption
@@ -2327,7 +2340,7 @@ msgstr "Salvar todos os quadros..."
 # "Salvar como" me parece mais amigável que a tradução "salvar para"
 #. Form20..PopupMenu1..Saveimagesequence1....Hint
 msgid "Save all frames in the animation to image files. This will create as many files as there are frames in the animation."
-msgstr "Salvar todos os quadros da animação como arquivos de imagens. Isso irá criar tantos arquivos quantos forem os quadros da animação."
+msgstr "Salva todos os quadros da animação como arquivos de imagens. Isso irá criar tantos arquivos quantos forem os quadros da animação."
 
 #. Form21..Label1..Caption
 msgid "Corner:"
@@ -2431,7 +2444,7 @@ msgstr "Unidades entre as linhas de grade perpendiculares ao eixo-x."
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox4..Hint
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox11..Hint
 msgid "Determine the tick unit automatically."
-msgstr "Determina a unidade das marcas automaticamente."
+msgstr "Determina a unidade de marcas automaticamente."
 
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox4..Caption
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox11..Caption
@@ -2440,7 +2453,7 @@ msgstr "Auto marcas"
 
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox6..Hint
 msgid "Show tick marks on the x-axis."
-msgstr "Mostra as marcas no eixo-x"
+msgstr "Mostra marcas de escala no eixo-x"
 
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox6..Caption
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox13..Caption
@@ -2450,7 +2463,7 @@ msgstr "Mostrar marcas"
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox5..Hint
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox12..Hint
 msgid "Set the grid unit to the same as the tick unit."
-msgstr "Ajusta a unidade da grade ultilizando a mesma unidade das marcas."
+msgstr "Ajusta a unidade de grade para o mesmo valor da unidade de marcas."
 
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox5..Caption
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox12..Caption
@@ -2467,41 +2480,10 @@ msgstr "Mostra as linhas de grade vertical."
 msgid "Show grid"
 msgstr "Mostrar grade"
 
-# faltou artigo "o" ao início
-# "graphing area " foi traduzido por vocês mais à frente como "área de plotagem", de forma que resolvi utilizar o termo aqui também
-# "above" é acima, e não abaixo
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3....Hint
-msgid "Show the label at the right side of the graphing area, above the x-axis."
-msgstr "Mostra o rótulo no lado direito da área de plotagem, acima do eixo-x."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..CheckBox3..Caption
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10..Caption
-msgid "Label:"
-msgstr "Rótulo:"
-
-# palavra aqui colocada ao final (fica melhor e mais sparecido com o texto original)
-# "edit', por uma questão de padronização, traduzido como editar
-# eixo está no sigular (axis, e não axes)
-# Parece que Ivan usou a preposição errada (for, ao invés de of) no texto original
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel1..Edit5..Hint
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..Edit11..Hint
-msgid "Edit the label for the axis here."
-msgstr "Edite o rótulo do eixo aqui."
-
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Label4..Caption
-msgid "The x-axis cross at y="
-msgstr "O eixo-x cruza em y="
-
-# traduzi "intercept" como interceptará.
-# É melhor traduzir "value" como valor, pois ponto implica dois valores (um x e outro y), enquanto que valor implica que x=0 e y = o valor em questão
-#. Form3..PageControl1..TabSheet1..GridPanel1..Panel2..Edit6..Hint
-msgid "The x-axis will intersect with the y-axis at this value."
-msgstr "O eixo-x interceptará o eixo-y neste valor."
-
 # tempo verbal alterado
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Hint
 msgid "Use logarithmic scale on the x-axis."
-msgstr "Utiliza escala logaritimica no eixo-x."
+msgstr "Utiliza escala logarítmica no eixo-x."
 
 # acento no i e t mudo
 #. Form3..PageControl1..TabSheet1..GridPanel1..CheckBox1..Caption
@@ -2532,6 +2514,37 @@ msgstr "Mostra as unidades no eixo selecionado como frações multiplicadas por 
 msgid "Show as a multiple of π"
 msgstr "Mostrar como múltiplos de π"
 
+# palavra aqui colocada ao final (fica melhor e mais sparecido com o texto original)
+# "edit', por uma questão de padronização, traduzido como editar
+# eixo está no sigular (axis, e não axes)
+# Parece que Ivan usou a preposição errada (for, ao invés de of) no texto original
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..Edit5..Hint
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..Edit11..Hint
+msgid "Edit the label for the axis here."
+msgstr "Edite o rótulo do eixo aqui."
+
+# faltou artigo "o" ao início
+# "graphing area " foi traduzido por vocês mais à frente como "área de plotagem", de forma que resolvi utilizar o termo aqui também
+# "above" é acima, e não abaixo
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3....Hint
+msgid "Show the label at the right side of the graphing area, above the x-axis."
+msgstr "Mostra o rótulo no lado direito da área de plotagem, acima do eixo-x."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx3..CheckBox3..Caption
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10..Caption
+msgid "Label:"
+msgstr "Rótulo:"
+
+# traduzi "intercept" como interceptará.
+# É melhor traduzir "value" como valor, pois ponto implica dois valores (um x e outro y), enquanto que valor implica que x=0 e y = o valor em questão
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Edit6..Hint
+msgid "The x-axis will intersect with the y-axis at this value."
+msgstr "O eixo-x interceptará o eixo-y neste valor."
+
+#. Form3..PageControl1..TabSheet1..GridPanel1..GridPanelEx4..Label4..Caption
+msgid "The x-axis cross at y="
+msgstr "O eixo-x cruza em y="
+
 #. Form3..PageControl1..TabSheet2..Caption
 #. ParFuncFrame..ComboBox1....Items.Strings
 #. PolFuncFrame..ComboBox1....Items.Strings
@@ -2558,25 +2571,11 @@ msgstr "Unidades entre as linhas de grade perpendiculares ao eixo-y."
 
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox13..Hint
 msgid "Show tick marks on the y-axis."
-msgstr "Mostra marcas no eixo-y"
+msgstr "Mostra marcas de escala no eixo-y"
 
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox14..Hint
 msgid "Show horizontal grid lines."
 msgstr "Mostra as linhas de grade horizontal."
-
-# padronização com tradução anterior
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel3..CheckBox10....Hint
-msgid "Show the label at the top of the graphing area, to the right of the y-axis."
-msgstr "Mostra o rótulo no topo da área de plotagem, à direita do eixo-y."
-
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Label8..Caption
-msgid "The y-axis cross at x="
-msgstr "O eixo-y cruza em x="
-
-# padronizar com tradução anterior
-#. Form3..PageControl1..TabSheet2..GridPanel2..Panel4..Edit12..Hint
-msgid "The y-axis will intersect with the x-axis at this value."
-msgstr "O eixo-y interceptará o eixo-x neste valor."
 
 # acento em logarítmica
 # o t é mudo
@@ -2587,6 +2586,20 @@ msgstr "Utiliza escala logarítmica no eixo-y."
 #. Form3..PageControl1..TabSheet2..GridPanel2..CheckBox9..Hint
 msgid "Show units on the y-axis."
 msgstr "Mostra unidades no eixo-y."
+
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Label8..Caption
+msgid "The y-axis cross at x="
+msgstr "O eixo-y cruza em x="
+
+# padronizar com tradução anterior
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx1..Edit12..Hint
+msgid "The y-axis will intersect with the x-axis at this value."
+msgstr "O eixo-y interceptará o eixo-x neste valor."
+
+# padronização com tradução anterior
+#. Form3..PageControl1..TabSheet2..GridPanel2..GridPanelEx2..CheckBox10....Hint
+msgid "Show the label at the top of the graphing area, to the right of the y-axis."
+msgstr "Mostra o rótulo no topo da área de plotagem, à direita do eixo-y."
 
 #. Form3..PageControl1..TabSheet3..Caption
 msgid "Settings"
@@ -2600,7 +2613,7 @@ msgstr "Título:"
 # Foi feita uma tradução livre aqui, omitindo-se algumas palavras, para fins de clareza
 #. Form3..PageControl1..TabSheet3..RadioGroup1....Hint
 msgid "Choose if you want to show the axes, and if you want to show them crossed or at the left and bottom of the image."
-msgstr "Escolhe se os eixos serão mostrados, e se os mesmos deverão ser cruzados ou mostrados à esquerda e embaixo na imagem."
+msgstr "Escolhe se os eixos serão exibidos, e se os mesmos deverão ser mostrados cruzados ou à esquerda e embaixo da imagem."
 
 # faltou a palavra "dos"
 #. Form3..PageControl1..TabSheet3..RadioGroup1..Caption
@@ -2613,7 +2626,7 @@ msgstr "Nenhum"
 
 #. Form3..PageControl1..TabSheet3..RadioGroup1....Items.Strings
 msgid "Crossed"
-msgstr "Cruzado"
+msgstr "Cruzados"
 
 #. Form3..PageControl1..TabSheet3..RadioGroup1....Items.Strings
 msgid "Boxed"
@@ -2641,10 +2654,6 @@ msgstr "Graus"
 msgid "Enter a title to show above the coordinate system."
 msgstr "Entre com um título a ser mostrado acima do sistema de coordenadas"
 
-#. Form3..PageControl1..TabSheet3..BitBtn1..Hint
-msgid "Select the font for the title."
-msgstr "Seleciona a fonte para o título."
-
 # "escolha" alterado para escolhe
 #. Form3..PageControl1..TabSheet3..RadioGroup3..Hint
 msgid "Choose where the legend should be placed."
@@ -2658,12 +2667,16 @@ msgstr "Posição da legenda"
 # complexo estava no singular
 #. Form3..PageControl1..TabSheet3..CheckBox19....Hint
 msgid "Check this to use complex numbers for calculations. Notice that this will slow graphing down."
-msgstr "Marque esta opção para usar números complexos nos cálculos. Observe que isso irá diminuir a velocidade da representação gráfica."
+msgstr "Selecione esta opção para utilizar números complexos nos cálculos. Observe que isso irá diminuir a velocidade da representação gráfica."
 
 # "numbers" ficou sem ser traduzido
 #. Form3..PageControl1..TabSheet3..CheckBox19..Caption
 msgid "Calculate with complex numbers"
 msgstr "Calcular com números complexos "
+
+#. Form3..PageControl1..TabSheet3..Button7..Hint
+msgid "Select the font for the title."
+msgstr "Seleciona a fonte para o título."
 
 #. Form3..PageControl1..TabSheet4..Caption
 msgid "Font and color"
@@ -2671,7 +2684,7 @@ msgstr "Fonte e cor"
 
 #. Form3..PageControl1..TabSheet4..GroupBox3..Caption
 msgid "Colors"
-msgstr "Cor"
+msgstr "Cores"
 
 #. Form3..PageControl1..TabSheet4..GroupBox3..Label17..Caption
 msgid "Grid color:"
@@ -2684,12 +2697,12 @@ msgstr "Cor dos eixos:"
 #. Form3..PageControl1..TabSheet4..GroupBox3..Label19..Caption
 #. Form6..Label4..Caption
 msgid "Background color:"
-msgstr "Cor do fundo:"
+msgstr "Cor de fundo:"
 
 # acho que não há necessidade de complementação do texto aqui, com planos cartesiano (o comando é bem óbvio)
 #. Form3..PageControl1..TabSheet4..GroupBox3..ExtColorBox1..Hint
 msgid "Select the color of the image background."
-msgstr "Escolhe a cor de fundo do gráfico."
+msgstr "Seleciona a cor de fundo do gráfico."
 
 #. Form3..PageControl1..TabSheet4..GroupBox3..ExtColorBox2..Hint
 msgid "Select the color of the axes."
@@ -2717,15 +2730,15 @@ msgstr "Fonte do rótulo:"
 msgid "Legend font:"
 msgstr "Fonte da legenda:"
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn2..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button4..Hint
 msgid "Select the font used to show the labels on the axes."
 msgstr "Seleciona a fonte a ser usada nos rótulos dos eixos."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn3..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button5..Hint
 msgid "Select the font used to show the numbers on the axes."
 msgstr "Seleciona a fonte a ser usada nos números dos eixos."
 
-#. Form3..PageControl1..TabSheet4..GroupBox4..BitBtn4..Hint
+#. Form3..PageControl1..TabSheet4..GroupBox4..Button6..Hint
 msgid "Select the font used to show the legend text."
 msgstr "Seleciona a fonte a ser usada nos textos da legenda."
 
@@ -2820,16 +2833,16 @@ msgstr "Salva o tamanho da janela principal quando o programa é encerrado. Esse
 
 #. Form4..GridPanelEx1..CheckBox3..Caption
 msgid "Save workspace on exit"
-msgstr "Salva área de trabalho ao sair"
+msgstr "Salvar área de trabalho ao sair"
 
 # o texto estava um pouco estranho
 #. Form4..GridPanelEx1..CheckBox4....Hint
 msgid "If checked the program will contact a web server when the program is started to see if a newer version is available."
-msgstr "Se marcado, o programa irá contatar um servidor de web quando for iniciado para verificar se uma versão mais nova se encontra disponível. "
+msgstr "Se marcado, o programa irá contatar um servidor da web ao iniciar, e verificará se uma versão mais nova do Graph se encontra disponível. "
 
 #. Form4..GridPanelEx1..CheckBox4..Caption
 msgid "Check for new version of Graph at startup"
-msgstr "Procura por nova versão do Graph ao iniciar"
+msgstr "Procurar por nova versão do Graph ao iniciar"
 
 # separador de decimais é mais exato
 # Obs: me parece que o texto foi trocado: há um outro texto duas linhas abaixo (não utilizado) que explica que se trata apenas da exportação de dados. Esta informação não utilizada é, em verdade, a mais relevante de todas, de forma resolvi adicioná-la nesta ajuda
@@ -2939,55 +2952,55 @@ msgstr "Tamanho do texto."
 msgid "Text string"
 msgstr "Texto"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton11..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton11..Hint
 msgid "Insert symbol (Ctrl+G)"
 msgstr "Inserir símbolo (Ctrl+G)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton13..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton13..Hint
 msgid "Insert object."
 msgstr "Inserir objeto."
 
-#. Form6..GroupBox1..ToolBar1..ToolButton1..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton1..Hint
 msgid "Bold (Ctrl+B)"
 msgstr "Negrito (Ctrl-B)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton2..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton2..Hint
 msgid "Italic (Ctrl+I)"
 msgstr "Itálico (Ctrl-I)"
 
-#. Form6..GroupBox1..ToolBar1..ToolButton3..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton3..Hint
 msgid "Underline (Ctrl+U)"
 msgstr "Sublinhado (Ctrl-U)"
 
 # A princípio, achei melhor usar aqui a mesma terminologoa usda no Microsoft Word, a saber, "tachado" (acho que as pessoas que digitam textos estão mais acostuamdas com esta terminologia).
 # No entanto, existe uma biblioteca do Windows que é usada quando do ajuste de fonte, e lá aparece escrito "Riscado", de forma que fui obrigado a retornar a usar este termo.
-#. Form6..GroupBox1..ToolBar1..ToolButton4..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton4..Hint
 msgid "Strikethrough (Ctrl+S)"
 msgstr "Riscado (Ctrl-S)"
 
 # idem
-#. Form6..GroupBox1..ToolBar1..ToolButton9..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton9..Hint
 msgid "Superscript (Ctrl++)"
 msgstr "Sobrescrito (Ctrl++)"
 
 # idem
-#. Form6..GroupBox1..ToolBar1..ToolButton10..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton10..Hint
 msgid "Subscript (Ctrl+=)"
 msgstr "Subscrito (Ctrl+=)"
 
 # "align" aqui é verbo
 # vide também padrão do Word
-#. Form6..GroupBox1..ToolBar1..ToolButton5..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton5..Hint
 msgid "Align left (Ctrl+L)"
 msgstr "Alinhar à esquerda (Ctrl-L)"
 
 # idem
-#. Form6..GroupBox1..ToolBar1..ToolButton6..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton6..Hint
 msgid "Center (Ctrl+E)"
 msgstr "Centralizar (Ctrl-E)"
 
 # idem
-#. Form6..GroupBox1..ToolBar1..ToolButton7..Hint
+#. Form6..GroupBox1..Panel1..ToolBar1..ToolButton7..Hint
 msgid "Align right (Ctrl+R)"
 msgstr "Alinhar à direita (Ctrl-R)"
 
@@ -3065,10 +3078,9 @@ msgstr "Constante"
 msgid "Value"
 msgstr "Valor"
 
-# calcular, e não cálculo
 #. Form9..Label1..Caption
 msgid "Select a function or tangent to evaluate."
-msgstr "Selecione uma função ou tangente para calcular."
+msgstr "Selecione uma função ou tangente para o cálculo do valor numérico."
 
 # "posicionado" é mais comum, em se tratando deste tipo de informação
 #. Form9..PolFuncFrame1....Hint
@@ -3080,12 +3092,12 @@ msgstr "Selecione onde o cursor será posicionado quando você clicar sobre a im
 # "the graph itself" é o próprio gráfico
 #. AreaFrame..GridPanel1..Panel1..Edit1....Hint
 msgid "Enter the start coordinate or mark the range on the graph itself with the mouse."
-msgstr "Entre com a coordenada inicial ou marque o intervalo no próprio gráfico com o mouse."
+msgstr "Entre com a coordenada inicial ou indique o intervalo no próprio gráfico com o mouse."
 
 # idem
 #. AreaFrame..GridPanel1..Panel2..Edit2....Hint
 msgid "Enter the end coordinate or mark the range on the graph itself with the mouse."
-msgstr "Entre com a coordenada final ou marque o intervalo no próprio gráfico com o mouse."
+msgstr "Entre com a coordenada final ou indique o intervalo no próprio gráfico com o mouse."
 
 # "snap" significa se mover de forma rápida e inteligente, em direção a alguma coisa (vide definições de dicionário). No caso, a coisa aqui são pontos especiais dentro da curva,  ou um percurso por toda ela).
 # Me parece que não temos um termo equivalente a este (os espanhóis usaram a a expressão "ver em").
@@ -3098,11 +3110,11 @@ msgstr "Mover p/:"
 
 #. ParFuncFrame..Edit2..Hint
 msgid "The x-coordinate evaluated for the t-parameter."
-msgstr "A coordenada-x calculada para o parâmetro-t."
+msgstr "A coordenada-x calculada para o parâmetro-t informado."
 
 #. ParFuncFrame..Edit3..Hint
 msgid "The y-coordinate evaluated for the t-parameter."
-msgstr "A coordenada-y calculada para o parâmetro-t."
+msgstr "A coordenada-y calculada para o parâmetro-t informado."
 
 # faltou a tradução de "entered"
 #. ParFuncFrame..Edit4..Hint
@@ -3122,7 +3134,7 @@ msgstr "A inclinação da função calculada para o parâmetro-t informado."
 # estava truncado
 #. ParFuncFrame..Edit1....Hint
 msgid "Enter the value for the parameter t for which you want to evaluate the function, or click on the graph in the graphing area."
-msgstr "Entre com o valor do parâmetro t para o qual você deseja calcular a função, ou clique no gráfico na área de plotagem."
+msgstr "Entre com o valor do parâmetro t para o qual você deseja calcular os valores numéricos da função, ou clique no gráfico na área de plotagem."
 
 #. ParFuncFrame..ComboBox1....Items.Strings
 #. PolFuncFrame..ComboBox1....Items.Strings
@@ -3166,27 +3178,27 @@ msgstr "A inclinação da função calculada para o ângulo dado."
 
 #. PolFuncFrame..Edit1....Hint
 msgid "Enter the value of the polar angle for which you want to evaluate the function, or click on the graph in the graphing area."
-msgstr "Entre com o valor do ângulo polar para o qual você deseja calcular a função, ou clique no gráfico na área de plotagem."
+msgstr "Entre com o valor do ângulo polar para o qual você deseja calcular o valor numérico da função, ou clique no gráfico na área de plotagem."
 
 # "um" valor, e não "o"
 #. StdFuncFrame..Edit1....Hint
 msgid "Enter a value for which you want to evaluate the function, or click on the graph in the graphing area."
-msgstr "Entre com o valor para o qual você deseja calcular a função, ou clique no gráfico na área de plotagem."
+msgstr "Entre com o valor do argumento para o qual você deseja calcular o valor numérico da função, ou clique no gráfico na área de plotagem."
 
 # correção de gêneros
 #. StdFuncFrame..Edit2..Hint
 msgid "This is the function evaluated for the entered x-value."
-msgstr "Esta é a função calculada para o valor-x informado."
+msgstr "Este é o valor da função para o valor do argumento informado."
 
 # sem vírgula, conforma linha de cima (padronização)
 #. StdFuncFrame..Edit3....Hint
 msgid "This is the first derivative of the function evaluated for the entered value."
-msgstr "Esta é a derivada primeira da função calculada para o valor informado."
+msgstr "Esta é a derivada primeira da função calculada para o valor do argumento informado."
 
 # idem
 #. StdFuncFrame..Edit4....Hint
 msgid "This is the second derivative of the function evaluated for the entered value."
-msgstr "Esta é a derivada segunda da função calculada para o valor informado."
+msgstr "Esta é a derivada segunda da função calculada para o valor do argumento informado."
 
 # esta
 #. TanFrame..Edit2....Hint
@@ -3269,7 +3281,7 @@ msgstr "Espaço"
 
 # power = potência
 msgid "An error occurred while evaluating power function."
-msgstr "Um erro ocorreu ao calcular a função potência."
+msgstr "Um erro ocorreu ao se calcular a função potência."
 
 msgid "Tangent to pi/2+n*pi (90+n180 in degrees) is undefined."
 msgstr "A tangente de pi/2+n*pi (90+n180 em graus) é indefinida."
@@ -3300,7 +3312,7 @@ msgstr "Divisão por zero."
 # Já o termo escala me parece mais comumente usado se referindo a instrumentos de medidas.
 # [-1,1] estava com excesso de espaços
 msgid "Inverse trigonometric function out of range [-1;1]"
-msgstr "Função trigonométrica inversa fora do intervalo de variação [-1;1 ]"
+msgstr "Função trigonométrica inversa fora do intervalo [-1;1 ]"
 
 msgid "The function is not defined for this value."
 msgstr "A função não é definida para este valor."
@@ -3331,16 +3343,16 @@ msgid "The custom function/constant '%s' was not found or has the wrong number o
 msgstr "A funçao/constante personalizada '%s' não foi encontrada ou tem um número incorreto de argumentos."
 
 msgid "Too many recursive calls."
-msgstr "Muitas chamadas de recursividade."
+msgstr "Muitas chamadas recursivas."
 
 # "to handle" foi omisso na tradução
 # "Overflow" é às vezes traduzido em alguns tetxos técnicos como "transbordo" mas, acho que este não é um termo muito conhecido de todos
 msgid "Overflow: A function returned a value too large to handle."
-msgstr "Overflow: A função retornou um valor grande demais para ser manipulado."
+msgstr "Estouro (overflow): A função retornou um valor grande demais para ser manipulado."
 
 # Não estava traduzido
 msgid "A plugin function failed: %s"
-msgstr "Um plugin da função falhou: %s"
+msgstr "Uma função de um plugin falhou: %s"
 
 # espaço a mais em '%s'
 msgid "Unexpected operator. Operator '%s' cannot be placed here."
@@ -3352,12 +3364,12 @@ msgstr "Faltando o parêntese direito."
 
 # "número de argumentos inválidos" ficou meio estranho: o adjetivo que era de uma palavra foi atribuída a outra!
 msgid "Invalid number of arguments supplied for the function '%s'"
-msgstr "Número inválido de argumentos para a função '%s'"
+msgstr "Número inválido de argumentos fornecidos para a função '%s'"
 
 # comparison = comparação
 # misplaced = mal colocado/posicionado
 msgid "Comparison operator misplaced."
-msgstr "Operador de comparação posicionado incorretamente."
+msgstr "Operador de comparação incorretamente posicionado."
 
 # inválido estava sem acento
 msgid "Invalid number found. Use the format: -5.475E-8"
@@ -3378,7 +3390,7 @@ msgid "Unexpected end of brackets."
 msgstr "Fim inesperado dos parênteses."
 
 msgid "Number, constant or function expected."
-msgstr "Número, constante ou função esperados."
+msgstr "Número, constante ou função esperado."
 
 # erro de gênero: é o parâmetro (masculino) que não é permitido.
 msgid "Parameter after constant or variable not allowed."
@@ -3388,7 +3400,7 @@ msgid "Expression expected."
 msgstr "Expressão esperada."
 
 msgid "Unknown variable, function or constant: \"%s\""
-msgstr "Variável, função ou constante desconhecida: \"%s \" "
+msgstr "Variável, função ou constante desconhecida: \"%s\" "
 
 # caractere é a grafia correta dicionarizada
 msgid "Unknown character: \"%s\""
@@ -3397,9 +3409,9 @@ msgstr "Caractere desconhecido: \"%s\""
 msgid "The end of the expression was unexpected."
 msgstr "Fim inesperado da expressão."
 
-# erro de análise é "parsing error"; a expressão "Error parsing" me parece que seria melhor traduzida como "erro ao analisar"
+# Parsing or syntactic analysis is the process of analysing a string of symbols...
 msgid "Error parsing expression."
-msgstr "Erro ao analisar a expressão."
+msgstr "Erro ao analisar a sintaxe da expressão."
 
 msgid "A calculation resulted in an overflow."
 msgstr "Um cálculo resultou em um overflow."
@@ -3407,7 +3419,7 @@ msgstr "Um cálculo resultou em um overflow."
 # inválido não tem exatamente o mesmo sentido de incorreto: no primeiro caso, existe muito de convenção (por exemplo, digitar o CPF num site na internete, colocando os traços que separam os números, pode ser inválido para aquela página, mas não em essêncai uma digitação incorreta (o site é que não é preparado para lidar com a informação correta/completa).
 # Então, melhor usar o termo "inválido" aqui
 msgid "An invalid value was used in the calculation."
-msgstr "Um valor inválido foi usado no cálculo."
+msgstr "Um valor inválido foi utilizado no cálculo."
 
 # "enough" significa suficiente, e pode significar, por exemplo, apenas dois (quando se tem de definir um intervalo, por exemplo). Bastante dá idéia de muita coisa. Por exemplo, na solução de um sistema de equaçãoes com 10 variáveis, pode se ter bastante elementos de cálculo (8 deles) em um problema, mas esse bastante ser insuficiente para resolver o problema (o mínimo aqui seriam 9). Como se vê, estas palavras não são sinônimas
 msgid "Not enough points for calculation."
@@ -3434,7 +3446,7 @@ msgid "Not further specified error occurred under calculation."
 msgstr "Um erro não especificado ocorreu durante o cálculo."
 
 msgid "No solution found. Try another guess or another model."
-msgstr "Nenhuma solução encontrada. Tente uma outra suposição ou um outro modelo."
+msgstr "Nenhuma solução encontrada. Tente um outro palpite ou um outro modelo."
 
 msgid "No result found."
 msgstr "Nenhum resultado encontrado."
@@ -3443,7 +3455,10 @@ msgstr "Nenhum resultado encontrado."
 # Me parece também que "preciso" (significando com baixa margem de erro), cujo antônimo é impreciso (com alta margem de erro) é mais adequado que "exato" (significando o valor sem aproximações de casas decimais) em contraposição a "aproximado" (casas decimais omitidas).
 # Concordo que a diferença aqui é sutil, mas é que estou mais acostumado com a expressão "precisaõ de um experimento", em Física.
 msgid "An accurate result cannot be found."
-msgstr "Um resultado preciso não pode ser encontrado."
+msgstr "Um resultado preciso não pôde ser encontrado."
+
+msgid "Memory allocation failed."
+msgstr "Falha na alocação de memória."
 
 msgid "Internal error. Please notify the programmer with as much information as possible."
 msgstr "Erro interno. Por favor, notifique o programador com o maxímo de informação possível."
@@ -3460,7 +3475,7 @@ msgid ""
 msgstr ""
 "Nome de função/constante inválido: '%s'.\n"
 "O nome deve conter apenas letras e números, e deve sempre iniciar com uma letra.\n"
-"Além disso, não é permitido redefinir nomes pré-definidas."
+"Além disso, não é permitido redefinir nomes pré-definidos."
 
 # name = nome (e não valor)
 msgid "You need to enter a name for the argument."
@@ -3500,7 +3515,7 @@ msgid "You have reached the maximum range of zoom."
 msgstr "Você alcançou a escala máxima do zoom."
 
 msgid "You have reached the minimum range of zoom."
-msgstr "Você alcançou a escala mínima do zoom"
+msgstr "Você alcançou a escala mínima do zoom."
 
 # Não poder ser zero, não é a mesma coisa que ter de ser maior que zero. Por exemplo, -3 não é igual a zero mas, nem por isso é maior que zero
 msgid "'%s' must not be zero."
@@ -3633,7 +3648,10 @@ msgid "Invalid use of infinity. Infinity cannot be used here."
 msgstr "Uso inválido do infinito. Infinito não pode ser usado aqui."
 
 msgid "Not enough memory to complete the operation."
-msgstr ""
+msgstr "Sem memória suficiente para completar a operação"
+
+msgid "Printing aborted!"
+msgstr "Impressão cancelada!"
 
 # "você está certo DISSO" (o verbo pede a preposição "de".
 msgid "Confirm delete"
@@ -3746,8 +3764,8 @@ msgstr "Editar função"
 msgid "Edit tangent/normal"
 msgstr "Editar tangente/normal"
 
-msgid "Error processing file '%s' at line %s."
-msgstr "Erro no processamento do arquivo '%s' na linha %s."
+msgid "Error processing file at line %s."
+msgstr "Erro ao processar o arquivo na linha %s."
 
 # faltou traduzir "text"
 msgid "Edit text label"
@@ -3838,7 +3856,7 @@ msgstr "Erro de socket %s"
 # "signed" não estava traduzido (sign = assinalar)
 # a vírgula depois de "ou", no texto traduzido, é desnecessária
 msgid "Definite integral, or signed area between function and x-axis, for the given domain range."
-msgstr "Integral definida ou área assinalada entre a função e o eixo x, para a faixa de domínio dada."
+msgstr "Integral definida ou área assinalada entre a função e o eixo-x, para a faixa de domínio dada."
 
 # o jargão correto aqui é comprimento de arco
 msgid "Length of path along the curve calculated for the given range."
@@ -3909,240 +3927,6 @@ msgstr ""
 msgid "Thread is not responding"
 msgstr "A \"thread\" não está respondendo"
 
-# a próclise aqui (lhe dar) é indicada
-# "a lot of" é muitas
-# "most" é a maioria
-# Embora o texto original não tenha nenhuma aspa, foram colocadas aqui aspas simples, pois é o padrão utilizado na maioria dos textos das dicas
-msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
-msgstr "Esta 'Dica do dia' pode lhe dar muitas informações sobre o programa, que a maioria dos usuários desconhece."
-
-# "using graph" = no uso do Graph
-#, fuzzy
-msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
-msgstr "Você pode obter ajuda no uso do Graph, reportar bugs e sugerir melhorias futuras no forum da web: <a href=\"http://www.padowan.dk/forum\">http://www.padowan.dk/forum</a>"
-
-# customize = personalizar
-# "on it" = sobre ela = sobre a mesma
-# o tempo verbal do Ivan está errado (deveria ter usado selecting")
-msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
-msgstr "Você pode personalizar a barra de ferramentas clicando com o botão direito do mouse sobre a mesma e selecionando 'Personalizar barra de ferramentas'."
-
-# "check mark" não tem uma tradução muito comum em nossa língua (marca de conferência?). Então, "removing the check mark" é mais comumente traduzido como "desmarcando"
-# "Ao invés" me parece uma construção mais comum que "em vez de "
-msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
-msgstr "Ao invés de excluir uma função, você pode torná-la invisível desmarcando-a na lista de funções."
-
-# faltou traduzir text
-msgid "You can paste images into a text label."
-msgstr "Você pode colar imagens num rótulo de texto."
-
-# faltou traduzir muitos termos
-msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
-msgstr "Rótulos de texto podem conter quaisquer tipos de objetos OLE, como por exemplo, o Microsoft Equation. Ao editar um rótulo, dê um clique com o botão direito do mouse na área de edição e selecione 'Inserir objeto'."
-
-# "Ao editar " é mais comum que "quando estiver editando", em traduções
-# Fui obrigado a fazer uma tradução livre, pois o texto estava absurdamente redundante, além de tecnicamente estranho (exportar pontos de uma série de pontos?)
-msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
-msgstr "Você pode exportar os dados de uma série de pontos para um arquivo que pode ser lido por outros programas, como por exemplo, o Microsoft Excel. Ao editar a série, selecione os pontos desejados, clique com o botão direito e escolha 'Exportar para arquivo'."
-
-# as the = "como a"
-msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
-msgstr "Uma linha vertical em x=5 pode ser obtida a partir da função paramétrica x(t)=5, y(t)=t ou através da relação x=5."
-
-# Ivan esqueceu de colocar suas aspas simples aqui masn, por questão de padronização,as adicionei
-# isso, zoom
-msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
-msgstr "Você pode usar 'Zoom|Quadrado' para fazer os eixos ficarem com a mesma escala. Isso é particularmente útil quando se desenham círculos e funções similares."
-
-# "in the help" = na ajuda (do programa)
-msgid "You can find a list of all available functions in the help."
-msgstr "Você pode encontrar uma lista de todas as funções disponíveis na ajuda do programa"
-
-# haviam espaços a mais aqui
-msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
-msgstr "Você pode combinar duas funções em uma única, utilizando 'if'. Por exemplo, a função f(x)=x para x<1 e f(x)=x^2 for x>=1 pode ser escrita como f(x)=if(x<1, x, x^2)."
-
-# into = para dentro de
-# coordenadas estava no masculino
-# havia espaços demais aqui
-msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
-msgstr "Você pode importar o conteúdo de um arquivo qualquer do Graph para dentro do sistema de coordenadas, usando 'Arquivo|Importar|Arquivo do Graph'"
-
-# "dialog" ou "dialog box" é traduzido nos textos de informática como "caixa de diálogo"
-# tradução impessoal (sem usar "você")
-msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
-msgstr "Se 'Salvar como padrão' estiver selecionado na caixa de diálogo dos eixos, as configurações atualmente em uso serão utilizadas como padrão na criação de novos sistemas de coordenadas."
-
-# "hold down" significa manter pressionada
-# while = enquanto
-msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
-msgstr "Mantendo a tecla Ctrl pressionada, você pode utilizar as teclas de seta para mover o plano cartesiano."
-
-# idem
-msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
-msgstr "Mantendo a tecla Ctrl pressionada, você pode utilizar as teclas + e - para aumentar ou diminuir o zoom."
-
-# manter scroll aqui é dispensável
-msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
-msgstr "Você pode usar o botão de rolagem do seu mouse para aumentar ou diminuir o zoom na posição do cursor do mouse."
-
-# pequenas correções
-# imperativo usado aqui, com vistas à padronização com outras traduções
-msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
-msgstr "Se você não quiser que um item seja mostrado na legenda, clique com o botão direito sobre o mesmo na lista de funções e desmarque a opção 'Mostrar na legenda'."
-
-# "tab" é traduzida no Firefox como "aba", e no Internet Explore como "guia" (vide imagens do Windows)
-msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
-msgstr "Se você quiser que os eixos sejam mostrados à esquerda e embaixo da imagem, escolha o estilo \"Caixa\" na guia \"Configurações\" da caixa de diálogo dos Eixos."
-
-# "sistema de coordenadas", e não "de eixos coordenados"
-msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
-msgstr "O Graph pode salvar o sistema de coordenadas mostrado em cinco formatos de imagem diferentes : bmp, emf, png, jpg e pdf."
-
-# vide comentários anteriores sobre o comando "Copy image"
-# "usually" aqui significa "da forma habitual"
-msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
-msgstr "Você pode usar 'Editar|Copiar imagem OLE' para copiar o sistema de coordenadas e colá-lo em um outro programa, como por exemplo, o Microsoft Word. Mais tarde, você pode editar essa imagem de maneira habitual no Graph, dando um clique duplo sobre a mesma dentro do outro programa."
-
-# me parece que a inclusão da palavra "disco", aqui, torna a compreensão do texto um pouco mais fácil
-# "instance" significa "instância" mas, como isso é um jargão pouco conhecido, me parece que a utilização aqui de "janela" (como feito por vocês mais à frente) é uma escolha mais adequada
-msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
-msgstr "Você pode abrir um arquivo do tipo .grf em uma nova janela do programa, dando um duplo-clique no mesmo a partir do Explorer."
-
-# mudei um pouco a forma do texto
-msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
-msgstr "Você pode arrastar um arquivo .grf a partir do Explorer para dentro de uma janela aberta do Graph, de maneira a abrí-lo. "
-
-# coloquei o texto aqui "caixa de diálogo"
-msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
-msgstr "O Graph irá lembrar o tamanho da janela principal, a cada execução. Esse recurso pode ser desabilitado na caixa de diálogo de 'Opções'."
-
-# faltou um para aqui
-# "evaluation values" é valores de cálculo (valores calculados seria evaluated values)
-# "for" aqui é "em relação a"
-msgid "Calc|Table can be used to create a table with evaluation values for a function."
-msgstr "'Calc|Tabela' pode ser usado para criar uma tabela com valores de cálculo relativos à uma função."
-
-# "evaluation table" é tabela de cálculo.
-# "evaluated table" é que seria tabela calculada
-msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
-msgstr "Uma tabela de cálculo completa ou apenas parte dessa pode ser exportada para um arquivo, clicando-se com o botão direito do mouse e selecionando a opção 'Exportar para arquivo'. Esse arquivo pode mais tarde ser aberto em outros programas, como o Microsoft Excel."
-
-# "like" aqui é tal como
-msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
-msgstr "Dados de uma tabela de cálculo podem ser copiados para outro programa, tal como Microsoft Excel."
-
-# o texto original está redundante, de forma que "points" (o primeiro) pode ser omitido na tradução
-# A inversão dos termos "de" e "para" gera uma construção de texto mais agradável
-msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
-msgstr "Dados de uma série de pontos podem ser copiados \"de\" e \"para\" outros programas, tais como Microsoft Excel."
-
-# aqui não me pareceu tão problemático usar instância
-msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
-msgstr "Elementos como funções, séries de ponto, etc., podem ser copiados de uma instância do programa para outra usando 'Editar|Copiar'."
-
-# tradução impessoal, no final (sem "você")
-msgid "You can always undo the last thing you did using Edit|Undo."
-msgstr "Você pode sempre desfazer a última ação efetuada, usando 'Editar|Desfazer'."
-
-# used = usou
-# tradução impessoal no meio
-msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
-msgstr "Se você usou 'Editar|Desfazer' por engano, é possível usar 'Editar|Refazer' e refazer o que foi desfeito."
-
-# "sistemas de coordenadas", além de ser a tradução literal, é a tradução que tem sido utilizada até aqui. Além disso, esta expresão é cerca de 100 vezes mai comum que "sistema de eixos coordenados"
-msgid "In the Axes dialog you can add a title to the coordinate system."
-msgstr "Na caixa de diálogo dos Eixos, você pode adicionar um título para o sistema de coordenadas."
-
-# pequenas alterações
-msgid "You can import point series from files saved by other programs, like Microsoft Excel."
-msgstr "Você pode importar séries de pontos de arquivos salvos por outros programas, tais como Microsoft Excel."
-
-msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
-msgstr "Ao inserir uma série de pontos, você pode copiar os dados de programas como Microsoft Excel, e colá-los dentro da grade do Graph."
-
-# tradução mais semelhante ao original
-msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
-msgstr "Você pode usar 'Zoom|Enquadrar todos' para alterar o sistema de coordenadas, de forma que todas as funções e séries de ponto se tornem visíveis."
-
-# padronização
-# "all parts" não pode ser traduzido aqui como "todas as partes", em se tratando de funções, pois elas em geral são infinitas (o que não acontece com as séries de pontos, que são sempre finitas).
-msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
-msgstr "Você pode usar 'Zoom|Enquadrar' para alterar o sistema de coordenadas, de forma que uma boa parte de uma função ou todos os pontos de uma série de pontos selecionada sejam exibidos."
-
-# pressionada estava com" c"
-# a tradução de around aqui seria "pra lá e para cá", "ao redor", mas me parece melhor, por ma questão de estilo, usar "em todas as direções"
-msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
-msgstr "Mantendo pressionada tecla Shift você pode arrastar o sistema de coordenadas com o mouse em todas as direções."
-
-# padronização.
-# crossings = cruzamentos
-msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
-msgstr "Você pode usar 'Calc|Calcular' para encontrar interseções entre funções, cruzamentos com os eixos e pontos extremos."
-
-# Obs: foi necessa´rio se fazer uma tradução um tanto diferente, em termos de estilo, para que a dica ficasse compreensível (os pontos aparecem imediatamente na tela a cada clique, sem ser necessária a introdução de valores em uma tabela
-msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
-msgstr "Quando uma série de pontos é selecionada, é possível adicionar pontos à mesma clicando-se em cima da imagem, com a tecla Ctrl pressionada."
-
-# necessário separar a sílaba aqui, por razões práticas na apresentação das dicas
-# (o "y" correu para a 3ª linha, quando a palavra não estava separada)
-msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
-msgstr "Você pode usar uma relação para plotar qualquer inequação, por exemplo, sin(x^2) < cos(y^2)"
-
-# padronização
-msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
-msgstr "Você pode usar uma relação para plotar qual-  quer equação, por exemplo, x*sin x = y*cos y."
-
-# padronização
-msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
-msgstr "Elementos (funções, sombreamentos, rótulos, relações, etc.) são plotados na mesma ordem em que aparecem na lista de funções à esquerda."
-
-# o uso do artigo definido "the", por parte do Ivan, não me aprece muito adequado
-msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
-msgstr "Você pode mover um elemento selecionado na lista de funções, arrastando o mesmo com o mouse ou utilizando as teclas seta-para-cima/ seta-para-baixo, com a tecla ALT pressionada."
-
-# o texto original do Ivan está mal escrito, de forma que tive que inverter a ordem de algumas palavras aqui, omitir termos (left), etc., com vistas a torná-lo mais claro
-msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
-msgstr "Você pode exibir funções e outros elementos atrás dos eixos, movendo os mesmos na lista de funções para cima de 'Eixos'. Para mover sombreamentos e tangentes, você deverá mover as funções às quais eles estejam ligados."
-
-# faltou personalizados
-# "fixado" aqui me pareceu melhor que anexado, pois a intenção neste caso é fazer com que o rótulo fique imóvel, independente da escala de zoom que for aplicada ou da modificação ba configuração dos eixos. Também com vistas a padronizar com o próximo texto (legenda fixada em um dos cantos)
-msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
-msgstr "Rótulos de texto personalizados podem ser fixados junto aos eixos, clicando-se no rótulo com o botão direito e selecionando uma posição no menu contextual."
-
-# idem.
-# padronização.
-msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
-msgstr "A legenda pode ser movida livremente com o mouse ou fixada a um dos cantos, clicando-se na mesma com o botão direito e selecionando uma posição no menu contextual."
-
-# "draw" aqui não me parece signiciar denehado ou traçado (estamos falando de um rótulo), mas sim, "mover em uma direção particular" e, por extensão, "posicionar" (vide definições de dicionário"
-msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
-msgstr "Como alternativa à 'Transparente', você pode escolher uma cor de fundo personalizada para os rótulos. Isso é particulamente útil no caso de rótulos posicionados em cima de sombreamentos."
-
-# "place" aqui é circunstância
-# "in most places" significa, literalmente, "na maioria das circunstância" que, equivale ao nosso conhecido "na maioria dos casos"
-# "like" aqui significa "típicos de" (vide definições de dicionários) e, por extensão, "relacionados à"
-msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
-msgstr "Na maioria dos casos relacionados à série de pontos, configurações dos eixos, intervalos de funções, etc., você pode utilizar expressões, tipo \"pi/4\", ao invés de números."
-
-# padronização/pequenas correções
-# "under" aqui é simplesmente "em"
-msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
-msgstr "Você pode criar suas próprias constantes personalizadas em 'Função|Funções/constantes personalizadas' para usar em funções, série de pontos, etc.  Por exemplo, g=9.80665, R=8.31."
-
-# idem
-msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
-msgstr "Você pode criar suas próprias funções personalizadas em 'Função|Funções/constantes personalizadas', para plotar funções, relações, etc. Por exemplo, sinc(x)=if(x=0, 0, sin(x)/x)."
-
-# padronização
-msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
-msgstr "Na caixa de diálogo de 'Salvar como imagem' existe um botão de 'Opção' que pode ser usado para especificar a resolução da imagem. Isso é particularmente útil quando se deseja uma imagem de alta resolução."
-
-# O texto original está redundante, fiz umas simplificações de estilo e correções básicas
-# "show" aqui significa "indicar" e, por extensão, "representar"
-msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
-msgstr "Séries de pontos podem ter setas como marcadores. Uma série de pontos desse tipo, com linhas interligando os pontos, pode ser utilizada para representar um vetor."
-
 msgid "Insert symbol"
 msgstr "Inserir símbolo"
 
@@ -4211,24 +3995,6 @@ msgstr "Comentário:"
 msgid "Select the printer to use. The Properties button may be used to change more advanced settings for the printer."
 msgstr "Selecione a impressora a ser usada. O botão Propriedades pode ser usado para mudar configurações mais avançadas da impressora."
 
-# "to print in color" = para imprimir em cores
-#. PrintFrm..RadioGroup2....Hint
-msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
-msgstr "Seleciona imprimir em cores (ou escala de cinza, se sua impressora não for colorida) ou converter todas as cores para preto."
-
-# output = saída
-#. PrintFrm..RadioGroup2..Caption
-msgid "Print output"
-msgstr "Saída de impressão"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Color"
-msgstr "Cor"
-
-#. PrintFrm..RadioGroup2....Items.Strings
-msgid "Black && white"
-msgstr "Preto e Branco"
-
 #. PrintFrm..GroupBox2..Caption
 msgid "Position (millimeters)"
 msgstr "Posição (milímetros)"
@@ -4269,6 +4035,334 @@ msgstr "Seleciona o número de cópias a serem impressas."
 #. PrintFrm..Edit4..Hint
 msgid "Enter percent of original size."
 msgstr "Ajusta para um percentual do tamanho original."
+
+#: ../Plugins/PluginManager/__init__.py:14
+msgid "The Plugin Manager is used to install and remove Graph plugins from  a single .py file or a package in a .zip file."
+msgstr "O Gerenciador de Plugins é usado para instalar e remover plug-ins do Graph a partir de um único arquivo .py ou de um pacote em um arquivo .zip."
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Overwrite plugin?"
+msgstr "Sobrescrever o plugin?"
+
+#: ../Plugins/PluginManager/__init__.py:62
+msgid "Plugin \"%s\" is already installed. Do you want to overwrite it?"
+msgstr "O plug-in \"%s\" já se encontra instalado. Você deseja sobrescrevê-lo?"
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "\"%s\" is not a valid Graph plugin as it does not have a __init__.py file in the root."
+msgstr "\"%s\" não é um plugin válido do Graph, pois não possui um arquivo __init__.py no diretório raiz."
+
+#: ../Plugins/PluginManager/__init__.py:72
+msgid "Install failed"
+msgstr "Falha na instalação"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "The plugin will keep running until Graph is closed. Are you sure you want to uninstall the plugin \"%s\"?"
+msgstr "O plug-in continuará sendo executado até que o Graph seja fechado. Tem certeza de que deseja desinstalar o plug-in \"%s\"?"
+
+#: ../Plugins/PluginManager/__init__.py:92
+msgid "Uninstall plugin?"
+msgstr "Desinstalar o plugin?"
+
+#: ../Plugins/PluginManager/__init__.py:100
+msgid "Failed to uninstall the plugin \"%s\". You may not have access rights to delete the file."
+msgstr "Falha ao desinstalar o plug-in \"%s\". Você talvez não tenha permissão para excluir o arquivo."
+
+#: ../Plugins/PluginManager/__init__.py:110
+msgid "Import and remove Graph plugins."
+msgstr "Importar e remover plugins do Graph."
+
+# dicas é um nome genérico. Por exemplo, o Graph tem as chamadas "dicas do dia", que não tem nada a ver com estas dicas na forma de baluns.
+# Então, achei melhor traduzir tooltip(s) como "dicas de ferramentas"
+#: ../Plugins/ShowConsole.py:5
+msgid "Show Console"
+msgstr "Exibe o console"
+
+#: ../Plugins/ShowConsole.py:7
+msgid "This is a very simple plugin that creates a menu item to show/hide the Python interpreter window."
+msgstr "Este é um plugin bastante simples que cria um item de menu para exibir/ocultar a janela do interpretador Python."
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show Python interpreter"
+msgstr "Exibe o interpretador Python"
+
+#: ../Plugins/ShowConsole.py:13
+msgid "Show the Python interpreter window."
+msgstr "Exibe a janela do interpretador Python."
+
+#~ msgid "Segoe UI"
+#~ msgstr "Segoe UI"
+
+#~ msgid "Tip of the day"
+#~ msgstr "Dica do dia"
+
+#~ msgid "Show tip of the day"
+#~ msgstr "Mostra a dica do dia."
+
+#~ msgid "Next tip"
+#~ msgstr "Próxima dica"
+
+#~ msgid "Previous tip"
+#~ msgstr "Dica anterior"
+
+#~ msgid "Show tips at startup"
+#~ msgstr "Mostrar dicas ao iniciar"
+
+#~ msgid "Did you know..."
+#~ msgstr "Você sabia que..."
+
+# a próclise aqui (lhe dar) é indicada
+# "a lot of" é muitas
+# "most" é a maioria
+# Embora o texto original não tenha nenhuma aspa, foram colocadas aqui aspas simples, pois é o padrão utilizado na maioria dos textos das dicas
+#~ msgid "This Tip of the day can give you a lot of information about the program that most users don't know."
+#~ msgstr "Esta 'Dica do dia' pode lhe dar muitas informações sobre o programa, que a maioria dos usuários desconhece."
+
+# "using graph" = no uso do Graph
+#~ msgid "You can get help using Graph, report bugs and suggest future improvements at the web forum: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
+#~ msgstr "Você pode obter ajuda no uso do Graph, reportar bugs e sugerir melhorias futuras no fórum da web: <a href=\"http://forum.padowan.dk\">http://forum.padowan.dk</a>"
+
+# customize = personalizar
+# "on it" = sobre ela = sobre a mesma
+# o tempo verbal do Ivan está errado (deveria ter usado selecting")
+#~ msgid "You can customize the toolbar by right clicking on it and select 'Customize toolbar'."
+#~ msgstr "Você pode personalizar a barra de ferramentas clicando com o botão direito do mouse sobre a mesma e selecionando 'Personalizar barra de ferramentas'."
+
+# "check mark" não tem uma tradução muito comum em nossa língua (marca de conferência?). Então, "removing the check mark" é mais comumente traduzido como "desmarcando"
+# "Ao invés" me parece uma construção mais comum que "em vez de "
+#~ msgid "Instead of deleting a function, you can make it invisible by removing the check mark for the item in the function list."
+#~ msgstr "Ao invés de excluir uma função, você pode torná-la invisível desmarcando-a na lista de funções."
+
+# faltou traduzir text
+#~ msgid "You can paste images into a text label."
+#~ msgstr "Você pode colar imagens num rótulo de texto."
+
+# faltou traduzir muitos termos
+#~ msgid "Text labels can contain any kind of OLE objects, for example Microsoft Equation. When editing a label right click in the editing area and select 'Insert object'."
+#~ msgstr "Rótulos de texto podem conter quaisquer tipos de objetos OLE, por exemplo, o Microsoft Equation. Ao editar um rótulo, clique com o botão direito na área de edição e selecione 'Inserir objeto'."
+
+# "Ao editar " é mais comum que "quando estiver editando", em traduções
+# Fui obrigado a fazer uma tradução livre, pois o texto estava absurdamente redundante, além de tecnicamente estranho (exportar pontos de uma série de pontos?)
+#~ msgid "You can export points from a point series to a file that can be read by other programs, for example Microsoft Excel. When editing the point series select the points, right click and choose 'Export to file'."
+#~ msgstr "Você pode exportar os dados de uma série de pontos para um arquivo que pode ser lido por outros programas, por exemplo, o Microsoft Excel. Ao editar a série, selecione os pontos desejados, clique com o botão direito e escolha 'Exportar para arquivo'."
+
+# as the = "como a"
+#~ msgid "A vertical line at x=5 can be drawn as the parametric function x(t)=5, y(t)=t or as the relation x=5."
+#~ msgstr "Uma linha vertical em x=5 pode ser obtida a partir da função paramétrica x(t)=5, y(t)=t ou através da relação x=5."
+
+# Ivan esqueceu de colocar suas aspas simples aqui masn, por questão de padronização,as adicionei
+# isso, zoom
+#~ msgid "You can use Zoom|Square to make the axes look equally scaled. This is especially useful when drawing circles and similar functions."
+#~ msgstr "Você pode usar 'Zoom|Quadrado' para fazer os eixos ficarem com a mesma escala. Isso é particularmente útil quando se desenham círculos e funções similares."
+
+# "in the help" = na ajuda (do programa)
+#~ msgid "You can find a list of all available functions in the help."
+#~ msgstr "Você pode encontrar uma lista de todas as funções disponíveis na ajuda do programa"
+
+# haviam espaços a mais aqui
+#~ msgid "You can combine two functions to one using 'if'. For example the function f(x)=x for x<1 and f(x)=x^2 for x>=1 can be written as f(x)=if(x<1, x, x^2)."
+#~ msgstr "Você pode combinar duas funções em uma única, utilizando 'if'. Por exemplo, a função f(x)=x para x<1 e f(x)=x^2 for x>=1 pode ser escrita como f(x)=if(x<1, x, x^2)."
+
+# into = para dentro de
+# coordenadas estava no masculino
+# havia espaços demais aqui
+#~ msgid "You can import the contents of another Graph file into the current coordinate system using 'File|Import|Graph file'."
+#~ msgstr "Você pode importar o conteúdo de um arquivo qualquer do Graph para dentro do sistema de coordenadas, usando 'Arquivo|Importar|Arquivo do Graph'"
+
+# "dialog" ou "dialog box" é traduzido nos textos de informática como "caixa de diálogo"
+# tradução impessoal (sem usar "você")
+#~ msgid "If you check 'Save as default' in the Axes dialog the current settings will be used as default when creating new coordinate systems."
+#~ msgstr "Se 'Salvar como padrão' estiver selecionado na caixa de diálogo dos eixos, as configurações atualmente em uso serão utilizadas como padrão na criação de novos sistemas de coordenadas."
+
+# "hold down" significa manter pressionada
+# while = enquanto
+#~ msgid "While you hold down the Ctrl key, you can use the arrow keys to move the system."
+#~ msgstr "Mantendo a tecla Ctrl pressionada, você pode utilizar as teclas de seta para mover o plano cartesiano."
+
+# idem
+#~ msgid "While you hold down the Ctrl key, you can use the + and - keys to zoom in and out."
+#~ msgstr "Mantendo a tecla Ctrl pressionada, você pode utilizar as teclas + e - para aumentar ou diminuir o zoom."
+
+# manter scroll aqui é dispensável
+#~ msgid "You can use the scroll button on your mouse to zoom in and out at the position of the mouse cursor."
+#~ msgstr "Você pode usar o botão de rolagem do seu mouse para aumentar ou diminuir o zoom na posição do cursor do mouse."
+
+# pequenas correções
+# imperativo usado aqui, com vistas à padronização com outras traduções
+#~ msgid "If you don't want an item shown in the legend, you can right click on the item in the function list and deselect 'Show in legend'."
+#~ msgstr "Se você não quiser que um item seja mostrado na legenda, clique com o botão direito sobre o mesmo na lista de funções e desmarque a opção 'Mostrar na legenda'."
+
+# "tab" é traduzida no Firefox como "aba", e no Internet Explore como "guia" (vide imagens do Windows)
+#~ msgid "If you want the axes shown to the left and bottom of the image, you can choose Axes style as Boxed in the Settings tab of the Axes dialog."
+#~ msgstr "Se você quiser que os eixos sejam mostrados à esquerda e embaixo da imagem, escolha o estilo \"Caixa\" na guia \"Configurações\" da caixa de diálogo dos Eixos."
+
+# "sistema de coordenadas", e não "de eixos coordenados"
+#~ msgid "Graph can save the shown coordinate system in five different image formats: bmp, emf, png, jpg and pdf."
+#~ msgstr "O Graph pode salvar o sistema de coordenadas em cinco formatos de imagem diferentes : bmp, emf, png, jpg e pdf."
+
+# vide comentários anteriores sobre o comando "Copy image"
+# "usually" aqui significa "da forma habitual"
+#~ msgid "You can use 'Edit|Copy image' to copy the coordinate system and paste it into another program, for example, Microsoft Word. Later you can usually edit the image in Graph by double clicking on it in the other program."
+#~ msgstr "Você pode usar 'Editar|Copiar imagem OLE' para copiar o sistema de coordenadas e colá-lo em um outro programa, por exemplo, o Microsoft Word. Mais tarde, você pode editar essa imagem de maneira habitual no Graph, dando um duplo clique sobre a mesma dentro do outro programa."
+
+# me parece que a inclusão da palavra "disco", aqui, torna a compreensão do texto um pouco mais fácil
+# "instance" significa "instância" mas, como isso é um jargão pouco conhecido, me parece que a utilização aqui de "janela" (como feito por vocês mais à frente) é uma escolha mais adequada
+#~ msgid "You can open a saved grf-file in a new instance of the program by double clicking on it in Explorer."
+#~ msgstr "Você pode abrir um arquivo do tipo .grf em uma nova janela do programa, dando um duplo clique no mesmo a partir do Explorer."
+
+# mudei um pouco a forma do texto
+#~ msgid "You can drag a grf-file from explorer into an open instance of Graph to open the file."
+#~ msgstr "Você pode arrastar um arquivo .grf a partir do Explorer para dentro de uma janela aberta do Graph, de maneira a abrí-lo. "
+
+# coloquei o texto aqui "caixa de diálogo"
+#~ msgid "Graph will remember the size of the main window between executions. This can be disabled from the Options dialog."
+#~ msgstr "O Graph irá lembrar o tamanho da janela principal, a cada execução. Esse recurso pode ser desabilitado na caixa de diálogo de 'Opções'."
+
+# faltou um para aqui
+# "evaluation values" é valores de cálculo (valores calculados seria evaluated values)
+# "for" aqui é "em relação a"
+#~ msgid "Calc|Table can be used to create a table with evaluation values for a function."
+#~ msgstr "'Calc|Tabela' pode ser usado para criar uma tabela com valores de cálculo relativos à uma função."
+
+# "evaluation table" é tabela de cálculo.
+# "evaluated table" é que seria tabela calculada
+#~ msgid "A part or the whole evaluation table can be exported to a file by right clicking and selecting 'Export to file'. It can afterwards be opened in other programs like Microsoft Excel."
+#~ msgstr "Uma tabela de cálculo completa ou apenas parte da mesma pode ser exportada para um arquivo, clicando-se com o botão direito do mouse e selecionando a opção 'Exportar para arquivo'. Esse arquivo pode mais tarde ser aberto em outros programas, como o Microsoft Excel."
+
+# "like" aqui é tal como
+#~ msgid "Data from the evaluation table can be copied to another program like Microsoft Excel."
+#~ msgstr "Dados de uma tabela de cálculo podem ser copiados para outro programa, tal como Microsoft Excel."
+
+# o texto original está redundante, de forma que "points" (o primeiro) pode ser omitido na tradução
+# A inversão dos termos "de" e "para" gera uma construção de texto mais agradável
+#~ msgid "The data points in a point series can be copied to and from other programs like Microsoft Excel."
+#~ msgstr "Dados de uma série de pontos podem ser copiados \"de\" e \"para\" outros programas, tais como Microsoft Excel."
+
+# aqui não me pareceu tão problemático usar instância
+#~ msgid "Elements as functions, point series, etc. can be copied from one instance of the program to another using Edit|Copy."
+#~ msgstr "Elementos como funções, séries de ponto, etc., podem ser copiados de uma instância do programa para outra usando 'Editar|Copiar'."
+
+# tradução impessoal, no final (sem "você")
+#~ msgid "You can always undo the last thing you did using Edit|Undo."
+#~ msgstr "Você pode sempre desfazer a última ação efetuada, usando 'Editar|Desfazer'."
+
+# used = usou
+# tradução impessoal no meio
+#~ msgid "If you used Edit|Undo by mistake, you can use Edit|Redo to redo what you have undone."
+#~ msgstr "Se você usou 'Editar|Desfazer' por engano, é possível usar 'Editar|Refazer' e refazer o que foi desfeito."
+
+# "sistemas de coordenadas", além de ser a tradução literal, é a tradução que tem sido utilizada até aqui. Além disso, esta expresão é cerca de 100 vezes mai comum que "sistema de eixos coordenados"
+#~ msgid "In the Axes dialog you can add a title to the coordinate system."
+#~ msgstr "Na caixa de diálogo dos Eixos, você pode adicionar um título para o sistema de coordenadas."
+
+# pequenas alterações
+#~ msgid "You can import point series from files saved by other programs, like Microsoft Excel."
+#~ msgstr "Você pode importar séries de pontos de arquivos salvos por outros programas, tais como Microsoft Excel."
+
+#~ msgid "When inserting a point series, you can copy data from programs like Microsoft Excel, and paste the data into the grid in Graph."
+#~ msgstr "Ao inserir uma série de pontos, você pode copiar os dados de programas como Microsoft Excel, e colá-los dentro da grade do Graph."
+
+# tradução mais semelhante ao original
+#~ msgid "You can use 'Zoom|Fit all' to change the coordinate system so all functions and point series are visible."
+#~ msgstr "Você pode usar 'Zoom|Enquadrar todos' para alterar o sistema de coordenadas, de forma que todas as funções e séries de ponto se tornem visíveis."
+
+# padronização
+# "all parts" não pode ser traduzido aqui como "todas as partes", em se tratando de funções, pois elas em geral são infinitas (o que não acontece com as séries de pontos, que são sempre finitas).
+#~ msgid "You can use Zoom|Fit to change the coordinate system to show all parts of the selected function or point series."
+#~ msgstr "Você pode usar 'Zoom|Enquadrar' para alterar o sistema de coordenadas, de forma que uma boa parte de uma função ou todos os pontos de uma série de pontos selecionada sejam exibidos."
+
+# pressionada estava com" c"
+# a tradução de around aqui seria "pra lá e para cá", "ao redor", mas me parece melhor, por ma questão de estilo, usar "em todas as direções"
+#~ msgid "When you hold down the Shift key you can drag the coordinate system around with the mouse."
+#~ msgstr "Mantendo pressionada tecla Shift você pode arrastar o sistema de coordenadas com o mouse em todas as direções."
+
+# padronização.
+# crossings = cruzamentos
+#~ msgid "You can use Calc|Evaluate to find intersections between functions, crossings with the axes and extremum points."
+#~ msgstr "Você pode usar 'Calc|Valor da função para encontrar interseções entre funções, cruzamentos com os eixos e pontos extremos."
+
+# Obs: foi necessa´rio se fazer uma tradução um tanto diferente, em termos de estilo, para que a dica ficasse compreensível (os pontos aparecem imediatamente na tela a cada clique, sem ser necessária a introdução de valores em uma tabela
+#~ msgid "When a point series is selected you can add points to it by clicking on the image while you hold down the Ctrl key."
+#~ msgstr "Quando uma série de pontos é selecionada, é possível adicionar pontos à mesma clicando-se em cima da imagem, com a tecla Ctrl pressionada."
+
+# necessário separar a sílaba aqui, por razões práticas na apresentação das dicas
+# (o "y" correu para a 3ª linha, quando a palavra não estava separada)
+#~ msgid "You can use a relation to plot any inequality, for example sin(x^2) < cos(y^2)"
+#~ msgstr "Você pode usar uma relação para plotar qualquer inequação, por exemplo, sin(x^2) < cos(y^2)"
+
+# padronização
+#~ msgid "You can use a relation to plot any equation, for example x*sin x = y*cos y"
+#~ msgstr "Você pode usar uma relação para plotar qual-  quer equação, por exemplo, x*sin x = y*cos y."
+
+# padronização
+#~ msgid "Elements (functions, shadings, labels, relations, etc.) are drawn in the same order they appear in the function list to the left."
+#~ msgstr "Elementos (funções, sombreamentos, rótulos, relações, etc.) são plotados na mesma ordem em que aparecem na lista de funções à esquerda."
+
+# o uso do artigo definido "the", por parte do Ivan, não me aprece muito adequado
+#~ msgid "You can move the selected element in the function list either by dragging it with the mouse or with the arrow up/down keys while ALT is held down."
+#~ msgstr "Você pode mover um elemento selecionado na lista de funções, arrastando o mesmo com o mouse ou utilizando as teclas seta-para-cima/ seta-para-baixo, com a tecla ALT pressionada."
+
+# o texto original do Ivan está mal escrito, de forma que tive que inverter a ordem de algumas palavras aqui, omitir termos (left), etc., com vistas a torná-lo mais claro
+#~ msgid "You can show functions and other elements behind the axes by moving the element above the axes in the function list to the left. To move shadings and tangents you will have to move the functions they are attached to."
+#~ msgstr "Você pode exibir funções e outros elementos atrás dos eixos, movendo os mesmos na lista de funções para cima de 'Eixos'. Para mover sombreamentos e tangentes, você deverá mover as funções às quais eles estejam ligados."
+
+# faltou personalizados
+# "fixado" aqui me pareceu melhor que anexado, pois a intenção neste caso é fazer com que o rótulo fique imóvel, independente da escala de zoom que for aplicada ou da modificação ba configuração dos eixos. Também com vistas a padronizar com o próximo texto (legenda fixada em um dos cantos)
+#~ msgid "Custom text labels may be attached to the axes by right clicking on the label and selecting a placement from the context menu."
+#~ msgstr "Rótulos de texto personalizados podem ser fixados junto aos eixos, clicando-se no rótulo com o botão direito e selecionando uma posição no menu contextual."
+
+# idem.
+# padronização.
+#~ msgid "The legend may be moved freely with the mouse or attached to one of the corners by right clicking on the legend and choose a placement from the context menu."
+#~ msgstr "A legenda pode ser movida livremente com o mouse ou fixada a um dos cantos, clicando-se na mesma com o botão direito e selecionando uma posição no menu contextual."
+
+# "draw" aqui não me parece signiciar denehado ou traçado (estamos falando de um rótulo), mas sim, "mover em uma direção particular" e, por extensão, "posicionar" (vide definições de dicionário"
+#~ msgid "As an alternative to Transparent, you can choose a custom background color for labels. This is especially useful for labels drawn over shadings."
+#~ msgstr "Como alternativa à 'Transparente', você pode escolher uma cor de fundo personalizada para os rótulos. Isso é particulamente útil no caso de rótulos posicionados em cima de sombreamentos."
+
+# "place" aqui é circunstância
+# "in most places" significa, literalmente, "na maioria das circunstância" que, equivale ao nosso conhecido "na maioria dos casos"
+# "like" aqui significa "típicos de" (vide definições de dicionários) e, por extensão, "relacionados à"
+#~ msgid "In most places like point series, axes settings, function ranges, etc., you can use expressions like pi/4 instead of numbers."
+#~ msgstr "Na maioria dos casos relacionados à série de pontos, configurações dos eixos, intervalos de funções, etc., você pode utilizar expressões, tipo \"pi/4\", ao invés de números."
+
+# padronização/pequenas correções
+# "under" aqui é simplesmente "em"
+#~ msgid "You can create your own custom constants under Function|Custom functions for use in functions, point series, etc. For example g=9.80665, R=8.31"
+#~ msgstr "Você pode criar suas próprias constantes personalizadas em 'Função|Funções/constantes personalizadas' para usar em funções, série de pontos, etc.  Por exemplo, g=9.80665, R=8.31."
+
+# idem
+#~ msgid "You can create your own custom functions under Function|Custom functions for use in plotting functions, relations, etc. For example sinc(x)=if(x=0, 0, sin(x)/x)"
+#~ msgstr "Você pode criar suas próprias funções personalizadas em 'Função|Funções/constantes personalizadas', para plotar funções, relações, etc. Por exemplo, sinc(x)=if(x=0, 0, sin(x)/x)."
+
+# padronização
+#~ msgid "In the Save as image dialog there is an Option button you can use to specify the image resolution. This is especially useful if you want a high resolution image."
+#~ msgstr "Na caixa de diálogo de 'Salvar como imagem' existe um botão de 'Opção' que pode ser usado para especificar a resolução da imagem. Isso é particularmente útil quando se deseja uma imagem de alta resolução."
+
+# O texto original está redundante, fiz umas simplificações de estilo e correções básicas
+# "show" aqui significa "indicar" e, por extensão, "representar"
+#~ msgid "Point series can have arrows as markers. A point series with arrows as markers and lines between the points can be used to show vectors."
+#~ msgstr "Séries de pontos podem ter setas como marcadores. Uma série de pontos desse tipo, com linhas interligando os pontos, pode ser utilizada para representar um vetor."
+
+# "to print in color" = para imprimir em cores
+#~ msgid "Select to print in color (or grayscale if your printer is not a color printer) or convert all colors to black."
+#~ msgstr "Seleciona imprimir em cores (ou escala de cinza, se sua impressora não for colorida) ou converter todas as cores para preto."
+
+# output = saída
+#~ msgid "Print output"
+#~ msgstr "Saída de impressão"
+
+#~ msgid "Color"
+#~ msgstr "Cor"
+
+#~ msgid "Black && white"
+#~ msgstr "Preto e Branco"
+
+#~ msgid "SourceGraph.manifest"
+#~ msgstr "SourceGraph.manifest"
+
+#~ msgid "Email: %s"
+#~ msgstr "Email: %s"
 
 # "com o Graph" é mais correto
 #~ msgid "Associate *.grf files with Graph."

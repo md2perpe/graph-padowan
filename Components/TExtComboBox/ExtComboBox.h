@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 class PACKAGE TExtComboBox : public TComboBox
 {
+  typedef TComboBox inherited;
 private:
   bool FAutoDroppedWidth;
   int FDroppedWidth;

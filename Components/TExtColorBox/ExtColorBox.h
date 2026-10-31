@@ -12,6 +12,7 @@ enum TColorDialogType {cdtColorDialog, cdtColorSelect};
 
 class PACKAGE TExtColorBox : public TCustomComboBox
 {
+  typedef TCustomComboBox inherited;
 private:
   TColorDialogType FColorDialogType;
   TPickColorEvent FOnPickColor;

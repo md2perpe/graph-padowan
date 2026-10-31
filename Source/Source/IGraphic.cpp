@@ -15,8 +15,10 @@
 #include "RichEditOle.h"
 #include <fstream>
 #include <algorithm>
+#include <RegularExpressions.hpp>
+#include "PyGraph.h"
 //---------------------------------------------------------------------------
-void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
+/*void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
 {
   std::wstring Str = ToWString(RichEdit->Text);
   for(int I = Str.size()-1; I >=0; I--)
@@ -24,7 +26,7 @@ void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
       Str.erase(I, 1);
 
   size_t Pos = std::wstring::npos;
-  while((Pos = Str.rfind(L"%(", Pos-1)) != std::wstring::npos)
+  while((Pos = Str.rfind(L"%", Pos-1)) != std::wstring::npos)
   {
     size_t Pos2 = FindEndPar(Str, Pos);
     if(Pos2 == std::string::npos)
@@ -46,7 +48,7 @@ void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
 
       RichEdit->SelStart = Pos;
       RichEdit->SelLength = Length;
-      RichEdit->SelText = Value;                 
+      RichEdit->SelText = Value;
     }
     catch(Func32::EFuncError &Error)
     {
@@ -64,28 +66,108 @@ void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
 		if(Pos == 0)
       break; //Special case
   }
+}*/
+//---------------------------------------------------------------------------
+void ReplaceExpression(TIRichEdit *RichEdit, const TData &Data)
+{
+  static TRegEx RegEx(
+    "%"                   // Match %
+    "(\\d*\\w*)?"         // ?1 Match an optional name
+    "("                   // ?2
+      "\\("               // Match start bracket
+      "(?>"
+        "[^()'\"]"        //Match anything that is not a bracket or quote
+        "|(?>'[^']*')"    // Or match a single quoted string
+        "|(?>\"[^\"]*\")" // Or match a double quoted string
+        "|(?2)"           // Or recursive match ?2
+      ")*"                // Match zero or more times
+      "\\)"               // Match end bracket
+    ")", TRegExOptions() << roCompiled);
+  String Str = RichEdit->GetPlainText(false);
+  TMatchCollection Collection = RegEx.Matches(Str);
+  for(int I = Collection.Count - 1; I >= 0; I--)
+  {
+    TGroupCollection  SubMatch = Collection[I].Groups;
+    int Pos = SubMatch[0].Index;
+    int Length = SubMatch[0].Length;
+    String FormatFunc = SubMatch[1].Value;
+    String Expression = SubMatch[2].Value.SubString(2, SubMatch[2].Value.Length() - 2);
+    try
+    {
+      String Value;
+      if(!FormatFunc.IsEmpty())
+      {
+        if(Python::IsPythonInstalled())
+          Value = Python::ExecutePluginFunc<String>("CallTextFormatFunc", FormatFunc, Expression);
+      }
+      else
+      {
+        std::wstring Expression2 = ToWString(Expression);
+        //Remove optional quotes
+        if(!Expression2.empty() && (Expression2[0] == '"' || Expression2[0] == '\''))
+          Expression2.erase(0, 1);
+        if(!Expression2.empty() && (Expression2[Expression2.size()-1] == '"' || Expression2[Expression2.size()-1] == '\''))
+          Expression2.erase(Expression2.end()-1);
+        bool UseReal = Options.ComplexFormat == cfReal;
+        Value = ComplexToString(UseReal ? Func32::TComplex(Data.Calc(Expression2)) : Data.CalcComplex(Expression2));
+      }
+
+      //If %() is preceded by a '+' and the value is negative, the '+' will be removed to avoid such as "2x+-3"
+      if(!Value.IsEmpty() && Value[1] == '-' && Pos > 1 && Str[Pos - 1] == '+')
+      {
+        Pos--;
+        Length++;
+      }
+
+      RichEdit->ReplaceText(Pos - 1, Length, Value);
+    }
+    catch(Func32::EFuncError &Error)
+    {
+      RichEdit->ReplaceText(Pos - 1, Length, GetErrorMsg(Error), clRed);
+    }
+    catch(Python::EPyVclError &E)
+    {
+      RichEdit->ReplaceText(Pos - 1, Length, E.Message, clRed);
+    }
+  }
 }
 //---------------------------------------------------------------------------
-void RenderRichText(const String &Str, TCanvas *Canvas, const TPoint &Pos, int Width, TColor BackgroundColor, const TData *Data)
+String ReplaceExpression(const String &Str, const TData &Data)
 {
-  //We need a parent window; just use main form
+  if(Application->MainForm == NULL)
+    return Str;
   std::auto_ptr<TIRichEdit> RichEdit(new TIRichEdit(Application->MainForm));
   RichEdit->Visible = false;
-  RichEdit->Transparent = BackgroundColor == clNone;
   RichEdit->Parent = Application->MainForm;
-  RichEdit->WrapType = wtNone;
-  RichEdit->BackgroundColor = BackgroundColor;
   TRichEditOle RichEditOle(RichEdit.get());
-
   RichEdit->SetRichText(Str);
-  if(Data)
-    ReplaceExpression(RichEdit.get(), *Data);
-  RichEdit->Render(Canvas, Pos, Width);
+  ReplaceExpression(RichEdit.get(), Data);
+  return RichEdit->GetRichText();
 }
 //---------------------------------------------------------------------------
-String UpdateRichText(const String &Str)
+void RenderRichText(const String &Str, TCanvas *Canvas, const TPoint &Pos, int Width, TColor BackgroundColor)
 {
   //We need a parent window; just use main form
+  if(Application->MainForm != NULL)
+  {
+    std::auto_ptr<TIRichEdit> RichEdit(new TIRichEdit(Application->MainForm));
+    RichEdit->Visible = false;
+    RichEdit->Transparent = BackgroundColor == clNone;
+    RichEdit->Parent = Application->MainForm;
+    RichEdit->WrapType = wtNone;
+    RichEdit->BackgroundColor = BackgroundColor;
+    TRichEditOle RichEditOle(RichEdit.get());
+
+    RichEdit->SetRichText(Str);
+    RichEdit->Render(Canvas, Pos, Width);
+  }
+}
+//---------------------------------------------------------------------------
+String UpdateRichTextOleObjects(const String &Str)
+{
+  //We need a parent window; just use main form
+  if(Application->MainForm == NULL)
+    return Str;
   std::auto_ptr<TIRichEdit> RichEdit(new TIRichEdit(Application->MainForm));
   RichEdit->Visible = false;
   RichEdit->Parent = Application->MainForm;
@@ -95,9 +177,11 @@ String UpdateRichText(const String &Str)
   return RichEdit->GetRichText();
 }
 //---------------------------------------------------------------------------
-TPoint RichTextSize(const std::string &Str, const TData *Data)
+TPoint RichTextSize(const String &Str)
 {
   //We need a parent window; just use main form
+  if(Application->MainForm == NULL)
+    return TPoint(0,0);
   std::auto_ptr<TIRichEdit> RichEdit(new TIRichEdit(Application->MainForm));
   RichEdit->Visible = false;
   RichEdit->Transparent = true;
@@ -106,9 +190,7 @@ TPoint RichTextSize(const std::string &Str, const TData *Data)
 
   RichEdit->Parent = Application->MainForm;
   TRichEditOle RichEditOle(RichEdit.get());
-  RichEdit->SetRichText(Str.c_str());
-  if(Data)
-		ReplaceExpression(RichEdit.get(), *Data);
+  RichEdit->SetRichText(Str);
 
 	//We have to disable Beep while setting SelText below;
 	//Else the system beeps if the Rich Edit cannot be changed , for example because
@@ -289,7 +371,7 @@ void Create2DCubicSplines(std::vector<TPoint> &Points, const std::vector<TPoint>
 	std::vector<double> y2 = CalcSecondDerivatives(Py);
 	for(unsigned I = 0; I < n-1; I++)
 	{
-    int ds = std::max(abs(P[I].x-P[I+1].x), abs(P[I].y-P[I+1].y));
+	int ds = std::max(std::abs(P[I].x-P[I+1].x), std::abs(P[I].y-P[I+1].y));
 		double dt = ds == 0 ? 1 : 1.0/ds;
 		for(double t = I; t < I+1; t += dt)
 		{
@@ -353,7 +435,7 @@ TCurveDirection CreateSingleHalfCosine(std::vector<TPoint> &Points, TCurveDirect
   else
   {
     //Draw an quarter ellipsis if we need to change horizontal/vertical direction
-		double dt = M_PI/std::max(abs(p2.x-p3.x), abs(p2.y-p3.y));
+	double dt = M_PI/std::max(std::abs(p2.x-p3.x), std::abs(p2.y-p3.y));
     for(double t = 0; t <= M_PI/2; t += dt)
     {
       TPoint q;
@@ -391,6 +473,8 @@ void CreateHalfCosineInterpolation(std::vector<TPoint> &Points, const std::vecto
 //Calculate points used to draw a series of cubic splines between points in P
 void Interpolate(std::vector<TPoint> &Points, const std::vector<TPoint> &P, TInterpolationAlgorithm Algorithm)
 {
+  if(P.empty())
+    return;
   switch(Algorithm)
   {
 		case iaCubicSpline:
@@ -440,7 +524,7 @@ double InterpolationAngle(Func32::TDblPoint p1, Func32::TDblPoint p2, Func32::TD
   }
 }
 //---------------------------------------------------------------------------
-TRect Rotate(TMetafile *Metafile, int Degrees)
+TRect Rotate(TMetafile *Metafile, double Degrees)
 {
   if(Degrees == 0)
     return TRect(0, 0, Metafile->Width, Metafile->Height);
@@ -514,7 +598,7 @@ void InitializeBitmapInfoHeader(HBITMAP Bitmap, BITMAPINFOHEADER &Info, TPixelFo
   }
   Info.biPlanes = 1;
   Info.biCompression = BI_RGB; // Always return data in RGB format
-  Info.biSizeImage = AlignBit(Info.biWidth, Info.biBitCount, 32) * abs(Info.biHeight);
+  Info.biSizeImage = AlignBit(Info.biWidth, Info.biBitCount, 32) * std::abs(Info.biHeight);
 }
 //---------------------------------------------------------------------------
 bool InternalGetDIB(HBITMAP Bitmap, HPALETTE Palette, void *BitmapInfo, void *Bits, TPixelFormat PixelFormat)
@@ -528,7 +612,7 @@ bool InternalGetDIB(HBITMAP Bitmap, HPALETTE Palette, void *BitmapInfo, void *Bi
     OldPal = SelectPalette(DC, Palette, False);
     RealizePalette(DC);
   }
-  bool Result = GetDIBits(DC, Bitmap, 0, abs(Info.biHeight), Bits,
+  bool Result = GetDIBits(DC, Bitmap, 0, std::abs(Info.biHeight), Bits,
     static_cast<BITMAPINFO*>(BitmapInfo), DIB_RGB_COLORS);
   if(OldPal != 0)
     SelectPalette(DC, OldPal, false);

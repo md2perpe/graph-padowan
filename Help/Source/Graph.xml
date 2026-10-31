@@ -9,15 +9,8 @@
   		<imageobject role="html"><imagedata fileref="GraphIcon.png"/></imageobject>
 		</mediaobject>
 	</subtitle>
-	<xi:include href="version.xml"/>
-	<bookinfo>
-		<authorgroup>
-		</authorgroup>
-		<copyright>
-			<year>2012</year>
-			<holder>Ivan Johansen</holder>
-		</copyright>
-	</bookinfo>
+	<xi:include href="Version.xml" xpointer="version"/>
+	<xi:include href="Version.xml" xpointer="copyright"/>
 	<!-- include external files -->
 	<xi:include href="Introduction.xml"/>
 	<xi:include href="HowToUse.xml"/>

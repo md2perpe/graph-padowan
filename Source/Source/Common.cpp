@@ -132,7 +132,8 @@ void DrawCurve(TCanvas *Canvas, const std::vector<TPoint> &Points)
 //---------------------------------------------------------------------------
 void InvertBitmap(Graphics::TBitmap *Bitmap)
 {
-  InvertRect(Bitmap->Canvas->Handle, &TRect(0, 0, Bitmap->Width, Bitmap->Height));
+  TRect Rect(0, 0, Bitmap->Width, Bitmap->Height);
+  InvertRect(Bitmap->Canvas->Handle, &Rect);
 }
 //---------------------------------------------------------------------------
 //Returns number rounded up to nearest a*10^k, where a={1,2,5} and k is an integer
@@ -167,7 +168,7 @@ void SetGlobalFocus(TWinControl *Control)
 }
 //---------------------------------------------------------------------------
 template<typename T1, typename T2>
-LessFirstPair(const std::pair<T1, T2> &Pair1, const std::pair<T1, T2> &Pair2)
+bool LessFirstPair(const std::pair<T1, T2> &Pair1, const std::pair<T1, T2> &Pair2)
 {
   return Pair1.first < Pair2.first;
 }
@@ -180,8 +181,7 @@ void GetLanguageList(TStrings *List)
   TempList->Add("English"); //We always have English
 
   TSearchRec SearchRec;
-  String Path = ExtractFilePath(Application->ExeName) + "locale\\";
-  int Result = FindFirst(Path + "*.mo", faReadOnly | faArchive, SearchRec);
+  int Result = FindFirst(GetBaseDir() + "\\Locale\\*.mo", faReadOnly | faArchive, SearchRec);
   while(Result == 0)
   {
     TempList->Add(SearchRec.Name.SubString(1, SearchRec.Name.Length() - 3));
@@ -222,16 +222,20 @@ String GetTempPath()
   unsigned Length = GetTempPathW(0, NULL);
   std::vector<wchar_t> Result(Length);
   Win32Check(GetTempPathW(Length, &Result[0]));
-  return &Result[0];
+  Length = GetLongPathName(&Result[0], NULL, 0);
+  Result.resize(Length);
+  GetLongPathName(&Result[0], &Result[0], Length);
+  return String(&Result[0], Length - 1);
 }
 //---------------------------------------------------------------------------
 String GetTempFileName(const String &Prefix, const String &Ext)
 {
+  String Base = GetTempPath() + Prefix;
   String FileName;
   int Count = 0;
   do
   {
-    FileName = GetTempPath() + Prefix + Count + "." + Ext;
+    FileName = Base + Count + "." + Ext;
     Count++;
   }
   while(FileExists(FileName));
@@ -239,20 +243,30 @@ String GetTempFileName(const String &Prefix, const String &Ext)
   return FileName;
 }
 //---------------------------------------------------------------------------
+String GetTempFileName()
+{
+  String TempPath = GetTempPath();
+  std::vector<wchar_t> Result(MAX_PATH);
+  ::SetLastError(ERROR_SUCCESS);
+  if(GetTempFileName(TempPath.c_str(), L"tmp", 0, &Result[0]) == 0)
+    RaiseLastOSError();
+  return &Result[0];
+}
+//---------------------------------------------------------------------------
 void LoadLanguage(const String &Lang)
 {
-  String Path = ExtractFilePath(Application->ExeName);
+	String Path = GetBaseDir();
   UseLanguage(Lang); //dxGetText will not update translation unless language has been changed
-  DefaultInstance->bindtextdomainToFile("default", Path + "locale\\" + Lang + ".mo");
+  DefaultInstance->bindtextdomainToFile("default", Path + "\\locale\\" + Lang + ".mo");
 	String HelpFile = DefaultInstance->GetTranslationProperty("Help-file");
 	if(HelpFile.IsEmpty() )
-		HelpFile = Path + "Help\\Graph-" + Lang + ".chm";
+		HelpFile = Path + "\\Help\\Graph-" + Lang + ".chm";
 	else
-	  HelpFile = Path + "Help\\" + HelpFile;
+	  HelpFile = Path + "\\Help\\" + HelpFile;
 	if(FileExists(HelpFile))
     Application->HelpFile = HelpFile;
   else
-    Application->HelpFile = Path + "Help\\Graph-English.chm";
+    Application->HelpFile = Path + "\\Help\\Graph-English.chm";
 }
 //---------------------------------------------------------------------------
 struct TTimerClass
@@ -273,6 +287,26 @@ void StartTimer(unsigned Time, TNotifyEvent CallBack)
   TTimerClass *TimerClass = new TTimerClass;
   TimerClass->CallBack = CallBack;
   Timer->OnTimer = TimerClass->OnTimer;
+}
+//---------------------------------------------------------------------------
+/** Find the base directory:
+ *  1. Read the registry key BaseDir (BaseDirBeta if combiled as debug)
+ *  2. If not found and 3 levels above has a directory named Local, use 3 levels above. (For debug purpose)
+ *  3. Otherwise use same directory as exe file.
+ */
+String FindBaseDir()
+{
+  std::wstring RegKeyName = TVersionInfo().FileFlags() & ffDebug ? L"BaseDirBeta" : L"BaseDir";
+  std::wstring DefaultPath = ToWString(ExtractFileDir(Application->ExeName));
+  if(PathIsDirectory((DefaultPath + L"\\..\\..\\..\\Locale").c_str()))
+    DefaultPath += L"\\..\\..\\..";
+  return ToUString(GetRegValue(REGISTRY_KEY, RegKeyName, HKEY_CURRENT_USER, DefaultPath));
+}
+//---------------------------------------------------------------------------
+const String& GetBaseDir()
+{
+  static String BaseDir = FindBaseDir();
+  return BaseDir;
 }
 //---------------------------------------------------------------------------
 

@@ -11,13 +11,17 @@
 #pragma hdrstop
 #include "Images.h"
 #include <PngImage.hpp>
-#include "pdflib.hpp"
 #include "VersionInfo.h"
 #include "Unit1.h"
 #include "EmfParser.h"
 #include "SvgWriter.h"
 #include <Jpeg.hpp>
+#ifndef _WIN64
+#include "pdflib.hpp"
+#pragma link "PDFlib.lib"
+#endif
 //---------------------------------------------------------------------------
+#ifndef _WIN64
 void SaveAsPdf(const std::string &FileName, Graphics::TBitmap *Bitmap, const std::string &Title, const std::string &Subject, Printers::TPrinterOrientation Orientation)
 {
   std::auto_ptr<TMemoryStream> Stream(new TMemoryStream);
@@ -56,6 +60,7 @@ void SaveAsPdf(const std::string &FileName, Graphics::TBitmap *Bitmap, const std
       ToUString(ex.get_apiname()) + L": " + ToUString(ex.get_errmsg()));
   }
 }
+#endif
 //---------------------------------------------------------------------------
 void SaveAsImage(const String &FileName, const TImageOptions &ImageOptions)
 {
@@ -100,18 +105,18 @@ void SaveAsImage(const String &FileName, int ImageFileType, const TImageOptions 
 
       std::auto_ptr<TMetafileCanvas> Meta(new TMetafileCanvas(Metafile.get(), 0));
       TData MetaData(Form1->Data);
-      TDraw FileDraw(Meta.get(), SameSize ? &Form1->Data : &MetaData, false, "Metafile DrawThread");
+      TDraw FileDraw(Meta.get(), SameSize ? &Form1->Data : &MetaData, "Metafile DrawThread", false);
       FileDraw.SetArea(TRect(0, 0, Width, Height));  //Set drawing area
+      FileDraw.SetSizeMul(Screen->PixelsPerInch / 96.0);
 
       FileDraw.DrawAll();
-      if(SameSize)
-        FileDraw.Wait(); //Wait if using Data object
-      else
+      if(!SameSize)
         while(FileDraw.Updating())
         { //Process messages while waiting for draw thread to finish
           Sleep(100);
           Application->ProcessMessages();
         }
+      FileDraw.Wait(); //Ensure that everything is finished
       Meta.reset();
       if(ImageFileType == ifSvg)
       {
@@ -139,8 +144,9 @@ void SaveAsImage(const String &FileName, int ImageFileType, const TImageOptions 
         Bitmap->Canvas->FillRect(Rect);
 
         TData FileData(Form1->Data);
-        TDraw FileDraw(Bitmap->Canvas, &FileData, false, "Save as image DrawThread");
+        TDraw FileDraw(Bitmap->Canvas, &FileData, "Save as image DrawThread", false);
         FileDraw.SetArea(Rect);  //Set drawing area
+        FileDraw.SetSizeMul(Screen->PixelsPerInch / 96.0);
         FileDraw.DrawAll();
         while(FileDraw.Updating())
         {
@@ -175,7 +181,11 @@ void SaveAsImage(const String &FileName, int ImageFileType, const TImageOptions 
         }
 
         case ifPdf:
+#ifdef _WIN64
+    throw ESaveError("Saving as PDF is currently not supported!");
+#else
           SaveAsPdf(::ToString(FileName), Bitmap.get(), ::ToString(Form1->Data.GetFileName()), ::ToString(Form1->Data.Axes.Title), ImageOptions.Pdf.Orientation);
+#endif
       }
     }
     Form1->SetStatusIcon(-1); //Replaces TCallOnRelease
@@ -243,9 +253,6 @@ struct pRGBTripleArray
 
 int CountColors(Graphics::TBitmap *Bitmap)
 {
-  int i;
-  int j;
-  int k;
   pRGBTripleArray *rowIn;
   TBits* Flags[256][256];
 
@@ -254,15 +261,15 @@ int CountColors(Graphics::TBitmap *Bitmap)
     return -1;
 
   // Clear 2D array of TBits objects
-  for(j = 0; j <= 255;j++)
-    for(i = 0;i <= 255;i++)
+  for(int j = 0; j <= 255; j++)
+    for(int i = 0; i <= 255; i++)
       Flags[i][j] = NULL;
 
   // Step through each scanline of image
-  for(j = 0;j < Bitmap->Height;j++)
+  for(int j = 0; j < Bitmap->Height; j++)
   {
     rowIn = (pRGBTripleArray*)Bitmap->ScanLine[j];
-    for(i = 0;i < Bitmap->Width;i++)
+    for(int i = 0; i < Bitmap->Width; i++)
     {
       if(!Flags[rowIn[i].rgbtRed][rowIn[i].rgbtGreen])
       {
@@ -278,16 +285,15 @@ int CountColors(Graphics::TBitmap *Bitmap)
 
   int RESULT = 0;
   // Count and Free TBits objects
-  for(j = 0;j <= 255;j++)
-    for(i = 0;i<= 255;i++)
-      if(Flags[i,j])
-        if(Flags[i][j])
-        {
-          for(k = 0;k <= 255;k++)
-            if(Flags[i][j]->Bits[k])
-              ++RESULT;
-          delete Flags[i,j];
-        }
+  for(int j = 0; j <= 255;j++)
+    for(int i = 0; i<= 255;i++)
+      if(Flags[i][j])
+      {
+        for(int k = 0; k <= 255; k++)
+          if(Flags[i][j]->Bits[k])
+            ++RESULT;
+        delete Flags[i][j];
+      }
   return RESULT;
 }
 //---------------------------------------------------------------------------
@@ -320,8 +326,8 @@ void FillBitmapInfoHeader(BITMAPINFOHEADER &BitmapHeader, Graphics::TBitmap *Bit
   BitmapHeader.biCompression = BI_RLE8;        //Compression format
   BitmapHeader.biSizeImage = DataSize;       //Size of bitmap in bytes
   //Calculate the x- and y-resolution in pixels per meter
-  BitmapHeader.biXPelsPerMeter = GetDeviceCaps(Bitmap->Canvas->Handle,HORZRES)*1000/GetDeviceCaps(Bitmap->Canvas->Handle,HORZSIZE);
-  BitmapHeader.biYPelsPerMeter = GetDeviceCaps(Bitmap->Canvas->Handle,VERTRES)*1000/GetDeviceCaps(Bitmap->Canvas->Handle,VERTSIZE);
+  BitmapHeader.biXPelsPerMeter = Bitmap ? GetDeviceCaps(Bitmap->Canvas->Handle,HORZRES)*1000/GetDeviceCaps(Bitmap->Canvas->Handle,HORZSIZE) : 0;
+  BitmapHeader.biYPelsPerMeter = Bitmap ? GetDeviceCaps(Bitmap->Canvas->Handle,VERTRES)*1000/GetDeviceCaps(Bitmap->Canvas->Handle,VERTSIZE) : 0;
   BitmapHeader.biClrUsed = Colors;      //Used indexes in the color table
   BitmapHeader.biClrImportant = Colors; //Required indexes
 }

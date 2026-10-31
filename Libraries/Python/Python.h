@@ -18,7 +18,7 @@
 #error "Python's source code assumes C's unsigned char is an 8-bit type."
 #endif
 
-#if defined(__sgi) && defined(WITH_THREAD) && !defined(_SGI_MP_SOURCE)
+#if defined(__sgi) && !defined(_SGI_MP_SOURCE)
 #define _SGI_MP_SOURCE
 #endif
 
@@ -35,6 +35,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#ifdef HAVE_CRYPT_H
+#include <crypt.h>
+#endif
 
 /* For size_t? */
 #ifdef HAVE_STDDEF_H
@@ -48,6 +51,7 @@
 #include <assert.h>
 
 #include "pyport.h"
+#include "pymacro.h"
 
 #include "pyatomic.h"
 
@@ -67,6 +71,7 @@
 #include "object.h"
 #include "objimpl.h"
 #include "typeslots.h"
+#include "pyhash.h"
 
 #include "pydebug.h"
 
@@ -83,6 +88,7 @@
 #include "tupleobject.h"
 #include "listobject.h"
 #include "dictobject.h"
+#include "odictobject.h"
 #include "enumobject.h"
 #include "setobject.h"
 #include "methodobject.h"
@@ -100,25 +106,28 @@
 #include "warnings.h"
 #include "weakrefobject.h"
 #include "structseq.h"
-
+#include "namespaceobject.h"
 
 #include "codecs.h"
 #include "pyerrors.h"
 
 #include "pystate.h"
+#include "context.h"
 
 #include "pyarena.h"
 #include "modsupport.h"
+#include "compile.h"
 #include "pythonrun.h"
+#include "pylifecycle.h"
 #include "ceval.h"
 #include "sysmodule.h"
+#include "osmodule.h"
 #include "intrcheck.h"
 #include "import.h"
 
 #include "abstract.h"
 #include "bltinmodule.h"
 
-#include "compile.h"
 #include "eval.h"
 
 #include "pyctype.h"
@@ -126,43 +135,6 @@
 #include "pystrcmp.h"
 #include "dtoa.h"
 #include "fileutils.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* _Py_Mangle is defined in compile.c */
-#ifndef Py_LIMITED_API
-PyAPI_FUNC(PyObject*) _Py_Mangle(PyObject *p, PyObject *name);
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-/* Argument must be a char or an int in [-128, 127] or [0, 255]. */
-#define Py_CHARMASK(c)		((unsigned char)((c) & 0xff))
-
 #include "pyfpe.h"
-
-/* These definitions must match corresponding definitions in graminit.h.
-   There's code in compile.c that checks that they are the same. */
-#define Py_single_input 256
-#define Py_file_input 257
-#define Py_eval_input 258
-
-#ifdef HAVE_PTH
-/* GNU pth user-space thread support */
-#include <pth.h>
-#endif
-
-/* Define macros for inline documentation. */
-#define PyDoc_VAR(name) static char name[]
-#define PyDoc_STRVAR(name,str) PyDoc_VAR(name) = PyDoc_STR(str)
-#ifdef WITH_DOC_STRINGS
-#define PyDoc_STR(str) str
-#else
-#define PyDoc_STR(str) ""
-#endif
 
 #endif /* !Py_PYTHON_H */

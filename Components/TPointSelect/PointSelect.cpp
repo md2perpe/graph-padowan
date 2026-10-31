@@ -64,7 +64,7 @@ void __fastcall TPointSelect::DrawItem(int Index, const TRect &Rect, TOwnerDrawS
   Canvas->FillRect(Rect);
 
   TPoint Pos((Rect.Left+Rect.Right)/2, (Rect.Top+Rect.Bottom)/2);
-  DrawPoint(Canvas, Pos, Index, FrameColor, FillColor, 5);
+  DrawPoint(Canvas, Pos, Index, FrameColor, FillColor, Rect.Height() / 3.2);
 
   //This is necesarry to use white as brush before the VCL can draw the focus
   //rectangle correct; I don't know why.

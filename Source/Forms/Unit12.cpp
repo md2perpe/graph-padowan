@@ -10,6 +10,7 @@
 #include "Graph.h"
 #pragma hdrstop
 #include "Unit12.h"
+#include "PyGraph.h"
 #include <float.h>
 //---------------------------------------------------------------------------
 #pragma link "LineSelect"
@@ -36,9 +37,9 @@ __fastcall TForm12::TForm12(TComponent* Owner, TData &AData)
   MoveControl(ComboBox1, Label11);
   MoveLabel(ComboBox2, Label12);
 
-  LineSelect1->ItemIndex = Property.DefaultTangent.Style;
-  ExtColorBox1->Selected = Property.DefaultTangent.Color;
-  UpDown1->Position = Property.DefaultTangent.Size;
+  LineSelect1->ItemIndex = Options.DefaultTangent.Style;
+  ExtColorBox1->Selected = Options.DefaultTangent.Color;
+  UpDown1->Position = Options.DefaultTangent.Size;
   ComboBox1->ItemIndex = 0;
   ComboBox2->ItemIndex = 0;
   FlipForm(this);
@@ -46,7 +47,8 @@ __fastcall TForm12::TForm12(TComponent* Owner, TData &AData)
 //---------------------------------------------------------------------------
 void __fastcall TForm12::Button1Click(TObject *Sender)
 {
-  boost::shared_ptr<TTan> Tan(new TTan);
+  boost::shared_ptr<TTangent> Tan(new TTangent);
+  Tan->SetData(&Data);
   int Size = ToIntDef(Edit3->Text, 1);
   //check if size is less than 1
   if(Size <= 0)
@@ -56,31 +58,21 @@ void __fastcall TForm12::Button1Click(TObject *Sender)
     return;
   }
 
-  Tan->t.Text = ToWString(Edit1->Text);
-  Tan->t.Value = MakeFloat(Edit1);
-
+  Tan->SetPos(TTextValue(MakeFloat(Edit1),ToWString(Edit1->Text)));
   Data.AbortUpdate();
 
-  Tan->Size = Size;
-  Tan->Style = LineSelect1->LineStyle;
-  Tan->Color = ExtColorBox1->Selected;
-  Tan->TangentType = RadioGroup1->ItemIndex == 0 ? ttTangent : ttNormal;
+  Tan->SetSize(Size);
+  Tan->SetStyle(LineSelect1->LineStyle);
+  Tan->SetColor(ExtColorBox1->Selected);
+  Tan->SetTangentType(RadioGroup1->ItemIndex == 0 ? ttTangent : ttNormal);
   Tan->SetLegendText(ToWString(Edit2->Text));
 
-  Tan->From.Value = -INF;
-  Tan->To.Value = INF;
-  Tan->From.Text = ToWString(Edit4->Text);
-  Tan->To.Text = ToWString(Edit5->Text);
+  Tan->SetFrom(TTextValue(!Edit4->Text.IsEmpty() ? MakeFloat(Edit4) : -INF, ToWString(Edit4->Text)));
+  Tan->SetTo(TTextValue(!Edit5->Text.IsEmpty() ? MakeFloat(Edit5) : INF, ToWString(Edit5->Text)));
 
-  Tan->StartPointStyle = ComboBox1->ItemIndex;
-  Tan->EndPointStyle = ComboBox2->ItemIndex;
+  Tan->SetEndpointStyle(std::make_pair(ComboBox1->ItemIndex, ComboBox2->ItemIndex));
 
-  if(!Edit4->Text.IsEmpty())
-    Tan->From.Value = MakeFloat(Edit4);
-  if(!Edit5->Text.IsEmpty())
-    Tan->To.Value = MakeFloat(Edit5);
-
-  if(Tan->From.Value >= Tan->To.Value)
+  if(Tan->GetFrom().Value >= Tan->GetTo().Value)
   {
     MessageBox(LoadRes(511), LoadRes(512));
     return;
@@ -95,9 +87,10 @@ void __fastcall TForm12::Button1Click(TObject *Sender)
   {
     Tan->SetVisible(OldTan->GetVisible());
     Tan->SetShowInLegend(OldTan->GetShowInLegend());
-    unsigned Index = Parent->GetChildIndex(OldTan);
+    Tan->Swap(*OldTan);
     UndoList.Push(TUndoChange(OldTan, Tan));
-    Parent->ReplaceChild(Index, Tan);
+    Tan = OldTan; //Because of the check on Tan below
+    Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(OldTan));
   }
 
   if(!Tan->CalcTan())
@@ -105,40 +98,40 @@ void __fastcall TForm12::Button1Click(TObject *Sender)
     std::wstring Variable = L"t";
     if(boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(Parent))
       Variable = Func->GetVariable();
-    MessageBox(LoadRes(518, Variable, Tan->t.Text), LoadString(519));
+    MessageBox(LoadRes(518, Variable, Tan->GetPos().Text), LoadString(519));
     UndoList.Undo();
     UndoList.ClearRedo();
     return;
   }
 
-  Property.DefaultTangent.Set(LineSelect1->ItemIndex, ExtColorBox1->Selected, Edit3->Text.ToInt());
+  Options.DefaultTangent.Set(LineSelect1->ItemIndex, ExtColorBox1->Selected, Edit3->Text.ToInt());
 
   ModalResult=mrOk;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm12::Edit3KeyPress(TObject *Sender, char &Key)
 {
-  if(!isdigit(Key) && Key!='\b' || (Key=='0' && Edit3->Text.IsEmpty()))
+  if((!isdigit(Key) && Key!='\b') || (Key=='0' && Edit3->Text.IsEmpty()))
     Key=0;//Allown only digits and backspace. 0 may not be placed first.
 }
 //---------------------------------------------------------------------------
-int TForm12::EditTan(const boost::shared_ptr<TTan> &Tan)
+int TForm12::EditTan(const boost::shared_ptr<TTangent> &Tan)
 {
   OldTan = Tan;
   Caption = LoadRes(525);
   Parent = Tan->GetParent();
-  Edit1->Text = Tan->t.Text.c_str();
-  UpDown1->Position = Tan->Size;
-  LineSelect1->LineStyle = Tan->Style;
-  ExtColorBox1->Selected = Tan->Color;
+  Edit1->Text = Tan->GetPos().Text.c_str();
+  UpDown1->Position = Tan->GetSize();
+  LineSelect1->LineStyle = Tan->GetStyle();
+  ExtColorBox1->Selected = Tan->GetColor();
   if(boost::shared_ptr<TBaseFuncType> Func = boost::dynamic_pointer_cast<TBaseFuncType>(Parent))
     Label1->Caption = ToUString(Func->GetVariable() + L"=");
   Edit2->Text = ToUString(Tan->GetLegendText());
-  RadioGroup1->ItemIndex = Tan->TangentType;
-  Edit4->Text = Tan->From.Text.c_str();
-  Edit5->Text = Tan->To.Text.c_str();
-  ComboBox1->ItemIndex = Tan->StartPointStyle;
-  ComboBox2->ItemIndex = Tan->EndPointStyle;
+  RadioGroup1->ItemIndex = Tan->GetTangentType();
+  Edit4->Text = Tan->GetFrom().Text.c_str();
+  Edit5->Text = Tan->GetTo().Text.c_str();
+  ComboBox1->ItemIndex = Tan->GetEndpointStyle().first;
+  ComboBox2->ItemIndex = Tan->GetEndpointStyle().second;
 
   return ShowModal();
 }

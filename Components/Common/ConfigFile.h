@@ -15,6 +15,7 @@
 #include <iosfwd>
 #include <iomanip>
 #include <algorithm>
+#include <sstream>
 
 namespace ConfigFileImpl
 {

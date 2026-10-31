@@ -12,18 +12,19 @@
 #include "Unit5.h"
 #include "Unit1.h"
 #include <float.h>
+#include "PyGraph.h"
 //---------------------------------------------------------------------------
 #pragma link "LineSelect"
 #pragma link "MyEdit"
 #pragma link "ExtColorBox"
 #pragma link "GridPanelEx"
 #pragma link "ExtComboBox"
+#pragma link "FocusPanel"
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TForm5::TForm5(TComponent* Owner, TData &AData)
 	: TForm(Owner), OldItemIndex(0), Data(AData)
 {
-  LineSelect1->Height = (LineSelect1->Height * Property.FontScale) / 100;
   Translate();
   ScaleForm(this);
 
@@ -35,9 +36,9 @@ __fastcall TForm5::TForm5(TComponent* Owner, TData &AData)
   TempData[2].To = Data.Axes.Trigonometry == Func32::Degree ? "360" : "2pi";
   TempData[2].Steps = "1000";
 
-  LineSelect1->LineStyle = static_cast<TPenStyle>(Property.DefaultFunction.Style);
-  ExtColorBox1->Selected = Property.DefaultFunction.Color;
-  UpDown1->Position = Property.DefaultFunction.Size;
+  LineSelect1->LineStyle = static_cast<TPenStyle>(Options.DefaultFunction.Style);
+  ExtColorBox1->Selected = Options.DefaultFunction.Color;
+  UpDown1->Position = Options.DefaultFunction.Size;
   ComboBox2->ItemIndex = 0;
   ComboBox3->ItemIndex = 0;
 
@@ -115,51 +116,55 @@ void __fastcall TForm5::Button1Click(TObject *Sender)
     return;
   }
 
-  Func->From.Value = -INF;
-  Func->To.Value = INF;
-  Func->From.Text = ToWString(Edit3->Text);
-  Func->To.Text = ToWString(Edit4->Text);
+  Func->SetFrom(TTextValue(!Edit3->Text.IsEmpty() || ComboBox1->ItemIndex ? MakeFloat(Edit3) : -INF, ToWString(Edit3->Text)));
+  Func->SetTo(TTextValue(!Edit4->Text.IsEmpty() || ComboBox1->ItemIndex ? MakeFloat(Edit4) : INF, ToWString(Edit4->Text)));
   Func->SetSteps(Steps);
 
-  if(!Edit3->Text.IsEmpty() || ComboBox1->ItemIndex)
-    Func->From.Value = MakeFloat(Edit3);
-
-  if(!Edit4->Text.IsEmpty() || ComboBox1->ItemIndex)
-    Func->To.Value = MakeFloat(Edit4);
-
-  if(Func->From.Value >= Func->To.Value)
+  if(Func->GetFrom().Value >= Func->GetTo().Value)
     Form1->ShowStatusError(LoadRes(511));
 
-  if(ToIntDef(Edit6->Text, 1) < 1)
+  int WidthValue = ToIntDef(Edit6->Text, -1);
+  if(WidthValue < 1)
   {
     MessageBox(LoadRes(513), LoadRes(514));
     return;
   }
 
-  Func->Color = ExtColorBox1->Selected;
-  Func->Size = ToIntDef(Edit6->Text, 1);
-  Func->Style = LineSelect1->LineStyle;
+  Func->SetColor(ExtColorBox1->Selected);
+  Func->SetSize(WidthValue);
+  Func->SetStyle(LineSelect1->LineStyle);
   Func->SetLegendText(ToWString(Edit7->Text));
-  Func->StartPointStyle = ComboBox2->ItemIndex;
-  Func->EndPointStyle = ComboBox3->ItemIndex;
-  Func->DrawType = static_cast<TDrawType>(ComboBox4->ItemIndex);
+  Func->SetEndpointStyle(std::make_pair(ComboBox2->ItemIndex, ComboBox3->ItemIndex));
+  Func->SetDrawType(static_cast<TDrawType>(ComboBox4->ItemIndex));
 
   Data.AbortUpdate();
   if(F)
   {
     Func->SetVisible(F->GetVisible());
     Func->SetShowInLegend(F->GetShowInLegend());
-    UndoList.Push(TUndoChange(F, Func));
-    Data.Replace(F, Func);
+    if(typeid(*F) == typeid(*Func))
+    {
+      F->Swap(*Func);
+      UndoList.Push(TUndoChange(F, Func));
+      Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(F));
+      F->Update(); //Make sure tangents are updated
+    }
+    else
+    {
+      Data.Replace(F, Func);
+      UndoList.Push(TUndoReplace(F, Func));
+      Python::ExecutePluginEvent(Python::peChanged, TGraphElemPtr(Func));
+      Func->Update(); //Make sure tangents are updated
+    }
   }
   else
   {
     UndoList.Push(TUndoAdd(Func));
     Data.Insert(Func);
+    Func->Update(); //Make sure tangents are updated
   }
 
-  Func->Update(); //Make sure tangents are updated
-  Property.DefaultFunction.Set(LineSelect1->LineStyle, ExtColorBox1->Selected, Edit6->Text.ToInt());
+  Options.DefaultFunction.Set(LineSelect1->LineStyle, ExtColorBox1->Selected, WidthValue);
   ModalResult = mrOk;
 }
 //---------------------------------------------------------------------------
@@ -171,33 +176,33 @@ int TForm5::EditFunc(boost::shared_ptr<TBaseFuncType> Func)
     if(TStdFunc *StdFunc = dynamic_cast<TStdFunc*>(F.get()))
     {
       ComboBox1->ItemIndex = 0;
-      Edit1->Text = StdFunc->GetText().c_str();
+      Edit1->Text = StdFunc->GetEquation().c_str();
     }
     else if(TParFunc *ParFunc = dynamic_cast<TParFunc*>(F.get()))
     {
       ComboBox1->ItemIndex = 1;
-      Edit1->Text = ParFunc->GetxText().c_str();
-      Edit2->Text = ParFunc->GetyText().c_str();
+      Edit1->Text = ToUString(ParFunc->GetEquation().first);
+      Edit2->Text = ToUString(ParFunc->GetEquation().second);
     }
     else if(TPolFunc *PolFunc = dynamic_cast<TPolFunc*>(F.get()))
     {
       ComboBox1->ItemIndex = 2;
-      Edit1->Text = PolFunc->GetText().c_str();
+      Edit1->Text = PolFunc->GetEquation().c_str();
     }
 
     Caption = LoadRes(524);
-    Edit3->Text = F->From.Text.c_str();
-    Edit4->Text = F->To.Text.c_str();
+    Edit3->Text = F->GetFrom().Text.c_str();
+    Edit4->Text = F->GetTo().Text.c_str();
 //    if(F->GetSteps())
       Edit5->Text = ToUString(F->GetSteps().Text);
-    LineSelect1->LineStyle = F->Style;
-    UpDown1->Position = F->Size;
-    ExtColorBox1->Selected = F->Color;
+    LineSelect1->LineStyle = F->GetStyle();
+    UpDown1->Position = F->GetSize();
+    ExtColorBox1->Selected = F->GetColor();
     Edit7->Text = ToUString(F->GetLegendText());
-    ComboBox2->ItemIndex = F->StartPointStyle;
-    ComboBox3->ItemIndex = F->EndPointStyle;
-    ComboBox4->ItemIndex = F->DrawType;
-    LineSelect1->Enabled = F->DrawType != dtDots;
+    ComboBox2->ItemIndex = F->GetEndpointStyle().first;
+    ComboBox3->ItemIndex = F->GetEndpointStyle().second;
+    ComboBox4->ItemIndex = F->GetDrawType();
+    LineSelect1->Enabled = F->GetDrawType() != dtDots;
   }
 
   OldItemIndex = ComboBox1->ItemIndex;
@@ -272,8 +277,7 @@ void __fastcall TForm5::ComboBoxDrawItem(TWinControl *Control, int Index,
 //---------------------------------------------------------------------------
 void __fastcall TForm5::ComboBox4Change(TObject *Sender)
 {
-  LineSelect1->Enabled = ComboBox4->ItemIndex == 0;
+  LineSelect1->Enabled = ComboBox4->ItemIndex != 1;
 }
 //---------------------------------------------------------------------------
-
 

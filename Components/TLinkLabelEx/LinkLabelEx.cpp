@@ -43,7 +43,7 @@ bool IsLinkLabelSupported()
     ManifestResourcePresent = FindResource(MainInstance, CREATEPROCESS_MANIFEST_RESOURCE_ID, RT_MANIFEST) != 0;
     ManifestResourceTested = True;
   }
-  return ManifestResourcePresent && ThemeServices()->ThemesAvailable;
+  return ManifestResourcePresent && ThemeServices()->ThemesAvailable();
 }
 //---------------------------------------------------------------------------
 void TLinkLabelEx::AdjustBounds()
@@ -223,9 +223,9 @@ void __fastcall TLinkLabelEx::CreateParams(TCreateParams &Params)
 {
   TWinControl::CreateParams(Params);
   if(CheckWin32Version(5, 1) && IsLinkLabelSupported())
-    CreateSubClass(Params, WC_LINK);
+    CreateSubClass(Params, const_cast<wchar_t*>(WC_LINK));
   else
-    CreateSubClass(Params, L"STATIC");
+    CreateSubClass(Params, const_cast<wchar_t*>(L"STATIC"));
   Params.WindowClass.style &= ~CS_VREDRAW;
 }
 //---------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 #include "ConfigRegistry.h"
 //---------------------------------------------------------------------------
 #pragma link "MediaPlayerEx"
+#pragma link "ScaledImageList"
 #pragma resource "*.dfm"
 const double MaxWidth = Screen->Width - 50;
 const double MaxHeight = Screen->Height - 180;
@@ -24,11 +25,11 @@ const double MaxHeight = Screen->Height - 180;
 __fastcall TForm20::TForm20(TComponent* Owner, const std::wstring &Constant, double AMin, double AStep)
   : TForm(Owner), BackwardDirection(false), Min(AMin), Step(AStep)
 {
+  ScaleForm(this);
   TranslateProperties(this);
   SetAccelerators(this);
 
   dwICValue = dwICValue; //Avoid stupid warning
-  Panel1->DoubleBuffered;
   LabeledEdit1->EditLabel->Caption = ToUString(Constant + L"=");
   LabeledEdit1->Text = Min;
 
@@ -38,6 +39,11 @@ __fastcall TForm20::TForm20(TComponent* Owner, const std::wstring &Constant, dou
     Repeat1->Checked = Registry.Read("Repeat", false);
     Reverse1->Checked = Registry.Read("AutoReverse", false);
   }
+  if(NeedScaling())
+  {
+    TrackBar1->ThumbLength = GuiScale(20);
+    ScaledImageList1->SetSize(GuiScale(24), GuiScale(24));
+ }
 }
 //---------------------------------------------------------------------------
 void TForm20::ShowAnimation(const String &FileName)
@@ -260,5 +266,10 @@ void TForm20::SaveFrame(const String &FileName, int FilterIndex)
   MediaPlayer1->DisplayRect = DisplayRect; 
 }
 //---------------------------------------------------------------------------
-
+void __fastcall TForm20::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+  if(Key == VK_ESCAPE)
+    Close();
+}
+//---------------------------------------------------------------------------
 
